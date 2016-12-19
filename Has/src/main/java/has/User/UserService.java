@@ -38,16 +38,19 @@ public class UserService {
     }
 
     public User findById(Long id) throws Exception {
-        User user = repo.findOne(id);
-        if(user == null){
-            throw new Exception();
+        User dbUser = repo.findOne(id);
+        if(dbUser == null){
+            throw new Exception("There is no user with such ID");
         }
-        return user;
+        return dbUser;
     }
 
-    public User remove(Long id) {
-        User user = repo.findOne(id);
-        repo.delete(user);
-        return user;
+    public User remove(Long id) throws Exception {
+        User dbUser = repo.findOne(id);
+        if(dbUser == null){
+            throw new Exception("There is no user with such ID");
+        }
+        repo.delete(dbUser);
+        return dbUser;
     }
 }
