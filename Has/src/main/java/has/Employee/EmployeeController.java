@@ -1,4 +1,4 @@
-package has.User;
+package has.Employee;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,53 +9,53 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * Created by kaloi on 12/17/2016.
+ * Created by kaloi on 12/19/2016.
  */
 @RestController
-public class UserController {
-
+public class EmployeeController {
+    
     @Autowired
-    private UserService userService;
+    private EmployeeService employeeService;
 
-    @RequestMapping(value = "/user", method = RequestMethod.POST,
+    @RequestMapping(value = "/emploee", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public User save(@RequestBody User user) {
-        return userService.save(user);
+    public Employee save(@RequestBody Employee employee) {
+        return employeeService.save(employee);
     }
 
-    @RequestMapping(value = "/users", method = RequestMethod.GET,
+    @RequestMapping(value = "/employees", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public List<Employee> getAllEmployees() {
+        return employeeService.getAllEmployees();
     }
 
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET,
+    @RequestMapping(value = "/employee/{id}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public User findUserById(@PathVariable Long id) throws Exception {
-        return userService.findById(id);
+    public Employee findEmployeeById(@PathVariable Long id) throws Exception {
+        return employeeService.findById(id);
     }
 
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE,
+    @RequestMapping(value = "/employee/{id}", method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public User removeUserById(@PathVariable Long id) throws Exception {
-        return userService.remove(id);
+    public Employee removeEmployeeById(@PathVariable Long id) throws Exception {
+        return employeeService.remove(id);
     }
 
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT,
+    @RequestMapping(value = "/employee/{id}", method = RequestMethod.PUT,
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public User updateUser(@PathVariable Long id, @RequestBody User user) throws Exception {
-        return userService.update(id, user);
+    public Employee updateEmployee(@PathVariable Long id, @RequestBody Employee employee) throws Exception {
+        return employeeService.update(id, employee);
     }
 }
