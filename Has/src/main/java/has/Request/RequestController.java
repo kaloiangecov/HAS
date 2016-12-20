@@ -1,4 +1,4 @@
-package has.Employee;
+package has.Request;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,53 +9,53 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * Created by kaloi on 12/19/2016.
+ * Created by kaloi on 12/20/2016.
  */
 @RestController
-public class EmployeeController {
-    
+public class RequestController {
+
     @Autowired
-    private EmployeeService employeeService;
+    private RequestService requestService;
 
-    @RequestMapping(value = "/employee", method = RequestMethod.POST,
+    @RequestMapping(value = "/request", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public Employee save(@RequestBody Employee employee) {
-        return employeeService.save(employee);
+    public Request save(@RequestBody Request request) {
+        return requestService.save(request);
     }
 
-    @RequestMapping(value = "/employees", method = RequestMethod.GET,
+    @RequestMapping(value = "/requests", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public List<Employee> getAllEmployees() {
-        return employeeService.getAllEmployees();
+    public List<Request> getAllRequests() {
+        return requestService.getAllRequests();
     }
 
-    @RequestMapping(value = "/employee/{id}", method = RequestMethod.GET,
+    @RequestMapping(value = "/request/{id}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public Employee findEmployeeById(@PathVariable Long id) throws Exception {
-        return employeeService.findById(id);
+    public Request findRequestById(@PathVariable Long id) throws Exception {
+        return requestService.findById(id);
     }
 
-    @RequestMapping(value = "/employee/{id}", method = RequestMethod.DELETE,
+    @RequestMapping(value = "/request/{id}", method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public Employee removeEmployeeById(@PathVariable Long id) throws Exception {
-        return employeeService.remove(id);
+    public Request removeRequestById(@PathVariable Long id) throws Exception {
+        return requestService.remove(id);
     }
 
-    @RequestMapping(value = "/employee/{id}", method = RequestMethod.PUT,
+    @RequestMapping(value = "/request/{id}", method = RequestMethod.PUT,
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public Employee updateEmployee(@PathVariable Long id, @RequestBody Employee employee) throws Exception {
-        return employeeService.update(id, employee);
+    public Request updateRequest(@PathVariable Long id, @RequestBody Request request) throws Exception {
+        return requestService.update(id, request);
     }
 }
