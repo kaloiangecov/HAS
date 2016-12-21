@@ -1,6 +1,5 @@
 package has.Employee;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import has.User.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,16 +22,15 @@ public class Employee implements Serializable {
     private String fullName;
     private String post;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JsonIgnore
+    @OneToOne
+//    @JsonIgnore
     private User user;
-    //    public WorkingSchedule m_WorkingSchedule;
+    //    public WorkingSchedule WorkingSchedule;
 //    public Reservation reservation;
 
-    public Employee(String dateHired, String fullName, Long id, String post) {
+    public Employee(String dateHired, String fullName, String post) {
         this.dateHired = dateHired;
         this.fullName = fullName;
-        this.id = id;
         this.post = post;
     }
 
