@@ -1,12 +1,10 @@
 package has.Employee;
 
+import has.User.User;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -23,14 +21,16 @@ public class Employee implements Serializable {
     private String dateHired;
     private String fullName;
     private String post;
-//    private User user;
-//    public WorkingSchedule m_WorkingSchedule;
-//    public Reservation m_Reservation;
 
-    public Employee(String dateHired, String fullName, Long id, String post) {
+    @OneToOne
+//    @JsonIgnore
+    private User user;
+    //    public WorkingSchedule WorkingSchedule;
+//    public Reservation reservation;
+
+    public Employee(String dateHired, String fullName, String post) {
         this.dateHired = dateHired;
         this.fullName = fullName;
-        this.id = id;
         this.post = post;
     }
 

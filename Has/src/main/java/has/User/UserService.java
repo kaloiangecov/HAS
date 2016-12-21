@@ -1,8 +1,10 @@
 package has.User;
 
+import has.Employee.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
@@ -52,5 +54,15 @@ public class UserService {
         }
         repo.delete(dbUser);
         return dbUser;
+    }
+
+    @PostConstruct
+    private void initSomeData(){
+        Employee emp1 = new Employee("yday", "ivan asen", "register");
+
+        User usr1 = new User("never", "password", "yesterday", "admin", "ivan", emp1);
+
+        repo.save(usr1);
+
     }
 }
