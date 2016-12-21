@@ -1,12 +1,11 @@
 package has.User;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import has.Employee.Employee;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Created by kaloi on 12/17/2016.
@@ -25,7 +24,11 @@ public class User {
     private String role;
     private String username;
 
-    public User(){
+    @OneToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Employee employee;
+
+    public User() {
 
     }
 

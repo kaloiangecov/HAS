@@ -1,12 +1,11 @@
 package has.Employee;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import has.User.User;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -23,9 +22,12 @@ public class Employee implements Serializable {
     private String dateHired;
     private String fullName;
     private String post;
-//    private User user;
-//    public WorkingSchedule m_WorkingSchedule;
-//    public Reservation m_Reservation;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private User user;
+    //    public WorkingSchedule m_WorkingSchedule;
+//    public Reservation reservation;
 
     public Employee(String dateHired, String fullName, Long id, String post) {
         this.dateHired = dateHired;
