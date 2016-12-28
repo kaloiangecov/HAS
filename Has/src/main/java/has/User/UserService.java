@@ -58,7 +58,7 @@ public class UserService {
 
     @PostConstruct
     private void initSomeData(){
-        Employee emp1 = new Employee("yday", "ivan asen", "register");
+        Employee emp1 = new Employee("yday","register");
 
         User usr1 = new User("never", "password", "yesterday", "admin", "ivan", emp1);
 

@@ -46,17 +46,16 @@ public class GuestService {
             throw new Exception("There is no guest with such ID");
         }
 
-        dbGuest.setFullName(guest.getFullName());
-        dbGuest.setAddress(guest.getAddress());
-        dbGuest.setEGN(guest.getEGN());
-        dbGuest.setEmail(guest.getEmail());
-        dbGuest.setIdExpireDate(guest.getIdExpireDate());
-        dbGuest.setIdIssueDate(guest.getIdIssueDate());
-
-        dbGuest.setIdIssuedBy(guest.getIdIssuedBy());
-        dbGuest.setIdNumber(guest.getIdNumber());
-        dbGuest.setPhone(guest.getPhone());
+        dbGuest.setNumberReservations(guest.getNumberReservations());
         dbGuest.setStatus(guest.getStatus());
+        dbGuest.setEgn(guest.getEgn());
+        dbGuest.setAddress(guest.getAddress());
+        dbGuest.setFullName(guest.getFullName());
+        dbGuest.setPhone(guest.getPhone());
+        dbGuest.setIdentityExpireDate(guest.getIdentityExpireDate());
+        dbGuest.setIdentityIssueDate(guest.getIdentityIssueDate());
+        dbGuest.setIdentityIssuedBy(guest.getIdentityIssuedBy());
+        dbGuest.setIdentityNumber(guest.getIdentityNumber());
 
         return repo.save(dbGuest);
     }

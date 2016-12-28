@@ -1,5 +1,6 @@
 package has.Employee;
 
+import has.User.PersonalData;
 import has.User.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,24 +14,21 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Entity
-public class Employee implements Serializable {
+public class Employee extends PersonalData implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String dateHired;
-    private String fullName;
     private String post;
 
     @OneToOne
-//    @JsonIgnore
     private User user;
     //    public WorkingSchedule WorkingSchedule;
 //    public Reservation reservation;
 
-    public Employee(String dateHired, String fullName, String post) {
+    public Employee(String dateHired, String post) {
         this.dateHired = dateHired;
-        this.fullName = fullName;
         this.post = post;
     }
 

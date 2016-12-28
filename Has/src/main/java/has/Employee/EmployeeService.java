@@ -42,8 +42,15 @@ public class EmployeeService {
         }
 
         dbEmployee.setDateHired(employee.getDateHired());
-        dbEmployee.setFullName(employee.getFullName());
         dbEmployee.setPost(employee.getPost());
+        dbEmployee.setEgn(employee.getEgn());
+        dbEmployee.setAddress(employee.getAddress());
+        dbEmployee.setFullName(employee.getFullName());
+        dbEmployee.setPhone(employee.getPhone());
+        dbEmployee.setIdentityExpireDate(employee.getIdentityExpireDate());
+        dbEmployee.setIdentityIssueDate(employee.getIdentityIssueDate());
+        dbEmployee.setIdentityIssuedBy(employee.getIdentityIssuedBy());
+        dbEmployee.setIdentityNumber(employee.getIdentityNumber());
 
         return repo.save(dbEmployee);
     }
