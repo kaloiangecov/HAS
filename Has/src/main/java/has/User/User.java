@@ -1,10 +1,12 @@
 package has.User;
 
 import has.Employee.Employee;
+import has.Guest.Guest;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by kaloi on 12/17/2016.
@@ -12,22 +14,23 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String lastLogin;
     private String password;
+    private String email;
     private String regDate;
     private String role;
     private String username;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
-//    @JsonIgnore
-    //TODO: adding json ignore to the declaration prevents the object from being posted,
-    // the setter getter should be overwritten and anoteded with json ignore to make it work properly
     private Employee employee;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
+    private Guest guest;
 
     public User() {
 
@@ -50,4 +53,14 @@ public class User {
         this.username = username;
     }
 
+    public User(String lastLogin, String password, String email, String regDate, String role, String username, Employee employee, Guest guest) {
+        this.lastLogin = lastLogin;
+        this.password = password;
+        this.email = email;
+        this.regDate = regDate;
+        this.role = role;
+        this.username = username;
+        this.employee = employee;
+        this.guest = guest;
+    }
 }
