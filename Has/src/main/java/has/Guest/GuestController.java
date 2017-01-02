@@ -21,7 +21,7 @@ public class GuestController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Guest save(@RequestBody Guest guest) {
         return guestService.save(guest);
     }
@@ -29,7 +29,7 @@ public class GuestController {
     @RequestMapping(value = "/guests", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<Guest> getAllGuests() {
         return guestService.getAllGuests();
     }
@@ -37,7 +37,7 @@ public class GuestController {
     @RequestMapping(value = "/guest/{id}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Guest findGuestById(@PathVariable Long id) throws Exception {
         return guestService.findById(id);
     }
@@ -45,7 +45,7 @@ public class GuestController {
     @RequestMapping(value = "/guest/{id}", method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Guest removeGuestById(@PathVariable Long id) throws Exception {
         return guestService.remove(id);
     }
@@ -54,7 +54,7 @@ public class GuestController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Guest updateGuest(@PathVariable Long id, @RequestBody Guest guest) throws Exception {
         return guestService.update(id, guest);
     }

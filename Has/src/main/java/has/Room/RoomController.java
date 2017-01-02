@@ -21,7 +21,7 @@ public class RoomController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Room save(@RequestBody Room room){
         return roomService.save(room);
     }
@@ -29,7 +29,7 @@ public class RoomController {
     @RequestMapping(value = "/rooms", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<Room> getAllRooms(){
         return roomService.getAllRooms();
     }
@@ -37,7 +37,7 @@ public class RoomController {
     @RequestMapping(value = "/room/{id}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Room removeRoomById(@PathVariable Long id) throws Exception{
         return roomService.remove(id);
     }
@@ -46,7 +46,7 @@ public class RoomController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Room updateRoom(@PathVariable Long id, @RequestBody Room room) throws Exception {
         return roomService.update(id,room);
     }

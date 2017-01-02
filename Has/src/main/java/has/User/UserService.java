@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,7 +30,6 @@ public class UserService {
         dbUser.setLastLogin(user.getLastLogin());
         dbUser.setPassword(user.getPassword());
         dbUser.setRegDate(user.getRegDate());
-        dbUser.setRole(user.getRole());
         dbUser.setUsername(user.getUsername());
 
         return repo.save(dbUser);
@@ -60,9 +60,13 @@ public class UserService {
     private void initSomeData(){
         Employee emp1 = new Employee("yday","register");
 
-        User usr1 = new User("never", "password", "yesterday", "admin", "ivan", emp1);
+        RolePermission perm1 = new RolePermission("ADMIN");
+        List<RolePermission> permissions = new ArrayList<>();
+        permissions.add(perm1);
+        UserRole role1 = new UserRole("adm", permissions);
+
+        User usr1 = new User("never", "password", "yesterday", "ivan", emp1, role1);
 
         repo.save(usr1);
-
     }
 }

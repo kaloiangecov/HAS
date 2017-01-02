@@ -1,15 +1,24 @@
-package has.User;
+package has.PersonalData;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  * Created by kaloi on 12/23/2016.
  */
 @Getter
 @Setter
+@Entity
 public class PersonalData {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String address;
     private String egn;
     private String fullName;

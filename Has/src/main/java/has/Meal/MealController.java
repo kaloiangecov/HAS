@@ -22,7 +22,7 @@ public class MealController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Meal save(@RequestBody Meal meal) {
         return mealService.save(meal);
     }
@@ -30,7 +30,7 @@ public class MealController {
     @RequestMapping(value = "/meals", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<Meal> getAllMeals() {
         return mealService.getAllMeals();
     }
@@ -38,7 +38,7 @@ public class MealController {
     @RequestMapping(value = "/meal/{id}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Meal findMealById(@PathVariable Long id) throws Exception {
         return mealService.findById(id);
     }
@@ -46,7 +46,7 @@ public class MealController {
     @RequestMapping(value = "/meal/{id}", method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Meal removeMealById(@PathVariable Long id) throws Exception {
         return mealService.remove(id);
     }
@@ -55,7 +55,7 @@ public class MealController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Meal updateMeal(@PathVariable Long id, @RequestBody Meal meal) throws Exception {
         return mealService.update(id, meal);
     }

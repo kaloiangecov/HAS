@@ -22,14 +22,18 @@ public class EmployeeService {
         return repo.findAll();
     }
 
-    public Employee findById(Long id) {
-        return repo.findOne(id);
+    public Employee findById(Long id) throws Exception {
+        Employee employee = repo.findOne(id);
+        if(employee == null){
+            throw new Exception("There is no employee with such ID");
+        }
+        return employee;
     }
 
     public Employee remove(Long id) throws Exception {
         Employee employee = repo.findOne(id);
-        if (employee == null){
-            throw new Exception();
+        if(employee == null){
+            throw new Exception("There is no employee with such ID");
         }
         repo.delete(employee);
         return employee;
@@ -37,20 +41,20 @@ public class EmployeeService {
 
     public Employee update(Long id, Employee employee) throws Exception {
         Employee dbEmployee = repo.findOne(id);
-        if (dbEmployee == null){
-            throw new Exception();
+        if(dbEmployee == null){
+            throw new Exception("There is no employee with such ID");
         }
 
         dbEmployee.setDateHired(employee.getDateHired());
         dbEmployee.setPost(employee.getPost());
-        dbEmployee.setEgn(employee.getEgn());
-        dbEmployee.setAddress(employee.getAddress());
-        dbEmployee.setFullName(employee.getFullName());
-        dbEmployee.setPhone(employee.getPhone());
-        dbEmployee.setIdentityExpireDate(employee.getIdentityExpireDate());
-        dbEmployee.setIdentityIssueDate(employee.getIdentityIssueDate());
-        dbEmployee.setIdentityIssuedBy(employee.getIdentityIssuedBy());
-        dbEmployee.setIdentityNumber(employee.getIdentityNumber());
+//        dbEmployee.setEgn(employee.getEgn());
+//        dbEmployee.setAddress(employee.getAddress());
+//        dbEmployee.setFullName(employee.getFullName());
+//        dbEmployee.setPhone(employee.getPhone());
+//        dbEmployee.setIdentityExpireDate(employee.getIdentityExpireDate());
+//        dbEmployee.setIdentityIssueDate(employee.getIdentityIssueDate());
+//        dbEmployee.setIdentityIssuedBy(employee.getIdentityIssuedBy());
+//        dbEmployee.setIdentityNumber(employee.getIdentityNumber());
 
         return repo.save(dbEmployee);
     }
