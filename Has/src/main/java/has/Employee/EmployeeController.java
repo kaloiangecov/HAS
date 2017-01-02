@@ -21,7 +21,7 @@ public class EmployeeController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Employee save(@RequestBody Employee employee) {
         return employeeService.save(employee);
     }
@@ -29,7 +29,7 @@ public class EmployeeController {
     @RequestMapping(value = "/employees", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<Employee> getAllEmployees() {
         return employeeService.getAllEmployees();
     }
@@ -37,7 +37,7 @@ public class EmployeeController {
     @RequestMapping(value = "/employee/{id}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Employee findEmployeeById(@PathVariable Long id) throws Exception {
         return employeeService.findById(id);
     }
@@ -45,7 +45,7 @@ public class EmployeeController {
     @RequestMapping(value = "/employee/{id}", method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Employee removeEmployeeById(@PathVariable Long id) throws Exception {
         return employeeService.remove(id);
     }
@@ -54,7 +54,7 @@ public class EmployeeController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Employee updateEmployee(@PathVariable Long id, @RequestBody Employee employee) throws Exception {
         return employeeService.update(id, employee);
     }

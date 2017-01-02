@@ -1,6 +1,6 @@
 package has.Guest;
 
-import has.User.PersonalData;
+import has.PersonalData.PersonalData;
 import has.User.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,13 +13,16 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-public class Guest extends PersonalData {
+public class Guest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private int numberReservations;
     private int status;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private PersonalData personalData;
 
     @OneToOne
     private User user;

@@ -1,6 +1,6 @@
 package has.Employee;
 
-import has.User.PersonalData;
+import has.PersonalData.PersonalData;
 import has.User.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Entity
-public class Employee extends PersonalData implements Serializable {
+public class Employee implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,6 +24,9 @@ public class Employee extends PersonalData implements Serializable {
 
     @OneToOne
     private User user;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private PersonalData personalData;
     //    public WorkingSchedule WorkingSchedule;
 //    public Reservation reservation;
 

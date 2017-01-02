@@ -23,7 +23,7 @@ public class ReservationController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Reservation save(@RequestBody Reservation reservation, @AuthenticationPrincipal Employee employee) {
         return reservationService.save(reservation, employee);
     }
@@ -31,7 +31,7 @@ public class ReservationController {
     @RequestMapping(value = "/reservations", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<Reservation> getAllReservations() {
         return reservationService.getAllReservations();
     }
@@ -39,7 +39,7 @@ public class ReservationController {
     @RequestMapping(value = "/reservation/{id}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Reservation findReservationById(@PathVariable Long id) throws Exception {
         return reservationService.findById(id);
     }
@@ -47,7 +47,7 @@ public class ReservationController {
     @RequestMapping(value = "/reservation/{id}", method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Reservation removeReservationById(@PathVariable Long id) throws Exception {
         return reservationService.remove(id);
     }
@@ -56,7 +56,7 @@ public class ReservationController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Reservation updateReservation(@PathVariable Long id, @RequestBody Reservation reservation) throws Exception {
         return reservationService.update(id, reservation);
     }

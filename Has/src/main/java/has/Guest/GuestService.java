@@ -48,14 +48,14 @@ public class GuestService {
 
         dbGuest.setNumberReservations(guest.getNumberReservations());
         dbGuest.setStatus(guest.getStatus());
-        dbGuest.setEgn(guest.getEgn());
-        dbGuest.setAddress(guest.getAddress());
-        dbGuest.setFullName(guest.getFullName());
-        dbGuest.setPhone(guest.getPhone());
-        dbGuest.setIdentityExpireDate(guest.getIdentityExpireDate());
-        dbGuest.setIdentityIssueDate(guest.getIdentityIssueDate());
-        dbGuest.setIdentityIssuedBy(guest.getIdentityIssuedBy());
-        dbGuest.setIdentityNumber(guest.getIdentityNumber());
+//        dbGuest.setEgn(guest.getEgn());
+//        dbGuest.setAddress(guest.getAddress());
+//        dbGuest.setFullName(guest.getFullName());
+//        dbGuest.setPhone(guest.getPhone());
+//        dbGuest.setIdentityExpireDate(guest.getIdentityExpireDate());
+//        dbGuest.setIdentityIssueDate(guest.getIdentityIssueDate());
+//        dbGuest.setIdentityIssuedBy(guest.getIdentityIssuedBy());
+//        dbGuest.setIdentityNumber(guest.getIdentityNumber());
 
         return repo.save(dbGuest);
     }

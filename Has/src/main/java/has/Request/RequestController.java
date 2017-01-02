@@ -21,7 +21,7 @@ public class RequestController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Request save(@RequestBody Request request) {
         return requestService.save(request);
     }
@@ -29,7 +29,7 @@ public class RequestController {
     @RequestMapping(value = "/requests", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<Request> getAllRequests() {
         return requestService.getAllRequests();
     }
@@ -37,7 +37,7 @@ public class RequestController {
     @RequestMapping(value = "/request/{id}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Request findRequestById(@PathVariable Long id) throws Exception {
         return requestService.findById(id);
     }
@@ -45,7 +45,7 @@ public class RequestController {
     @RequestMapping(value = "/request/{id}", method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Request removeRequestById(@PathVariable Long id) throws Exception {
         return requestService.remove(id);
     }
@@ -54,7 +54,7 @@ public class RequestController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Request updateRequest(@PathVariable Long id, @RequestBody Request request) throws Exception {
         return requestService.update(id, request);
     }
