@@ -23,6 +23,7 @@ public class Room {
     private String roomClass;
     private String status;
     private boolean children;
+    private boolean minibar;
     private boolean pets;
 
     public Room(){

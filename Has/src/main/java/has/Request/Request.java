@@ -1,12 +1,11 @@
 package has.Request;
 
+import has.Meal.Meal;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by kaloi on 12/20/2016.
@@ -19,6 +18,8 @@ public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "requests", cascade = CascadeType.ALL)
+    private List<Meal> meals;
 //    private Map<Meal,int> meals;
 //    private ReservationGuest reservationGuest;
     private int status;

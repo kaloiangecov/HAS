@@ -1,6 +1,6 @@
 package has.Reservation;
 
-import has.Employee.Employee;
+import has.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,8 +24,8 @@ public class ReservationController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Reservation save(@RequestBody Reservation reservation, @AuthenticationPrincipal Employee employee) {
-        return reservationService.save(reservation, employee);
+    public Reservation save(@RequestBody Reservation reservation, @AuthenticationPrincipal User user) {
+        return reservationService.save(reservation, user);
     }
 
     @RequestMapping(value = "/reservations", method = RequestMethod.GET,
@@ -57,7 +57,7 @@ public class ReservationController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Reservation updateReservation(@PathVariable Long id, @RequestBody Reservation reservation) throws Exception {
-        return reservationService.update(id, reservation);
+    public Reservation updateReservation(@PathVariable Long id, @RequestBody Reservation reservation, @AuthenticationPrincipal User user) throws Exception {
+        return reservationService.update(id, reservation, user);
     }
 }

@@ -20,19 +20,17 @@ public class Employee implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String dateHired;
-    private String post;
+    private int internship;
 
     @OneToOne
     private User user;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private PersonalData personalData;
-    //    public WorkingSchedule WorkingSchedule;
-//    public Reservation reservation;
 
-    public Employee(String dateHired, String post) {
+    public Employee(String dateHired, int internship) {
         this.dateHired = dateHired;
-        this.post = post;
+        this.internship = internship;
     }
 
     public Employee() {

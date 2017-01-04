@@ -1,6 +1,7 @@
 package has.Reservation;
 
 import has.Employee.Employee;
+import has.User.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,6 +25,9 @@ public class Reservation {
     private String endDate;
     private boolean group;
 //    private List<ReservationGuest> guests;
+    @ManyToOne
+    private User lastModifidBy;
+    private String lastModifiedTime;
     private int numberAdults;
     private int numberChildren;
     private String price;

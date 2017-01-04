@@ -14,19 +14,19 @@ public class WorkingScheduleService {
     @Autowired
     private WorkingScheduleRepository repo;
 
-    public WorkingSchedule save(WorkingSchedule schedule){
+    public WorkingSchedule save(WorkingSchedule schedule) {
 
         return repo.save(schedule);
     }
 
-    public List<WorkingSchedule> getAllSchedules(){
+    public List<WorkingSchedule> getAllSchedules() {
 
         return repo.findAll();
     }
 
-    public WorkingSchedule findById(Long id)throws Exception{
+    public WorkingSchedule findById(Long id) throws Exception {
         WorkingSchedule dbSchedule = repo.findOne(id);
-        if(dbSchedule==null){
+        if (dbSchedule == null) {
             throw new Exception("There is no schedule with such ID");
         }
         return dbSchedule;
@@ -34,7 +34,7 @@ public class WorkingScheduleService {
 
     public WorkingSchedule remove(Long id) throws Exception {
         WorkingSchedule dbSchedule = repo.findOne(id);
-        if(dbSchedule == null){
+        if (dbSchedule == null) {
             throw new Exception("There is no schedule with such ID");
         }
         repo.delete(dbSchedule);
@@ -43,7 +43,7 @@ public class WorkingScheduleService {
 
     public WorkingSchedule update(Long id, WorkingSchedule schedule) throws Exception {
         WorkingSchedule dbSchedule = repo.findOne(id);
-        if(dbSchedule == null) {
+        if (dbSchedule == null) {
             throw new Exception("There is no schedule with such ID");
         }
         dbSchedule.setStartDate(schedule.getStartDate());

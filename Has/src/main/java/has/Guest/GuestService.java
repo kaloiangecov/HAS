@@ -27,7 +27,6 @@ public class GuestService {
         if(dbGuest == null){
             throw new Exception("There is no guest with such ID");
         }
-
         return dbGuest;
     }
 
