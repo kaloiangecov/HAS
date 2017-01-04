@@ -26,7 +26,6 @@ public class Guest {
 
     @OneToOne
     private User user;
-//    public ReservationGuest m_ReservationGuest;
 
     public Guest(){
 

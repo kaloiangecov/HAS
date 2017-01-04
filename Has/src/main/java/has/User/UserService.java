@@ -1,6 +1,7 @@
 package has.User;
 
 import has.Employee.Employee;
+import has.Exceptions.UserAlreadyExists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,10 @@ public class UserService {
     @Autowired
     private UserRepository repo;
 
-    public User save(User user){
+    public User save(User user) throws UserAlreadyExists {
+        if(repo.findByUsername(user.getUsername()) != null){
+            throw new UserAlreadyExists(user.getUsername());
+        }
         return repo.save(user);
     }
 
@@ -58,7 +62,7 @@ public class UserService {
 
     @PostConstruct
     private void initSomeData(){
-        Employee emp1 = new Employee("yday","register");
+        Employee emp1 = new Employee("yday",5);
 
         RolePermission perm1 = new RolePermission("ADMIN");
         List<RolePermission> permissions = new ArrayList<>();

@@ -51,6 +51,7 @@ public class RoomService {
         dbRoom.setBedsSingle(room.getBedsSingle());
         dbRoom.setChildren(room.isChildren());
         dbRoom.setPets(room.isPets());
+        dbRoom.setMinibar(room.isMinibar());
         return repo.save(dbRoom);
     }
 }

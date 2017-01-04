@@ -22,7 +22,7 @@ public class WorkingScheduleController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public WorkingSchedule save(@RequestBody WorkingSchedule schedule){
+    public WorkingSchedule save(@RequestBody WorkingSchedule schedule) {
         return wsService.save(schedule);
     }
 
@@ -30,15 +30,23 @@ public class WorkingScheduleController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<WorkingSchedule> getAllSchedules(){
+    public List<WorkingSchedule> getAllSchedules() {
         return wsService.getAllSchedules();
     }
 
-    @RequestMapping(value = "/schedule/{id}", method = RequestMethod.GET,
+    @RequestMapping(value = "/schedules/{id}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public WorkingSchedule removeScheduleById(@PathVariable Long id) throws Exception{
+    public WorkingSchedule getScheduleById(@PathVariable Long id) throws Exception {
+        return wsService.findById(id);
+    }
+
+    @RequestMapping(value = "/schedule/{id}", method = RequestMethod.DELETE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public WorkingSchedule removeScheduleById(@PathVariable Long id) throws Exception {
         return wsService.remove(id);
     }
 
@@ -48,6 +56,6 @@ public class WorkingScheduleController {
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
     public WorkingSchedule updateSchedule(@PathVariable Long id, @RequestBody WorkingSchedule schedule) throws Exception {
-        return wsService.update(id,schedule);
+        return wsService.update(id, schedule);
     }
 }

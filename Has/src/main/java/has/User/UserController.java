@@ -1,5 +1,6 @@
 package has.User;
 
+import has.Exceptions.UserAlreadyExists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,7 +23,7 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public User save(@RequestBody User user) {
+    public User save(@RequestBody User user) throws UserAlreadyExists {
         return userService.save(user);
     }
 

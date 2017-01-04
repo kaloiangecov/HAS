@@ -46,7 +46,7 @@ public class EmployeeService {
         }
 
         dbEmployee.setDateHired(employee.getDateHired());
-        dbEmployee.setPost(employee.getPost());
+        dbEmployee.setInternship(employee.getInternship());
 //        dbEmployee.setEgn(employee.getEgn());
 //        dbEmployee.setAddress(employee.getAddress());
 //        dbEmployee.setFullName(employee.getFullName());

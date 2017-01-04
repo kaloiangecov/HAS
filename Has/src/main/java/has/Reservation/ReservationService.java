@@ -1,9 +1,10 @@
 package has.Reservation;
 
-import has.Employee.Employee;
+import has.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,8 +17,8 @@ public class ReservationService {
     private ReservationRepository repo;
 
 
-    public Reservation save(Reservation reservation, Employee employee) {
-        reservation.setReceptionist(employee);
+    public Reservation save(Reservation reservation, User user) {
+        reservation.setLastModifidBy(user);
         return repo.save(reservation);
     }
 
@@ -42,7 +43,7 @@ public class ReservationService {
         return dbReservation;
     }
 
-    public Reservation update(Long id, Reservation reservation) throws Exception {
+    public Reservation update(Long id, Reservation reservation, User user) throws Exception {
         Reservation dbReservation = repo.findOne(id);
         if(dbReservation == null){
             throw new Exception("There is no reservation with such ID");
@@ -53,13 +54,16 @@ public class ReservationService {
         dbReservation.setAllInclusive(reservation.isAllInclusive());
         dbReservation.setBreakfast(reservation.isBreakfast());
         dbReservation.setDinner(reservation.isDinner());
-
         dbReservation.setDiscount(reservation.getDiscount());
+
         dbReservation.setEndDate(reservation.getEndDate());
         dbReservation.setGroup(reservation.isGroup());
         dbReservation.setNumberAdults(reservation.getNumberAdults());
         dbReservation.setStartDate(reservation.getStartDate());
         dbReservation.setNumberChildren(reservation.getNumberChildren());
+        dbReservation.setLastModifidBy(user);
+        dbReservation.setLastModifiedTime((new Date().toString()));
+//        dbReservation.setReceptionist(Employee employee);
 
         return repo.save(dbReservation);
     }
