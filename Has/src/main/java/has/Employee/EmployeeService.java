@@ -1,5 +1,7 @@
 package has.Employee;
 
+import has.mailsender.MailTemplates;
+import has.mailsender.SendMailSSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,7 +57,7 @@ public class EmployeeService {
 //        dbEmployee.setIdentityIssueDate(employee.getIdentityIssueDate());
 //        dbEmployee.setIdentityIssuedBy(employee.getIdentityIssuedBy());
 //        dbEmployee.setIdentityNumber(employee.getIdentityNumber());
-
+        SendMailSSL.sendMail("gunesh.shefkedov@gmail.com", MailTemplates.RESERVATION_CONFIRMATION);
         return repo.save(dbEmployee);
     }
 }
