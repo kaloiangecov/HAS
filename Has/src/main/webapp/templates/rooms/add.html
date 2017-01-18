@@ -1,0 +1,92 @@
+<div class="col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-plus"></i> <i class="fa fa-bed"></i> Add Room Form</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <form method="POST" name="roomForm" class="col-md-6 col-md-offset-3 col-xs-12" novalidate>
+                <div class="row">
+                    <div class="form-group col-xs-6">
+                        <label for="number">Room Number *</label>
+                        <input type="number" class="form-control" id="number" name="number" ng-model="room.number"
+                               min="100" max="2000" required="required"/>
+                        <div ng-show="roomForm.$submitted || roomForm.number.$touched"
+                             class="validation-message">
+                            <span ng-show="roomForm.number.$error.required">This field is required</span>
+                            <span ng-show="roomForm.number.$error.min">Number too small</span>
+                            <span ng-show="roomForm.number.$error.max">Number too big</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-6">
+                        <label for="type">Type</label>
+                        <select class="form-control" id="type" name="type" ng-model="room.type"
+                                ng-options="roomTypes.indexOf(item) as item for item in roomTypes" required="required">
+                        </select>
+                        <div ng-show="roomForm.$submitted || roomForm.type.$touched" class="validation-message">
+                            <span ng-show="roomForm.type.$error.required">This field is required</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-xs-6">
+                        <label for="bedsSingle">Small Beds *</label>
+                        <input type="number" class="form-control" id="bedsSingle" name="bedsSingle"
+                               ng-model="room.bedsSingle" min="0" max="4" required="required"/>
+                        <div ng-show="roomForm.$submitted || roomForm.bedsSingle.$touched"
+                             class="validation-message">
+                            <span ng-show="roomForm.bedsSingle.$error.required">This field is required</span>
+                            <span ng-show="roomForm.bedsSingle.$error.min">Number too small</span>
+                            <span ng-show="roomForm.bedsSingle.$error.max">Number too big</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-6">
+                        <label for="bedsDouble">Big Beds *</label>
+                        <input type="number" class="form-control" id="bedsDouble" name="bedsDouble"
+                               ng-model="room.bedsDouble" min="0" max="2" required="required"/>
+                        <div ng-show="roomForm.$submitted || roomForm.bedsDouble.$touched"
+                             class="validation-message">
+                            <span ng-show="roomForm.bedsDouble.$error.required">This field is required</span>
+                            <span ng-show="roomForm.bedsDouble.$error.min">Number too small</span>
+                            <span ng-show="roomForm.bedsDouble.$error.max">Number too big</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-xs-6">
+                        <label for="type">Status</label>
+                        <select class="form-control" id="status" name="status" ng-model="room.status"
+                                ng-options="roomStatuses.indexOf(item) as item for item in roomStatuses"
+                                required="required">
+                        </select>
+                        <div ng-show="roomForm.$submitted || roomForm.status.$touched" class="validation-message">
+                            <span ng-show="roomForm.status.$error.required">This field is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-6">
+                        <label for="children">
+                            <input type="checkbox" id="children" name="children" ng-model="room.children"/>
+                            Children
+                        </label>
+
+                        <label for="pets">
+                            <input type="checkbox" id="pets" name="pets" ng-model="room.pets"/>
+                            Pets
+                        </label>
+
+                        <label for="minibar">
+                            <input type="checkbox" id="minibar" name="minibar" ng-model="room.minibar"/>
+                            Minibar
+                        </label>
+                    </div>
+                </div>
+
+                <div class="ln_solid"></div>
+
+                <button type="submit" ng-click="submit(room)" class="btn btn-success">Submit</button>
+                <button type="reset" ng-click="reset()" class="btn btn-default">Reset</button>
+                <a type="button" class="btn btn-primary" href="#/rooms/list">Back</a>
+            </form>
+        </div>
+    </div>
+</div>
