@@ -1,0 +1,127 @@
+<div class="col-xs-12" id="scheduleContainer">
+    <div class="form-inline">
+        <input type="text" id="dateRange" name="dateRange" class="form-control"/>
+        <select class="form-control" ng-model="selectedRoom" ng-change="changeRoomType()">
+            <option value="All" ng-selected="true">All</option>
+            <option ng-repeat="type in roomTypes" value="{{type}}">{{type}}</option>
+        </select>
+    </div>
+
+
+    <daypilot-scheduler id="scheduler"
+                        config="config"
+                        events="events"
+                        on-event-selected="onEventSelected(args)"
+                        on-event-moved="onEventMoved(args)">
+    </daypilot-scheduler>
+
+
+    <div>
+        <span class="bold">Scale:</span>
+        <a ng-click="scale('Day')" href="javascript:void(0)">Days</a>
+        <a ng-click="scale('Week')" href="javascript:void(0)">Weeks</a>
+    </div>
+    <div>
+        <div>Event list:</div>
+        <ul>
+            <li ng-repeat="item in events">
+                {{item}}
+            </li>
+        </ul>
+        <div>Selected events (click or Ctrl+click to select):</div>
+        <ul>
+            <li ng-repeat="item in selectedEvents">
+                {{item.text()}} - {{item.start()}}
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="modal fade" id="reservationModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST" name="reservationForm" novalidate>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                            ng-click="resetReservation()"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Add reservation</h4>
+                </div>
+                <div class="modal-body row">
+                    <div class="form-group col-sm-12 col-xs-12">
+                        <label for="fullName">Full Name *</label>
+                        <input type="text" class="form-control" id="fullName" name="fullName"
+                               ng-model="reservation.name"
+                               minlength="4" maxlength="64" required="required"/>
+                        <div ng-show="reservationForm.$submitted || reservationForm.fullName.$touched"
+                             class="validation-message">
+                            <span ng-show="reservationForm.fullName.$error.required">This field is required</span>
+                            <span ng-show="reservationForm.fullName.$error.minlength">Input too short</span>
+                            <span ng-show="reservationForm.fullName.$error.maxlength">Input too long</span>
+                        </div>
+
+                    </div>
+                    <div class="form-group col-sm-12 col-xs-12">
+                        <label for="address">Address *</label>
+                        <input type="text" class="form-control" id="address" name="address"
+                               ng-model="reservation.address"
+                               minlength="4" maxlength="100" required="required"/>
+                        <div ng-show="reservationForm.$submitted || reservationForm.address.$touched"
+                             class="validation-message">
+                            <span ng-show="reservationForm.address.$error.required">This field is required</span>
+                            <span ng-show="reservationForm.address.$error.minlength">Input too short</span>
+                            <span ng-show="reservationForm.address.$error.maxlength">Input too long</span>
+                        </div>
+
+                    </div>
+                    <div class="form-group col-sm-6 col-xs-12">
+                        <label for="city">City *</label>
+                        <input type="text" class="form-control" id="city" name="city" ng-model="reservation.city"
+                               minlength="3" maxlength="32" required="required"/>
+                        <div ng-show="reservationForm.$submitted || reservationForm.city.$touched"
+                             class="validation-message">
+                            <span ng-show="reservationForm.city.$error.required">This field is required</span>
+                            <span ng-show="reservationForm.city.$error.minlength">Input too short</span>
+                            <span ng-show="reservationForm.city.$error.maxlength">Input too long</span>
+                        </div>
+
+                    </div>
+                    <div class="form-group col-sm-6 col-xs-12">
+                        <label for="country">Country *</label>
+                        <select class="form-control" id="country" name="country"
+                                ng-model="reservation.country"
+                                ng-options="item.code as item.name for item in countries track by item.code"
+                                required="required">
+                        </select>
+                    </div>
+                    <div class="form-group col-sm-6 col-xs-12">
+                        <label for="phone">Phone *</label>
+                        <input type="text" class="form-control" id="phone" name="phone" ng-model="reservation.phone"
+                               minlength="8" maxlength="11" required="required"/>
+                        <div ng-show="reservationForm.$submitted || reservationForm.phone.$touched"
+                             class="validation-message">
+                            <span ng-show="reservationForm.phone.$error.required">This field is required</span>
+                            <span ng-show="reservationForm.phone.$error.minlength">Input too short</span>
+                            <span ng-show="reservationForm.phone.$error.maxlength">Input too long</span>
+                        </div>
+
+                    </div>
+                    <div class="form-group col-sm-6 col-xs-12">
+                        <label for="email">E-Mail</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="name@mail.com"
+                               ng-model="user.email"/>
+                        <div ng-show="reservationForm.$submitted || reservationForm.email.$touched"
+                             class="validation-message">
+                            <span ng-show="reservationForm.email.$error.email">This is not a valid email</span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" ng-click="addReservation()" class="btn btn-primary">Submit</button>
+                    <button type="reset" ng-click="resetReservation()" class="btn btn-default">Reset</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

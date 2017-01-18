@@ -1,0 +1,119 @@
+.actions-column {
+    width: 80px;
+}
+
+a.action-btn {
+    padding: 5px;
+    margin-right: 6px;
+}
+
+a.action-btn:hover {
+    background-color: rgba(50,50,50,0.1);
+    border-radius: 10px;
+}
+
+a > i.fa-refresh {
+    color: #26B99A;
+}
+a > i.fa-refresh:hover {
+    color: #26DD9A;
+}
+
+a > i.fa-ban {
+    color: #e55;
+}
+a > i.fa-ban:hover {
+    color: #f77;
+}
+
+a > i.fa-user-times {
+    color: #a11;
+}
+
+.dataTables_filter {
+    width: 100%;
+}
+
+.checkbox-form > label {
+    padding-left: 2px;
+}
+
+.buttons-excel, .buttons-excel:hover {
+    color: #26B99A;
+}
+
+.buttons-pdf, .buttons-pdf:hover {
+    color: #e55;
+}
+
+.StepTitle {
+    text-align: center;
+}
+
+.wizard_steps {
+    padding-left: 0px;
+}
+
+table.table-info > tbody > tr > th {
+    text-align: right;
+}
+table.table-info > tbody > tr > td {
+    text-align: left;
+}
+
+.img-profile-holder {
+    max-width: 100%;
+    width: 100%;
+    background-image: url('../img/transparency.png');
+    background-repeat: repeat;
+    margin-bottom: 6px;
+    padding: 0px;
+    text-align: center;
+}
+
+.img-profile-holder img {
+    width: inherit;
+    max-height: inherit;
+    padding: 0px;
+    /* box-shadow: 0px 0px 4px #555; */
+    
+}
+
+.validation-message span {
+    color: #e55;
+    font-weight: bold;
+}
+
+.scheduler_default_main {
+    margin-top: 10px;
+}
+
+.scheduler_default_rowheader {
+    background-color: white;
+}
+
+.scheduler_default_rowheadercol2
+{
+    background-color: white;
+}
+.scheduler_default_rowheadercol2 .scheduler_default_rowheader_inner 
+{
+    top: 2px;
+    bottom: 2px;
+    left: 2px;
+    background-color: transparent;
+    border-left: 5px solid #1ABB9C; /* status: "free" (default), green color */
+    border-right: 0px none;
+}
+.status_dirty.scheduler_default_rowheadercol2 .scheduler_default_rowheader_inner
+{
+    border-left: 5px solid #e55; /* status: "dirty", red color */
+}
+.status_cleanup.scheduler_default_rowheadercol2 .scheduler_default_rowheader_inner
+{
+    border-left: 5px solid #feda55; /* status: "cleanup", orange color */
+}
+
+.login_wrapper {
+    display: none;
+}

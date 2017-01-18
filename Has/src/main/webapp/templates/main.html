@@ -1,0 +1,24 @@
+<!-- left menu -->
+<div ui-view="menu" class="col-md-3 left_col"></div>
+<!-- /left menu -->
+
+<!-- top navigation -->
+<div ui-view="navigation" class="top_nav"></div>
+
+<!-- /top navigation -->
+
+<!-- page content -->
+<div class="right_col" role="main">
+
+    <div class="page-title">
+        <div class="title_left">
+            <h3>{{page.title}}</h3>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <div ui-view="content" class="row"></div>
+    <!-- /top tiles -->
+
+</div>
+<!-- /page content -->
