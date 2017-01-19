@@ -1,0 +1,34 @@
+<div class="col-lg-6 col-md-7 col-sm-6 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-user"></i> Profile Details</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content form-horizontal form-label-left">
+
+            <div class="img-profile-holder">
+                <img src="img/djordjano.jpg" alt="Profile Picture"/>
+            </div>
+
+            <p id="shit"></p>
+            <table class="table table-info table-hover">
+                <tr>
+                    <th>Username</th>
+                    <td>{{loginData.username}}</td>
+                </tr>
+                <tr>
+                    <th>Full Name</th>
+                    <td>{{loginData.fullName}}</td>
+                </tr>
+                <tr>
+                    <th>E-mail</th>
+                    <td>{{loginData.email}}</td>
+                </tr>
+                <tr>
+                    <th>Last login</th>
+                    <td>{{loginData.lastLogin.toLocaleString()}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-users"></i> Users List</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li>
+                    <a class="collapse-link" style="visibility:hidden"><i class="fa fa-chevron-up"></i></a>
+                </li>
+                <li>
+                    <a class="collapse-link" style="visibility:hidden"><i class="fa fa-chevron-up"></i></a>
+                </li>
+                <li>
+                    <a class="btn" href="#/users/add" role="button" aria-expanded="false" title="Create new user"><i
+                            class="fa fa-user-plus"></i></a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+            <form class="form-inline text-center" ng-submit="search()">
+                <input type="text" class="form-control" ng-model="filters.username" placeholder="Username"/>
+                <input type="text" class="form-control" ng-model="filters.email" placeholder="Email"/>
+                <select class="form-control roles" ng-model="filters.role" title="Role">
+                    <option value="{{$index}}" ng-repeat="role in roles" ng-selected="$index == user.role">{{role}}
+                    </option>
+                </select>
+                <button type="submit" class="btn btn-primary" style="position:relative;top:+3px;"><i
+                        class="fa fa-search"></i> Search
+                </button>
+            </form>
+        </div>
+        <div class="x_content">
+            <table datatable="" dt-options="dtOptions" dt-columns="dtColumns" dt-instance="dtInstance"
+                   class="table table-hover" style="width:100%"></table>
+        </div>
+    </div>
+</div>
