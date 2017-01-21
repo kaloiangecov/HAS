@@ -1,12 +1,46 @@
-app.controller("roomCtrl", function ($scope, $state, $stateParams, $resource, $timeout, $interval, DTOptionsBuilder, DTColumnBuilder) {
+app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resource, $timeout, $interval, DTOptionsBuilder, DTColumnBuilder) {
     $scope.page.title = "Rooms";
     $scope.roomsTable;
     $scope.master = {};
     $scope.isEdit = false;
 
-    if ($stateParams.id) {
+    function saveRoom() {
+        var url = $scope.isEdit ? ("room/" + $stateParams.id) : "room";
+        var method = $scope.isEdit ? "PUT" : "POST";
+
+        $http({
+            method: method,
+            url: url,
+            data: $scope.master,
+            responseType: "json"
+        }).then(
+            function (response) { //success
+                if ($scope.isEdit) {
+                    alert('Edited: ' + $scope.master.number);
+                } else {
+                    alert('Created: ' + $scope.master.number);
+                }
+            },
+            function (response) { //error
+                alert(response.data.message);
+            });
+    }
+
+    if ($stateParams && $stateParams.id) {
         $scope.isEdit = true;
-        $scope.room = angular.copy($scope.rooms[$stateParams.id]);
+        var url = "room/" + $stateParams.id;
+
+        $http({
+            method: "GET",
+            url: url,
+            responseType: "json"
+        }).then(
+            function (response) { //success
+                $scope.room = response.data;
+            },
+            function (response) { //error
+                alert(response.data.message);
+            });
     }
     else {
         $scope.isEdit = false;
@@ -22,19 +56,10 @@ app.controller("roomCtrl", function ($scope, $state, $stateParams, $resource, $t
         };
     }
 
-    $scope.submit = function (user) {
+    $scope.submit = function (room) {
         if ($scope.roomForm.$valid) {
-            $scope.master = angular.copy(user);
-
-            if ($scope.isEdit) {
-                $scope.rooms[$stateParams.id] = $scope.master;
-            } else {
-                $scope.rooms.push($scope.master);
-            }
-
-            delete $scope.master.picture;
-            $scope.exportForm($scope.master);
-
+            $scope.master = angular.copy(room);
+            saveRoom();
             $state.go('loggedin.root.users.list')
         }
     };
@@ -49,8 +74,14 @@ app.controller("roomCtrl", function ($scope, $state, $stateParams, $resource, $t
 
     $scope.dtOptions = DTOptionsBuilder.newOptions()
         .withOption('ajax', {
-            url: 'sample_data/sampleRooms.json', //TODO put real service URL here
-            type: 'GET'
+            url: 'searchrooms',
+            type: 'GET',
+            dataType: "json",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': ('Basic ' + window.base64encode($scope.loginData.username + ':' + $scope.loginData.password))
+            },
         })
         .withDataProp('data')
         .withOption('processing', true)
@@ -60,7 +91,7 @@ app.controller("roomCtrl", function ($scope, $state, $stateParams, $resource, $t
 
     $scope.dtColumns = [
         DTColumnBuilder.newColumn('number', 'Number'),
-        DTColumnBuilder.newColumn('type', 'Type')
+        DTColumnBuilder.newColumn('roomClass', 'Type')
             .renderWith(function (typeIndex) {
                 return $scope.roomTypes[typeIndex];
             }),
@@ -83,7 +114,7 @@ app.controller("roomCtrl", function ($scope, $state, $stateParams, $resource, $t
     };
 
     angular.element(document).ready(function () {
-        $interval($scope.reloadTableData, 5000);
+        //$interval($scope.reloadTableData, 5000);
     });
 
 });

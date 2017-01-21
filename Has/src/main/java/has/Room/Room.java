@@ -17,11 +17,11 @@ public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String bedsDouble;
-    private String bedsSingle;
-    private String number;
-    private String roomClass;
-    private String status;
+    private int bedsDouble;
+    private int bedsSingle;
+    private int number;
+    private int roomClass;
+    private int status;
     private boolean children;
     private boolean minibar;
     private boolean pets;
@@ -29,7 +29,7 @@ public class Room {
     public Room(){
     }
 
-    public Room(String bedsDouble, String bedsSingle, String number, String roomClass, String status, boolean children, boolean pets) {
+    public Room(int bedsDouble, int bedsSingle, int number, int roomClass, int status, boolean children, boolean pets, boolean minibar) {
         this.bedsDouble = bedsDouble;
         this.bedsSingle = bedsSingle;
         this.number = number;
@@ -37,5 +37,6 @@ public class Room {
         this.status = status;
         this.children = children;
         this.pets = pets;
+        this.minibar = minibar;
     }
 }

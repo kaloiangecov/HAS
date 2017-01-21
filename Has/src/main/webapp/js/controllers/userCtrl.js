@@ -8,23 +8,9 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
 
     if ($stateParams && $stateParams.id) {
         $scope.isEdit = true;
-        var url = "sample_data/sampleUsers.json"; //TODO put real service URL here
-
-        $http({
-            method: "GET",
-            url: url,
-            data: {
-                id: $stateParams.id
-            },
-            responseType: "json"
-        }).then(
-            function (response) { //success
-                $scope.user = response.data;
-                console.log($scope.user);
-            },
-            function (response) { //error
-                alert(response.statusText);
-            });
+        $scope.getUser($stateParams.id, function(data) {
+            $scope.user = data;
+        });
     }
     else {
         $scope.isEdit = false;
@@ -34,20 +20,21 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
         };
     }
 
-    $scope.search = function () {
-        alert(JSON.stringify($scope.filters));
-        $scope.reloadTableData();
-    };
-
     $scope.submit = function (user) {
         if ($scope.userForm.$valid) {
             $scope.master = angular.copy(user);
-            var url = $scope.isEdit ?
-                "sample_data/sampleUsers.json" : // TODO put real service URL here
-                "sample_data/sampleUsers.json"; // TODO put real service URL here
+            $scope.master.regDate = (new Date()).toISOString();
+            $scope.master.lastLogin = (new Date()).toISOString();
+            $scope.master.userRole = {
+                id: user.role,
+                roleName: sampleRoles[user.role]
+            }
+
+            var url = $scope.isEdit ? ("user/" + $stateParams.id) : "user";
+            var method = $scope.isEdit ? "PUT" : "POST";
 
             $http({
-                method: "POST",
+                method: method,
                 url: url,
                 data: $scope.master,
                 responseType: "json"
@@ -60,17 +47,17 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
                     }
                 },
                 function (response) { //error
-                    alert(response.statusText);
+                    alert(response.data.message);
                 });
             $state.go('loggedin.root.users.list')
         }
     };
 
     $scope.banUser = function (index) {
-        var url = "sample_data/sampleUsers.json"; //TODO put real service URL here
+        var url = "user" + $stateParams.id;
 
         $http({
-            method: "POST",
+            method: "DELETE",
             url: url,
             data: {
                 id: $stateParams.id
@@ -81,7 +68,7 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
                 alert("User banned");
             },
             function (response) { //error
-                alert(response.statusText);
+                alert(response.data.message);
             });
 
         reloadData();
@@ -89,11 +76,16 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
 
     // users table
     $scope.dtInstance = {};
-
     $scope.dtOptions = DTOptionsBuilder.newOptions()
         .withOption('ajax', {
-            url: 'sample_data/sampleUsers.json', //TODO put real service URL here
+            url: 'searchusers',
             type: 'GET',
+            dataType: "json",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': ('Basic ' + window.base64encode($scope.loginData.username + ':' + $scope.loginData.password))
+            },
             data: {
                 username: $scope.filters.username,
                 email: $scope.filters.email,
@@ -110,10 +102,7 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
         DTColumnBuilder.newColumn('id', 'ID'),
         DTColumnBuilder.newColumn('username', 'Username'),
         DTColumnBuilder.newColumn('email', 'E-Mail'),
-        DTColumnBuilder.newColumn('role', 'Role')
-            .renderWith(function (data) {
-                return $scope.roles[data];
-            }),
+        DTColumnBuilder.newColumn('userRole.roleName', 'Role'),
         DTColumnBuilder.newColumn('lastLogin', 'Last Login')
             .renderWith(function (date) {
                 return new Date(date).toLocaleString();
@@ -140,7 +129,7 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
     angular.element(document).ready(function () {
         //$('.roles').select2();
 
-        $interval($scope.reloadTableData, 5000);
+        //$interval($scope.reloadTableData, 5000);
 
         $('#inputPicture').on('change', function () {
             var files = $(this).prop('files');

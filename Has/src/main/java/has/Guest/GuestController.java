@@ -1,5 +1,7 @@
 package has.Guest;
 
+import has.DataTableResult;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -7,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by kaloi on 12/20/2016.
@@ -32,6 +35,26 @@ public class GuestController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Guest> getAllGuests() {
         return guestService.getAllGuests();
+    }
+
+    @RequestMapping(value = "/searchguests", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public @ResponseBody
+    DataTableResult searchGuests(HttpServletRequest request) throws Exception {
+        Map<String, String[]> parameterMap = request.getParameterMap();
+
+        List<Guest> guests = guestService.getAllGuests();
+
+        return new DataTableResult(
+                Integer.parseInt(parameterMap.get("draw")[0]),
+                Integer.parseInt(parameterMap.get("start")[0]),
+                Integer.parseInt(parameterMap.get("length")[0]),
+                guests.size(),
+                guests.size(),
+                guests);
     }
 
     @RequestMapping(value = "/guest/{id}", method = RequestMethod.GET,

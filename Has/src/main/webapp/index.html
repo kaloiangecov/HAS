@@ -24,6 +24,7 @@
 
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="js/datatables.min.js"></script>
+    <script src="js/base64.js"></script>
 
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
@@ -43,7 +44,7 @@
 <body class="nav-md" ng-app="mse">
 <div ui-view="login" class="login_wrapper"></div>
 
-<div class="container body" id="logged_content">
+<div class="container body" id="logged_content" ng-controller="mainCtrl">
     <div class="main_container">
         <div ui-view="loggedin"></div>
     </div>
@@ -68,6 +69,7 @@
 <script src="bower_components/iCheck/icheck.min.js"></script>
 <script src="bower_components/switchery/dist/switchery.min.js"></script>
 <script src="js/gentelella.js"></script>
+
 
 </body>
 

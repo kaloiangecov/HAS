@@ -35,31 +35,8 @@ public class User implements Serializable, UserDetails {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private UserRole userRole;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
-    private Employee employee;
-
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
-    private Guest guest;
-
     public User() {
 
-    }
-
-    public User(String lastLogin, String password, String regDate, String username, Employee employee) {
-        this.lastLogin = lastLogin;
-        this.password = password;
-        this.regDate = regDate;
-        this.username = username;
-        this.employee = employee;
-    }
-
-    public User(String lastLogin, String password, String regDate, String username, Employee employee, UserRole userRole) {
-        this.lastLogin = lastLogin;
-        this.password = password;
-        this.regDate = regDate;
-        this.username = username;
-        this.employee = employee;
-        this.userRole = userRole;
     }
 
     public User(String lastLogin, String password, String regDate, String username) {
@@ -69,14 +46,21 @@ public class User implements Serializable, UserDetails {
         this.username = username;
     }
 
-    public User(String lastLogin, String password, String email, String regDate, String username, Employee employee, Guest guest) {
+    public User(String lastLogin, String password, String regDate, String username, UserRole userRole) {
+        this.lastLogin = lastLogin;
+        this.password = password;
+        this.regDate = regDate;
+        this.username = username;
+        this.userRole = userRole;
+    }
+
+    public User(String lastLogin, String password, String email, String regDate, String username, UserRole userRole) {
         this.lastLogin = lastLogin;
         this.password = password;
         this.email = email;
         this.regDate = regDate;
         this.username = username;
-        this.employee = employee;
-        this.guest = guest;
+        this.userRole = userRole;
     }
 
     @Override
@@ -111,33 +95,15 @@ public class User implements Serializable, UserDetails {
         return true;
     }
 
-    @JsonIgnore
+    //@JsonIgnore
     public UserRole getUserRole() {
         return userRole;
     }
 
-    @JsonIgnore
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    @JsonIgnore
-    public Guest getGuest() {
-        return guest;
-    }
 
     @JsonProperty
     public void setUserRole(UserRole userRole) {
         this.userRole = userRole;
     }
 
-    @JsonProperty
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
-
-    @JsonProperty
-    public void setGuest(Guest guest) {
-        this.guest = guest;
-    }
 }

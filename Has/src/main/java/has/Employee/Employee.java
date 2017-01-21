@@ -33,6 +33,13 @@ public class Employee implements Serializable {
         this.internship = internship;
     }
 
+    public Employee(String dateHired, int internship, User user, PersonalData personalData) {
+        this.dateHired = dateHired;
+        this.internship = internship;
+        this.user = user;
+        this.personalData = personalData;
+    }
+
     public Employee() {
     }
 }

@@ -1,5 +1,7 @@
 package has.Room;
 
+import has.DataTableResult;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -7,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Chokleet on 20.12.2016 г..
@@ -34,7 +37,35 @@ public class RoomController {
         return roomService.getAllRooms();
     }
 
-    @RequestMapping(value = "/room/{id}", method = RequestMethod.GET,
+    @RequestMapping(value = "/searchrooms", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public @ResponseBody
+    DataTableResult searchRooms(HttpServletRequest request) throws Exception {
+        Map<String, String[]> parameterMap = request.getParameterMap();
+
+        List<Room> rooms = roomService.getAllRooms();
+
+        return new DataTableResult(
+                Integer.parseInt(parameterMap.get("draw")[0]),
+                Integer.parseInt(parameterMap.get("start")[0]),
+                Integer.parseInt(parameterMap.get("length")[0]),
+                rooms.size(),
+                rooms.size(),
+                rooms);
+    }
+
+    @RequestMapping(value = "/room/{number}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Room findRoomByNumber(@PathVariable Integer number) throws Exception {
+        return roomService.findByNumber(number);
+    }
+
+    @RequestMapping(value = "/room/{id}", method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")

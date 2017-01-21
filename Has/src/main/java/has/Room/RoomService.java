@@ -22,6 +22,14 @@ public class RoomService {
         return repo.findAll();
     }
 
+    public Room findByNumber(Integer number)throws Exception{
+        Room dbRoom = repo.findByNumber(number);
+        if(dbRoom==null){
+            throw new Exception("There is no room with such ID");
+        }
+        return dbRoom;
+    }
+
     public Room findById(Long id)throws Exception{
         Room dbRoom = repo.findOne(id);
         if(dbRoom==null){

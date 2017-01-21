@@ -5,24 +5,42 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
     $scope.users = [];
     $scope.isEdit = false;
 
+    function saveEmployee() {
+        var url = $scope.isEdit ? ("employee/" + $stateParams.id) : "employee";
+        var method = $scope.isEdit ? "PUT" : "POST";
+
+        $http({
+            method: method,
+            url: url,
+            data: $scope.master,
+            responseType: "json"
+        }).then(
+            function (response) { //success
+                if ($scope.isEdit) {
+                    alert('Edited: ' + $scope.master.personalData.fullName);
+                } else {
+                    alert('Created: ' + $scope.master.personalData.fullName);
+                }
+            },
+            function (response) { //error
+                alert(response.data.message);
+            });
+    }
+
     if ($stateParams && $stateParams.id) {
         $scope.isEdit = true;
-        var url = "sample_data/sampleEmployees.json"; //TODO put real service URL here
+        var url = "employee/" + $stateParams.id;
 
         $http({
             method: "GET",
             url: url,
-            data: {
-                id: $stateParams.id
-            },
             responseType: "json"
         }).then(
             function (response) { //success
                 $scope.employee = response.data;
-                console.log($scope.user);
             },
             function (response) { //error
-                alert(response.statusText);
+                alert(response.data.message);
             });
     }
     else {
@@ -32,47 +50,19 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
         };
     }
 
-
-    $http({
-        method: "GET",
-        url: "sample_data/sampleUsers.json", //TODO put real service URL here
-        responseType: "json"
-    }).then(
-        function (response) { //success
-            $scope.users = response.data.data;
-        },
-        function (response) { //error
-            alert(response.statusText);
-        });
-
-    $scope.search = function () {
-        alert(JSON.stringify($scope.filters));
-        $scope.reloadTableData();
-    };
-
     $scope.submit = function (employee) {
         if ($scope.employeeForm.$valid) {
             $scope.master = angular.copy(employee);
-            var url = $scope.isEdit ?
-                "sample_data/sampleEmployees.json" : // TODO put real service URL here
-                "sample_data/sampleEmployees.json"; // TODO put real service URL here
 
-            $http({
-                method: "POST",
-                url: url,
-                data: $scope.master,
-                responseType: "json"
-            }).then(
-                function (response) { //success
-                    if ($scope.isEdit) {
-                        alert('Edited: ' + $scope.master.personalData.fullName);
-                    } else {
-                        alert('Created: ' + $scope.master.personalData.fullName);
-                    }
-                },
-                function (response) { //error
-                    alert(response.statusText);
+            delete $scope.master.userID;
+
+            if (!$scope.isEdit)
+                $scope.getUser(employee.userID, function(data) {
+                    $scope.master.user = data;
                 });
+            if ($scope.master.user)
+                saveEmployee();
+
             $state.go('loggedin.root.employees.list')
         }
     };
@@ -82,8 +72,14 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
 
     $scope.dtOptions = DTOptionsBuilder.newOptions()
         .withOption('ajax', {
-            url: 'sample_data/sampleEmployees.json', //TODO put real service URL here
+            url: 'searchemployees',
             type: 'GET',
+            dataType: "json",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': ('Basic ' + window.base64encode($scope.loginData.username + ':' + $scope.loginData.password))
+            },
             data: {
                 fullName: $scope.filters.fullName,
                 dateHired: $scope.filters.dateHired
@@ -103,10 +99,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
             .renderWith(function (date) {
                 return new Date(date).toLocaleDateString();
             }),
-        DTColumnBuilder.newColumn('userID', 'User')
-            .renderWith(function (userID) {
-                return $scope.users[userID].username;
-            }),
+        DTColumnBuilder.newColumn('user.username', 'User'),
         DTColumnBuilder.newColumn('id').notSortable().withClass('actions-column')
             .renderWith(function (data) {
                 var html = '<a class="action-btn" href="#/employees/edit/' +
@@ -123,6 +116,10 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
     };
 
     angular.element(document).ready(function () {
+        $scope.getAllUsers(function(data) {
+            $scope.uesrs = data;
+        });
+
         $('#dateHired').daterangepicker({
                 singleDatePicker: true,
                 showDropdowns: true
@@ -145,7 +142,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
                 $scope.employee.personalData.identityExpireDate = start.toISOString();
             });
 
-        $interval($scope.reloadTableData, 5000);
+        //$interval($scope.reloadTableData, 5000);
     });
 
 });

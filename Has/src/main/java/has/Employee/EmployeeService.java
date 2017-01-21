@@ -49,15 +49,11 @@ public class EmployeeService {
 
         dbEmployee.setDateHired(employee.getDateHired());
         dbEmployee.setInternship(employee.getInternship());
-//        dbEmployee.setEgn(employee.getEgn());
-//        dbEmployee.setAddress(employee.getAddress());
-//        dbEmployee.setFullName(employee.getFullName());
-//        dbEmployee.setPhone(employee.getPhone());
-//        dbEmployee.setIdentityExpireDate(employee.getIdentityExpireDate());
-//        dbEmployee.setIdentityIssueDate(employee.getIdentityIssueDate());
-//        dbEmployee.setIdentityIssuedBy(employee.getIdentityIssuedBy());
-//        dbEmployee.setIdentityNumber(employee.getIdentityNumber());
-        SendMailSSL.sendMail("gunesh.shefkedov@gmail.com", MailTemplates.RESERVATION_CONFIRMATION);
+        dbEmployee.setPersonalData(employee.getPersonalData());
+        if (dbEmployee.getUser().getId() != employee.getUser().getId())
+            dbEmployee.setUser(employee.getUser());
+
+        SendMailSSL.sendMail("shit@shit.com", MailTemplates.RESERVATION_CONFIRMATION);
         return repo.save(dbEmployee);
     }
 }

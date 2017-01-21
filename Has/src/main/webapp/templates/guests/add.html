@@ -24,7 +24,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-6 col-sm-6 col-xs-12" for="user">User</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <select class="form-control roles" id="user" name="user" ng-model="guest.user"
+                        <select class="form-control roles" id="user" name="user" ng-model="guest.userID"
                                 ng-options="item.id as item.username for item in users track by item.id">
                         </select>
                         <div ng-show="guestForm.$submitted || guestForm.user.$touched" class="validation-message">
@@ -35,7 +35,7 @@
 
                 <div class="ln_solid"></div>
                 <div class="form-group">
-                    <div class="col-md-8 col-sm-8 col-xs-12 col-sm-offset-4">
+                    <div class="col-md-8 col-sm-10 col-xs-12 col-sm-offset-2 col-md-offset-4">
                         <button type="submit" ng-click="submit(guest)" class="btn btn-success">Submit</button>
                         <button type="reset" class="btn btn-default">Reset</button>
                         <a type="button" class="btn btn-primary" href="#/guests/list">Back</a>
@@ -83,7 +83,7 @@
                     <label class="control-label col-md-4 col-sm-4 col-xs-12" for="egn">EGN *</label>
                     <div class="col-md-8 col-sm-8 col-xs-12">
                         <input type="text" class="form-control" id="egn" name="egn"
-                               ng-model="guest.personalData.egn" minlength="9" maxlength="9" required="required"/>
+                               ng-model="guest.personalData.egn" minlength="10" maxlength="10" required="required"/>
                         <div ng-show="guestForm.$submitted || guestForm.egn.$touched"
                              class="validation-message">
                             <span ng-show="guestForm.egn.$error.required">This field is required</span>

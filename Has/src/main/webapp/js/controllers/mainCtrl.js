@@ -12,7 +12,7 @@ app.controller("mainCtrl", function ($scope, $http) {
 
     $http({
         method: "GET",
-        url: "sample_data/countries.json"
+        url: "js/countries.json"
     })
         .then(
             function (response) { //success
@@ -21,6 +21,35 @@ app.controller("mainCtrl", function ($scope, $http) {
             function (response) { //error
                 alert(response.statusText);
             });
+
+    $scope.getUser = function (userID, updateCallback) {
+        var response = $http({
+            method: "GET",
+            url: ("user/" + userID),
+            responseType: "json"
+        }).then(
+            function (response) { //success
+                return response.data;
+            },
+            function (response) { //error
+                alert(response.data.message);
+            }).then(updateCallback);
+    };
+
+    $scope.getAllUsers = function (updateCallback) {
+        $http({
+            method: "GET",
+            url: "users",
+            responseType: "json"
+        }).then(
+            function (response) { //success
+                return response.data;
+            },
+            function (response) { //error
+                alert(response.data.message);
+                return undefined;
+            }).then(updateCallback(data));
+    };
 
     $scope.exportForm = function (data) {
         var text = JSON.stringify(data);
@@ -54,16 +83,8 @@ app.controller("mainCtrl", function ($scope, $http) {
     };
 
     angular.element(document).ready(function () {
-        $http({
-            method: "GET",
-            url: "sample_data/sampleUsers.json"
-        })
-            .then(
-                function (response) { //success
-                    $scope.loginData = angular.copy(response.data.data[0]);
-                },
-                function (response) { //error
-                    alert(response.statusText);
-                });
+        $scope.getUser(1, function(data) {
+            $scope.loginData = data;
+        });
     });
 });

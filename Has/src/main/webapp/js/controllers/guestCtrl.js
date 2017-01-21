@@ -5,24 +5,42 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
     $scope.users = [];
     $scope.isEdit = false;
 
+    function saveGuest() {
+        var url = $scope.isEdit ? ("guest/" + $stateParams.id) : "guest";
+        var method = $scope.isEdit ? "PUT" : "POST";
+
+        $http({
+            method: method,
+            url: url,
+            data: $scope.master,
+            responseType: "json"
+        }).then(
+            function (response) { //success
+                if ($scope.isEdit) {
+                    alert('Edited: ' + $scope.master.personalData.fullName);
+                } else {
+                    alert('Created: ' + $scope.master.personalData.fullName);
+                }
+            },
+            function (response) { //error
+                alert(response.data.message);
+            });
+    }
+
     if ($stateParams && $stateParams.id) {
         $scope.isEdit = true;
-        var url = "sample_data/sampleGuests.json"; //TODO put real service URL here
+        var url = "guest/" + $stateParams.id;
 
         $http({
             method: "GET",
             url: url,
-            data: {
-                id: $stateParams.id
-            },
             responseType: "json"
         }).then(
             function (response) { //success
                 $scope.guest = response.data;
-                console.log($scope.user);
             },
             function (response) { //error
-                alert(response.statusText);
+                alert(response.data.message);
             });
     }
     else {
@@ -34,47 +52,19 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
         };
     }
 
-
-    $http({
-        method: "GET",
-        url: "sample_data/sampleUsers.json", //TODO put real service URL here
-        responseType: "json"
-    }).then(
-        function (response) { //success
-            $scope.users = response.data.data;
-        },
-        function (response) { //error
-            alert(response.statusText);
-        });
-
-    $scope.search = function () {
-        alert(JSON.stringify($scope.filters));
-        $scope.reloadTableData();
-    };
-
     $scope.submit = function (guest) {
         if ($scope.guestForm.$valid) {
             $scope.master = angular.copy(guest);
-            var url = $scope.isEdit ?
-                "sample_data/sampleGuests.json" : // TODO put real service URL here
-                "sample_data/sampleGuests.json"; // TODO put real service URL here
 
-            $http({
-                method: "POST",
-                url: url,
-                data: $scope.master,
-                responseType: "json"
-            }).then(
-                function (response) { //success
-                    if ($scope.isEdit) {
-                        alert('Edited: ' + $scope.master.personalData.fullName);
-                    } else {
-                        alert('Created: ' + $scope.master.personalData.fullName);
-                    }
-                },
-                function (response) { //error
-                    alert(response.statusText);
+            delete $scope.master.userID;
+
+            if (!$scope.isEdit)
+                $scope.getUser(guest.userID, function(data) {
+                    $scope.master.user = data;
                 });
+            if ($scope.master.user)
+                saveGuest();
+
             $state.go('loggedin.root.guests.list')
         }
     };
@@ -84,8 +74,14 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
 
     $scope.dtOptions = DTOptionsBuilder.newOptions()
         .withOption('ajax', {
-            url: 'sample_data/sampleGuests.json', //TODO put real service URL here
+            url: 'searchguests',
             type: 'GET',
+            dataType: "json",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': ('Basic ' + window.base64encode($scope.loginData.username + ':' + $scope.loginData.password))
+            },
             data: {
                 fullName: $scope.filters.fullName
             }
@@ -101,10 +97,7 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
         DTColumnBuilder.newColumn('numberReservations', 'Number of Reservations'),
         DTColumnBuilder.newColumn('personalData.phone', 'Phone Number'),
         DTColumnBuilder.newColumn('personalData.fullName', 'Full Name'),
-        DTColumnBuilder.newColumn('userID', 'User')
-            .renderWith(function (userID) {
-                return $scope.users[userID].username;
-            }),
+        DTColumnBuilder.newColumn('user.username', 'User'),
         DTColumnBuilder.newColumn('id').notSortable().withClass('actions-column')
             .renderWith(function (data) {
                 var html = '<a class="action-btn" href="#/guests/edit/' +
@@ -121,6 +114,10 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
     };
 
     angular.element(document).ready(function () {
+        $scope.getAllUsers(function(data) {
+             $scope.uesrs = data;
+        });
+
         $('#identityIssueDate').daterangepicker({
                 singleDatePicker: true,
                 showDropdowns: true
@@ -136,7 +133,7 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
                 $scope.guest.personalData.identityExpireDate = start.toISOString();
             });
 
-        $interval($scope.reloadTableData, 5000);
+        //$interval($scope.reloadTableData, 5000);
     });
 
 });
