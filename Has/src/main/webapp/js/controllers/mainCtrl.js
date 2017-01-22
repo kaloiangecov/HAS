@@ -48,7 +48,7 @@ app.controller("mainCtrl", function ($scope, $http) {
             function (response) { //error
                 alert(response.data.message);
                 return undefined;
-            }).then(updateCallback(data));
+            }).then(updateCallback);
     };
 
     $scope.exportForm = function (data) {
@@ -83,7 +83,7 @@ app.controller("mainCtrl", function ($scope, $http) {
     };
 
     angular.element(document).ready(function () {
-        $scope.getUser(1, function(data) {
+        $scope.getUser(1, function (data) {
             $scope.loginData = data;
         });
     });

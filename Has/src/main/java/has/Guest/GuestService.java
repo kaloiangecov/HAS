@@ -22,6 +22,10 @@ public class GuestService {
         return repo.findAll();
     }
 
+    public List<Guest> searchGuests(String fullName) {
+        return repo.findByFullName(fullName);
+    }
+
     public Guest findById(Long id) throws Exception {
         Guest dbGuest = repo.findOne(id);
         if(dbGuest == null){

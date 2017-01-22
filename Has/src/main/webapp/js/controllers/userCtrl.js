@@ -1,14 +1,17 @@
 app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $interval, $resource, $http, DTOptionsBuilder, DTColumnBuilder) {
+    var ctrl = this;
     $scope.page.title = "Users";
     $scope.master = {};
-    $scope.filters = {
+    ctrl.filters = {
+        username: "",
+        email: "",
         role: 1
     };
     $scope.isEdit = false;
 
     if ($stateParams && $stateParams.id) {
         $scope.isEdit = true;
-        $scope.getUser($stateParams.id, function(data) {
+        $scope.getUser($stateParams.id, function (data) {
             $scope.user = data;
         });
     }
@@ -86,11 +89,7 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
                 'Content-Type': 'application/json',
                 'Authorization': ('Basic ' + window.base64encode($scope.loginData.username + ':' + $scope.loginData.password))
             },
-            data: {
-                username: $scope.filters.username,
-                email: $scope.filters.email,
-                role: $scope.filters.role
-            }
+            data: ctrl.filters
         })
         .withDataProp('data')
         .withOption('processing', true)

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by kaloi on 12/19/2016.
@@ -22,6 +24,13 @@ public class EmployeeService {
 
     public List<Employee> getAllEmployees() {
         return repo.findAll();
+    }
+
+    public List<Employee> searchEmployees(String fullName, String dateHired) {
+        if (dateHired.isEmpty())
+            return repo.findByFullName(fullName);
+        else
+            return repo.findByFullNameAndDateHired(fullName, dateHired);
     }
 
     public Employee findById(Long id) throws Exception {

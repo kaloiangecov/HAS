@@ -9,6 +9,7 @@ import has.Guest.Guest;
 import has.Room.Room;
 import has.Room.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -58,9 +59,8 @@ public class UserService {
         return repo.findAll();
     }
 
-    public List<User> searchUsers(int draw, int start, int length, String username, String email) {
-        List<User> users = repo.findByUsernameAndEmail(username, email);
-        return users;
+    public List<User> searchUsers(int draw, int start, int length, String username, String email, Integer role) {
+        return repo.findByUsernameContainingAndEmailContaining(username, email);
     }
 
     public User findById(Long id) throws Exception {
@@ -92,7 +92,7 @@ public class UserService {
         User usr2 = new User("2017-01-11T12:30:00", "123456789", "dick@abv.bg", "2016-09-12T11:30:30", "grigor", new UserRole("adm", permissions));
 
         Employee emp1 = new Employee(
-                "2016-11-12T11:30:30",
+                "2016-11-12",
                 5,
                 usr1,
                 new PersonalData(
@@ -106,7 +106,7 @@ public class UserService {
                         "102391203"));
 
         Employee emp2 = new Employee(
-                "2016-08-25T12:23:30",
+                "2016-08-25",
                 5,
                 usr1,
                 new PersonalData(
@@ -118,6 +118,19 @@ public class UserService {
                         "МВР Някъде си",
                         "000777111",
                         "567812345"));
+        Employee emp3 = new Employee(
+                "2016-09-11",
+                4,
+                usr1,
+                new PersonalData(
+                        "somewhere else 67",
+                        "0088881122",
+                        "Христо Стоичков",
+                        "2022-11-22",
+                        "2012-11-22",
+                        "МВР София",
+                        "123717111",
+                        "088567812345"));
 
         Guest guest1 = new Guest(
                 0,
@@ -132,13 +145,28 @@ public class UserService {
                         "888000555",
                         "4543212453"));
 
+        Guest guest2 = new Guest(
+                0,
+                usr1,
+                new PersonalData(
+                        "some address 3",
+                        "9999999999",
+                        "Шошо Мошо",
+                        "2020-12-11",
+                        "2010-12-11",
+                        "МВР Варна",
+                        "123123456",
+                        "000999999"));
+
         Room room1 = new Room(1, 1, 104, 2, 2, true, false, true);
         Room room2 = new Room(0, 2, 106, 2, 2, false, false, true);
 
         repo.save(usr1);
         repoEmployee.save(emp1);
         repoEmployee.save(emp2);
+        repoEmployee.save(emp3);
         repoGuest.save(guest1);
+        repoGuest.save(guest2);
         repoRoom.save(room1);
         repoRoom.save(room2);
     }

@@ -46,7 +46,9 @@ public class GuestController {
     DataTableResult searchGuests(HttpServletRequest request) throws Exception {
         Map<String, String[]> parameterMap = request.getParameterMap();
 
-        List<Guest> guests = guestService.getAllGuests();
+        List<Guest> guests = guestService.searchGuests(
+            parameterMap.get("fullName")[0]
+        );
 
         return new DataTableResult(
                 Integer.parseInt(parameterMap.get("draw")[0]),

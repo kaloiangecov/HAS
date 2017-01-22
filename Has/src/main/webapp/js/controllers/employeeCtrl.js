@@ -1,11 +1,15 @@
 app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout, $interval, $resource, $http, DTOptionsBuilder, DTColumnBuilder) {
+    var ctrl = this;
     $scope.page.title = "Employees";
     $scope.master = {};
-    $scope.filters = {};
-    $scope.users = [];
+    ctrl.filters = {
+        fullName: "",
+        dateHired: ""
+    };
+    ctrl.users = [];
     $scope.isEdit = false;
 
-    function saveEmployee() {
+    function saveEmployee(callback) {
         var url = $scope.isEdit ? ("employee/" + $stateParams.id) : "employee";
         var method = $scope.isEdit ? "PUT" : "POST";
 
@@ -15,13 +19,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
             data: $scope.master,
             responseType: "json"
         }).then(
-            function (response) { //success
-                if ($scope.isEdit) {
-                    alert('Edited: ' + $scope.master.personalData.fullName);
-                } else {
-                    alert('Created: ' + $scope.master.personalData.fullName);
-                }
-            },
+            callback,
             function (response) { //error
                 alert(response.data.message);
             });
@@ -57,13 +55,19 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
             delete $scope.master.userID;
 
             if (!$scope.isEdit)
-                $scope.getUser(employee.userID, function(data) {
+                $scope.getUser(employee.userID, function (data) {
                     $scope.master.user = data;
                 });
             if ($scope.master.user)
-                saveEmployee();
-
-            $state.go('loggedin.root.employees.list')
+                saveEmployee(function () {
+                    if ($scope.isEdit) {
+                        alert('Edited: ' + $scope.master.personalData.fullName);
+                    } else {
+                        alert('Created: ' + $scope.master.personalData.fullName);
+                    }
+                    $state.go('loggedin.root.employees.list');
+                    $scope.reloadTableData();
+                });
         }
     };
 
@@ -80,10 +84,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
                 'Content-Type': 'application/json',
                 'Authorization': ('Basic ' + window.base64encode($scope.loginData.username + ':' + $scope.loginData.password))
             },
-            data: {
-                fullName: $scope.filters.fullName,
-                dateHired: $scope.filters.dateHired
-            }
+            data: ctrl.filters
         })
         .withDataProp('data')
         .withOption('processing', true)
@@ -116,30 +117,39 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
     };
 
     angular.element(document).ready(function () {
-        $scope.getAllUsers(function(data) {
-            $scope.uesrs = data;
+        $scope.getAllUsers(function (data) {
+            ctrl.uesrs = data;
         });
 
+        $('#filterDateHired').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                autoUpdateInput: false
+            },
+            function (start) {
+                ctrl.filters.dateHired = start.format("DD/MM/YYYY");
+
+            });
         $('#dateHired').daterangepicker({
                 singleDatePicker: true,
                 showDropdowns: true
             },
             function (start) {
-                $scope.employee.dateHired = start.toISOString();
+                $scope.employee.dateHired = start.format("DD/MM/YYYY");
             });
         $('#identityIssueDate').daterangepicker({
                 singleDatePicker: true,
                 showDropdowns: true
             },
             function (start) {
-                $scope.employee.personalData.identityIssueDate = start.toISOString();
+                $scope.employee.personalData.identityIssueDate = start.format("DD/MM/YYYY");
             });
         $('#identityExpireDate').daterangepicker({
                 singleDatePicker: true,
                 showDropdowns: true
             },
             function (start) {
-                $scope.employee.personalData.identityExpireDate = start.toISOString();
+                $scope.employee.personalData.identityExpireDate = start.format("DD/MM/YYYY");
             });
 
         //$interval($scope.reloadTableData, 5000);

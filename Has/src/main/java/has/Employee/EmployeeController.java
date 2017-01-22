@@ -46,7 +46,9 @@ public class EmployeeController {
     DataTableResult searchEmployees(HttpServletRequest request) throws Exception {
         Map<String, String[]> parameterMap = request.getParameterMap();
 
-        List<Employee> employees = employeeService.getAllEmployees();
+        List<Employee> employees = employeeService.searchEmployees(
+                parameterMap.get("fullName")[0],
+                parameterMap.get("dateHired")[0]);
 
         return new DataTableResult(
                 Integer.parseInt(parameterMap.get("draw")[0]),

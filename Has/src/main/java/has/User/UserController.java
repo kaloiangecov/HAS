@@ -50,16 +50,17 @@ public class UserController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public @ResponseBody DataTableResult searchUsers(HttpServletRequest request) throws Exception {
         Map<String, String[]> parameterMap = request.getParameterMap();
-/* //TODO for another time
+
         List<User> users = userService.searchUsers(
                 Integer.parseInt(parameterMap.get("draw")[0]),
                 Integer.parseInt(parameterMap.get("start")[0]),
                 Integer.parseInt(parameterMap.get("length")[0]),
                 parameterMap.get("username")[0],
-                parameterMap.get("email")[0]
+                parameterMap.get("email")[0],
+                Integer.parseInt(parameterMap.get("role")[0])
         );
-*/
-        List<User> users = userService.getAllUsers();
+
+        //List<User> users = userService.getAllUsers();
 
         return new DataTableResult(
                 Integer.parseInt(parameterMap.get("draw")[0]),
