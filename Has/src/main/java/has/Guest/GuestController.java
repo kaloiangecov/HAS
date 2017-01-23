@@ -47,7 +47,8 @@ public class GuestController {
         Map<String, String[]> parameterMap = request.getParameterMap();
 
         List<Guest> guests = guestService.searchGuests(
-            parameterMap.get("fullName")[0]
+            parameterMap.get("fullName")[0],
+            parameterMap.get("phone")[0]
         );
 
         return new DataTableResult(

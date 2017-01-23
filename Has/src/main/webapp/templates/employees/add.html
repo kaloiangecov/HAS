@@ -25,10 +25,9 @@
                         <label class="control-label col-md-4 col-sm-4 col-xs-12" for="user">User</label>
                         <div class="col-md-8 col-sm-8 col-xs-12">
                             <select class="form-control roles" id="user" name="user" ng-model="employee.userID"
-                                    ng-options="item.id as item.username for item in ctrl.users track by item.id">
+                                    ng-options="item.id as item.username for item in usersList">
                             </select>
-                            <div ng-show="employeeForm.$submitted || employeeForm.user.$touched"
-                                 class="validation-message">
+                            <div ng-show="employeeForm.$submitted || employeeForm.user.$touched" class="validation-message">
                                 <span ng-show="employeeForm.user.$error.required">This field is required</span>
                             </div>
                         </div>

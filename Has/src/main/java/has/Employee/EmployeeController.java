@@ -48,6 +48,7 @@ public class EmployeeController {
 
         List<Employee> employees = employeeService.searchEmployees(
                 parameterMap.get("fullName")[0],
+                parameterMap.get("phone")[0],
                 parameterMap.get("dateHired")[0]);
 
         return new DataTableResult(

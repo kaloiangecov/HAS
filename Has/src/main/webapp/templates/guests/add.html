@@ -26,7 +26,7 @@
                         <label class="control-label col-md-6 col-sm-6 col-xs-12" for="user">User</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select class="form-control roles" id="user" name="user" ng-model="guest.userID"
-                                    ng-options="item.id as item.username for item in ctrl.users track by item.id">
+                                    ng-options="item.id as item.username for item in usersList">
                             </select>
                             <div ng-show="guestForm.$submitted || guestForm.user.$touched" class="validation-message">
                                 <span ng-show="guestForm.user.$error.required">This field is required</span>

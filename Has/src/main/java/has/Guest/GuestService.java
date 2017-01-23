@@ -22,8 +22,8 @@ public class GuestService {
         return repo.findAll();
     }
 
-    public List<Guest> searchGuests(String fullName) {
-        return repo.findByFullName(fullName);
+    public List<Guest> searchGuests(String fullName, String phone) {
+        return repo.findByFullNameAndPhone(fullName, phone);
     }
 
     public Guest findById(Long id) throws Exception {

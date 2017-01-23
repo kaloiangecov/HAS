@@ -26,11 +26,11 @@ public class EmployeeService {
         return repo.findAll();
     }
 
-    public List<Employee> searchEmployees(String fullName, String dateHired) {
+    public List<Employee> searchEmployees(String fullName, String phone, String dateHired) {
         if (dateHired.isEmpty())
-            return repo.findByFullName(fullName);
+            return repo.findByFullNameAndPhone(fullName, phone);
         else
-            return repo.findByFullNameAndDateHired(fullName, dateHired);
+            return repo.findByFullNameAndPhoneAndDateHired(fullName, phone, dateHired);
     }
 
     public Employee findById(Long id) throws Exception {

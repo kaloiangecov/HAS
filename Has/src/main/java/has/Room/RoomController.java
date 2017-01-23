@@ -57,12 +57,12 @@ public class RoomController {
                 rooms);
     }
 
-    @RequestMapping(value = "/room/{number}", method = RequestMethod.GET,
+    @RequestMapping(value = "/room/{id}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Room findRoomByNumber(@PathVariable Integer number) throws Exception {
-        return roomService.findByNumber(number);
+    public Room findRoomByNumber(@PathVariable Long id) throws Exception {
+        return roomService.findById(id);
     }
 
     @RequestMapping(value = "/room/{id}", method = RequestMethod.DELETE,

@@ -15,4 +15,7 @@ public interface GuestRepository extends JpaRepository<Guest, Long> {
 
     @Query("select g from Guest g where g.personalData.fullName like %:fullName%")
     List<Guest> findByFullName(@Param("fullName") String fullName);
+
+    @Query("select e from Guest e where e.personalData.fullName like %:fullName% and e.personalData.phone like %:phone%")
+    List<Guest> findByFullNameAndPhone(@Param("fullName") String fullName, @Param("phone") String phone);
 }
