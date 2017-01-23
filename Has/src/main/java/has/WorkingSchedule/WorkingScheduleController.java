@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ public class WorkingScheduleController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public WorkingSchedule save(@RequestBody WorkingSchedule schedule) {
+    public WorkingSchedule save(@RequestBody @Valid WorkingSchedule schedule) {
         return wsService.save(schedule);
     }
 
@@ -55,7 +56,7 @@ public class WorkingScheduleController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public WorkingSchedule updateSchedule(@PathVariable Long id, @RequestBody WorkingSchedule schedule) throws Exception {
+    public WorkingSchedule updateSchedule(@PathVariable Long id, @RequestBody @Valid WorkingSchedule schedule) throws Exception {
         return wsService.update(id, schedule);
     }
 }

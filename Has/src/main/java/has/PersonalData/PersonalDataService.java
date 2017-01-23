@@ -1,5 +1,6 @@
 package has.PersonalData;
 
+import has.Exceptions.IdentityNumberAlreadyExists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,10 @@ public class PersonalDataService {
     @Autowired
     private PersonalDataRepository repo;
 
-    public PersonalData save(PersonalData personalData) {
+    public PersonalData save(PersonalData personalData) throws IdentityNumberAlreadyExists {
+        if(repo.findByEgn(personalData.getEgn()) != null){
+            throw new IdentityNumberAlreadyExists(personalData.getEgn());
+        }
         return repo.save(personalData);
     }
 

@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -23,7 +24,7 @@ public class MealController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Meal save(@RequestBody Meal meal) {
+    public Meal save(@RequestBody @Valid Meal meal) {
         return mealService.save(meal);
     }
 
@@ -56,7 +57,7 @@ public class MealController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Meal updateMeal(@PathVariable Long id, @RequestBody Meal meal) throws Exception {
+    public Meal updateMeal(@PathVariable Long id, @RequestBody @Valid Meal meal) throws Exception {
         return mealService.update(id, meal);
     }
 }

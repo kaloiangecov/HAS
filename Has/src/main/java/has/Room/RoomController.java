@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ public class RoomController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Room save(@RequestBody Room room){
+    public Room save(@RequestBody @Valid Room room) {
         return roomService.save(room);
     }
 
@@ -30,7 +31,7 @@ public class RoomController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<Room> getAllRooms(){
+    public List<Room> getAllRooms() {
         return roomService.getAllRooms();
     }
 
@@ -38,7 +39,7 @@ public class RoomController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Room removeRoomById(@PathVariable Long id) throws Exception{
+    public Room removeRoomById(@PathVariable Long id) throws Exception {
         return roomService.remove(id);
     }
 
@@ -47,7 +48,7 @@ public class RoomController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Room updateRoom(@PathVariable Long id, @RequestBody Room room) throws Exception {
-        return roomService.update(id,room);
+    public Room updateRoom(@PathVariable Long id, @RequestBody @Valid Room room) throws Exception {
+        return roomService.update(id, room);
     }
 }

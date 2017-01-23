@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ public class GuestController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Guest save(@RequestBody Guest guest) {
+    public Guest save(@RequestBody @Valid Guest guest) {
         return guestService.save(guest);
     }
 
@@ -55,7 +56,7 @@ public class GuestController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Guest updateGuest(@PathVariable Long id, @RequestBody Guest guest) throws Exception {
+    public Guest updateGuest(@PathVariable Long id, @RequestBody @Valid Guest guest) throws Exception {
         return guestService.update(id, guest);
     }
 }
