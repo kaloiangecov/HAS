@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -23,7 +24,7 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public User save(@RequestBody User user) throws UserAlreadyExists {
+    public User save(@RequestBody @Valid User user) throws UserAlreadyExists {
         return userService.save(user);
     }
 
@@ -56,7 +57,7 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public User updateUser(@PathVariable Long id, @RequestBody User user) throws Exception {
+    public User updateUser(@PathVariable Long id, @RequestBody @Valid User user) throws Exception {
         return userService.update(id, user);
     }
 }

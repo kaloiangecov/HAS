@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ public class RequestController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Request save(@RequestBody Request request) {
+    public Request save(@RequestBody @Valid Request request) {
         return requestService.save(request);
     }
 
@@ -55,7 +56,7 @@ public class RequestController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Request updateRequest(@PathVariable Long id, @RequestBody Request request) throws Exception {
+    public Request updateRequest(@PathVariable Long id, @RequestBody @Valid Request request) throws Exception {
         return requestService.update(id, request);
     }
 }
