@@ -1,6 +1,7 @@
 package has.User;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,9 +21,6 @@ public class UserRole {
     @Column(name = "USER_ROLE_ID")
     private Long id;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userRole")
-    private List<User> user;
-
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(joinColumns = {
             @JoinColumn(name = "PERMISSION_ID", nullable = false, updatable = false) },
@@ -40,8 +38,8 @@ public class UserRole {
         this.permissions = permissions;
     }
 
-    @JsonIgnore
-    public List<User> getUser() {
-        return user;
+    //@JsonIgnore
+    public List<RolePermission> getPermissions() {
+        return permissions;
     }
 }

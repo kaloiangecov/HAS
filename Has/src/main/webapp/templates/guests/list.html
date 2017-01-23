@@ -1,4 +1,4 @@
-<div class="col-md-12 col-sm-12 col-xs-12">
+<div class="col-md-12 col-sm-12 col-xs-12" ng-controller="guestCtrl as ctrl">
     <div class="x_panel">
         <div class="x_title">
             <h2><i class="fa fa-users"></i> Guests List</h2>
@@ -16,9 +16,9 @@
                 </li>
             </ul>
             <div class="clearfix"></div>
-            <form class="form-inline text-center" ng-submit="search()">
-                <input type="text" class="form-control" ng-model="filters.fullName" placeholder="Full Name"/>
-                <input type="text" class="form-control" ng-model="filters.dateHired" placeholder="Date Hired"/>
+            <form class="form-inline text-center" ng-submit="reloadTableData()">
+                <input type="text" class="form-control" ng-model="ctrl.filters.fullName" placeholder="Full Name"/>
+                <input type="text" class="form-control" ng-model="ctrl.filters.phone" placeholder="Phone Number"/>
                 <button type="submit" class="btn btn-primary" style="position:relative;top:+3px;"><i
                         class="fa fa-search"></i> Search
                 </button>

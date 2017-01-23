@@ -3,7 +3,7 @@ var stateLogin = {
     views: {
         "login": {
             templateUrl: "templates/login.html",
-            controller: "mainCtrl"
+            //controller: "mainCtrl"
         }
     },
     onEnter: function () {
@@ -30,7 +30,7 @@ var stateMain = {
     views: {
         "loggedin": {
             templateUrl: "templates/main.html",
-            controller: "mainCtrl"
+            //controller: "mainCtrl"
         }
     },
 };
@@ -69,7 +69,7 @@ var stateHome = {
     views: {
         'content@loggedin': {
             templateUrl: 'templates/home.html',
-            controller: "mainCtrl"
+            //controller: "mainCtrl"
         }
     }
 };

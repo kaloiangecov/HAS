@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by kaloi on 12/19/2016.
@@ -22,6 +24,13 @@ public class EmployeeService {
 
     public List<Employee> getAllEmployees() {
         return repo.findAll();
+    }
+
+    public List<Employee> searchEmployees(String fullName, String phone, String dateHired) {
+        if (dateHired.isEmpty())
+            return repo.findByFullNameAndPhone(fullName, phone);
+        else
+            return repo.findByFullNameAndPhoneAndDateHired(fullName, phone, dateHired);
     }
 
     public Employee findById(Long id) throws Exception {
@@ -49,15 +58,11 @@ public class EmployeeService {
 
         dbEmployee.setDateHired(employee.getDateHired());
         dbEmployee.setInternship(employee.getInternship());
-//        dbEmployee.setEgn(employee.getEgn());
-//        dbEmployee.setAddress(employee.getAddress());
-//        dbEmployee.setFullName(employee.getFullName());
-//        dbEmployee.setPhone(employee.getPhone());
-//        dbEmployee.setIdentityExpireDate(employee.getIdentityExpireDate());
-//        dbEmployee.setIdentityIssueDate(employee.getIdentityIssueDate());
-//        dbEmployee.setIdentityIssuedBy(employee.getIdentityIssuedBy());
-//        dbEmployee.setIdentityNumber(employee.getIdentityNumber());
-        SendMailSSL.sendMail("gunesh.shefkedov@gmail.com", MailTemplates.RESERVATION_CONFIRMATION);
+        dbEmployee.setPersonalData(employee.getPersonalData());
+        if (dbEmployee.getUser().getId() != employee.getUser().getId())
+            dbEmployee.setUser(employee.getUser());
+
+        SendMailSSL.sendMail("shit@shit.com", MailTemplates.RESERVATION_CONFIRMATION);
         return repo.save(dbEmployee);
     }
 }

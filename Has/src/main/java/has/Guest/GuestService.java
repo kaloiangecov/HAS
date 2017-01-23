@@ -22,6 +22,10 @@ public class GuestService {
         return repo.findAll();
     }
 
+    public List<Guest> searchGuests(String fullName, String phone) {
+        return repo.findByFullNameAndPhone(fullName, phone);
+    }
+
     public Guest findById(Long id) throws Exception {
         Guest dbGuest = repo.findOne(id);
         if(dbGuest == null){
@@ -47,14 +51,9 @@ public class GuestService {
 
         dbGuest.setNumberReservations(guest.getNumberReservations());
         dbGuest.setStatus(guest.getStatus());
-//        dbGuest.setEgn(guest.getEgn());
-//        dbGuest.setAddress(guest.getAddress());
-//        dbGuest.setFullName(guest.getFullName());
-//        dbGuest.setPhone(guest.getPhone());
-//        dbGuest.setIdentityExpireDate(guest.getIdentityExpireDate());
-//        dbGuest.setIdentityIssueDate(guest.getIdentityIssueDate());
-//        dbGuest.setIdentityIssuedBy(guest.getIdentityIssuedBy());
-//        dbGuest.setIdentityNumber(guest.getIdentityNumber());
+        dbGuest.setPersonalData(guest.getPersonalData());
+        if (dbGuest.getUser().getId() != guest.getUser().getId())
+            dbGuest.setUser(guest.getUser());
 
         return repo.save(dbGuest);
     }

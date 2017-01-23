@@ -1,5 +1,7 @@
 package has.Employee;
 
+import has.DataTableResult;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by kaloi on 12/19/2016.
@@ -33,6 +36,29 @@ public class EmployeeController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Employee> getAllEmployees() {
         return employeeService.getAllEmployees();
+    }
+
+    @RequestMapping(value = "/searchemployees", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public @ResponseBody
+    DataTableResult searchEmployees(HttpServletRequest request) throws Exception {
+        Map<String, String[]> parameterMap = request.getParameterMap();
+
+        List<Employee> employees = employeeService.searchEmployees(
+                parameterMap.get("fullName")[0],
+                parameterMap.get("phone")[0],
+                parameterMap.get("dateHired")[0]);
+
+        return new DataTableResult(
+                Integer.parseInt(parameterMap.get("draw")[0]),
+                Integer.parseInt(parameterMap.get("start")[0]),
+                Integer.parseInt(parameterMap.get("length")[0]),
+                employees.size(),
+                employees.size(),
+                employees);
     }
 
     @RequestMapping(value = "/employee/{id}", method = RequestMethod.GET,

@@ -1,4 +1,4 @@
-<div class="col-md-12 col-sm-12 col-xs-12">
+<div class="col-md-12 col-sm-12 col-xs-12" ng-controller="userCtrl as ctrl">
     <div class="x_panel">
         <div class="x_title">
             <h2><i class="fa fa-users"></i> Users List</h2>
@@ -15,10 +15,10 @@
                 </li>
             </ul>
             <div class="clearfix"></div>
-            <form class="form-inline text-center" ng-submit="search()">
-                <input type="text" class="form-control" ng-model="filters.username" placeholder="Username"/>
-                <input type="text" class="form-control" ng-model="filters.email" placeholder="Email"/>
-                <select class="form-control roles" ng-model="filters.role" title="Role">
+            <form class="form-inline text-center" ng-submit="reloadTableData()">
+                <input type="text" class="form-control" ng-model="ctrl.filters.username" placeholder="Username"/>
+                <input type="text" class="form-control" ng-model="ctrl.filters.email" placeholder="Email"/>
+                <select class="form-control roles" ng-model="ctrl.filters.role" title="Role">
                     <option value="{{$index}}" ng-repeat="role in roles" ng-selected="$index == user.role">{{role}}
                     </option>
                 </select>

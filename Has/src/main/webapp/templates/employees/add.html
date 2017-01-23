@@ -1,173 +1,180 @@
-<form method="POST" name="employeeForm" novalidate>
-    <div class="col-md-5 col-sm-6 col-xs-12">
-        <div class="x_panel">
-            <div class="x_title">
-                <h2><i class="fa fa-user-plus"></i> Add Employee Form</h2>
-                <div class="clearfix"></div>
+<div ng-controller="employeeCtrl as ctrl">
+    <form method="POST" name="employeeForm" novalidate>
+        <div class="col-md-5 col-sm-6 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-user-plus"></i> Add Employee Form</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content form-horizontal form-label-left">
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12" for="dateHired">Date Hired *</label>
+                        <div class="col-md-8 col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" id="dateHired" name="dateHired"
+                                   ng-model="employee.dateHired" minlength="7" maxlength="10" required="required"/>
+                            <div ng-show="employeeForm.$submitted || employeeForm.password.$touched"
+                                 class="validation-message">
+                                <span ng-show="employeeForm.dateHired.$error.required">This field is required</span>
+                                <span ng-show="employeeForm.dateHired.$error.minlength">Input too short</span>
+                                <span ng-show="employeeForm.dateHired.$error.maxlength">Input too long</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12" for="user">User</label>
+                        <div class="col-md-8 col-sm-8 col-xs-12">
+                            <select class="form-control roles" id="user" name="user" ng-model="employee.userID"
+                                    ng-options="item.id as item.username for item in usersList">
+                            </select>
+                            <div ng-show="employeeForm.$submitted || employeeForm.user.$touched" class="validation-message">
+                                <span ng-show="employeeForm.user.$error.required">This field is required</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-8 col-sm-10 col-xs-12 col-sm-offset-2 col-md-offset-4">
+                            <button type="submit" ng-click="submit(employee)" class="btn btn-success">Submit</button>
+                            <button type="reset" class="btn btn-default">Reset</button>
+                            <a type="button" class="btn btn-primary" href="#/employees/list">Back</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="x_content form-horizontal form-label-left">
+        </div>
 
-                <div class="form-group">
-                    <label class="control-label col-md-4 col-sm-4 col-xs-12" for="dateHired">Date Hired *</label>
-                    <div class="col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" id="dateHired" name="dateHired"
-                               ng-model="employee.dateHired" minlength="7" maxlength="10" required="required"/>
-                        <div ng-show="employeeForm.$submitted || employeeForm.password.$touched"
-                             class="validation-message">
-                            <span ng-show="employeeForm.dateHired.$error.required">This field is required</span>
-                            <span ng-show="employeeForm.dateHired.$error.minlength">Input too short</span>
-                            <span ng-show="employeeForm.dateHired.$error.maxlength">Input too long</span>
+        <div class="col-md-7 col-sm-6 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-id-card-o"></i> Personal Data</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content form-horizontal form-label-left">
+                    <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12" for="fullName">Full Name *</label>
+                        <div class="col-md-8 col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" id="fullName" name="fullName"
+                                   ng-model="employee.personalData.fullName" minlength="4" maxlength="100"
+                                   required="required"/>
+                            <div ng-show="employeeForm.$submitted || employeeForm.fullName.$touched"
+                                 class="validation-message">
+                                <span ng-show="employeeForm.fullName.$error.required">This field is required</span>
+                                <span ng-show="employeeForm.fullName.$error.minlength">Input too short</span>
+                                <span ng-show="employeeForm.fullName.$error.maxlength">Input too long</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-4 col-sm-4 col-xs-12" for="user">User</label>
-                    <div class="col-md-8 col-sm-8 col-xs-12">
-                        <select class="form-control roles" id="user" name="user" ng-model="employee.user"
-                                ng-options="item.id as item.username for item in users track by item.id">
-                        </select>
-                        <div ng-show="employeeForm.$submitted || employeeForm.user.$touched" class="validation-message">
-                            <span ng-show="employeeForm.user.$error.required">This field is required</span>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12" for="phone">Phone Number *</label>
+                        <div class="col-md-8 col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" id="phone" name="phone"
+                                   ng-model="employee.personalData.phone" minlength="4" maxlength="20"
+                                   required="required"/>
+                            <div ng-show="employeeForm.$submitted || employeeForm.phone.$touched"
+                                 class="validation-message">
+                                <span ng-show="employeeForm.phone.$error.required">This field is required</span>
+                                <span ng-show="employeeForm.phone.$error.minlength">Input too short</span>
+                                <span ng-show="employeeForm.phone.$error.maxlength">Input too long</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="ln_solid"></div>
-                <div class="form-group">
-                    <div class="col-md-8 col-sm-8 col-xs-12 col-sm-offset-4">
-                        <button type="submit" ng-click="submit(employee)" class="btn btn-success">Submit</button>
-                        <button type="reset" class="btn btn-default">Reset</button>
-                        <a type="button" class="btn btn-primary" href="#/employees/list">Back</a>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12" for="egn">EGN *</label>
+                        <div class="col-md-8 col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" id="egn" name="egn"
+                                   ng-model="employee.personalData.egn" minlength="10" maxlength="10"
+                                   required="required"/>
+                            <div ng-show="employeeForm.$submitted || employeeForm.egn.$touched"
+                                 class="validation-message">
+                                <span ng-show="employeeForm.egn.$error.required">This field is required</span>
+                                <span ng-show="employeeForm.egn.$error.minlength">Input too short</span>
+                                <span ng-show="employeeForm.egn.$error.maxlength">Input too long</span>
+                            </div>
+                        </div>
                     </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12" for="address">Address *</label>
+                        <div class="col-md-8 col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" id="address" name="address"
+                                   ng-model="employee.personalData.address" minlength="4" maxlength="200"
+                                   required="required"/>
+                            <div ng-show="employeeForm.$submitted || employeeForm.address.$touched"
+                                 class="validation-message">
+                                <span ng-show="employeeForm.address.$error.required">This field is required</span>
+                                <span ng-show="employeeForm.address.$error.minlength">Input too short</span>
+                                <span ng-show="employeeForm.address.$error.maxlength">Input too long</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12" for="identityNumber">Identity Number
+                            *</label>
+                        <div class="col-md-8 col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" id="identityNumber" name="identityNumber"
+                                   ng-model="employee.personalData.identityNumber" minlength="9" maxlength="9"
+                                   required="required"/>
+                            <div ng-show="employeeForm.$submitted || employeeForm.identityNumber.$touched"
+                                 class="validation-message">
+                                <span ng-show="employeeForm.identityNumber.$error.required">This field is required</span>
+                                <span ng-show="employeeForm.identityNumber.$error.minlength">Input too short</span>
+                                <span ng-show="employeeForm.identityNumber.$error.maxlength">Input too long</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12" for="identityIssueDate">Identity Issue
+                            Date
+                            *</label>
+                        <div class="col-md-8 col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" id="identityIssueDate" name="identityIssueDate"
+                                   ng-model="employee.personalData.identityIssueDate" minlength="4" maxlength="10"
+                                   required="required"/>
+                            <div ng-show="employeeForm.$submitted || employeeForm.identityIssueDate.$touched"
+                                 class="validation-message">
+                                <span ng-show="employeeForm.identityIssueDate.$error.required">This field is required</span>
+                                <span ng-show="employeeForm.identityIssueDate.$error.minlength">Input too short</span>
+                                <span ng-show="employeeForm.identityIssueDate.$error.maxlength">Input too long</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12" for="identityIssuedBy">Identity Issued
+                            By
+                            *</label>
+                        <div class="col-md-8 col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" id="identityIssuedBy" name="identityIssuedBy"
+                                   ng-model="employee.personalData.identityIssuedBy" minlength="4" maxlength="50"
+                                   required="required"/>
+                            <div ng-show="employeeForm.$submitted || employeeForm.identityIssuedBy.$touched"
+                                 class="validation-message">
+                                <span ng-show="employeeForm.identityIssuedBy.$error.required">This field is required</span>
+                                <span ng-show="employeeForm.identityIssuedBy.$error.minlength">Input too short</span>
+                                <span ng-show="employeeForm.identityIssuedBy.$error.maxlength">Input too long</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12" for="identityExpireDate">Identity
+                            Expire
+                            Date *</label>
+                        <div class="col-md-8 col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" id="identityExpireDate" name="identityExpireDate"
+                                   ng-model="employee.personalData.identityExpireDate" minlength="4" maxlength="10"
+                                   required="required"/>
+                            <div ng-show="employeeForm.$submitted || employeeForm.identityExpireDate.$touched"
+                                 class="validation-message">
+                                <span ng-show="employeeForm.identityExpireDate.$error.required">This field is required</span>
+                                <span ng-show="employeeForm.identityExpireDate.$error.minlength">Input too short</span>
+                                <span ng-show="employeeForm.identityExpireDate.$error.maxlength">Input too long</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ln_solid"></div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="col-md-7 col-sm-6 col-xs-12">
-        <div class="x_panel">
-            <div class="x_title">
-                <h2><i class="fa fa-id-card-o"></i> Personal Data</h2>
-                <div class="clearfix"></div>
-            </div>
-            <div class="x_content form-horizontal form-label-left">
-                <div class="form-group">
-                    <label class="control-label col-md-4 col-sm-4 col-xs-12" for="fullName">Full Name *</label>
-                    <div class="col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" id="fullName" name="fullName"
-                               ng-model="employee.personalData.fullName" minlength="4" maxlength="100"
-                               required="required"/>
-                        <div ng-show="employeeForm.$submitted || employeeForm.fullName.$touched"
-                             class="validation-message">
-                            <span ng-show="employeeForm.fullName.$error.required">This field is required</span>
-                            <span ng-show="employeeForm.fullName.$error.minlength">Input too short</span>
-                            <span ng-show="employeeForm.fullName.$error.maxlength">Input too long</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-4 col-sm-4 col-xs-12" for="phone">Phone Number *</label>
-                    <div class="col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" id="phone" name="phone"
-                               ng-model="employee.personalData.phone" minlength="4" maxlength="20" required="required"/>
-                        <div ng-show="employeeForm.$submitted || employeeForm.phone.$touched"
-                             class="validation-message">
-                            <span ng-show="employeeForm.phone.$error.required">This field is required</span>
-                            <span ng-show="employeeForm.phone.$error.minlength">Input too short</span>
-                            <span ng-show="employeeForm.phone.$error.maxlength">Input too long</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-4 col-sm-4 col-xs-12" for="egn">EGN *</label>
-                    <div class="col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" id="egn" name="egn"
-                               ng-model="employee.personalData.egn" minlength="9" maxlength="9" required="required"/>
-                        <div ng-show="employeeForm.$submitted || employeeForm.egn.$touched"
-                             class="validation-message">
-                            <span ng-show="employeeForm.egn.$error.required">This field is required</span>
-                            <span ng-show="employeeForm.egn.$error.minlength">Input too short</span>
-                            <span ng-show="employeeForm.egn.$error.maxlength">Input too long</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-4 col-sm-4 col-xs-12" for="address">Address *</label>
-                    <div class="col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" id="address" name="address"
-                               ng-model="employee.personalData.address" minlength="4" maxlength="200"
-                               required="required"/>
-                        <div ng-show="employeeForm.$submitted || employeeForm.address.$touched"
-                             class="validation-message">
-                            <span ng-show="employeeForm.address.$error.required">This field is required</span>
-                            <span ng-show="employeeForm.address.$error.minlength">Input too short</span>
-                            <span ng-show="employeeForm.address.$error.maxlength">Input too long</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-4 col-sm-4 col-xs-12" for="identityNumber">Identity Number
-                        *</label>
-                    <div class="col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" id="identityNumber" name="identityNumber"
-                               ng-model="employee.personalData.identityNumber" minlength="9" maxlength="9"
-                               required="required"/>
-                        <div ng-show="employeeForm.$submitted || employeeForm.identityNumber.$touched"
-                             class="validation-message">
-                            <span ng-show="employeeForm.identityNumber.$error.required">This field is required</span>
-                            <span ng-show="employeeForm.identityNumber.$error.minlength">Input too short</span>
-                            <span ng-show="employeeForm.identityNumber.$error.maxlength">Input too long</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-4 col-sm-4 col-xs-12" for="identityIssueDate">Identity Issue Date
-                        *</label>
-                    <div class="col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" id="identityIssueDate" name="identityIssueDate"
-                               ng-model="employee.personalData.identityIssueDate" minlength="4" maxlength="10"
-                               required="required"/>
-                        <div ng-show="employeeForm.$submitted || employeeForm.identityIssueDate.$touched"
-                             class="validation-message">
-                            <span ng-show="employeeForm.identityIssueDate.$error.required">This field is required</span>
-                            <span ng-show="employeeForm.identityIssueDate.$error.minlength">Input too short</span>
-                            <span ng-show="employeeForm.identityIssueDate.$error.maxlength">Input too long</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-4 col-sm-4 col-xs-12" for="identityIssuedBy">Identity Issued By
-                        *</label>
-                    <div class="col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" id="identityIssuedBy" name="identityIssuedBy"
-                               ng-model="employee.personalData.identityIssuedBy" minlength="4" maxlength="50"
-                               required="required"/>
-                        <div ng-show="employeeForm.$submitted || employeeForm.identityIssuedBy.$touched"
-                             class="validation-message">
-                            <span ng-show="employeeForm.identityIssuedBy.$error.required">This field is required</span>
-                            <span ng-show="employeeForm.identityIssuedBy.$error.minlength">Input too short</span>
-                            <span ng-show="employeeForm.identityIssuedBy.$error.maxlength">Input too long</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-4 col-sm-4 col-xs-12" for="identityExpireDate">Identity Expire
-                        Date *</label>
-                    <div class="col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" id="identityExpireDate" name="identityExpireDate"
-                               ng-model="employee.personalData.identityExpireDate" minlength="4" maxlength="10"
-                               required="required"/>
-                        <div ng-show="employeeForm.$submitted || employeeForm.identityExpireDate.$touched"
-                             class="validation-message">
-                            <span ng-show="employeeForm.identityExpireDate.$error.required">This field is required</span>
-                            <span ng-show="employeeForm.identityExpireDate.$error.minlength">Input too short</span>
-                            <span ng-show="employeeForm.identityExpireDate.$error.maxlength">Input too long</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="ln_solid"></div>
-            </div>
-        </div>
-    </div>
-</form>
+    </form>
+</div>

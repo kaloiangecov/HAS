@@ -29,8 +29,8 @@ public class RolePermission implements GrantedAuthority {
     public RolePermission() {
     }
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "permissions", cascade = CascadeType.ALL)
-    private List<UserRole> role;
+    //@ManyToMany(fetch = FetchType.EAGER, mappedBy = "permissions", cascade = CascadeType.ALL)
+    //private List<UserRole> role;
 
     @Override
     public String getAuthority() {

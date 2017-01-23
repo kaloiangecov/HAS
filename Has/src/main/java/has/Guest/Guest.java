@@ -8,6 +8,9 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import java.io.Serializable;
 
 /**
  * Created by kaloi on 12/20/2016.
@@ -15,7 +18,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @Entity
-public class Guest {
+public class Guest implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,7 +26,8 @@ public class Guest {
     @NotNull
     private int numberReservations;
     @NotNull
-    @Size(max = 2, min = 0)
+    @Min(0)
+    @Max(2)
     private int status;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -32,6 +36,13 @@ public class Guest {
 
     @OneToOne
     private User user;
+
+    public Guest(int status, User user, PersonalData personalData) {
+        this.status = status;
+        this.numberReservations = 1;
+        this.personalData = personalData;
+        this.user = user;
+    }
 
     public Guest(){
 

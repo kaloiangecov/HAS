@@ -1,151 +1,176 @@
 app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout, $interval, $resource, $http, DTOptionsBuilder, DTColumnBuilder) {
+    var ctrl = this;
     $scope.page.title = "Employees";
     $scope.master = {};
-    $scope.filters = {};
-    $scope.users = [];
+    ctrl.filters = {
+        fullName: "",
+        phone: "",
+        dateHired: ""
+    };
+    $scope.usersList = [];
     $scope.isEdit = false;
 
-    if ($stateParams && $stateParams.id) {
-        $scope.isEdit = true;
-        var url = "sample_data/sampleEmployees.json"; //TODO put real service URL here
+    if (window.location.hash.includes("list")) {
+        // employees table
+        $scope.dtInstance = {};
 
-        $http({
-            method: "GET",
-            url: url,
-            data: {
-                id: $stateParams.id
-            },
-            responseType: "json"
-        }).then(
-            function (response) { //success
-                $scope.employee = response.data;
-                console.log($scope.user);
-            },
-            function (response) { //error
-                alert(response.statusText);
-            });
-    }
-    else {
-        $scope.isEdit = false;
-        $scope.employee = {
-            personalData: {}
+        $scope.dtOptions = DTOptionsBuilder.newOptions()
+            .withOption('ajax', {
+                url: 'searchemployees',
+                type: 'GET',
+                dataType: "json",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': ('Basic ' + window.base64encode($scope.loginData.username + ':' + $scope.loginData.password))
+                },
+                data: ctrl.filters
+            })
+            .withDataProp('data')
+            .withOption('processing', true)
+            .withOption('serverSide', true)
+            .withOption('pagingType', 'full_numbers')
+            .withOption('dom', 'lrtip');
+
+        $scope.dtColumns = [
+            DTColumnBuilder.newColumn('id', 'ID'),
+            DTColumnBuilder.newColumn('personalData.fullName', 'Full Name'),
+            DTColumnBuilder.newColumn('personalData.phone', 'Phone Number'),
+            DTColumnBuilder.newColumn('dateHired', 'Date Hired')
+                .renderWith(function (date) {
+                    var dateItems = date.split("/");
+                    return new Date(dateItems[2], (dateItems[1] - 1), dateItems[0]).toLocaleDateString();
+                }),
+            DTColumnBuilder.newColumn('user.username', 'User'),
+            DTColumnBuilder.newColumn('id').notSortable().withClass('actions-column')
+                .renderWith(function (data) {
+                    var html = '<a class="action-btn" href="#/employees/edit/' +
+                        data +
+                        '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+                    return html;
+                })
+        ];
+        $scope.reloadTableData = function () {
+            var resetPaging = false;
+            $scope.dtInstance.reloadData(function (list) {
+                console.log(list);
+            }, resetPaging);
         };
     }
-
-
-    $http({
-        method: "GET",
-        url: "sample_data/sampleUsers.json", //TODO put real service URL here
-        responseType: "json"
-    }).then(
-        function (response) { //success
-            $scope.users = response.data.data;
-        },
-        function (response) { //error
-            alert(response.statusText);
-        });
-
-    $scope.search = function () {
-        alert(JSON.stringify($scope.filters));
-        $scope.reloadTableData();
-    };
-
-    $scope.submit = function (employee) {
-        if ($scope.employeeForm.$valid) {
-            $scope.master = angular.copy(employee);
-            var url = $scope.isEdit ?
-                "sample_data/sampleEmployees.json" : // TODO put real service URL here
-                "sample_data/sampleEmployees.json"; // TODO put real service URL here
+    else {
+        function saveEmployee(callback) {
+            var url = $scope.isEdit ? ("employee/" + $stateParams.id) : "employee";
+            var method = $scope.isEdit ? "PUT" : "POST";
 
             $http({
-                method: "POST",
+                method: method,
                 url: url,
                 data: $scope.master,
                 responseType: "json"
             }).then(
-                function (response) { //success
-                    if ($scope.isEdit) {
-                        alert('Edited: ' + $scope.master.personalData.fullName);
-                    } else {
-                        alert('Created: ' + $scope.master.personalData.fullName);
-                    }
-                },
+                callback,
                 function (response) { //error
-                    alert(response.statusText);
+                    alert(response.data.message);
                 });
-            $state.go('loggedin.root.employees.list')
         }
-    };
 
-    // employees table
-    $scope.dtInstance = {};
+        $scope.getAllUsers(function (data) {
+            $scope.usersList = data;
 
-    $scope.dtOptions = DTOptionsBuilder.newOptions()
-        .withOption('ajax', {
-            url: 'sample_data/sampleEmployees.json', //TODO put real service URL here
-            type: 'GET',
-            data: {
-                fullName: $scope.filters.fullName,
-                dateHired: $scope.filters.dateHired
+            if ($stateParams && $stateParams.id) {
+                $scope.isEdit = true;
+
+                var url = "employee/" + $stateParams.id;
+
+                $http({
+                    method: "GET",
+                    url: url,
+                    responseType: "json"
+                }).then(
+                    function (response) { //success
+                        $scope.employee = response.data;
+                        $scope.employee.userID = $scope.employee.user.id;
+                    },
+                    function (response) { //error
+                        alert(response.data.message);
+                    });
             }
-        })
-        .withDataProp('data')
-        .withOption('processing', true)
-        .withOption('serverSide', true)
-        .withOption('pagingType', 'full_numbers')
-        .withOption('dom', 'lrtip');
+            else {
+                $scope.isEdit = false;
+                $scope.employee = {
+                    personalData: {},
+                    userID: $scope.usersList[0].id
+                };
+            }
+        });
 
-    $scope.dtColumns = [
-        DTColumnBuilder.newColumn('id', 'ID'),
-        DTColumnBuilder.newColumn('personalData.fullName', 'Full Name'),
-        DTColumnBuilder.newColumn('personalData.phone', 'Phone Number'),
-        DTColumnBuilder.newColumn('dateHired', 'Date Hired')
-            .renderWith(function (date) {
-                return new Date(date).toLocaleDateString();
-            }),
-        DTColumnBuilder.newColumn('userID', 'User')
-            .renderWith(function (userID) {
-                return $scope.users[userID].username;
-            }),
-        DTColumnBuilder.newColumn('id').notSortable().withClass('actions-column')
-            .renderWith(function (data) {
-                var html = '<a class="action-btn" href="#/employees/edit/' +
-                    data +
-                    '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
-                return html;
-            })
-    ];
-    $scope.reloadTableData = function () {
-        var resetPaging = false;
-        $scope.dtInstance.reloadData(function (list) {
-            console.log(list);
-        }, resetPaging);
-    };
+        $scope.submit = function (employee) {
+            if ($scope.employeeForm.$valid) {
+                $scope.master = angular.copy(employee);
+
+                delete $scope.master.userID;
+
+                $scope.getUser(employee.userID, function (data) {
+                    $scope.master.user = data;
+
+                    saveEmployee(function () {
+                        if ($scope.isEdit) {
+                            alert('Edited: ' + $scope.master.personalData.fullName);
+                        } else {
+                            alert('Created: ' + $scope.master.personalData.fullName);
+                        }
+                        window.location.hash = "#/employees/list";
+                    });
+                });
+            }
+        };
+    }
 
     angular.element(document).ready(function () {
-        $('#dateHired').daterangepicker({
-                singleDatePicker: true,
-                showDropdowns: true
-            },
-            function (start) {
-                $scope.employee.dateHired = start.toISOString();
-            });
-        $('#identityIssueDate').daterangepicker({
-                singleDatePicker: true,
-                showDropdowns: true
-            },
-            function (start) {
-                $scope.employee.personalData.identityIssueDate = start.toISOString();
-            });
-        $('#identityExpireDate').daterangepicker({
-                singleDatePicker: true,
-                showDropdowns: true
-            },
-            function (start) {
-                $scope.employee.personalData.identityExpireDate = start.toISOString();
-            });
 
-        $interval($scope.reloadTableData, 5000);
+        if (window.location.hash.includes("list")) {
+            $('#filterDateHired').daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    autoUpdateInput: false
+                },
+                function (start) {
+                    ctrl.filters.dateHired = start.format("DD/MM/YYYY");
+                    $('#filterDateHired').val(ctrl.filters.dateHired);
+                });
+
+            $scope.reloadTableData();
+            //$interval($scope.reloadTableData, 30000);
+        }
+        else {
+            $('#dateHired').daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    autoUpdateInput: false
+                },
+                function (start) {
+                    $scope.employee.dateHired = start.format("DD/MM/YYYY");
+                    $('#dateHired').val($scope.employee.dateHired);
+                });
+            $('#identityIssueDate').daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    autoUpdateInput: false
+                },
+                function (start) {
+                    $scope.employee.personalData.identityIssueDate = start.format("DD/MM/YYYY");
+                    $('#identityIssueDate').val($scope.employee.personalData.identityIssueDate);
+                });
+            $('#identityExpireDate').daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    autoUpdateInput: false
+                },
+                function (start) {
+                    $scope.employee.personalData.identityExpireDate = start.format("DD/MM/YYYY");
+                    $('#identityExpireDate').val($scope.employee.personalData.identityExpireDate);
+                });
+        }
     });
 
 });

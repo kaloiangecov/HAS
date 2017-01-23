@@ -20,7 +20,7 @@
                     </div>
                     <div class="form-group col-xs-6">
                         <label for="type">Type</label>
-                        <select class="form-control" id="type" name="type" ng-model="room.type"
+                        <select class="form-control" id="type" name="type" ng-model="room.roomClass"
                                 ng-options="roomTypes.indexOf(item) as item for item in roomTypes" required="required">
                         </select>
                         <div ng-show="roomForm.$submitted || roomForm.type.$touched" class="validation-message">
