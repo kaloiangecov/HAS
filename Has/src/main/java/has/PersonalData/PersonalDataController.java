@@ -1,11 +1,13 @@
 package has.PersonalData;
 
+import has.Exceptions.IdentityNumberAlreadyExists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -22,7 +24,7 @@ public class PersonalDataController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public PersonalData save(@RequestBody PersonalData personalData) {
+    public PersonalData save(@RequestBody @Valid PersonalData personalData) throws IdentityNumberAlreadyExists {
         return personalDataService.save(personalData);
     }
 
@@ -55,7 +57,7 @@ public class PersonalDataController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public PersonalData updateEmployee(@PathVariable Long id, @RequestBody PersonalData personalData) throws Exception {
+    public PersonalData updateEmployee(@PathVariable Long id, @RequestBody @Valid PersonalData personalData) throws Exception {
         return personalDataService.update(id, personalData);
     }
 }

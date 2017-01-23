@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +26,7 @@ public class EmployeeController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Employee save(@RequestBody Employee employee) {
+    public Employee save(@RequestBody @Valid Employee employee) {
         return employeeService.save(employee);
     }
 
@@ -81,7 +82,7 @@ public class EmployeeController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Employee updateEmployee(@PathVariable Long id, @RequestBody Employee employee) throws Exception {
+    public Employee updateEmployee(@PathVariable Long id, @RequestBody @Valid Employee employee) throws Exception {
         return employeeService.update(id, employee);
     }
 }

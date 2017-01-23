@@ -10,6 +10,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,11 +29,17 @@ public class User implements Serializable, UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String lastLogin;
+    @NotNull
+    @Size(min = 6, max = 30)
     private String password;
+    @NotNull
     private String email;
     private String regDate;
+    @NotNull
+    @Size(max = 50, min = 3)
     private String username;
 
+    @NotNull
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private UserRole userRole;
 
