@@ -108,7 +108,7 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
                 delete $scope.master.userID;
 
                 $scope.getUser(guest.userID, function (data) {
-                    $scope.master.guest = data;
+                    $scope.master.user = data;
 
                     saveGuest(function () {
                         if ($scope.isEdit) {

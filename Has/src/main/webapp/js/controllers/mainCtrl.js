@@ -51,6 +51,35 @@ app.controller("mainCtrl", function ($scope, $http) {
             }).then(updateCallback);
     };
 
+    $scope.getAllRoles = function (updateCallback) {
+        $http({
+            method: "GET",
+            url: "roles",
+            responseType: "json"
+        }).then(
+            function (response) { //success
+                return response.data;
+            },
+            function (response) { //error
+                alert(response.data.message);
+                return undefined;
+            }).then(updateCallback);
+    };
+
+    $scope.getRole = function (roleID, updateCallback) {
+        var response = $http({
+            method: "GET",
+            url: ("role/" + roleID),
+            responseType: "json"
+        }).then(
+            function (response) { //success
+                return response.data;
+            },
+            function (response) { //error
+                alert(response.data.message);
+            }).then(updateCallback);
+    };
+
     $scope.exportForm = function (data) {
         var text = JSON.stringify(data);
 

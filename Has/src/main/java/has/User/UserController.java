@@ -45,6 +45,22 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @RequestMapping(value = "/roles", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<UserRole> getAllRoles() throws Exception {
+        return userService.getAllRoles();
+    }
+
+    @RequestMapping(value = "/role/{id}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public UserRole findRoleById(@PathVariable Long id) throws Exception {
+        return userService.findRoleById(id);
+    }
+
     @RequestMapping(value = "/searchusers", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)

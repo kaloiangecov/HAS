@@ -80,6 +80,13 @@ public class UserService {
         return dbUser;
     }
 
+    public List<UserRole> getAllRoles() {
+        return repo.getAllRoles();
+    }
+    public UserRole findRoleById(Long id) {
+        return repo.getRoleById(id);
+    }
+
     @PostConstruct
     private void initSomeData(){
 
