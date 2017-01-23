@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 @Getter
 @Setter
@@ -21,24 +23,26 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @NotNull
-    @Size(min = 0)
-    @Pattern(regexp = "[0-9]")
+    @Min(0)
+    //@Pattern(regexp = "[0-9]")
     private int bedsDouble;
     @NotNull
-    @Size(min = 0)
-    @Pattern(regexp = "[0-9]")
+    @Min(0)
+    //@Pattern(regexp = "[0-9]")
     private int bedsSingle;
     @NotNull
-    @Size(min = 1)
-    @Pattern(regexp = "[0-9]")
+    @Min(0)
+    //@Pattern(regexp = "[0-9]")
     private int number;
     @NotNull
-    @Pattern(regexp = "[0-9]")
-    @Size(min = 0, max = 5)
+    //@Pattern(regexp = "[0-9]")
+    @Min(0)
+    @Max(5)
     private int roomClass;
     @NotNull
-    @Size(min = 0, max = 3)
-    @Pattern(regexp = "[0-9]")
+    @Min(0)
+    @Max(3)
+    //@Pattern(regexp = "[0-9]")
     private int status;
     private boolean children;
     private boolean minibar;

@@ -8,6 +8,8 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.io.Serializable;
 
 /**
@@ -24,7 +26,8 @@ public class Guest implements Serializable {
     @NotNull
     private int numberReservations;
     @NotNull
-    @Size(max = 2, min = 0)
+    @Min(0)
+    @Max(2)
     private int status;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

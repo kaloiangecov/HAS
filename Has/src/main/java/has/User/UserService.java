@@ -89,7 +89,7 @@ public class UserService {
         UserRole role1 = new UserRole("adm", permissions);
 
         User usr1 = new User("2017-01-10T12:30:00", "password", "shit@abv.bg", "2016-11-12T11:30:30", "ivan", role1);
-        User usr2 = new User("2017-01-11T12:30:00", "123456789", "dick@abv.bg", "2016-09-12T11:30:30", "grigor", new UserRole("adm", permissions));
+        User usr2 = new User("2017-01-11T12:30:00", "123456789", "dick@abv.bg", "2016-09-12T11:30:30", "grigor", new UserRole("adm2", permissions));
 
         Employee emp1 = new Employee(
                 "12/11/2016",
@@ -162,6 +162,7 @@ public class UserService {
         Room room2 = new Room(0, 2, 106, 2, 2, false, false, true);
 
         repo.save(usr1);
+        //repo.save(usr2); //тук гърми
         repoEmployee.save(emp1);
         repoEmployee.save(emp2);
         repoEmployee.save(emp3);
