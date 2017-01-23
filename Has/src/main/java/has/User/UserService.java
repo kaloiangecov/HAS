@@ -9,6 +9,9 @@ import has.Guest.Guest;
 import has.Room.Room;
 import has.Room.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
@@ -59,8 +62,11 @@ public class UserService {
         return repo.findAll();
     }
 
-    public List<User> searchUsers(int draw, int start, int length, String username, String email, Integer role) {
-        return repo.findByUsernameContainingAndEmailContaining(username, email);
+    public Page<User> searchUsers(int draw, int start, int length, String username, String email, Integer role) {
+
+        PageRequest request = new PageRequest((start / length), length, Sort.Direction.ASC, "id");
+
+        return repo.findByUsernameContainingAndEmailContaining(username, email, request);
     }
 
     public User findById(Long id) throws Exception {

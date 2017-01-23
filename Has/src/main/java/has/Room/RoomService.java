@@ -1,6 +1,9 @@
 package has.Room;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +23,11 @@ public class RoomService {
 
     public List<Room> getAllRooms(){
         return repo.findAll();
+    }
+
+    public Page<Room> searchRooms(int draw, int start, int length) {
+        PageRequest request = new PageRequest((start / length), length, Sort.Direction.ASC, "id");
+        return repo.findAll(request);
     }
 
     public Room findByNumber(Integer number)throws Exception{

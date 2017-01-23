@@ -3,6 +3,7 @@ package has.Guest;
 import has.DataTableResult;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -47,7 +48,10 @@ public class GuestController {
     DataTableResult searchGuests(HttpServletRequest request) throws Exception {
         Map<String, String[]> parameterMap = request.getParameterMap();
 
-        List<Guest> guests = guestService.searchGuests(
+        Page<Guest> guests = guestService.searchGuests(
+                Integer.parseInt(parameterMap.get("draw")[0]),
+                Integer.parseInt(parameterMap.get("start")[0]),
+                Integer.parseInt(parameterMap.get("length")[0]),
             parameterMap.get("fullName")[0],
             parameterMap.get("phone")[0]
         );
@@ -56,9 +60,9 @@ public class GuestController {
                 Integer.parseInt(parameterMap.get("draw")[0]),
                 Integer.parseInt(parameterMap.get("start")[0]),
                 Integer.parseInt(parameterMap.get("length")[0]),
-                guests.size(),
-                guests.size(),
-                guests);
+                guests.getTotalElements(),
+                guests.getTotalElements(),
+                guests.getContent());
     }
 
     @RequestMapping(value = "/guest/{id}", method = RequestMethod.GET,

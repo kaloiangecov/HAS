@@ -3,6 +3,9 @@ package has.Employee;
 import has.mailsender.MailTemplates;
 import has.mailsender.SendMailSSL;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,11 +29,13 @@ public class EmployeeService {
         return repo.findAll();
     }
 
-    public List<Employee> searchEmployees(String fullName, String phone, String dateHired) {
+    public Page<Employee> searchEmployees(int draw, int start, int length, String fullName, String phone, String dateHired) {
+        PageRequest request = new PageRequest((start / length), length, Sort.Direction.ASC, "id");
+
         if (dateHired.isEmpty())
-            return repo.findByFullNameAndPhone(fullName, phone);
+            return repo.findByFullNameAndPhone(fullName, phone, request);
         else
-            return repo.findByFullNameAndPhoneAndDateHired(fullName, phone, dateHired);
+            return repo.findByFullNameAndPhoneAndDateHired(fullName, phone, dateHired, request);
     }
 
     public Employee findById(Long id) throws Exception {

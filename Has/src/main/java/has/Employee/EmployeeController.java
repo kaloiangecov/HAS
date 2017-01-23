@@ -3,6 +3,7 @@ package has.Employee;
 import has.DataTableResult;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -47,7 +48,10 @@ public class EmployeeController {
     DataTableResult searchEmployees(HttpServletRequest request) throws Exception {
         Map<String, String[]> parameterMap = request.getParameterMap();
 
-        List<Employee> employees = employeeService.searchEmployees(
+        Page<Employee> employees = employeeService.searchEmployees(
+                Integer.parseInt(parameterMap.get("draw")[0]),
+                Integer.parseInt(parameterMap.get("start")[0]),
+                Integer.parseInt(parameterMap.get("length")[0]),
                 parameterMap.get("fullName")[0],
                 parameterMap.get("phone")[0],
                 parameterMap.get("dateHired")[0]);
@@ -56,9 +60,9 @@ public class EmployeeController {
                 Integer.parseInt(parameterMap.get("draw")[0]),
                 Integer.parseInt(parameterMap.get("start")[0]),
                 Integer.parseInt(parameterMap.get("length")[0]),
-                employees.size(),
-                employees.size(),
-                employees);
+                employees.getTotalElements(),
+                employees.getTotalElements(),
+                employees.getContent());
     }
 
     @RequestMapping(value = "/employee/{id}", method = RequestMethod.GET,

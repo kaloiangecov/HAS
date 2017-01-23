@@ -1,6 +1,9 @@
 package has.Guest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,8 +25,10 @@ public class GuestService {
         return repo.findAll();
     }
 
-    public List<Guest> searchGuests(String fullName, String phone) {
-        return repo.findByFullNameAndPhone(fullName, phone);
+    public Page<Guest> searchGuests(int draw, int start, int length, String fullName, String phone) {
+        PageRequest request = new PageRequest((start / length), length, Sort.Direction.ASC, "id");
+
+        return repo.findByFullNameAndPhone(fullName, phone, request);
     }
 
     public Guest findById(Long id) throws Exception {

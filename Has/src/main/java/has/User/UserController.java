@@ -4,6 +4,8 @@ import has.DataTableResult;
 import has.Exceptions.UserAlreadyExists;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -69,7 +71,7 @@ public class UserController {
     public @ResponseBody DataTableResult searchUsers(HttpServletRequest request) throws Exception {
         Map<String, String[]> parameterMap = request.getParameterMap();
 
-        List<User> users = userService.searchUsers(
+        Page<User> users = userService.searchUsers(
                 Integer.parseInt(parameterMap.get("draw")[0]),
                 Integer.parseInt(parameterMap.get("start")[0]),
                 Integer.parseInt(parameterMap.get("length")[0]),
@@ -84,9 +86,9 @@ public class UserController {
                 Integer.parseInt(parameterMap.get("draw")[0]),
                 Integer.parseInt(parameterMap.get("start")[0]),
                 Integer.parseInt(parameterMap.get("length")[0]),
-                users.size(),
-                users.size(),
-                users);
+                users.getTotalElements(),
+                users.getTotalElements(),
+                users.getContent());
     }
 
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET,

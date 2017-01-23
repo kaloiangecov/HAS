@@ -3,6 +3,7 @@ package has.Room;
 import has.DataTableResult;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -47,15 +48,19 @@ public class RoomController {
     DataTableResult searchRooms(HttpServletRequest request) throws Exception {
         Map<String, String[]> parameterMap = request.getParameterMap();
 
-        List<Room> rooms = roomService.getAllRooms();
+        Page<Room> rooms = roomService.searchRooms(
+                Integer.parseInt(parameterMap.get("draw")[0]),
+                Integer.parseInt(parameterMap.get("start")[0]),
+                Integer.parseInt(parameterMap.get("length")[0])
+        );
 
         return new DataTableResult(
                 Integer.parseInt(parameterMap.get("draw")[0]),
                 Integer.parseInt(parameterMap.get("start")[0]),
                 Integer.parseInt(parameterMap.get("length")[0]),
-                rooms.size(),
-                rooms.size(),
-                rooms);
+                rooms.getTotalElements(),
+                rooms.getTotalElements(),
+                rooms.getContent());
     }
 
     @RequestMapping(value = "/room/{id}", method = RequestMethod.GET,

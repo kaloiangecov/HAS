@@ -9,11 +9,11 @@ public class DataTableResult {
     private Integer draw;
     private Integer start;
     private Integer length;
-    private Integer recordsTotal;
-    private Integer recordsFiltered;
+    private Long recordsTotal;
+    private Long recordsFiltered;
     private List data;
 
-    public DataTableResult(Integer draw, Integer start, Integer length, Integer recordsTotal, Integer recordsFiltered, List data) {
+    public DataTableResult(Integer draw, Integer start, Integer length, Long recordsTotal, Long recordsFiltered, List data) {
         this.draw = draw;
         this.start = start;
         this.length = length;
@@ -46,19 +46,19 @@ public class DataTableResult {
         this.length = length;
     }
 
-    public Integer getRecordsTotal() {
+    public Long getRecordsTotal() {
         return recordsTotal;
     }
 
-    public void setRecordsTotal(Integer recordsTotal) {
+    public void setRecordsTotal(Long recordsTotal) {
         this.recordsTotal = recordsTotal;
     }
 
-    public Integer getRecordsFiltered() {
+    public Long getRecordsFiltered() {
         return recordsFiltered;
     }
 
-    public void setRecordsFiltered(Integer recordsFiltered) {
+    public void setRecordsFiltered(Long recordsFiltered) {
         this.recordsFiltered = recordsFiltered;
     }
 
