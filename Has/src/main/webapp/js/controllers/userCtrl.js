@@ -2,6 +2,7 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
     var ctrl = this;
     $scope.page.title = "Users";
     $scope.master = {};
+    $scope.rolesList = [];
     ctrl.filters = {
         username: "",
         email: "",
@@ -59,52 +60,60 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
         };
     }
     else {
-        if ($stateParams && $stateParams.id) {
-            $scope.isEdit = true;
-            $scope.getUser($stateParams.id, function (data) {
-                $scope.user = data;
-                if (!$scope.user.picture)
-                    $scope.user.picture = 'img/user.png';
-            });
-        }
-        else {
-            $scope.isEdit = false;
-            $scope.user = {
-                role: 1,
-                picture: 'img/user.png'
-            };
-        }
+        $scope.getAllRoles(function(data) {
+            $scope.rolesList = data;
+
+            if ($stateParams && $stateParams.id) {
+                $scope.isEdit = true;
+                $scope.getUser($stateParams.id, function (data) {
+                    $scope.user = data;
+                    if (!$scope.user.picture)
+                        $scope.user.picture = 'img/user.png';
+                    $scope.user.roleID = $scope.user.userRole.id;
+                });
+            }
+            else {
+                $scope.isEdit = false;
+                $scope.user = {
+                    //userRole: $scope.rolesList[0],
+                    roleID: $scope.rolesList[0].id,
+                    picture: 'img/user.png'
+                };
+            }
+        });
 
         $scope.submit = function (user) {
             if ($scope.userForm.$valid) {
                 $scope.master = angular.copy(user);
                 $scope.master.regDate = (new Date()).toISOString();
                 $scope.master.lastLogin = (new Date()).toISOString();
-                $scope.master.userRole = {
-                    id: user.role,
-                    roleName: sampleRoles[user.role]
-                }
 
-                var url = $scope.isEdit ? ("user/" + $stateParams.id) : "user";
-                var method = $scope.isEdit ? "PUT" : "POST";
+                delete $scope.master.roleID;
 
-                $http({
-                    method: method,
-                    url: url,
-                    data: $scope.master,
-                    responseType: "json"
-                }).then(
-                    function (response) { //success
-                        if ($scope.isEdit) {
-                            alert('Edited: ' + $scope.master.username);
-                        } else {
-                            alert('Created: ' + $scope.master.username);
-                        }
-                        window.location.hash = "#/users/list";
-                    },
-                    function (response) { //error
-                        alert(response.data.message);
-                    });
+                $scope.getRole(user.roleID, function (data) {
+                    $scope.master.userRole = data;
+
+                    var url = $scope.isEdit ? ("user/" + $stateParams.id) : "user";
+                    var method = $scope.isEdit ? "PUT" : "POST";
+
+                    $http({
+                        method: method,
+                        url: url,
+                        data: $scope.master,
+                        responseType: "json"
+                    }).then(
+                        function (response) { //success
+                            if ($scope.isEdit) {
+                                alert('Edited: ' + $scope.master.username);
+                            } else {
+                                alert('Created: ' + $scope.master.username);
+                            }
+                            window.location.hash = "#/users/list";
+                        },
+                        function (response) { //error
+                            alert(response.data.message);
+                        });
+                });
             }
         };
 
