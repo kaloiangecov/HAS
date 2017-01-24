@@ -3,16 +3,15 @@ package has.User;
 import has.Employee.Employee;
 import has.Employee.EmployeeRepository;
 import has.Exceptions.UserAlreadyExists;
+import has.Guest.Guest;
 import has.Guest.GuestRepository;
 import has.PersonalData.PersonalData;
-import has.Guest.Guest;
 import has.Room.Room;
 import has.Room.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -98,15 +97,19 @@ public class UserService {
 
         RolePermission perm1 = new RolePermission("ADMIN");
         List<RolePermission> permissions = new ArrayList<>();
+        List<RolePermission> permissions2 = new ArrayList<>();
         permissions.add(perm1);
+        permissions2.add(new RolePermission("SHIT"));
         UserRole role1 = new UserRole("adm", permissions);
 
         User usr1 = new User("2017-01-10T12:30:00", "password", "shit@abv.bg", "2016-11-12T11:30:30", "ivan", role1);
-        User usr2 = new User("2017-01-11T12:30:00", "123456789", "dick@abv.bg", "2016-09-12T11:30:30", "grigor", new UserRole("adm2", permissions));
+        User usr2 = new User("2017-01-11T12:30:00", "123456789", "dick@abv.bg", "2016-09-12T11:30:30", "grigor", new UserRole("adm2", permissions2));
+
+        repo.save(usr1);
+        repo.save(usr2);
 
         Employee emp1 = new Employee(
                 "12/11/2016",
-                5,
                 usr1,
                 new PersonalData(
                         "some address",
@@ -120,8 +123,7 @@ public class UserService {
 
         Employee emp2 = new Employee(
                 "25/08/2016",
-                5,
-                usr1,
+                usr2,
                 new PersonalData(
                         "somewhere",
                         "8888881122",
@@ -133,8 +135,7 @@ public class UserService {
                         "0891345090"));
         Employee emp3 = new Employee(
                 "11/01/2017",
-                4,
-                usr1,
+                usr2,
                 new PersonalData(
                         "somewhere else 67",
                         "0088881122",
@@ -145,9 +146,13 @@ public class UserService {
                         "123717111",
                         "0885678123"));
 
+        repoEmployee.save(emp1);
+        repoEmployee.save(emp2);
+        repoEmployee.save(emp3);
+
         Guest guest1 = new Guest(
                 0,
-                usr1,
+                usr2,
                 new PersonalData(
                         "some address 2",
                         "9412567890",
@@ -171,17 +176,28 @@ public class UserService {
                         "123123456",
                         "0875999999"));
 
-        Room room1 = new Room(1, 1, 104, 2, 2, true, false, true);
-        Room room2 = new Room(0, 2, 106, 2, 2, false, false, true);
-
-        repo.save(usr1);
-        //repo.save(usr2); //тук гърми
-        repoEmployee.save(emp1);
-        repoEmployee.save(emp2);
-        repoEmployee.save(emp3);
         repoGuest.save(guest1);
         repoGuest.save(guest2);
-        repoRoom.save(room1);
-        repoRoom.save(room2);
+
+        //Room room1 = new Room(1, 1, 104, 2, 2, true, false, true);
+        //Room room2 = new Room(0, 2, 106, 2, 2, false, false, true);
+
+        Boolean _children = true;
+        Boolean _pets = false;
+        Boolean _minibar = true;
+        int roomStart = 100;
+
+        for (int i = 0; i < 50; i++) {
+            Room tempRoom = new Room(i % 2, i % 2, roomStart + i, i % 2, i % 2, _children, _pets, _minibar);
+            repoRoom.save(tempRoom);
+            _children = !_children;
+            _pets = !_pets;
+            _minibar = !_minibar;
+            if (roomStart == i * 10)
+                roomStart += (i * 10);
+        }
+
+        //repoRoom.save(room1);
+        //repoRoom.save(room2);
     }
 }

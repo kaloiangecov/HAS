@@ -5,7 +5,6 @@ import has.Exceptions.UserAlreadyExists;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,12 +22,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
-    @RequestMapping("/")
-    @ResponseStatus(value = HttpStatus.OK)
-    public void Index() throws UserAlreadyExists {
-
-    }
 
     @RequestMapping(value = "/user", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE,

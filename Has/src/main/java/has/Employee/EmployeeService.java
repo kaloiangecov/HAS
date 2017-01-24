@@ -9,8 +9,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * Created by kaloi on 12/19/2016.
@@ -62,7 +60,6 @@ public class EmployeeService {
         }
 
         dbEmployee.setDateHired(employee.getDateHired());
-        dbEmployee.setInternship(employee.getInternship());
         dbEmployee.setPersonalData(employee.getPersonalData());
         if (dbEmployee.getUser().getId() != employee.getUser().getId())
             dbEmployee.setUser(employee.getUser());

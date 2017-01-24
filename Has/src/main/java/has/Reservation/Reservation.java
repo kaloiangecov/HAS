@@ -6,9 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 /**
  * Created by kaloi on 12/20/2016.
@@ -25,34 +25,45 @@ public class Reservation {
     private boolean allInclusive;
     private boolean breakfast;
     private boolean dinner;
+    private boolean group;
+
     @NotNull
-    @Pattern(regexp = "[0-9]")
-    @Size(min = 0, max = 100)
+    //@Pattern(regexp = "[0-9]")
+    @Min(0)
+    @Max(100)
     private int discount;
+
+    @NotNull
+    private String startDate;
+
     @NotNull
     private String endDate;
-    private boolean group;
+
     //    private List<ReservationGuest> guests;
+
     @ManyToOne
-    private User lastModifidBy;
+    private User lastModifiedBy;
+
     private String lastModifiedTime;
+
     @NotNull
-    @Size(min = 1)
+    @Min(1)
     private int numberAdults;
+
     @NotNull
-    @Size(min = 1)
+    @Min(0)
     private int numberChildren;
+
     @NotNull
-    private String price;
+    private Double price;
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     private Employee receptionist;
 
     @NotNull
-    private String startDate;
-    @NotNull
-    @Size(min = 0, max = 2)
-    @Pattern(regexp = "[0-9]")
+    @Min(0)
+    @Max(2)
+    //@Pattern(regexp = "[0-9]")
     private int status;
 }

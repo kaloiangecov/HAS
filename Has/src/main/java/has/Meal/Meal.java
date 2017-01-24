@@ -22,17 +22,14 @@ public class Meal {
     @Column(name = "MEAL_ID")
     private Long id;
     @NotNull
-    private int code;
-    @NotNull
     private String date;
     @NotNull
-    @Size(min = 3, max = 250)
+    @Size(min = 3, max = 100)
     private String description;
     @NotNull
     @Size(min = 3, max = 50)
     private String name;
     @NotNull
-    @Size(min = 0)
     private Double price;
 
     @NotNull

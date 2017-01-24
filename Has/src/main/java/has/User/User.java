@@ -2,8 +2,6 @@ package has.User;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import has.Employee.Employee;
-import has.Guest.Guest;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,15 +26,21 @@ public class User implements Serializable, UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     private String lastLogin;
+
     @NotNull
-    @Size(min = 6, max = 30)
+    @Size(min = 6, max = 16)
     private String password;
+
     @NotNull
     private String email;
-    private String regDate;
+
     @NotNull
-    @Size(max = 50, min = 3)
+    private String regDate;
+
+    @NotNull
+    @Size(min = 3, max = 16)
     private String username;
 
     @NotNull

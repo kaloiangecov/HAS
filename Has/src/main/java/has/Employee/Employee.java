@@ -7,9 +7,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import java.io.Serializable;
 
 /**
@@ -23,11 +20,8 @@ public class Employee implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     private String dateHired;
-    @NotNull
-    @Min(0)
-    @Max(50)
-    private int internship;
 
     @NotNull
     @OneToOne
@@ -37,14 +31,12 @@ public class Employee implements Serializable {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private PersonalData personalData;
 
-    public Employee(String dateHired, int internship) {
+    public Employee(String dateHired) {
         this.dateHired = dateHired;
-        this.internship = internship;
     }
 
-    public Employee(String dateHired, int internship, User user, PersonalData personalData) {
+    public Employee(String dateHired, User user, PersonalData personalData) {
         this.dateHired = dateHired;
-        this.internship = internship;
         this.user = user;
         this.personalData = personalData;
     }

@@ -18,7 +18,7 @@ public class ReservationService {
 
 
     public Reservation save(Reservation reservation, User user) {
-        reservation.setLastModifidBy(user);
+        reservation.setLastModifiedBy(user);
         return repo.save(reservation);
     }
 
@@ -61,7 +61,7 @@ public class ReservationService {
         dbReservation.setNumberAdults(reservation.getNumberAdults());
         dbReservation.setStartDate(reservation.getStartDate());
         dbReservation.setNumberChildren(reservation.getNumberChildren());
-        dbReservation.setLastModifidBy(user);
+        dbReservation.setLastModifiedBy(user);
         dbReservation.setLastModifiedTime((new Date().toString()));
 //        dbReservation.setReceptionist(Employee employee);
 

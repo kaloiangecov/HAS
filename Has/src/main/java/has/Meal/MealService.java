@@ -44,7 +44,6 @@ public class MealService {
         if(dbMeal == null){
             throw new Exception("There is no meal with such ID");
         }
-        dbMeal.setCode(meal.getCode());
         dbMeal.setDate(meal.getDate());
         dbMeal.setDescription(meal.getDescription());
         dbMeal.setName(meal.getName());

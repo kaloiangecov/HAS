@@ -8,10 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 
 /**
  * Created by kaloi on 12/23/2016.
@@ -25,7 +22,7 @@ public class PersonalData {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @NotNull
-    @Size(min = 3, max = 100)
+    @Size(min = 3, max = 200)
     private String address;
     @NotNull
     @Size(min = 10, max = 10)
@@ -46,7 +43,7 @@ public class PersonalData {
     //@Pattern(regexp = "[0-9]")
     private String identityNumber;
     @NotNull
-    @Size(min = 10, max = 16)
+    @Size(min = 10, max = 20)
     //@Pattern(regexp = "[0-9]")
     private String phone;
 
