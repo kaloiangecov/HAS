@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
  */
 @Getter
 @Setter
-@Entity
+@Entity(name = "PERSONAL_DATA")
 public class PersonalData {
 
     @Id

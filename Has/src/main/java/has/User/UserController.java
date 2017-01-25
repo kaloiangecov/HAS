@@ -22,6 +22,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    RoleRepository repoRole;
 
     @RequestMapping(value = "/user", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE,
@@ -61,7 +63,9 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public @ResponseBody DataTableResult searchUsers(HttpServletRequest request) throws Exception {
+    public
+    @ResponseBody
+    DataTableResult searchUsers(HttpServletRequest request) throws Exception {
         Map<String, String[]> parameterMap = request.getParameterMap();
 
         Page<User> users = userService.searchUsers(
@@ -107,5 +111,14 @@ public class UserController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public User updateUser(@PathVariable Long id, @RequestBody @Valid User user) throws Exception {
         return userService.update(id, user);
+    }
+
+    @RequestMapping(value = "/roles", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<UserRole> getAllRoles() throws Exception {
+
+        return repoRole.findAll();
     }
 }

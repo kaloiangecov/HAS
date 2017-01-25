@@ -1,16 +1,16 @@
 package has.User;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
-import java.util.List;
 
 /**
  * Created by kaloi on 12/28/2016.
  */
-@Entity
+@Entity(name = "PERMISSION")
 @Getter
 @Setter
 public class RolePermission implements GrantedAuthority {
@@ -29,10 +29,8 @@ public class RolePermission implements GrantedAuthority {
     public RolePermission() {
     }
 
-    //@ManyToMany(fetch = FetchType.EAGER, mappedBy = "permissions", cascade = CascadeType.ALL)
-    //private List<UserRole> role;
-
     @Override
+    @JsonIgnore
     public String getAuthority() {
         return permission;
     }

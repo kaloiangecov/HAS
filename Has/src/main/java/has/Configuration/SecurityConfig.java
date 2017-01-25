@@ -41,13 +41,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().disable();
     }
 
-//    @Autowired
-//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.inMemoryAuthentication().withUser("admin").password("haspas").roles("ADMIN");
-//        auth.inMemoryAuthentication().withUser("admin").password("admin").roles("ADMIN");
-//        auth.inMemoryAuthentication().withUser("kans").password("kans123").roles("USER");
-//    }
-
     @Override
     protected UserDetailsService userDetailsService() {
         return userDetailsService;
