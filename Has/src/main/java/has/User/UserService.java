@@ -28,6 +28,9 @@ public class UserService {
     private UserRepository repo;
 
     @Autowired
+    private RoleRepository repoRole;
+
+    @Autowired
     private EmployeeRepository repoEmployee;
 
     @Autowired
@@ -37,7 +40,7 @@ public class UserService {
     private RoomRepository repoRoom;
 
     public User save(User user) throws UserAlreadyExists {
-        if(repo.findByUsername(user.getUsername()) != null){
+        if (repo.findByUsername(user.getUsername()) != null) {
             throw new UserAlreadyExists(user.getUsername());
         }
         return repo.save(user);
@@ -45,7 +48,7 @@ public class UserService {
 
     public User update(Long id, User user) throws Exception {
         User dbUser = repo.findOne(id);
-        if(dbUser == null){
+        if (dbUser == null) {
             throw new Exception("There is no user with such ID");
         }
 
@@ -70,7 +73,7 @@ public class UserService {
 
     public User findById(Long id) throws Exception {
         User dbUser = repo.findOne(id);
-        if(dbUser == null){
+        if (dbUser == null) {
             throw new Exception("There is no user with such ID");
         }
         return dbUser;
@@ -78,7 +81,7 @@ public class UserService {
 
     public User remove(Long id) throws Exception {
         User dbUser = repo.findOne(id);
-        if(dbUser == null){
+        if (dbUser == null) {
             throw new Exception("There is no user with such ID");
         }
         repo.delete(dbUser);
@@ -86,14 +89,15 @@ public class UserService {
     }
 
     public List<UserRole> getAllRoles() {
-        return repo.getAllRoles();
+        return repoRole.findAll();
     }
+
     public UserRole findRoleById(Long id) {
-        return repo.getRoleById(id);
+        return repoRole.findOne(id);
     }
 
     @PostConstruct
-    private void initSomeData(){
+    private void initSomeData() {
 
         RolePermission perm1 = new RolePermission("ADMIN");
         List<RolePermission> permissions = new ArrayList<>();

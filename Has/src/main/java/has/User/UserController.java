@@ -112,13 +112,4 @@ public class UserController {
     public User updateUser(@PathVariable Long id, @RequestBody @Valid User user) throws Exception {
         return userService.update(id, user);
     }
-
-    @RequestMapping(value = "/roles", method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public List<UserRole> getAllRoles() throws Exception {
-
-        return repoRole.findAll();
-    }
 }
