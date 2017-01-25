@@ -22,6 +22,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    RoleRepository repoRole;
 
     @RequestMapping(value = "/user", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE,
@@ -61,7 +63,9 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public @ResponseBody DataTableResult searchUsers(HttpServletRequest request) throws Exception {
+    public
+    @ResponseBody
+    DataTableResult searchUsers(HttpServletRequest request) throws Exception {
         Map<String, String[]> parameterMap = request.getParameterMap();
 
         Page<User> users = userService.searchUsers(
