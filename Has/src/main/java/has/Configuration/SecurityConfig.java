@@ -33,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .userDetailsService(userDetailsService())
                 .authorizeRequests()
                 .antMatchers("/**").permitAll()
-                .and().formLogin()
+                //.and().formLogin()
                 .and().httpBasic().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 

@@ -33,7 +33,7 @@ public class Employee implements Serializable {
     private User user;
 
     @NotNull
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "EMPLOYEE_PERSONAL_DATA", joinColumns = {
             @JoinColumn(name = "EMPLOYEE_ID", nullable = false, updatable = false)},
             inverseJoinColumns = {@JoinColumn(name = "PERSONAL_DATA_ID",

@@ -20,6 +20,7 @@ public class EmployeeService {
     private EmployeeRepository repo;
 
     public Employee save(Employee employee) {
+        SendMailSSL.sendMail("hardmaster.92@hotmail.com", MailTemplates.RESERVATION_CONFIRMATION);
         return repo.save(employee);
     }
 
@@ -31,11 +32,9 @@ public class EmployeeService {
         PageRequest request = new PageRequest((start / length), length, Sort.Direction.ASC, "id");
 
         if (dateHired.isEmpty())
-            return repo.findByPersonalDataFullNameLikeAndPersonalDataPhoneLike(fullName, phone, request);
-//            return repo.findByFullNameAndPhone(fullName, phone, request);
+            return repo.findByPersonalDataFullNameContainingAndPersonalDataPhoneContaining(fullName, phone, request);
         else
-            return repo.findByPersonalDataFullNameLikeAndPersonalDataPhoneLikeAndDateHired(fullName, phone, dateHired, request);
-//            return repo.findByFullNameAndPhoneAndDateHired(fullName, phone, dateHired, request);
+            return repo.findByPersonalDataFullNameContainingAndPersonalDataPhoneContainingAndDateHired(fullName, phone, dateHired, request);
     }
 
     public Employee findById(Long id) throws Exception {

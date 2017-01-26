@@ -46,9 +46,8 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
                         data +
                         '"><i class="fa fa-pencil" aria-hidden="true"></i></a><a class="action-btn" id="ban_' +
                         data +
-                        '" href="javascript:;" ng-click="banUser(' +
-                        data +
-                        ', this)"><i class="fa fa-ban" aria-hidden="true"></i></a>';
+                        '" href="javascript:;" onclick="banUser(' +
+                        data + ')"><i class="fa fa-ban" aria-hidden="true"></i></a>';
                     return html;
                 })
         ];
@@ -58,6 +57,21 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
                 console.log(list);
             }, resetPaging);
         };
+
+        var banUser = function (id) {
+            $http({
+                method: "DELETE",
+                url: ("user/" + id),
+                responseType: "json"
+            }).then(
+                function (response) { //success
+                    alert("User deleted");
+                    window.location.hash = "#/users/list";
+                },
+                function (response) { //error
+                    alert(response.data.message);
+                });
+        }
     }
     else {
         $scope.getAllRoles(function(data) {
@@ -115,26 +129,6 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
                         });
                 });
             }
-        };
-
-        $scope.banUser = function (index) {
-            var url = "user/" + $stateParams.id;
-
-            $http({
-                method: "DELETE",
-                url: url,
-                data: {
-                    id: $stateParams.id
-                },
-                responseType: "json"
-            }).then(
-                function (response) { //success
-                    alert("User banned");
-                    $state.go('loggedin.root.users.list');
-                },
-                function (response) { //error
-                    alert(response.data.message);
-                });
         };
     }
 

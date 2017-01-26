@@ -50,6 +50,7 @@ public class UserService {
         dbUser.setPassword(user.getPassword());
         dbUser.setRegDate(user.getRegDate());
         dbUser.setUsername(user.getUsername());
+        dbUser.setEmail(user.getEmail());
 
         return repo.save(dbUser);
     }

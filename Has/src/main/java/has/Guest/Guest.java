@@ -30,8 +30,12 @@ public class Guest implements Serializable {
     @Max(2)
     private int status;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @NotNull
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "GUEST_PERSONAL_DATA", joinColumns = {
+            @JoinColumn(name = "GUEST_ID", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "PERSONAL_DATA_ID",
+                    nullable = false, updatable = false)})
     private PersonalData personalData;
 
     @OneToOne
