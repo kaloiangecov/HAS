@@ -16,12 +16,11 @@ public class PersonalDataService {
     private PersonalDataRepository repo;
 
     public PersonalData save(PersonalData personalData) throws IdentityNumberAlreadyExists {
-        if(repo.findByEgn(personalData.getEgn()) != null){
+        if (repo.findByEgn(personalData.getEgn()) != null) {
             throw new IdentityNumberAlreadyExists(personalData.getEgn());
         }
         return repo.save(personalData);
     }
-
 
     public List<PersonalData> getAllPersonalData() {
         return repo.findAll();
@@ -29,7 +28,7 @@ public class PersonalDataService {
 
     public PersonalData findById(Long id) throws Exception {
         PersonalData personalData = repo.findOne(id);
-        if(personalData == null){
+        if (personalData == null) {
             throw new Exception("There is no personal-data with such ID");
         }
         return personalData;
@@ -37,7 +36,7 @@ public class PersonalDataService {
 
     public PersonalData remove(Long id) throws Exception {
         PersonalData personalData = repo.findOne(id);
-        if(personalData == null){
+        if (personalData == null) {
             throw new Exception("There is no personal-data with such ID");
         }
         repo.delete(personalData);
@@ -46,7 +45,7 @@ public class PersonalDataService {
 
     public PersonalData update(Long id, PersonalData personalData) throws Exception {
         PersonalData dbPersonalData = repo.findOne(id);
-        if(dbPersonalData == null){
+        if (dbPersonalData == null) {
             throw new Exception("There is no personal-data with such ID");
         }
         dbPersonalData.setIdentityNumber(personalData.getIdentityNumber());

@@ -3,10 +3,7 @@ package has.PersonalData;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -20,13 +17,14 @@ public class PersonalData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "PERSONAL_DATA_ID")
     private Long id;
     @NotNull
     @Size(min = 3, max = 200)
     private String address;
     @NotNull
     @Size(min = 10, max = 10)
-    //@Pattern(regexp = "[0-9]")
+//    @Pattern(regexp = "[0-9]")
     private String egn;
     @NotNull
     @Size(min = 3, max = 100)

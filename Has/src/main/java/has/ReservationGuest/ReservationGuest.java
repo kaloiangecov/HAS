@@ -12,14 +12,14 @@ import javax.validation.constraints.NotNull;
 /**
  * Created by kaloi on 1/4/2017.
  */
-@Entity
+@Entity(name = "RESERVATION_GUEST")
 @Getter
 @Setter
 public class ReservationGuest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "MEAL_ID")
+    @Column(name = "RESERVATION_GUEST_ID")
     private Long id;
 
     @NotNull

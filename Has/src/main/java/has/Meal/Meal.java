@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Getter
 @Setter
-@Entity
+@Entity(name = "MEAL")
 public class Meal {
 
     @Id
@@ -34,9 +34,9 @@ public class Meal {
 
     @NotNull
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(joinColumns = {
-            @JoinColumn(name = "PERMISSION_ID", nullable = false, updatable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "MEAL_ID",
+    @JoinTable(name = "MEAL_REQUEST", joinColumns = {
+            @JoinColumn(name = "MEAL_ID", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "REQUEST_ID",
                     nullable = false, updatable = false)})
     public List<Request> requests;
 

@@ -15,11 +15,12 @@ import java.util.List;
  */
 @Getter
 @Setter
-@Entity
+@Entity(name = "REQUEST")
 public class Request {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "REQUEST_ID")
     private Long id;
     @NotNull
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "requests", cascade = CascadeType.ALL)

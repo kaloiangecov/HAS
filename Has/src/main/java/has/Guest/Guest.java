@@ -6,10 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -17,11 +16,12 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-@Entity
+@Entity(name = "GUEST")
 public class Guest implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "GUEST_ID")
     private Long id;
     @NotNull
     private int numberReservations;
@@ -30,11 +30,19 @@ public class Guest implements Serializable {
     @Max(2)
     private int status;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @NotNull
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "GUEST_PERSONAL_DATA", joinColumns = {
+            @JoinColumn(name = "GUEST_ID", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "PERSONAL_DATA_ID",
+                    nullable = false, updatable = false)})
     private PersonalData personalData;
 
     @OneToOne
+    @JoinTable(name = "USER_GUEST", joinColumns = {
+            @JoinColumn(name = "GUEST_ID", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "USER_ID",
+                    nullable = false, updatable = false)})
     private User user;
 
     public Guest(int status, User user, PersonalData personalData) {
@@ -44,7 +52,7 @@ public class Guest implements Serializable {
         this.user = user;
     }
 
-    public Guest(){
+    public Guest() {
 
     }
 }

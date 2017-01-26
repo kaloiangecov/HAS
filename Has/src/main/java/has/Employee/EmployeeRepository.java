@@ -15,25 +15,13 @@ import java.util.List;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
-    @Query("select e from Employee e where e.personalData.fullName like %:fullName%")
-    List<Employee> findByFullName(@Param("fullName") String fullName);
+    List<Employee> findByPersonalDataFullNameLike(String fullName);
 
-    @Query("select e from Employee e where e.personalData.fullName like %:fullName% and e.personalData.phone like %:phone%")
-    List<Employee> findByFullNameAndPhone(@Param("fullName") String fullName, @Param("phone") String phone);
+    List<Employee> findByPersonalDataFullNameLikeAndPersonalDataPhoneLike(String fullName, String phone);
 
-    @Query("select e from Employee e where e.personalData.fullName like %:fullName% and e.personalData.phone like %:phone%")
-    Page<Employee> findByFullNameAndPhone(@Param("fullName") String fullName, @Param("phone") String phone, Pageable pageRequest);
+    Page<Employee> findByPersonalDataFullNameContainingAndPersonalDataPhoneContaining(String fullName, String phone, Pageable pageRequest);
 
-    @Query("select e from Employee e where e.personalData.fullName like %:fullName% and e.personalData.phone like %:phone% and e.dateHired = :dateHired")
-    List<Employee> findByFullNameAndPhoneAndDateHired(
-            @Param("fullName") String fullName,
-            @Param("phone") String phone,
-            @Param("dateHired") String dateHired);
+    List<Employee> findByPersonalDataFullNameLikeAndPersonalDataPhoneLikeAndDateHired(String fullName, String phone, String dateHired);
 
-    @Query("select e from Employee e where e.personalData.fullName like %:fullName% and e.personalData.phone like %:phone% and e.dateHired = :dateHired")
-    Page<Employee> findByFullNameAndPhoneAndDateHired(
-            @Param("fullName") String fullName,
-            @Param("phone") String phone,
-            @Param("dateHired") String dateHired,
-            Pageable pageRequest);
+    Page<Employee> findByPersonalDataFullNameContainingAndPersonalDataPhoneContainingAndDateHired(String fullName, String phone, String dateHired, Pageable pageRequest);
 }

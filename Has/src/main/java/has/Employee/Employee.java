@@ -14,21 +14,30 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-@Entity
+@Entity(name = "EMPLOYEE")
 public class Employee implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "EMPLOYEE_ID")
     private Long id;
 
     private String dateHired;
 
     @NotNull
     @OneToOne
+    @JoinTable(name = "USER_EMPLOYEE", joinColumns = {
+            @JoinColumn(name = "EMPLOYEE_ID", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "USER_ID",
+                    nullable = false, updatable = false)})
     private User user;
 
     @NotNull
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "EMPLOYEE_PERSONAL_DATA", joinColumns = {
+            @JoinColumn(name = "EMPLOYEE_ID", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "PERSONAL_DATA_ID",
+                    nullable = false, updatable = false)})
     private PersonalData personalData;
 
     public Employee(String dateHired) {
