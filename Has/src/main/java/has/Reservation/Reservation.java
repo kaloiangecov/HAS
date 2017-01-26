@@ -15,11 +15,12 @@ import javax.validation.constraints.NotNull;
  */
 @Getter
 @Setter
-@Entity
+@Entity(name = "RESERVATION")
 public class Reservation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "RESERVATION_ID")
     private Long id;
 
     private boolean allInclusive;
@@ -59,6 +60,10 @@ public class Reservation {
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinTable(name = "RESERVATION_EMPLOYEE", joinColumns = {
+            @JoinColumn(name = "RESERVATION_ID", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "EMPLOYEE_ID",
+                    nullable = false, updatable = false)})
     private Employee receptionist;
 
     @NotNull

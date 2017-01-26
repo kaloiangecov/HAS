@@ -19,10 +19,9 @@ public class UserRole {
     @Column(name = "USER_ROLE_ID")
     private Long id;
 
-    @Column(name = "ROLENAME")
     private String roleName;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ROLE_PERMISSION", joinColumns = {
             @JoinColumn(name = "USER_ROLE_ID", nullable = false, updatable = false)},
             inverseJoinColumns = {@JoinColumn(name = "PERMISSION_ID",

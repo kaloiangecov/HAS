@@ -20,11 +20,12 @@ import java.util.List;
  */
 @Getter
 @Setter
-@Entity
+@Entity(name = "T_USER")
 public class User implements Serializable, UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "USER_ID")
     private Long id;
 
     private String lastLogin;
@@ -44,7 +45,11 @@ public class User implements Serializable, UserDetails {
     private String username;
 
     @NotNull
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinTable(name = "USER_ROLE", joinColumns = {
+            @JoinColumn(name = "USER_ID", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "USER_ROLE_ID",
+                    nullable = false, updatable = false)})
     private UserRole userRole;
 
     public User() {

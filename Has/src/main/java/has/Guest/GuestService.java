@@ -27,8 +27,8 @@ public class GuestService {
 
     public Page<Guest> searchGuests(int draw, int start, int length, String fullName, String phone) {
         PageRequest request = new PageRequest((start / length), length, Sort.Direction.ASC, "id");
-
-        return repo.findByFullNameAndPhone(fullName, phone, request);
+        return repo.findByPersonalDataFullNameLikeAndPersonalDataPhoneLike(fullName, phone, request);
+//        return repo.findByFullNameAndPhone(fullName, phone, request);
     }
 
     public Guest findById(Long id) throws Exception {

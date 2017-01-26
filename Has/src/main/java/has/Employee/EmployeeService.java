@@ -31,14 +31,16 @@ public class EmployeeService {
         PageRequest request = new PageRequest((start / length), length, Sort.Direction.ASC, "id");
 
         if (dateHired.isEmpty())
-            return repo.findByFullNameAndPhone(fullName, phone, request);
+            return repo.findByPersonalDataFullNameLikeAndPersonalDataPhoneLike(fullName, phone, request);
+//            return repo.findByFullNameAndPhone(fullName, phone, request);
         else
-            return repo.findByFullNameAndPhoneAndDateHired(fullName, phone, dateHired, request);
+            return repo.findByPersonalDataFullNameLikeAndPersonalDataPhoneLikeAndDateHired(fullName, phone, dateHired, request);
+//            return repo.findByFullNameAndPhoneAndDateHired(fullName, phone, dateHired, request);
     }
 
     public Employee findById(Long id) throws Exception {
         Employee employee = repo.findOne(id);
-        if(employee == null){
+        if (employee == null) {
             throw new Exception("There is no employee with such ID");
         }
         return employee;
@@ -46,7 +48,7 @@ public class EmployeeService {
 
     public Employee remove(Long id) throws Exception {
         Employee employee = repo.findOne(id);
-        if(employee == null){
+        if (employee == null) {
             throw new Exception("There is no employee with such ID");
         }
         repo.delete(employee);
@@ -55,15 +57,15 @@ public class EmployeeService {
 
     public Employee update(Long id, Employee employee) throws Exception {
         Employee dbEmployee = repo.findOne(id);
-        if(dbEmployee == null){
+        if (dbEmployee == null) {
             throw new Exception("There is no employee with such ID");
         }
 
         dbEmployee.setDateHired(employee.getDateHired());
         dbEmployee.setPersonalData(employee.getPersonalData());
-        if (dbEmployee.getUser().getId() != employee.getUser().getId())
+        if (dbEmployee.getUser().getId() != employee.getUser().getId()) {
             dbEmployee.setUser(employee.getUser());
-
+        }
         SendMailSSL.sendMail("shit@shit.com", MailTemplates.RESERVATION_CONFIRMATION);
         return repo.save(dbEmployee);
     }
