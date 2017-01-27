@@ -23,7 +23,16 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
                     'Content-Type': 'application/json',
                     'Authorization': $scope.authentication
                 },
-                data: ctrl.filters
+                data: ctrl.filters,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    if (jqXHR.status == 401) {
+                        $scope.resetAuthorization("Unauthorized access!");
+                    } else if (jqXHR.status == 403) {
+                        $scope.resetAuthorization("You don't have permissions to view this page!");
+                    } else {
+                        $scope.resetAuthorization(textStatus);
+                    }
+                }
             })
             .withDataProp('data')
             .withOption('processing', true)
@@ -68,7 +77,7 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
             }).then(
                 callback,
                 function (response) { //error
-                    alert(response.data.message);
+                    alert(response.data.error + response.data.message);
                 });
         }
 
@@ -93,7 +102,7 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
                         $scope.guest.userID = $scope.guest.user.id;
                     },
                     function (response) { //error
-                        alert(response.data.message);
+                        alert(response.data.error + response.data.message);
                     });
             }
             else {

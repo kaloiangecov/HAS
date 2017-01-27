@@ -25,7 +25,7 @@ public class GuestService {
         return repo.findAll();
     }
 
-    public Page<Guest> searchGuests(int draw, int start, int length, String fullName, String phone) {
+    public Page<Guest> searchGuests(int start, int length, String fullName, String phone) {
         PageRequest request = new PageRequest((start / length), length, Sort.Direction.ASC, "id");
         return repo.findByPersonalDataFullNameContainingAndPersonalDataPhoneContaining(fullName, phone, request);
     }

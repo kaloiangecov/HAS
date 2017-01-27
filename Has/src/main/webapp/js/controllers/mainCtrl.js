@@ -57,7 +57,7 @@ app.controller("mainCtrl", function ($scope, $http) {
 
             window.location.hash = "#/home";
         }, function (response) { //error
-            $scope.resetAuthorization(response.data.message);
+            $scope.resetAuthorization(response.data.error + '\n' + response.data.message);
         })
     };
 
@@ -89,7 +89,7 @@ app.controller("mainCtrl", function ($scope, $http) {
                 return response.data;
             },
             function (response) { //error
-                $scope.resetAuthorization(response.data.message);
+                $scope.resetAuthorization(response.data.error + '\n' + response.data.message);
             }).then(updateCallback);
     };
 
@@ -106,7 +106,7 @@ app.controller("mainCtrl", function ($scope, $http) {
                 return response.data;
             },
             function (response) { //error
-                $scope.resetAuthorization(response.data.message);
+                $scope.resetAuthorization(response.data.error + '\n' + response.data.message);
             }).then(updateCallback);
     };
 
@@ -123,7 +123,7 @@ app.controller("mainCtrl", function ($scope, $http) {
                 return response.data;
             },
             function (response) { //error
-                $scope.resetAuthorization(response.data.message);
+                $scope.resetAuthorization(response.data.error + '\n' + response.data.message);
             }).then(updateCallback);
     };
 
@@ -140,7 +140,7 @@ app.controller("mainCtrl", function ($scope, $http) {
                 return response.data;
             },
             function (response) { //error
-                $scope.resetAuthorization(response.data.message);
+                $scope.resetAuthorization(response.data.error + '\n' + response.data.message);
             }).then(updateCallback);
     };
 

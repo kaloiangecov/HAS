@@ -28,7 +28,7 @@ public class EmployeeService {
         return repo.findAll();
     }
 
-    public Page<Employee> searchEmployees(int draw, int start, int length, String fullName, String phone, String dateHired) {
+    public Page<Employee> searchEmployees(int start, int length, String fullName, String phone, String dateHired) {
         PageRequest request = new PageRequest((start / length), length, Sort.Direction.ASC, "id");
 
         if (dateHired.isEmpty())

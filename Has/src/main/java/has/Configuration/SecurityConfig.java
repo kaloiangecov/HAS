@@ -37,23 +37,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .userDetailsService(userDetailsService())
-
-
                 .formLogin()
-                .loginPage("/#/login")
-                .permitAll()
-                .and()
-                .httpBasic()
-                .and()
-                .csrf().csrfTokenRepository(csrfTokenRepository())
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().authorizeRequests()
-                .antMatchers("/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);
+                .loginPage("/#/login").permitAll()
+                .and().httpBasic()
+                .and().csrf().csrfTokenRepository(csrfTokenRepository())
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().authorizeRequests().antMatchers("/**").permitAll().anyRequest().authenticated()
+                .and().addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);
 
         http.csrf()
                 .disable();

@@ -32,8 +32,10 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
                 error: function (jqXHR, textStatus, errorThrown) {
                     if (jqXHR.status == 401) {
                         $scope.resetAuthorization("Unauthorized access!");
+                    } else if (jqXHR.status == 403) {
+                        $scope.resetAuthorization("You don't have permissions to view this page!");
                     } else {
-                        $scope.resetAuthorization(errorThrown + '\n' + textStatus);
+                        $scope.resetAuthorization(textStatus);
                     }
                 }
             })

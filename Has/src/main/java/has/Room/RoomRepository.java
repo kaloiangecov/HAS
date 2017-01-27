@@ -13,16 +13,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     Room findByNumber(Integer number);
 
-//    @Query("select r from Room r where r.status = :status and r.roomClass = :roomClass and r.bedsSingle = :bedsSingle and r.bedsDouble = :bedsDouble and r.children = :children and r.pets = :pets and r.minibar = :minibar")
-//    Page<Room> searchByFilters(
-//            @Param("status") Integer status,
-//            @Param("roomClass") Integer roomClass,
-//            @Param("bedsSingle") Integer bedsSingle,
-//            @Param("bedsDouble") Integer bedsDouble,
-//            @Param("children") Boolean children,
-//            @Param("pets") Boolean pets,
-//            @Param("minibar") Boolean minibar,
-//            Pageable pageRequest);
+    Page<Room> findByNumber(Integer number, Pageable pageRequest);
 
     Page<Room> findByStatusAndRoomClassAndBedsSingleAndBedsDoubleAndChildrenAndPetsAndMinibar(Integer status,
                                                                                               Integer roomClass,

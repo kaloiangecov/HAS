@@ -54,7 +54,7 @@ public class UserService {
 
         PageRequest request = new PageRequest((start / length), length, Sort.Direction.ASC, "id");
 
-        return repo.findByUsernameContainingAndEmailContainingAndUserRoleID(username, email, roleID, request);
+        return repo.findByUsernameContainingAndEmailContainingAndUserRoleId(username, email, roleID, request);
     }
 
     public User findById(Long id) throws Exception {

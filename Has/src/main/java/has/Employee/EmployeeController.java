@@ -49,7 +49,6 @@ public class EmployeeController {
         Map<String, String[]> parameterMap = request.getParameterMap();
 
         Page<Employee> employees = employeeService.searchEmployees(
-                Integer.parseInt(parameterMap.get("draw")[0]),
                 Integer.parseInt(parameterMap.get("start")[0]),
                 Integer.parseInt(parameterMap.get("length")[0]),
                 parameterMap.get("fullName")[0],

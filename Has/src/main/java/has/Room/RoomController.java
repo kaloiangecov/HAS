@@ -48,10 +48,14 @@ public class RoomController {
     DataTableResult searchRooms(HttpServletRequest request) throws Exception {
         Map<String, String[]> parameterMap = request.getParameterMap();
 
+        int roomNumber = 0;
+        if (parameterMap.get("number") != null && !parameterMap.get("number")[0].isEmpty())
+            roomNumber = Integer.parseInt(parameterMap.get("number")[0]);
+
         Page<Room> rooms = roomService.searchRooms(
-                Integer.parseInt(parameterMap.get("draw")[0]),
                 Integer.parseInt(parameterMap.get("start")[0]),
-                Integer.parseInt(parameterMap.get("length")[0])
+                Integer.parseInt(parameterMap.get("length")[0]),
+                roomNumber
         );
 
         return new DataTableResult(

@@ -74,7 +74,7 @@ public class UserController {
                 Integer.parseInt(parameterMap.get("length")[0]),
                 parameterMap.get("username")[0],
                 parameterMap.get("email")[0],
-                Long.parseLong(parameterMap.get("roleIID")[0])
+                Long.parseLong(parameterMap.get("roleID")[0])
         );
 
         //List<User> users = userService.getAllUsers();

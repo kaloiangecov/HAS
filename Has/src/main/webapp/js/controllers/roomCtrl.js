@@ -1,7 +1,12 @@
 app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resource, $timeout, $interval, DTOptionsBuilder, DTColumnBuilder) {
+    var ctrl = this;
     $scope.page.title = "Rooms";
     $scope.roomsTable;
     $scope.master = {};
+    ctrl.filters = {
+        number: 0,
+        type: 0
+    };
     $scope.isEdit = false;
 
     if (window.location.hash.includes("list")) {
@@ -18,6 +23,16 @@ app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resou
                     'Content-Type': 'application/json',
                     'Authorization': $scope.authentication
                 },
+                data: ctrl.filters,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    if (jqXHR.status == 401) {
+                        $scope.resetAuthorization("Unauthorized access!");
+                    } else if (jqXHR.status == 403) {
+                        $scope.resetAuthorization("You don't have permissions to view this page!");
+                    } else {
+                        $scope.resetAuthorization(textStatus);
+                    }
+                }
             })
             .withDataProp('data')
             .withOption('processing', true)

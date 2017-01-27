@@ -25,17 +25,12 @@ public class RoomService {
         return repo.findAll();
     }
 
-    public Page<Room> searchRooms(int draw, int start, int length) {
+    public Page<Room> searchRooms(int start, int length, int number) {
         PageRequest request = new PageRequest((start / length), length, Sort.Direction.ASC, "id");
-        return repo.findAll(request);
-    }
-
-    public Room findByNumber(Integer number)throws Exception{
-        Room dbRoom = repo.findByNumber(number);
-        if(dbRoom==null){
-            throw new Exception("There is no room with such ID");
-        }
-        return dbRoom;
+        if (number > 0)
+            return repo.findByNumber(number, request);
+        else
+            return repo.findAll(request);
     }
 
     public Room findById(Long id)throws Exception{
