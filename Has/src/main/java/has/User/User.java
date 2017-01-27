@@ -49,7 +49,7 @@ public class User implements Serializable, UserDetails {
     @JoinTable(name = "USER_ROLE", joinColumns = {
             @JoinColumn(name = "USER_ID", nullable = false, updatable = false)},
             inverseJoinColumns = {@JoinColumn(name = "USER_ROLE_ID",
-                    nullable = false, updatable = false)})
+                    nullable = false, updatable = true)})
     private UserRole userRole;
 
     public User() {

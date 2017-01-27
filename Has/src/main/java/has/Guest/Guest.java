@@ -42,7 +42,7 @@ public class Guest implements Serializable {
     @JoinTable(name = "USER_GUEST", joinColumns = {
             @JoinColumn(name = "GUEST_ID", nullable = false, updatable = false)},
             inverseJoinColumns = {@JoinColumn(name = "USER_ID",
-                    nullable = false, updatable = false)})
+                    nullable = false, updatable = true)})
     private User user;
 
     public Guest(int status, User user, PersonalData personalData) {

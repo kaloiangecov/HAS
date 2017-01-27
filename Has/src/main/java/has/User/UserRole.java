@@ -25,7 +25,7 @@ public class UserRole {
     @JoinTable(name = "ROLE_PERMISSION", joinColumns = {
             @JoinColumn(name = "USER_ROLE_ID", nullable = false, updatable = false)},
             inverseJoinColumns = {@JoinColumn(name = "PERMISSION_ID",
-                    nullable = false, updatable = false)})
+                    nullable = false, updatable = true)})
     private List<RolePermission> permissions;
 
     public UserRole() {
