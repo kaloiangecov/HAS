@@ -39,7 +39,7 @@ public class GuestController {
         return guestService.getAllGuests();
     }
 
-    @RequestMapping(value = "/searchguests", method = RequestMethod.GET,
+    @RequestMapping(value = "/guests/search", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)

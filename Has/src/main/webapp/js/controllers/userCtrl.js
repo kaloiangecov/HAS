@@ -6,24 +6,36 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
     ctrl.filters = {
         username: "",
         email: "",
-        role: 1
+        roleID: 1
     };
     $scope.isEdit = false;
 
     if (window.location.hash.includes("list")) {
+        $scope.getAllRoles(function (data) {
+            $scope.rolesList = data;
+            $scope.filters.roleID = $scope.rolesList[0].id;
+        });
+
         // users table
         $scope.dtInstance = {};
         $scope.dtOptions = DTOptionsBuilder.newOptions()
             .withOption('ajax', {
-                url: 'searchusers',
+                url: 'users/search',
                 type: 'GET',
                 dataType: "json",
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
-                    'Authorization': ('Basic ' + window.base64encode($scope.loginData.username + ':' + $scope.loginData.password))
+                    'Authorization': $scope.authentication
                 },
-                data: ctrl.filters
+                data: ctrl.filters,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    if (jqXHR.status == 401) {
+                        $scope.resetAuthorization("Unauthorized access!");
+                    } else {
+                        $scope.resetAuthorization(errorThrown + '\n' + textStatus);
+                    }
+                }
             })
             .withDataProp('data')
             .withOption('processing', true)
@@ -62,14 +74,17 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
             $http({
                 method: "DELETE",
                 url: ("user/" + id),
-                responseType: "json"
+                responseType: "json",
+                headers: {
+                    "Authorization": $scope.authentication
+                }
             }).then(
                 function (response) { //success
                     alert("User deleted");
                     window.location.hash = "#/users/list";
                 },
                 function (response) { //error
-                    alert(response.data.message);
+                    $scope.resetAuthorization(response.data.message);
                 });
         }
     }
@@ -114,7 +129,10 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
                         method: method,
                         url: url,
                         data: $scope.master,
-                        responseType: "json"
+                        responseType: "json",
+                        headers: {
+                            "Authorization": $scope.authentication
+                        }
                     }).then(
                         function (response) { //success
                             if ($scope.isEdit) {
@@ -125,7 +143,7 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
                             window.location.hash = "#/users/list";
                         },
                         function (response) { //error
-                            alert(response.data.message);
+                            $scope.resetAuthorization(response.data.message);
                         });
                 });
             }

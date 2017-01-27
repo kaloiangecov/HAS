@@ -39,7 +39,7 @@ public class RoomController {
         return roomService.getAllRooms();
     }
 
-    @RequestMapping(value = "/searchrooms", method = RequestMethod.GET,
+    @RequestMapping(value = "/rooms/search", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)

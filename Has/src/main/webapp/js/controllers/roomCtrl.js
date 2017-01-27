@@ -10,13 +10,13 @@ app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resou
 
         $scope.dtOptions = DTOptionsBuilder.newOptions()
             .withOption('ajax', {
-                url: 'searchrooms',
+                url: 'rooms/search',
                 type: 'GET',
                 dataType: "json",
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
-                    'Authorization': ('Basic ' + window.base64encode($scope.loginData.username + ':' + $scope.loginData.password))
+                    'Authorization': $scope.authentication
                 },
             })
             .withDataProp('data')
@@ -58,7 +58,10 @@ app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resou
                 method: method,
                 url: url,
                 data: $scope.master,
-                responseType: "json"
+                responseType: "json",
+                headers: {
+                    "Authorization": $scope.authentication
+                }
             }).then(
                 function (response) { //success
                     if ($scope.isEdit) {
@@ -80,7 +83,10 @@ app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resou
             $http({
                 method: "GET",
                 url: url,
-                responseType: "json"
+                responseType: "json",
+                headers: {
+                    "Authorization": $scope.authentication
+                }
             }).then(
                 function (response) { //success
                     $scope.room = response.data;

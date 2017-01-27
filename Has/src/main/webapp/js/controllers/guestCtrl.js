@@ -15,13 +15,13 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
 
         $scope.dtOptions = DTOptionsBuilder.newOptions()
             .withOption('ajax', {
-                url: 'searchguests',
+                url: 'guests/search',
                 type: 'GET',
                 dataType: "json",
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
-                    'Authorization': ('Basic ' + window.base64encode($scope.loginData.username + ':' + $scope.loginData.password))
+                    'Authorization': $scope.authentication
                 },
                 data: ctrl.filters
             })
@@ -61,7 +61,10 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
                 method: method,
                 url: url,
                 data: $scope.master,
-                responseType: "json"
+                responseType: "json",
+                headers: {
+                    "Authorization": $scope.authentication
+                }
             }).then(
                 callback,
                 function (response) { //error
@@ -80,7 +83,10 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
                 $http({
                     method: "GET",
                     url: url,
-                    responseType: "json"
+                    responseType: "json",
+                    headers: {
+                        "Authorization": $scope.authentication
+                    }
                 }).then(
                     function (response) { //success
                         $scope.guest = response.data;

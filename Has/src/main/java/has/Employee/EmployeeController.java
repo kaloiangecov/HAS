@@ -39,7 +39,7 @@ public class EmployeeController {
         return employeeService.getAllEmployees();
     }
 
-    @RequestMapping(value = "/searchemployees", method = RequestMethod.GET,
+    @RequestMapping(value = "/employees/search", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
