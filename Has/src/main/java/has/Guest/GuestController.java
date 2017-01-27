@@ -39,7 +39,7 @@ public class GuestController {
         return guestService.getAllGuests();
     }
 
-    @RequestMapping(value = "/searchguests", method = RequestMethod.GET,
+    @RequestMapping(value = "/guests/search", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
@@ -49,11 +49,10 @@ public class GuestController {
         Map<String, String[]> parameterMap = request.getParameterMap();
 
         Page<Guest> guests = guestService.searchGuests(
-                Integer.parseInt(parameterMap.get("draw")[0]),
                 Integer.parseInt(parameterMap.get("start")[0]),
                 Integer.parseInt(parameterMap.get("length")[0]),
-            parameterMap.get("fullName")[0],
-            parameterMap.get("phone")[0]
+                parameterMap.get("fullName")[0],
+                parameterMap.get("phone")[0]
         );
 
         return new DataTableResult(

@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -58,7 +59,7 @@ public class UserController {
         return userService.findRoleById(id);
     }
 
-    @RequestMapping(value = "/searchusers", method = RequestMethod.GET,
+    @RequestMapping(value = "/users/search", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
@@ -69,12 +70,11 @@ public class UserController {
         Map<String, String[]> parameterMap = request.getParameterMap();
 
         Page<User> users = userService.searchUsers(
-                Integer.parseInt(parameterMap.get("draw")[0]),
                 Integer.parseInt(parameterMap.get("start")[0]),
                 Integer.parseInt(parameterMap.get("length")[0]),
                 parameterMap.get("username")[0],
                 parameterMap.get("email")[0],
-                Integer.parseInt(parameterMap.get("role")[0])
+                Long.parseLong(parameterMap.get("roleID")[0])
         );
 
         //List<User> users = userService.getAllUsers();
@@ -94,6 +94,12 @@ public class UserController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public User findUserById(@PathVariable Long id) throws Exception {
         return userService.findById(id);
+    }
+
+    @RequestMapping(value = "/user/login", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public Principal login(Principal user) {
+        return user;
     }
 
     @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE,

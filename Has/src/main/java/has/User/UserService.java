@@ -24,15 +24,6 @@ public class UserService {
     @Autowired
     private RoleRepository repoRole;
 
-    @Autowired
-    private EmployeeRepository repoEmployee;
-
-    @Autowired
-    private GuestRepository repoGuest;
-
-    @Autowired
-    private RoomRepository repoRoom;
-
     public User save(User user) throws UserAlreadyExists {
         if (repo.findByUsername(user.getUsername()) != null) {
             throw new UserAlreadyExists(user.getUsername());
@@ -59,11 +50,11 @@ public class UserService {
         return repo.findAll();
     }
 
-    public Page<User> searchUsers(int draw, int start, int length, String username, String email, Integer role) {
+    public Page<User> searchUsers(int start, int length, String username, String email, Long roleID) {
 
         PageRequest request = new PageRequest((start / length), length, Sort.Direction.ASC, "id");
 
-        return repo.findByUsernameContainingAndEmailContaining(username, email, request);
+        return repo.findByUsernameContainingAndEmailContainingAndUserRoleId(username, email, roleID, request);
     }
 
     public User findById(Long id) throws Exception {

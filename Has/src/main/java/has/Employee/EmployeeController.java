@@ -39,7 +39,7 @@ public class EmployeeController {
         return employeeService.getAllEmployees();
     }
 
-    @RequestMapping(value = "/searchemployees", method = RequestMethod.GET,
+    @RequestMapping(value = "/employees/search", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
@@ -49,7 +49,6 @@ public class EmployeeController {
         Map<String, String[]> parameterMap = request.getParameterMap();
 
         Page<Employee> employees = employeeService.searchEmployees(
-                Integer.parseInt(parameterMap.get("draw")[0]),
                 Integer.parseInt(parameterMap.get("start")[0]),
                 Integer.parseInt(parameterMap.get("length")[0]),
                 parameterMap.get("fullName")[0],

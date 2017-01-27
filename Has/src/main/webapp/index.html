@@ -41,10 +41,10 @@
     <script src="js/controllers/roomCtrl.js"></script>
 </head>
 
-<body class="nav-md" ng-app="mse">
+<body class="nav-md" ng-app="mse" ng-controller="mainCtrl">
 <div ui-view="login" class="login_wrapper"></div>
 
-<div class="container body" id="logged_content" ng-controller="mainCtrl">
+<div class="container body" id="logged_content">
     <div class="main_container">
         <div ui-view="loggedin"></div>
     </div>
@@ -52,7 +52,7 @@
     <!-- footer content -->
     <footer>
         <div class="pull-right">
-            Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+            VineSoft ©2017 All Rights Reserved.
         </div>
         <div class="clearfix"></div>
     </footer>

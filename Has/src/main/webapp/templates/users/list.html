@@ -18,9 +18,8 @@
             <form class="form-inline text-center" ng-submit="reloadTableData()">
                 <input type="text" class="form-control" ng-model="ctrl.filters.username" placeholder="Username"/>
                 <input type="text" class="form-control" ng-model="ctrl.filters.email" placeholder="Email"/>
-                <select class="form-control roles" ng-model="ctrl.filters.role" title="Role">
-                    <option value="{{$index}}" ng-repeat="role in roles" ng-selected="$index == user.role">{{role}}
-                    </option>
+                <select class="form-control roles" id="role" name="role" ng-model="ctrl.filters.roleID"
+                        ng-options="item.id as item.roleName for item in rolesList" required="required">
                 </select>
                 <button type="submit" class="btn btn-primary" style="position:relative;top:+3px;"><i
                         class="fa fa-search"></i> Search

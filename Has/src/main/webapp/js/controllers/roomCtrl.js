@@ -1,7 +1,12 @@
 app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resource, $timeout, $interval, DTOptionsBuilder, DTColumnBuilder) {
+    var ctrl = this;
     $scope.page.title = "Rooms";
     $scope.roomsTable;
     $scope.master = {};
+    ctrl.filters = {
+        number: 0,
+        type: 0
+    };
     $scope.isEdit = false;
 
     if (window.location.hash.includes("list")) {
@@ -10,14 +15,24 @@ app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resou
 
         $scope.dtOptions = DTOptionsBuilder.newOptions()
             .withOption('ajax', {
-                url: 'searchrooms',
+                url: 'rooms/search',
                 type: 'GET',
                 dataType: "json",
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
-                    'Authorization': ('Basic ' + window.base64encode($scope.loginData.username + ':' + $scope.loginData.password))
+                    'Authorization': $scope.authentication
                 },
+                data: ctrl.filters,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    if (jqXHR.status == 401) {
+                        $scope.resetAuthorization("Unauthorized access!");
+                    } else if (jqXHR.status == 403) {
+                        $scope.resetAuthorization("You don't have permissions to view this page!");
+                    } else {
+                        $scope.resetAuthorization(textStatus);
+                    }
+                }
             })
             .withDataProp('data')
             .withOption('processing', true)
@@ -58,7 +73,10 @@ app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resou
                 method: method,
                 url: url,
                 data: $scope.master,
-                responseType: "json"
+                responseType: "json",
+                headers: {
+                    "Authorization": $scope.authentication
+                }
             }).then(
                 function (response) { //success
                     if ($scope.isEdit) {
@@ -80,7 +98,10 @@ app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resou
             $http({
                 method: "GET",
                 url: url,
-                responseType: "json"
+                responseType: "json",
+                headers: {
+                    "Authorization": $scope.authentication
+                }
             }).then(
                 function (response) { //success
                     $scope.room = response.data;

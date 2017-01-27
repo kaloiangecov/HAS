@@ -1,24 +1,27 @@
 <div class="form login_form">
     <section class="login_content">
-        <form>
-            <h1>Login Form</h1>
+        <form ng-submit="login()">
+            <h2><img src="img/has_logo.png" style="width:100%" alt="HAS logo"/></h2>
+            <h1>Hotel Administration System</h1>
             <div>
-                <input type="text" class="form-control" placeholder="Username" required="required"/>
+                <input type="text" id="username" name="username" class="form-control" ng-model="credentials.username"
+                       placeholder="Username" required="required"/>
             </div>
             <div>
-                <input type="password" class="form-control" placeholder="Password" required="required"/>
+                <input type="password" id="password" name="password" class="form-control"
+                       ng-model="credentials.password" placeholder="Password" required="required"/>
             </div>
             <div>
-                <a class="btn btn-default submit" href="#/home">Log in</a>
-                <a class="reset_pass" href="#">Lost your password?</a>
+                <button type="submit" class="btn btn-default submit">Log in</button>
+                <!-- <a class="reset_pass" href="#">Lost your password?</a> -->
             </div>
 
             <div class="clearfix"></div>
 
             <div class="separator">
                 <div>
-                    <h1><i class="fa fa-paw"></i> HAS</h1>
-                    <p>©2016 All Rights Reserved. Gentelella Alela! is a Bootstrap 3 template. Privacy and Terms</p>
+                    <p>©2017 All Rights Reserved.</p>
+                    <p>Hotel Administartion System (HAS) is a software developed by VineSoft</p>
                 </div>
             </div>
         </form>

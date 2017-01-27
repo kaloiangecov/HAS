@@ -9,6 +9,11 @@ app.controller("mainCtrl", function ($scope, $http) {
     $scope.roomStatuses = sampleRoomStatuses;
     $scope.countries = [];
     $scope.documentElement = document.documentElement;
+    $scope.credentials = {
+        username: "",
+        password: ""
+    };
+    $scope.authentication = "";
 
     $http({
         method: "GET",
@@ -22,17 +27,69 @@ app.controller("mainCtrl", function ($scope, $http) {
                 alert(response.statusText);
             });
 
+    $scope.resetAuthorization = function (message) {
+        alert(message);
+        $scope.authentication = "";
+        $scope.loginData = {};
+        window.location.hash = "#/login";
+    };
+
+    $scope.getPrincipal = function (callbackSuccess, callbackError) {
+        var response = $http({
+            method: "GET",
+            url: "user/login",
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
+        }).then(
+            function (response) { //success
+                return response.data;
+            }, callbackError); //error
+        response.then(callbackSuccess);
+    }
+
+    $scope.login = function () {
+        $scope.authentication = "Basic " + btoa($scope.credentials.username + ":" + $scope.credentials.password);
+        $scope.getPrincipal(function (data) {
+            $scope.loginData = data.principal;
+            delete $scope.loginData.password;
+
+            window.location.hash = "#/home";
+        }, function (response) { //error
+            $scope.resetAuthorization(response.data.error + '\n' + response.data.message);
+        })
+    };
+
+    $scope.logout = function () {
+        var response = $http({
+            method: "POST",
+            url: "logout",
+            headers: {
+                "Authorization": $scope.authentication
+            }
+        }).then(
+            function (response) { //success
+                $scope.resetAuthorization("Logged out!");
+            }, function (response) { //error
+
+            });
+    };
+
     $scope.getUser = function (userID, updateCallback) {
         var response = $http({
             method: "GET",
             url: ("user/" + userID),
-            responseType: "json"
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
         }).then(
             function (response) { //success
                 return response.data;
             },
             function (response) { //error
-                alert(response.data.message);
+                $scope.resetAuthorization(response.data.error + '\n' + response.data.message);
             }).then(updateCallback);
     };
 
@@ -40,14 +97,16 @@ app.controller("mainCtrl", function ($scope, $http) {
         $http({
             method: "GET",
             url: "users",
-            responseType: "json"
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
         }).then(
             function (response) { //success
                 return response.data;
             },
             function (response) { //error
-                alert(response.data.message);
-                return undefined;
+                $scope.resetAuthorization(response.data.error + '\n' + response.data.message);
             }).then(updateCallback);
     };
 
@@ -55,14 +114,16 @@ app.controller("mainCtrl", function ($scope, $http) {
         $http({
             method: "GET",
             url: "roles",
-            responseType: "json"
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
         }).then(
             function (response) { //success
                 return response.data;
             },
             function (response) { //error
-                alert(response.data.message);
-                return undefined;
+                $scope.resetAuthorization(response.data.error + '\n' + response.data.message);
             }).then(updateCallback);
     };
 
@@ -70,13 +131,16 @@ app.controller("mainCtrl", function ($scope, $http) {
         var response = $http({
             method: "GET",
             url: ("role/" + roleID),
-            responseType: "json"
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
         }).then(
             function (response) { //success
                 return response.data;
             },
             function (response) { //error
-                alert(response.data.message);
+                $scope.resetAuthorization(response.data.error + '\n' + response.data.message);
             }).then(updateCallback);
     };
 
@@ -112,8 +176,6 @@ app.controller("mainCtrl", function ($scope, $http) {
     };
 
     angular.element(document).ready(function () {
-        $scope.getUser(1, function (data) {
-            $scope.loginData = data;
-        });
+
     });
 });
