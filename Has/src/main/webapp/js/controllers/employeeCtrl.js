@@ -26,13 +26,11 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
                 },
                 data: ctrl.filters,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    if (jqXHR.status == 401) {
-                        $scope.resetAuthorization("Unauthorized access!");
-                    } else if (jqXHR.status == 403) {
-                        $scope.resetAuthorization("You don't have permissions to view this page!");
-                    } else {
-                        $scope.resetAuthorization(textStatus);
-                    }
+                    $scope.displayMessage({
+                        status: jqXHR.status,
+                        error: jqXHR.statusText,
+                        message: jqXHR.responseText
+                    });
                 }
             })
             .withDataProp('data')
@@ -82,7 +80,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
             }).then(
                 callback,
                 function (response) { //error
-                    $scope.resetAuthorization(response.data.message);
+                    $scope.displayMessage(response.data);
                 });
         }
 
@@ -107,7 +105,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
                         $scope.employee.userID = $scope.employee.user.id;
                     },
                     function (response) { //error
-                        $scope.resetAuthorization(response.data.message);
+                        $scope.displayMessage(response.data);
                     });
             }
             else {

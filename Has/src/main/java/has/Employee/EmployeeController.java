@@ -27,7 +27,7 @@ public class EmployeeController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Employee save(@RequestBody @Valid Employee employee) {
+    public Employee save(@RequestBody @Valid Employee employee) throws Exception {
         return employeeService.save(employee);
     }
 

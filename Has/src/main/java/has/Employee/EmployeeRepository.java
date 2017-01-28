@@ -15,6 +15,8 @@ import java.util.List;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
+    Employee findByPersonalDataEgn(String egn);
+
     List<Employee> findByPersonalDataFullNameLike(String fullName);
 
     List<Employee> findByPersonalDataFullNameLikeAndPersonalDataPhoneLike(String fullName, String phone);

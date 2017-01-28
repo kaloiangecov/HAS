@@ -27,11 +27,19 @@ app.controller("mainCtrl", function ($scope, $http) {
                 alert(response.statusText);
             });
 
-    $scope.resetAuthorization = function (message) {
-        alert(message);
-        $scope.authentication = "";
-        $scope.loginData = {};
-        window.location.hash = "#/login";
+    $scope.displayMessage = function (response) {
+        if (!response)
+            return;
+
+        alert(response.error + '\n' + response.message);
+
+        if (response.status === 401) {
+            $scope.authentication = "";
+            $scope.loginData = {};
+            window.location.hash = "#/login";
+        } else if (response.status === 403) {
+            window.location.hash = "#/home";
+        }
     };
 
     $scope.getPrincipal = function (callbackSuccess, callbackError) {
@@ -57,7 +65,7 @@ app.controller("mainCtrl", function ($scope, $http) {
 
             window.location.hash = "#/home";
         }, function (response) { //error
-            $scope.resetAuthorization(response.data.error + '\n' + response.data.message);
+            $scope.displayMessage(response.data);
         })
     };
 
@@ -70,9 +78,13 @@ app.controller("mainCtrl", function ($scope, $http) {
             }
         }).then(
             function (response) { //success
-                $scope.resetAuthorization("Logged out!");
+                return response.data;
             }, function (response) { //error
-
+                $scope.displayMessage(response.data);
+            }).then(
+            function (data) {
+                alert("Logged out!");
+                window.location.hash = "#/login";
             });
     };
 
@@ -89,7 +101,7 @@ app.controller("mainCtrl", function ($scope, $http) {
                 return response.data;
             },
             function (response) { //error
-                $scope.resetAuthorization(response.data.error + '\n' + response.data.message);
+                $scope.displayMessage(response.data);
             }).then(updateCallback);
     };
 
@@ -106,7 +118,7 @@ app.controller("mainCtrl", function ($scope, $http) {
                 return response.data;
             },
             function (response) { //error
-                $scope.resetAuthorization(response.data.error + '\n' + response.data.message);
+                $scope.displayMessage(response.data);
             }).then(updateCallback);
     };
 
@@ -123,7 +135,7 @@ app.controller("mainCtrl", function ($scope, $http) {
                 return response.data;
             },
             function (response) { //error
-                $scope.resetAuthorization(response.data.error + '\n' + response.data.message);
+                $scope.displayMessage(response.data);
             }).then(updateCallback);
     };
 
@@ -140,7 +152,7 @@ app.controller("mainCtrl", function ($scope, $http) {
                 return response.data;
             },
             function (response) { //error
-                $scope.resetAuthorization(response.data.error + '\n' + response.data.message);
+                $scope.displayMessage(response.data);
             }).then(updateCallback);
     };
 

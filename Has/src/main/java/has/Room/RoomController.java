@@ -27,7 +27,7 @@ public class RoomController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Room save(@RequestBody @Valid Room room) {
+    public Room save(@RequestBody @Valid Room room) throws Exception {
         return roomService.save(room);
     }
 

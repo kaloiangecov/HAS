@@ -27,7 +27,7 @@ public class GuestController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Guest save(@RequestBody @Valid Guest guest) {
+    public Guest save(@RequestBody @Valid Guest guest) throws Exception {
         return guestService.save(guest);
     }
 

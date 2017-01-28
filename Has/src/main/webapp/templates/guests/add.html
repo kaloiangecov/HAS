@@ -85,12 +85,15 @@
                         <label class="control-label col-md-4 col-sm-4 col-xs-12" for="egn">EGN *</label>
                         <div class="col-md-8 col-sm-8 col-xs-12">
                             <input type="text" class="form-control" id="egn" name="egn"
-                                   ng-model="guest.personalData.egn" minlength="10" maxlength="10" required="required"/>
+                                   ng-model="guest.personalData.egn" ng-pattern="/^[0-9]+$/"
+                                   minlength="10" maxlength="10"
+                                   required="required"/>
                             <div ng-show="guestForm.$submitted || guestForm.egn.$touched"
                                  class="validation-message">
                                 <span ng-show="guestForm.egn.$error.required">This field is required</span>
                                 <span ng-show="guestForm.egn.$error.minlength">Input too short</span>
                                 <span ng-show="guestForm.egn.$error.maxlength">Input too long</span>
+                                <span ng-show="guestForm.egn.$error.pattern">EGN should contain only digits</span>
                             </div>
                         </div>
                     </div>

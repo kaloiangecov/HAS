@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().httpBasic()
                 .and().csrf().csrfTokenRepository(csrfTokenRepository())
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().authorizeRequests().antMatchers("/**").permitAll().anyRequest().authenticated()
+                .and().authorizeRequests().antMatchers("/**", "/#/*").permitAll().anyRequest().authenticated()
                 .and().addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);
 
         http.csrf()

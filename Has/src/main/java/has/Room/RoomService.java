@@ -17,7 +17,12 @@ public class RoomService {
     @Autowired
     private RoomRepository repo;
 
-    public Room save(Room room){
+    public Room save(Room room) throws Exception {
+        Room dbRoom = repo.findByNumber(room.getNumber());
+        if (dbRoom != null) {
+            throw new Exception("Room with number " + room.getNumber() + " already exists!");
+        }
+
         return repo.save(room);
     }
 

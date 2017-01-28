@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GuestRepository extends JpaRepository<Guest, Long> {
 
+    Guest findByPersonalDataEgn(String egn);
+
     Page<Guest> findByPersonalDataFullNameContainingAndPersonalDataPhoneContaining(String fullName, String phone, Pageable pageRequest);
 
 }

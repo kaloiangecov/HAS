@@ -25,13 +25,11 @@ app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resou
                 },
                 data: ctrl.filters,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    if (jqXHR.status == 401) {
-                        $scope.resetAuthorization("Unauthorized access!");
-                    } else if (jqXHR.status == 403) {
-                        $scope.resetAuthorization("You don't have permissions to view this page!");
-                    } else {
-                        $scope.resetAuthorization(textStatus);
-                    }
+                    $scope.displayMessage({
+                        status: jqXHR.status,
+                        error: jqXHR.statusText,
+                        message: jqXHR.responseText
+                    });
                 }
             })
             .withDataProp('data')
@@ -87,7 +85,7 @@ app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resou
                     window.location.hash = "#/rooms/list";
                 },
                 function (response) { //error
-                    alert(response.data.message);
+                    $scope.displayMessage(response.data);
                 });
         }
 
@@ -107,7 +105,7 @@ app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resou
                     $scope.room = response.data;
                 },
                 function (response) { //error
-                    alert(response.data.message);
+                    $scope.displayMessage(response.data);
                 });
         }
         else {

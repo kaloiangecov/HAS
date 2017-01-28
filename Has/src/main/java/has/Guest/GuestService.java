@@ -1,5 +1,7 @@
 package has.Guest;
 
+import has.mailsender.MailTemplates;
+import has.mailsender.SendMailSSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,7 +19,17 @@ public class GuestService {
     @Autowired
     private GuestRepository repo;
 
-    public Guest save(Guest guest) {
+    public Guest save(Guest guest) throws Exception {
+        Guest dbGuest = repo.findByPersonalDataEgn(guest.getPersonalData().getEgn());
+        if (dbGuest != null)
+            throw new Exception("Guest with EGN " + guest.getPersonalData().getEgn() + " already exists.");
+
+        new Thread(
+                new Runnable() {
+                    public void run() {
+                        SendMailSSL.sendMail("shit@hotmail.com", MailTemplates.RESERVATION_CONFIRMATION);
+                    }
+                }).start();
         return repo.save(guest);
     }
 
@@ -59,6 +71,7 @@ public class GuestService {
         if (dbGuest.getUser().getId() != guest.getUser().getId())
             dbGuest.setUser(guest.getUser());
 
+        SendMailSSL.sendMail("shit@hotmail.com", MailTemplates.RESERVATION_CONFIRMATION);
         return repo.save(dbGuest);
     }
 }

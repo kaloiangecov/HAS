@@ -19,8 +19,18 @@ public class EmployeeService {
     @Autowired
     private EmployeeRepository repo;
 
-    public Employee save(Employee employee) {
-        SendMailSSL.sendMail("hardmaster.92@hotmail.com", MailTemplates.RESERVATION_CONFIRMATION);
+    public Employee save(Employee employee) throws Exception {
+        Employee dbEmployee = repo.findByPersonalDataEgn(employee.getPersonalData().getEgn());
+        if (dbEmployee != null)
+            throw new Exception("Employee with EGN " + employee.getPersonalData().getEgn() + " already exists.");
+
+        new Thread(
+                new Runnable() {
+                    public void run() {
+                        SendMailSSL.sendMail("shit@hotmail.com", MailTemplates.RESERVATION_CONFIRMATION);
+                    }
+                }).start();
+
         return repo.save(employee);
     }
 
