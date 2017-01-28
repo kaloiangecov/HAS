@@ -71,13 +71,14 @@
                         <label class="control-label col-md-4 col-sm-4 col-xs-12" for="phone">Phone Number *</label>
                         <div class="col-md-8 col-sm-8 col-xs-12">
                             <input type="text" class="form-control" id="phone" name="phone"
-                                   ng-model="guest.personalData.phone" minlength="10" maxlength="20"
-                                   required="required"/>
+                                   ng-model="guest.personalData.phone" ng-pattern="/^[0-9]+$/"
+                                   minlength="10" maxlength="20" required="required"/>
                             <div ng-show="guestForm.$submitted || guestForm.phone.$touched"
                                  class="validation-message">
                                 <span ng-show="guestForm.phone.$error.required">This field is required</span>
                                 <span ng-show="guestForm.phone.$error.minlength">Input too short</span>
                                 <span ng-show="guestForm.phone.$error.maxlength">Input too long</span>
+                                <span ng-show="guestForm.phone.$error.pattern">Input should contain only digits</span>
                             </div>
                         </div>
                     </div>
@@ -86,14 +87,13 @@
                         <div class="col-md-8 col-sm-8 col-xs-12">
                             <input type="text" class="form-control" id="egn" name="egn"
                                    ng-model="guest.personalData.egn" ng-pattern="/^[0-9]+$/"
-                                   minlength="10" maxlength="10"
-                                   required="required"/>
+                                   minlength="10" maxlength="10" required="required"/>
                             <div ng-show="guestForm.$submitted || guestForm.egn.$touched"
                                  class="validation-message">
                                 <span ng-show="guestForm.egn.$error.required">This field is required</span>
                                 <span ng-show="guestForm.egn.$error.minlength">Input too short</span>
                                 <span ng-show="guestForm.egn.$error.maxlength">Input too long</span>
-                                <span ng-show="guestForm.egn.$error.pattern">EGN should contain only digits</span>
+                                <span ng-show="guestForm.egn.$error.pattern">Input should contain only digits</span>
                             </div>
                         </div>
                     </div>
@@ -116,13 +116,14 @@
                             *</label>
                         <div class="col-md-8 col-sm-8 col-xs-12">
                             <input type="text" class="form-control" id="identityNumber" name="identityNumber"
-                                   ng-model="guest.personalData.identityNumber" minlength="9" maxlength="9"
-                                   required="required"/>
+                                   ng-model="guest.personalData.identityNumber" ng-pattern="/^[0-9]+$/"
+                                   minlength="9" maxlength="9" required="required"/>
                             <div ng-show="guestForm.$submitted || guestForm.identityNumber.$touched"
                                  class="validation-message">
                                 <span ng-show="guestForm.identityNumber.$error.required">This field is required</span>
                                 <span ng-show="guestForm.identityNumber.$error.minlength">Input too short</span>
                                 <span ng-show="guestForm.identityNumber.$error.maxlength">Input too long</span>
+                                <span ng-show="guestForm.identityNumber.$error.pattern">Input should contain only digits</span>
                             </div>
                         </div>
                     </div>
