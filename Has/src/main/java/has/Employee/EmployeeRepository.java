@@ -21,7 +21,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     List<Employee> findByPersonalDataFullNameLikeAndPersonalDataPhoneLike(String fullName, String phone);
 
-    Page<Employee> findByPersonalDataFullNameContainingAndPersonalDataPhoneContaining(String fullName, String phone, Pageable pageRequest);
+    Page<Employee> findByPersonalDataFullNameLikeAndPersonalDataPhoneLike(String fullName, String phone, Pageable pageRequest);
 
     List<Employee> findByPersonalDataFullNameLikeAndPersonalDataPhoneLikeAndDateHired(String fullName, String phone, String dateHired);
 
