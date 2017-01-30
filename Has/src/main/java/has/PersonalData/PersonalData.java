@@ -24,7 +24,7 @@ public class PersonalData {
     private String address;
     @NotNull
     @Size(min = 10, max = 10)
-//    @Pattern(regexp = "[0-9]")
+//    @Pattern(regexp = "[0-9]+")
     private String egn;
     @NotNull
     @Size(min = 3, max = 100)
@@ -38,14 +38,14 @@ public class PersonalData {
     private String identityIssuedBy;
     @NotNull
     @Size(min = 9, max = 9)
-    //@Pattern(regexp = "[0-9]")
+    //@Pattern(regexp = "[0-9]+")
     private String identityNumber;
     @NotNull
     @Size(min = 10, max = 20)
-    //@Pattern(regexp = "[0-9]")
+    //@Pattern(regexp = "[0-9]+")
     private String phone;
 
-    public PersonalData(){
+    public PersonalData() {
 
     }
 

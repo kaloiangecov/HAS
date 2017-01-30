@@ -22,7 +22,7 @@ public class WorkingSchedule {
     private Long id;
     private String endDate;
     @NotNull
-    @Pattern(regexp = "[0-9]")
+    @Pattern(regexp = "[0-9]+")
     private String shift;
     private String startDate;
 

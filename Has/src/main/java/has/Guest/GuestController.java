@@ -1,6 +1,6 @@
 package has.Guest;
 
-import has.DataTableResult;
+import has.Utils.DataTableResult;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,7 +26,7 @@ public class GuestController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_CREATE_GUEST')")
     public Guest save(@RequestBody @Valid Guest guest) throws Exception {
         return guestService.save(guest);
     }
@@ -34,7 +34,7 @@ public class GuestController {
     @RequestMapping(value = "/guests", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_VIEW_GUEST')")
     public List<Guest> getAllGuests() {
         return guestService.getAllGuests();
     }
@@ -43,7 +43,7 @@ public class GuestController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_SEARCH_GUEST')")
     public @ResponseBody
     DataTableResult searchGuests(HttpServletRequest request) throws Exception {
         Map<String, String[]> parameterMap = request.getParameterMap();
@@ -67,7 +67,7 @@ public class GuestController {
     @RequestMapping(value = "/guest/{id}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_VIEW_GUEST')")
     public Guest findGuestById(@PathVariable Long id) throws Exception {
         return guestService.findById(id);
     }
@@ -75,7 +75,7 @@ public class GuestController {
     @RequestMapping(value = "/guest/{id}", method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_REMOVE_GUEST')")
     public Guest removeGuestById(@PathVariable Long id) throws Exception {
         return guestService.remove(id);
     }
@@ -84,7 +84,7 @@ public class GuestController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_EDIT_GUEST')")
     public Guest updateGuest(@PathVariable Long id, @RequestBody @Valid Guest guest) throws Exception {
         return guestService.update(id, guest);
     }

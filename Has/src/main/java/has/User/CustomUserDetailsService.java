@@ -22,10 +22,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         if(user == null){
             throw new UsernameNotFoundException(username + "username not found!");
         }
-//        if (user == null) {
-//            throw new Exception();
-//        }
-
         return user;
     }
 

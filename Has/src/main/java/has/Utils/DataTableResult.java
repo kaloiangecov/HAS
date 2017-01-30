@@ -1,5 +1,4 @@
-package has;
-import has.User.User;
+package has.Utils;
 import java.util.List;
 
 /**

@@ -22,25 +22,20 @@ public class Room {
     private Long id;
     @NotNull
     @Min(0)
-    //@Pattern(regexp = "[0-9]")
     private int bedsDouble;
     @NotNull
     @Min(0)
-    //@Pattern(regexp = "[0-9]")
     private int bedsSingle;
     @NotNull
     @Min(0)
-    //@Pattern(regexp = "[0-9]")
     private int number;
     @NotNull
-    //@Pattern(regexp = "[0-9]")
     @Min(0)
     @Max(5)
     private int roomClass;
     @NotNull
     @Min(0)
     @Max(3)
-    //@Pattern(regexp = "[0-9]")
     private int status;
     private boolean children;
     private boolean minibar;

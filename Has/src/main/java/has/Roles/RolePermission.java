@@ -1,4 +1,4 @@
-package has.User;
+package has.Roles;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;

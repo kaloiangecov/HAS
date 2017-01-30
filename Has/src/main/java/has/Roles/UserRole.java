@@ -1,4 +1,4 @@
-package has.User;
+package has.Roles;
 
 import lombok.Getter;
 import lombok.Setter;
