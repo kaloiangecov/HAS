@@ -1,6 +1,6 @@
 package has.Employee;
 
-import has.DataTableResult;
+import has.Utils.DataTableResult;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,7 +18,7 @@ import java.util.Map;
  */
 @RestController
 public class EmployeeController {
-    
+
     @Autowired
     private EmployeeService employeeService;
 
@@ -26,7 +26,7 @@ public class EmployeeController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_CREATE_EMPLOYEE')")
     public Employee save(@RequestBody @Valid Employee employee) throws Exception {
         return employeeService.save(employee);
     }
@@ -34,7 +34,7 @@ public class EmployeeController {
     @RequestMapping(value = "/employees", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_VIEW_EMPLOYEE')")
     public List<Employee> getAllEmployees() {
         return employeeService.getAllEmployees();
     }
@@ -43,8 +43,9 @@ public class EmployeeController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public @ResponseBody
+    @PreAuthorize("hasAuthority('PERM_SEARCH_EMPLOYEE')")
+    public
+    @ResponseBody
     DataTableResult searchEmployees(HttpServletRequest request) throws Exception {
         Map<String, String[]> parameterMap = request.getParameterMap();
 
@@ -67,7 +68,7 @@ public class EmployeeController {
     @RequestMapping(value = "/employee/{id}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_VIEW_EMPLOYEE')")
     public Employee findEmployeeById(@PathVariable Long id) throws Exception {
         return employeeService.findById(id);
     }
@@ -75,7 +76,7 @@ public class EmployeeController {
     @RequestMapping(value = "/employee/{id}", method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_REMOVE_EMPLOYEE')")
     public Employee removeEmployeeById(@PathVariable Long id) throws Exception {
         return employeeService.remove(id);
     }
@@ -84,7 +85,7 @@ public class EmployeeController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_EDIT_EMPLOYEE')")
     public Employee updateEmployee(@PathVariable Long id, @RequestBody @Valid Employee employee) throws Exception {
         return employeeService.update(id, employee);
     }

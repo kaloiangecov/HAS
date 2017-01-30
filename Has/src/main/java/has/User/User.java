@@ -2,6 +2,7 @@ package has.User;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import has.Roles.UserRole;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -112,7 +113,6 @@ public class User implements Serializable, UserDetails {
         return true;
     }
 
-    //@JsonIgnore
     public UserRole getUserRole() {
         return userRole;
     }

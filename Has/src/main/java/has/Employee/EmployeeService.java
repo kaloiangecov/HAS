@@ -41,10 +41,11 @@ public class EmployeeService {
     public Page<Employee> searchEmployees(int start, int length, String fullName, String phone, String dateHired) {
         PageRequest request = new PageRequest((start / length), length, Sort.Direction.ASC, "id");
 
-        if (dateHired.isEmpty())
+        if (dateHired.isEmpty()) {
             return repo.findByPersonalDataFullNameContainingAndPersonalDataPhoneContaining(fullName, phone, request);
-        else
+        } else {
             return repo.findByPersonalDataFullNameContainingAndPersonalDataPhoneContainingAndDateHired(fullName, phone, dateHired, request);
+        }
     }
 
     public Employee findById(Long id) throws Exception {

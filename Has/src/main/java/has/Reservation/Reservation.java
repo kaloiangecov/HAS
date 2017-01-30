@@ -29,7 +29,6 @@ public class Reservation {
     private boolean group;
 
     @NotNull
-    //@Pattern(regexp = "[0-9]")
     @Min(0)
     @Max(100)
     private int discount;
@@ -69,6 +68,8 @@ public class Reservation {
     @NotNull
     @Min(0)
     @Max(2)
-    //@Pattern(regexp = "[0-9]")
     private int status;
+
+    public Reservation() {
+    }
 }

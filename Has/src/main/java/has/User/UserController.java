@@ -1,7 +1,8 @@
 package has.User;
 
-import has.DataTableResult;
+import has.Utils.DataTableResult;
 import has.Exceptions.UserAlreadyExists;
+import has.Roles.RoleRepository;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,7 +31,7 @@ public class UserController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_CREATE_USER')")
     public User save(@RequestBody @Valid User user) throws UserAlreadyExists {
         return userService.save(user);
     }
@@ -38,32 +39,16 @@ public class UserController {
     @RequestMapping(value = "/users", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_VIEW_USER')")
     public List<User> getAllUsers(HttpServletRequest request) throws Exception {
         return userService.getAllUsers();
-    }
-
-    @RequestMapping(value = "/roles", method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public List<UserRole> getAllRoles() throws Exception {
-        return userService.getAllRoles();
-    }
-
-    @RequestMapping(value = "/role/{id}", method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public UserRole findRoleById(@PathVariable Long id) throws Exception {
-        return userService.findRoleById(id);
     }
 
     @RequestMapping(value = "/users/search", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_SEARCH_USER')")
     public
     @ResponseBody
     DataTableResult searchUsers(HttpServletRequest request) throws Exception {
@@ -77,8 +62,6 @@ public class UserController {
                 Long.parseLong(parameterMap.get("roleID")[0])
         );
 
-        //List<User> users = userService.getAllUsers();
-
         return new DataTableResult(
                 Integer.parseInt(parameterMap.get("draw")[0]),
                 Integer.parseInt(parameterMap.get("start")[0]),
@@ -91,7 +74,7 @@ public class UserController {
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_VIEW_USER')")
     public User findUserById(@PathVariable Long id) throws Exception {
         return userService.findById(id);
     }
@@ -105,7 +88,7 @@ public class UserController {
     @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_REMOVE_USER')")
     public User removeUserById(@PathVariable Long id) throws Exception {
         return userService.remove(id);
     }
@@ -114,7 +97,7 @@ public class UserController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_EDIT_USER')")
     public User updateUser(@PathVariable Long id, @RequestBody @Valid User user) throws Exception {
         return userService.update(id, user);
     }

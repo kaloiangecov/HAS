@@ -1,6 +1,6 @@
 package has.Room;
 
-import has.DataTableResult;
+import has.Utils.DataTableResult;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,7 +26,7 @@ public class RoomController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_CREATE_ROOM')")
     public Room save(@RequestBody @Valid Room room) throws Exception {
         return roomService.save(room);
     }
@@ -34,7 +34,7 @@ public class RoomController {
     @RequestMapping(value = "/rooms", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_VIEW_ROOM')")
     public List<Room> getAllRooms() {
         return roomService.getAllRooms();
     }
@@ -43,8 +43,9 @@ public class RoomController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public @ResponseBody
+    @PreAuthorize("hasAuthority('PERM_SEARCH_ROOM')")
+    public
+    @ResponseBody
     DataTableResult searchRooms(HttpServletRequest request) throws Exception {
         Map<String, String[]> parameterMap = request.getParameterMap();
 
@@ -70,7 +71,7 @@ public class RoomController {
     @RequestMapping(value = "/room/{id}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_VIEW_ROOM')")
     public Room findRoomByNumber(@PathVariable Long id) throws Exception {
         return roomService.findById(id);
     }
@@ -78,7 +79,7 @@ public class RoomController {
     @RequestMapping(value = "/room/{id}", method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_REMOVE_ROOM')")
     public Room removeRoomById(@PathVariable Long id) throws Exception {
         return roomService.remove(id);
     }
@@ -87,7 +88,7 @@ public class RoomController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_EDIT_ROOM')")
     public Room updateRoom(@PathVariable Long id, @RequestBody @Valid Room room) throws Exception {
         return roomService.update(id, room);
     }

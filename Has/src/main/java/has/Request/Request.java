@@ -25,7 +25,6 @@ public class Request {
     @NotNull
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "requests", cascade = CascadeType.ALL)
     private List<Meal> meals;
-    //    private Map<Meal,int> meals;
 //    private ReservationGuest reservationGuest;
     @NotNull
     @Min(0)

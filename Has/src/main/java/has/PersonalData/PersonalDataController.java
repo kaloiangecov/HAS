@@ -23,7 +23,7 @@ public class PersonalDataController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_CREATE_PERSONAL_DATA')")
     public PersonalData save(@RequestBody @Valid PersonalData personalData) throws IdentityNumberAlreadyExists {
         return personalDataService.save(personalData);
     }
@@ -31,7 +31,7 @@ public class PersonalDataController {
     @RequestMapping(value = "/data", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_VIEW_PERSONAL_DATA')")
     public List<PersonalData> getAllEmployees() {
         return personalDataService.getAllPersonalData();
     }
@@ -39,7 +39,7 @@ public class PersonalDataController {
     @RequestMapping(value = "/personal-data/{id}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_VIEW_PERSONAL_DATA')")
     public PersonalData findEmployeeById(@PathVariable Long id) throws Exception {
         return personalDataService.findById(id);
     }
@@ -47,7 +47,7 @@ public class PersonalDataController {
     @RequestMapping(value = "/personal-data/{id}", method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_REMOVE_PERSONAL_DATA')")
     public PersonalData removeEmployeeById(@PathVariable Long id) throws Exception {
         return personalDataService.remove(id);
     }
@@ -56,7 +56,7 @@ public class PersonalDataController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_EDIT_PERSONAL_DATA')")
     public PersonalData updateEmployee(@PathVariable Long id, @RequestBody @Valid PersonalData personalData) throws Exception {
         return personalDataService.update(id, personalData);
     }
