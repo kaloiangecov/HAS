@@ -32,17 +32,11 @@ public class Guest implements Serializable {
 
     @NotNull
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "GUEST_PERSONAL_DATA", joinColumns = {
-            @JoinColumn(name = "GUEST_ID", nullable = false, updatable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "PERSONAL_DATA_ID",
-                    nullable = false, updatable = false)})
+    @JoinColumn(name = "PERSONAL_DATA_ID")
     private PersonalData personalData;
 
     @OneToOne
-    @JoinTable(name = "USER_GUEST", joinColumns = {
-            @JoinColumn(name = "GUEST_ID", nullable = false, updatable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "USER_ID",
-                    nullable = false)})
+    @JoinColumn(name = "USER_ID")
     private User user;
 
     public Guest(int status, User user, PersonalData personalData) {

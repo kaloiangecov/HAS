@@ -1,6 +1,9 @@
 package has.Meal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +27,7 @@ public class MealService {
 
     public Meal findById(Long id) throws Exception {
         Meal dbMeal = repo.findOne(id);
-        if(dbMeal == null){
+        if (dbMeal == null) {
             throw new Exception("There is no meal with such ID");
         }
         return dbMeal;
@@ -32,7 +35,7 @@ public class MealService {
 
     public Meal remove(Long id) throws Exception {
         Meal dbMeal = repo.findOne(id);
-        if(dbMeal == null){
+        if (dbMeal == null) {
             throw new Exception("There is no meal with such ID");
         }
         repo.delete(dbMeal);
@@ -41,7 +44,7 @@ public class MealService {
 
     public Meal update(Long id, Meal meal) throws Exception {
         Meal dbMeal = repo.findOne(id);
-        if(dbMeal == null){
+        if (dbMeal == null) {
             throw new Exception("There is no meal with such ID");
         }
         dbMeal.setDate(meal.getDate());
@@ -50,5 +53,11 @@ public class MealService {
         dbMeal.setPrice(meal.getPrice());
 
         return dbMeal;
+    }
+
+    public Page<Meal> search(int start, int length, String name) {
+        PageRequest request = new PageRequest((start / length), length, Sort.Direction.ASC, "id");
+
+        return repo.findByNameContaining(name, request);
     }
 }
