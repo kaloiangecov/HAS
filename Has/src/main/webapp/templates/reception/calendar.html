@@ -51,8 +51,8 @@
 
                 <div class="form-group col-sm-12 col-xs-12">
                     <label>
-                        <input type="radio" name="newGuest" ng-model="isNewGuest" ng-value="false"
-                               ng-selected="isNewGuest"/> Select existing guest
+                        <input type="radio" name="newGuest" ng-model="ctrl.isNewGuest" ng-selected="isNewGuest"/>
+                        Select existing guest
                     </label>
                     <select class="form-control roles" id="user" name="user" ng-model="ctrl.selectedGuestID"
                             ng-options="item.id as item.personalData.fullName for item in allGuests track by item.id">
@@ -63,8 +63,8 @@
 
                 <div class="form-group col-sm-12 col-xs-12">
                     <label>
-                        <input type="radio" name="newGuest" ng-model="isNewGuest" ng-value="true"
-                               ng-selected="!isNewGuest"/> ...or create new
+                        <input type="radio" name="newGuest" ng-model="ctrl.isNewGuest" ng-selected="!isNewGuest"/>
+                        ...or create new
                     </label>
                 </div>
 

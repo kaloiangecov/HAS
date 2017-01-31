@@ -120,7 +120,7 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
                     numberReservations: 0,
                     status: 0,
                     personalData: {},
-                    userID: $scope.usersList[0].id
+                    userID: $scope.usersList[data.length].id
                 };
             }
         });

@@ -10,6 +10,7 @@ app.controller("calendarCtrl", function ($scope, $timeout, $filter, $http) {
     ctrl.selectedRoom = 3;
     ctrl.selectedGuestID = 0;
     ctrl.isNewGuest = true;
+    $scope.reservationGuest = {};
     $scope.newEvent = {};
     $scope.allGuests = [];
     $scope.timer;
@@ -359,15 +360,16 @@ app.controller("calendarCtrl", function ($scope, $timeout, $filter, $http) {
         }, 1);
     }
 
-    $scope.getAllGuestUsers(function (data) {
-        $scope.allGuests = data;
-    });
-
     angular.element(document).ready(function () {
         //loadEvents();
         ctrl.selectedRoom = 3;
         $scope.changeRoomType();
         //$scope.timer = setInterval(loadEvents, 10000);
+
+        $scope.getAllGuestUsers(function (data) {
+            $scope.allGuests = data;
+            ctrl.selectedGuestID = 0;
+        });
 
         $('#dateRange').daterangepicker({
             parentEl: "#scheduleContainer",
