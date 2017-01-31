@@ -42,8 +42,8 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
             DTColumnBuilder.newColumn('id', 'ID'),
             DTColumnBuilder.newColumn('personalData.fullName', 'Full Name'),
             DTColumnBuilder.newColumn('personalData.phone', 'Phone Number'),
+            DTColumnBuilder.newColumn('personalData.address', 'Address'),
             DTColumnBuilder.newColumn('numberReservations', 'Number of Reservations'),
-            DTColumnBuilder.newColumn('user.username', 'User'),
             DTColumnBuilder.newColumn('id').notSortable().withClass('actions-column')
                 .renderWith(function (data) {
                     var html = '<a class="action-btn" href="#/guests/edit/' +
@@ -81,6 +81,10 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
 
         $scope.getAllUsers(function (data) {
             $scope.usersList = data;
+            $scope.usersList[data.length] = {
+                id: 0,
+                username: "-- None --"
+            };
 
             if ($stateParams && $stateParams.id) {
                 $scope.isEdit = true;
@@ -96,11 +100,18 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
                     }
                 }).then(
                     function (response) { //success
-                        $scope.guest = response.data;
-                        $scope.guest.userID = $scope.guest.user.id;
+                        return response.data;
                     },
                     function (response) { //error
                         $scope.displayMessage(response.data);
+                    }).then(
+                    function (data) {
+                        $scope.guest = data;
+
+                        if ($scope.guest.user)
+                            $scope.guest.userID = $scope.guest.user.id;
+                        else
+                            $scope.guest.userID = 0;
                     });
             }
             else {
@@ -120,9 +131,20 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
 
                 delete $scope.master.userID;
 
-                $scope.getUser(guest.userID, function (data) {
-                    $scope.master.user = data;
+                if (guest.userID > 0) {
+                    $scope.getUser(guest.userID, function (data) {
+                        $scope.master.user = data;
 
+                        saveGuest(function () {
+                            if ($scope.isEdit) {
+                                alert('Edited: ' + $scope.master.personalData.fullName);
+                            } else {
+                                alert('Created: ' + $scope.master.personalData.fullName);
+                            }
+                            window.location.hash = "#/guests/list";
+                        });
+                    });
+                } else {
                     saveGuest(function () {
                         if ($scope.isEdit) {
                             alert('Edited: ' + $scope.master.personalData.fullName);
@@ -131,7 +153,7 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
                         }
                         window.location.hash = "#/guests/list";
                     });
-                });
+                }
             }
         };
     }
