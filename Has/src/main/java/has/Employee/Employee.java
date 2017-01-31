@@ -26,18 +26,12 @@ public class Employee implements Serializable {
 
     @NotNull
     @OneToOne
-    @JoinTable(name = "USER_EMPLOYEE", joinColumns = {
-            @JoinColumn(name = "EMPLOYEE_ID", nullable = false, updatable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "USER_ID",
-                    nullable = false, updatable = true)})
+    @JoinColumn(name = "USER_ID")
     private User user;
 
     @NotNull
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "EMPLOYEE_PERSONAL_DATA", joinColumns = {
-            @JoinColumn(name = "EMPLOYEE_ID", nullable = false, updatable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "PERSONAL_DATA_ID",
-                    nullable = false, updatable = false)})
+    @JoinColumn(name = "PERSONAL_DATA_ID")
     private PersonalData personalData;
 
     public Employee(String dateHired) {

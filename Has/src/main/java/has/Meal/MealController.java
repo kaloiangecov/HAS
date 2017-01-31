@@ -1,6 +1,9 @@
 package has.Meal;
 
+import has.Utils.DataTableResult;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by kaloi on 12/20/2016.
@@ -59,5 +63,29 @@ public class MealController {
     @PreAuthorize("hasAuthority('PERM_EDIT_MEAL')")
     public Meal updateMeal(@PathVariable Long id, @RequestBody @Valid Meal meal) throws Exception {
         return mealService.update(id, meal);
+    }
+
+    @RequestMapping(value = "/meal/search", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_SEARCH_MEAL')")
+    public
+    @ResponseBody
+    DataTableResult findMealByName(HttpServletRequest request) throws Exception {
+        Map<String, String[]> parameterMap = request.getParameterMap();
+
+        Page<Meal> meals = mealService.search(
+                Integer.parseInt(parameterMap.get("start")[0]),
+                Integer.parseInt(parameterMap.get("length")[0]),
+                parameterMap.get("name")[0]);
+
+
+        return new DataTableResult(
+                Integer.parseInt(parameterMap.get("draw")[0]),
+                Integer.parseInt(parameterMap.get("start")[0]),
+                Integer.parseInt(parameterMap.get("length")[0]),
+                meals.getTotalElements(),
+                meals.getTotalElements(),
+                meals.getContent());
     }
 }

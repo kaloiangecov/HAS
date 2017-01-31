@@ -13,7 +13,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     Employee findByPersonalDataEgn(String egn);
 
-    Page<Employee> findByPersonalDataFullNameContainingAndPersonalDataPhoneContaining(String fullName, String phone, Pageable request);
+    Page<Employee> findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContaining(String fullName, String phone, Pageable request);
 
-    Page<Employee> findByPersonalDataFullNameContainingAndPersonalDataPhoneContainingAndDateHired(String fullName, String phone, String dateHired, Pageable pageRequest);
+    Page<Employee> findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContainingAndDateHired(String fullName, String phone, String dateHired, Pageable pageRequest);
 }

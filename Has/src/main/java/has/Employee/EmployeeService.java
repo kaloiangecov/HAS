@@ -42,9 +42,9 @@ public class EmployeeService {
         PageRequest request = new PageRequest((start / length), length, Sort.Direction.ASC, "id");
 
         if (dateHired.isEmpty()) {
-            return repo.findByPersonalDataFullNameContainingAndPersonalDataPhoneContaining(fullName, phone, request);
+            return repo.findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContaining(fullName, phone, request);
         } else {
-            return repo.findByPersonalDataFullNameContainingAndPersonalDataPhoneContainingAndDateHired(fullName, phone, dateHired, request);
+            return repo.findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContainingAndDateHired(fullName, phone, dateHired, request);
         }
     }
 
