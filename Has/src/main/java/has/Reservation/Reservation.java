@@ -59,10 +59,7 @@ public class Reservation {
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinTable(name = "RESERVATION_EMPLOYEE", joinColumns = {
-            @JoinColumn(name = "RESERVATION_ID", nullable = false, updatable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "EMPLOYEE_ID",
-                    nullable = false, updatable = false)})
+    @JoinColumn(name = "EMPLOYEE_ID")
     private Employee receptionist;
 
     @NotNull

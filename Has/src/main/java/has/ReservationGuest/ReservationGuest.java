@@ -23,7 +23,7 @@ public class ReservationGuest {
     private Long id;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Reservation reservation;
 
     @NotNull

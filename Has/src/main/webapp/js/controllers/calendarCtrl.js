@@ -4,15 +4,25 @@ app.controller("calendarCtrl", function ($scope, $timeout, $filter, $http) {
 
     $scope.roomTypes = sampleRoomTypes;
     $scope.roomTypes[3] = "All";
-    $scope.events = [];
-    $scope.resources = [];
-    $scope.selectedEvents = [];
-    ctrl.selectedRoom = 3;
-    ctrl.selectedGuestID = 0;
-    ctrl.isNewGuest = true;
-    $scope.reservationGuest = {};
-    $scope.newEvent = {};
-    $scope.allGuests = [];
+
+    $scope.events = {
+        list: [],
+        selected: [],
+        new: {},
+        resources: []
+    };
+
+    ctrl.selectedRoomType = 3;
+    $scope.guests = {
+        list: [],
+        selectedGuest: {}
+    }
+    $scope.isNewGuest = true;
+    $scope.reservationGuest = {
+        reservation: {},
+        guest: {},
+        room: {}
+    };
     $scope.timer;
 
     $scope.getResources = function (callback) {
@@ -50,6 +60,22 @@ app.controller("calendarCtrl", function ($scope, $timeout, $filter, $http) {
             }).then(updateCallback);
     };
 
+    $scope.saveReservationGuest = function (callback) {
+        $http({
+            method: "POST",
+            url: "reservation-guest",
+            data: $scope.reservationGuest,
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
+        }).then(
+            callback,
+            function (response) { //error
+                $scope.displayMessage(response.data);
+            });
+    };
+
     $scope.startDate = new Date();
     $scope.startDate.setDate($scope.startDate.getDate() - 3);
 
@@ -59,7 +85,7 @@ app.controller("calendarCtrl", function ($scope, $timeout, $filter, $http) {
         //days: 14,
         scale: "Manual",
         timeline: getTimeline(),
-        resources: $scope.resources,
+        resources: $scope.events.resources,
         timeHeaders: [{groupBy: "Month"}, {groupBy: "Day", format: "d"}],
         eventDeleteHandling: "Update",
         eventClickHandling: "Select",
@@ -130,7 +156,7 @@ app.controller("calendarCtrl", function ($scope, $timeout, $filter, $http) {
         },
         onEventSelected: function (args) {
             $scope.$apply(function () {
-                $scope.selectedEvents = $scope.scheduler.multiselect.events();
+                $scope.events.selected = $scope.scheduler.multiselect.events();
             });
         },
         onEventMoved: function (args) {
@@ -140,25 +166,23 @@ app.controller("calendarCtrl", function ($scope, $timeout, $filter, $http) {
             $scope.scheduler.message("Reservation period changed: " + args.e.text());
         },
         onEventDeleted: function (args) {
-            delete $scope.newEvent;
+            $scope.events.new = {};
         },
         onTimeRangeSelected: function (args) {
             $scope.scheduler.clearSelection();
-
             //clearInterval($scope.timer);
             //loadEvents();
 
-            if (!$scope.newEvent || !$scope.newEvent.start) {
-                $timeout(function () {
-                    $scope.newEvent = {
+            $timeout(function () {
+                if (!$scope.events.new.start) {
+                    $('#reservationModal').modal('show');
+                    $scope.events.new = {
                         start: args.start,
                         end: args.end,
-                        resource: args.resource,
+                        resource: args.resource
                     };
-
-                    $('#reservationModal').modal('show');
-                }, 1);
-            }
+                }
+            }, 1);
         },
         onEventClick: function (args) {
 
@@ -235,7 +259,7 @@ app.controller("calendarCtrl", function ($scope, $timeout, $filter, $http) {
              */
         },
         onEventFilter: function (args) {
-            var filteredRes = $filter('filter')($scope.resources, {type: args.filter});
+            var filteredRes = $filter('filter')($scope.events.resources, {type: args.filter});
             var found = false;
 
             angular.forEach(filteredRes, function (value, key) {
@@ -274,9 +298,9 @@ app.controller("calendarCtrl", function ($scope, $timeout, $filter, $http) {
         })
             .then(
                 function (response) { //success
-                    $scope.events = response.data;
-                    if ($scope.newEvent)
-                        $scope.events.push($scope.newEvent);
+                    $scope.events.list = response.data;
+                    if ($scope.events.new.start)
+                        $scope.events.list.push($scope.events.new);
                 },
                 function (response) { //error
                     alert(response.statusText);
@@ -285,53 +309,58 @@ app.controller("calendarCtrl", function ($scope, $timeout, $filter, $http) {
 
     $scope.changeRoomType = function () {
         $scope.getResources(function (data) {
-            $scope.resources = data;
+            $scope.events.resources = data;
 
-            if (ctrl.selectedRoom == 3) {
-                $scope.config.resources = $scope.resources;
+            if (ctrl.selectedRoomType == 3) {
+                $scope.config.resources = $scope.events.resources;
             } else {
-                var filtered = $filter('filter')($scope.resources, {roomClass: ctrl.selectedRoom});
+                var filtered = $filter('filter')($scope.events.resources, {roomClass: ctrl.selectedRoomType});
                 $scope.config.resources = filtered;
             }
         });
     };
 
     $scope.addReservation = function () {
-        $timeout(function () {
-            if (!ctrl.isNewGuest)
-                $scope.reservationGuest.guest = $scope.allGuests[ctrl.selectedGuestID - 1];
+
+        $scope.getUser($scope.loginData.id, function (data) {
+            if (!$scope.isNewGuest)
+                $scope.reservationGuest.guest = $scope.guests.selectedGuest;
 
             $scope.reservationGuest.reservation = {
-                startDate: $scope.newEvent.start.value,
-                endDate: $scope.newEvent.end.value,
-                discount: 0,
+                startDate: $scope.events.new.start.value,
+                endDate: $scope.events.new.end.value,
                 price: 40.0,
+                discount: 0,
                 numberAdults: 1,
                 numberChildren: 0,
-                receptionist: $scope.loginData
+                status: 0,
+                receptionist: data
             };
-            $scope.reservationGuest.room = $scope.resources[$scope.newEvent.resource];
 
-            $scope.newEvent.id = "new_evnt";
-            $scope.newEvent.text = $scope.reservationGuest.guest.personalData.fullName;
-            $scope.newEvent.bubbleHtml = "Reservation details";
-            $scope.newEvent.status = "New";
+            $scope.reservationGuest.room = $scope.events.resources[$scope.events.new.resource];
+            $scope.reservationGuest.isOwner = true;
 
-            $scope.events.push($scope.newEvent);
-            $scope.scheduler.message("New event created!");
-            console.log($scope.events);
+            $scope.events.new.id = "new_evnt";
+            $scope.events.new.text = $scope.reservationGuest.guest.personalData.fullName;
+            $scope.events.new.bubbleHtml = "Reservation details";
+            $scope.events.new.status = 0;
 
-            console.log($scope.reservationGuest);
+
+            $scope.saveReservationGuest(function () {
+                $scope.events.list.push($scope.events.new);
+                $scope.scheduler.message("New event created!");
+                console.log($scope.reservationGuest);
+            });
 
             //$scope.timer = setInterval(loadEvents, 10000);
 
             $('#reservationModal').modal('hide');
-        }, 1);
+        });
     };
 
     $scope.resetReservation = function () {
         $timeout(function () {
-            delete $scope.newEvent;
+            $scope.events.new = {};
             $scope.reservationGuest = {};
         }, 1);
     };
@@ -362,13 +391,13 @@ app.controller("calendarCtrl", function ($scope, $timeout, $filter, $http) {
 
     angular.element(document).ready(function () {
         //loadEvents();
-        ctrl.selectedRoom = 3;
+
         $scope.changeRoomType();
+
         //$scope.timer = setInterval(loadEvents, 10000);
 
         $scope.getAllGuestUsers(function (data) {
-            $scope.allGuests = data;
-            ctrl.selectedGuestID = 0;
+            $scope.guests.list = data;
         });
 
         $('#dateRange').daterangepicker({
