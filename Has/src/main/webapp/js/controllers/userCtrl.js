@@ -113,7 +113,7 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $interval, $r
             if ($scope.userForm.$valid) {
                 $scope.master = angular.copy(user);
                 $scope.master.regDate = (new Date()).toISOString();
-                $scope.master.lastLogin = (new Date()).toISOString();
+                //$scope.master.lastLogin = (new Date()).toISOString();
 
                 var url = $scope.isEdit ? ("user/" + $stateParams.id) : "user";
                 var method = $scope.isEdit ? "PUT" : "POST";

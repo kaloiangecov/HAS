@@ -28,7 +28,8 @@ public class ReservationGuest {
     private Reservation reservation;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "GUEST_ID")
     private Guest guest;
 
     @NotNull

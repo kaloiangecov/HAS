@@ -1,5 +1,6 @@
 package has.ReservationGuest;
 
+import has.Guest.Guest;
 import has.Reservation.Reservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,11 @@ public class ReservationGuestService {
     private ReservationGuestRepository repo;
 
     public ReservationGuest save(ReservationGuest reservationGuest) {
+        Guest guest = reservationGuest.getGuest();
+        guest.setNumberReservations(guest.getNumberReservations() + 1);
+
+        reservationGuest.setGuest(guest);
+
         return repo.save(reservationGuest);
     }
 

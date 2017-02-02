@@ -338,8 +338,14 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
     $scope.addReservation = function () {
 
         $scope.getEmployeeByUserId($scope.loginData.id, function (data) {
-            if (!$scope.isNewGuest)
+            if ($scope.isNewGuest) {
+                $scope.reservationGuest.guest.numberReservations = 0;
+                $scope.reservationGuest.guest.status = 0;
+            }
+            else {
                 $scope.reservationGuest.guest = $scope.guests.selectedGuest;
+                $scope.reservationGuest.guest.numberReservations++;
+            }
 
             $scope.reservationGuest.reservation = {
                 startDate: $scope.events.new.start.value,
