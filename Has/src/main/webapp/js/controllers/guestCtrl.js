@@ -107,11 +107,6 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $interval, $
                     }).then(
                     function (data) {
                         $scope.guest = data;
-
-                        if ($scope.guest.user)
-                            $scope.guest.userID = $scope.guest.user.id;
-                        else
-                            $scope.guest.userID = 0;
                     });
             }
             else {
@@ -119,8 +114,7 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $interval, $
                 $scope.guest = {
                     numberReservations: 0,
                     status: 0,
-                    personalData: {},
-                    userID: $scope.usersList[data.length].id
+                    personalData: {}
                 };
             }
         });
@@ -129,31 +123,17 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $interval, $
             if ($scope.guestForm.$valid) {
                 $scope.master = angular.copy(guest);
 
-                delete $scope.master.userID;
+                if ($scope.master.user.id === 0)
+                    delete $scope.master.user;
 
-                if (guest.userID > 0) {
-                    $scope.getUser(guest.userID, function (data) {
-                        $scope.master.user = data;
-
-                        saveGuest(function () {
-                            if ($scope.isEdit) {
-                                alert('Edited: ' + $scope.master.personalData.fullName);
-                            } else {
-                                alert('Created: ' + $scope.master.personalData.fullName);
-                            }
-                            window.location.hash = "#/guests/list";
-                        });
-                    });
-                } else {
-                    saveGuest(function () {
-                        if ($scope.isEdit) {
-                            alert('Edited: ' + $scope.master.personalData.fullName);
-                        } else {
-                            alert('Created: ' + $scope.master.personalData.fullName);
-                        }
-                        window.location.hash = "#/guests/list";
-                    });
-                }
+                saveGuest(function () {
+                    if ($scope.isEdit) {
+                        alert('Edited: ' + $scope.master.personalData.fullName);
+                    } else {
+                        alert('Created: ' + $scope.master.personalData.fullName);
+                    }
+                    window.location.hash = "#/guests/list";
+                });
             }
         };
     }

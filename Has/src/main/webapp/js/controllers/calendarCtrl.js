@@ -194,7 +194,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
             // customize the reservation bar color and tooltip depending on status
             switch (args.e.status) {
-                case "New":
+                case 0:
                     var checkinDeadline = today.addHours(21);
                     if ((start < today) || (start === today && now > checkinDeadline)) { // must checkoin before 21:00
                         args.data.barColor = "#e55";  // red
@@ -204,7 +204,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                         status = "New"
                     }
                     break;
-                case 'Arrived': // arrived
+                case 1: // arrived
                     var checkoutDeadline = today.addHours(12);
 
                     if ((end < today) || (end === today && now > checkoutDeadline)) { // must checkout before 10:00
@@ -216,7 +216,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                         status = "Arrived";
                     }
                     break;
-                case 'Leaving': // checked out
+                case 2: // checked out
                     args.data.barColor = "red";
                     status = "Checked out";
                     break;
