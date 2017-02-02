@@ -60,6 +60,23 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             }).then(updateCallback);
     };
 
+    $scope.getEmployeeByUserId = function (userID, updateCallback) {
+        var response = $http({
+            method: "GET",
+            url: ("employee/by-user/" + userID),
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
+        }).then(
+            function (response) { //success
+                return response.data;
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+            }).then(updateCallback);
+    };
+
     $scope.saveReservationGuest = function (callback) {
         $http({
             method: "POST",
@@ -320,7 +337,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
     $scope.addReservation = function () {
 
-        $scope.getUser($scope.loginData.id, function (data) {
+        $scope.getEmployeeByUserId($scope.loginData.id, function (data) {
             if (!$scope.isNewGuest)
                 $scope.reservationGuest.guest = $scope.guests.selectedGuest;
 

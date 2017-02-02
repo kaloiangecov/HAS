@@ -56,6 +56,10 @@ public class EmployeeService {
         return employee;
     }
 
+    public Employee findByUserId(Long userId) throws Exception {
+        return repo.findByUserId(userId);
+    }
+
     public Employee remove(Long id) throws Exception {
         Employee employee = repo.findOne(id);
         if (employee == null) {

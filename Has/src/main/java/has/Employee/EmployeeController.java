@@ -73,6 +73,14 @@ public class EmployeeController {
         return employeeService.findById(id);
     }
 
+    @RequestMapping(value = "/employee/by-user/{id}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_VIEW_EMPLOYEE')")
+    public Employee findEmployeeByUserId(@PathVariable Long id) throws Exception {
+        return employeeService.findByUserId(id);
+    }
+
     @RequestMapping(value = "/employee/{id}", method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
