@@ -1,4 +1,4 @@
-app.controller("calendarCtrl", function ($scope, $timeout, $filter, $http) {
+app.controller("calendarCtrl", function ($scope, $filter, $http) {
     var ctrl = this;
     $scope.page.title = "Calendar";
 
@@ -100,18 +100,12 @@ app.controller("calendarCtrl", function ($scope, $timeout, $filter, $http) {
         contextMenu: new DayPilot.Menu({
             items: [
                 {
-                    text: "Show event ID", onclick: function () {
-                    alert("Event value: " + this.source.value());
-                }
-                },
-                {
-                    text: "Show event text", onclick: function () {
-                    alert("Event text: " + this.source.text());
-                }
-                },
-                {
-                    text: "Show event range", onclick: function () {
-                    alert("Event start: " + this.source.start().toStringSortable().substr(0, 10) + "\nEvent end: " + this.source.end().toStringSortable().substr(0, 10));
+                    text: "Show event info", onclick: function () {
+                    var dateRange = "\nEvent start: " +
+                        this.source.start().toStringSortable().substr(0, 10) +
+                        "\nEvent end: " +
+                        this.source.end().toStringSortable().substr(0, 10);
+                    alert("ID: " + this.source.value() + "\nGuest: " + this.source.text() + dateRange);
                 }
                 },
                 {
@@ -173,16 +167,16 @@ app.controller("calendarCtrl", function ($scope, $timeout, $filter, $http) {
             //clearInterval($scope.timer);
             //loadEvents();
 
-            $timeout(function () {
-                if (!$scope.events.new.start) {
-                    $('#reservationModal').modal('show');
+            if (!$scope.events.new.start) {
+                $scope.$apply(function () {
                     $scope.events.new = {
                         start: args.start,
                         end: args.end,
                         resource: args.resource
                     };
-                }
-            }, 1);
+                });
+                $('#reservationModal').modal('show');
+            }
         },
         onEventClick: function (args) {
 
@@ -350,6 +344,7 @@ app.controller("calendarCtrl", function ($scope, $timeout, $filter, $http) {
                 $scope.events.list.push($scope.events.new);
                 $scope.scheduler.message("New event created!");
                 console.log($scope.reservationGuest);
+                $scope.resetReservation();
             });
 
             //$scope.timer = setInterval(loadEvents, 10000);
@@ -359,10 +354,10 @@ app.controller("calendarCtrl", function ($scope, $timeout, $filter, $http) {
     };
 
     $scope.resetReservation = function () {
-        $timeout(function () {
+        $scope.$apply(function () {
             $scope.events.new = {};
             $scope.reservationGuest = {};
-        }, 1);
+        });
     };
 
     $scope.scrollTo = function (date) {
@@ -383,10 +378,10 @@ app.controller("calendarCtrl", function ($scope, $timeout, $filter, $http) {
     }
 
     function setDateRange(start, end, label) {
-        $timeout(function () {
+        $scope.$apply(function () {
             var tmp = end._d.getTime() - start._d.getTime();
             $scope.config.timeline = getTimeline(start._d, tmp / 86400000);
-        }, 1);
+        });
     }
 
     angular.element(document).ready(function () {

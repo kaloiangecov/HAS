@@ -1,4 +1,4 @@
-app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $interval, $resource, $http, DTOptionsBuilder, DTColumnBuilder) {
+app.controller("userCtrl", function ($scope, $state, $stateParams, $interval, $resource, $http, DTOptionsBuilder, DTColumnBuilder) {
     var ctrl = this;
     $scope.page.title = "Users";
     $scope.master = {};
@@ -162,9 +162,9 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
                 if (files && files[0]) {
                     var reader = new FileReader();
                     reader.onload = function (e) {
-                        $timeout(function () {
+                        $scope.$apply(function () {
                             $scope.user.picture = e.target.result;
-                        }, 1);
+                        });
                     };
 
                     reader.readAsDataURL(files[0]);

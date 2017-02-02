@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * Created by kaloi on 12/20/2016.
@@ -16,7 +17,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @Entity(name = "RESERVATION")
-public class Reservation {
+public class Reservation implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -42,6 +43,7 @@ public class Reservation {
     //    private List<ReservationGuest> guests;
 
     @ManyToOne
+    @JoinColumn(name = "USER_ID")
     private User lastModifiedBy;
 
     private String lastModifiedTime;
@@ -58,7 +60,7 @@ public class Reservation {
     private Double price;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "EMPLOYEE_ID")
     private Employee receptionist;
 

@@ -24,6 +24,7 @@ public class ReservationGuest {
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "RESERVATION_ID")
     private Reservation reservation;
 
     @NotNull
@@ -34,6 +35,7 @@ public class ReservationGuest {
     @ManyToOne(fetch = FetchType.EAGER)
     private Room room;
 
+    @NotNull
     private boolean isOwner;
 
 

@@ -1,4 +1,4 @@
-app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $interval, $resource, $http, DTOptionsBuilder, DTColumnBuilder) {
+app.controller("guestCtrl", function ($scope, $state, $stateParams, $interval, $resource, $http, DTOptionsBuilder, DTColumnBuilder) {
     var ctrl = this;
     $scope.page.title = "Guests";
     $scope.master = {};

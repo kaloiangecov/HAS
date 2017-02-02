@@ -1,4 +1,4 @@
-app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resource, $timeout, $interval, DTOptionsBuilder, DTColumnBuilder) {
+app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resource, $interval, DTOptionsBuilder, DTColumnBuilder) {
     var ctrl = this;
     $scope.page.title = "Rooms";
     $scope.roomsTable;
