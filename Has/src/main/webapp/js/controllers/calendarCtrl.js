@@ -288,7 +288,11 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
     function loadEvents() {
         $http({
             method: "GET",
-            url: "reservations"
+            url: "reservations",
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
         })
             .then(
                 function (response) { //success
@@ -385,9 +389,9 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
     }
 
     angular.element(document).ready(function () {
-        //loadEvents();
-
         $scope.changeRoomType();
+
+        loadEvents();
 
         //$scope.timer = setInterval(loadEvents, 10000);
 

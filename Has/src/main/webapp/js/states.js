@@ -78,8 +78,7 @@ var stateCalendar = {
     url: '/calendar',
     views: {
         'content@loggedin': {
-            templateUrl: 'templates/reception/calendar.html',
-            controller: "calendarCtrl"
+            templateUrl: 'templates/reception/calendar.html'
         }
     }
 };
@@ -101,8 +100,7 @@ var stateUserList = {
     url: '/users/list',
     views: {
         'content@loggedin': {
-            templateUrl: 'templates/users/list.html',
-            controller: "userCtrl"
+            templateUrl: 'templates/users/list.html'
         }
     }
 };
@@ -135,8 +133,7 @@ var stateEmployeeList = {
     url: '/employees/list',
     views: {
         'content@loggedin': {
-            templateUrl: 'templates/employees/list.html',
-            controller: "employeeCtrl"
+            templateUrl: 'templates/employees/list.html'
         }
     }
 };
@@ -145,8 +142,7 @@ var stateEmployeeAdd = {
     url: '/employees/add',
     views: {
         'content@loggedin': {
-            templateUrl: 'templates/employees/add.html',
-            controller: "employeeCtrl"
+            templateUrl: 'templates/employees/add.html'
         }
     }
 };
@@ -155,8 +151,7 @@ var stateEmployeeEdit = {
     url: '/employees/edit/:id',
     views: {
         'content@loggedin': {
-            templateUrl: 'templates/employees/add.html',
-            controller: "employeeCtrl"
+            templateUrl: 'templates/employees/add.html'
         }
     }
 };
@@ -169,8 +164,7 @@ var stateGuestList = {
     url: '/guests/list',
     views: {
         'content@loggedin': {
-            templateUrl: 'templates/guests/list.html',
-            controller: "guestCtrl"
+            templateUrl: 'templates/guests/list.html'
         }
     }
 };
@@ -179,8 +173,7 @@ var stateGuestAdd = {
     url: '/guests/add',
     views: {
         'content@loggedin': {
-            templateUrl: 'templates/guests/add.html',
-            controller: "guestCtrl"
+            templateUrl: 'templates/guests/add.html'
         }
     }
 };
@@ -189,8 +182,7 @@ var stateGuestEdit = {
     url: '/guests/edit/:id',
     views: {
         'content@loggedin': {
-            templateUrl: 'templates/guests/add.html',
-            controller: "guestCtrl"
+            templateUrl: 'templates/guests/add.html'
         }
     }
 };
@@ -204,8 +196,7 @@ var stateRoomList = {
     url: '/rooms/list',
     views: {
         'content@loggedin': {
-            templateUrl: 'templates/rooms/list.html',
-            controller: "roomCtrl"
+            templateUrl: 'templates/rooms/list.html'
         }
     }
 };

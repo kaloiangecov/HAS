@@ -27,6 +27,8 @@ public class Reservation implements Serializable {
     private boolean allInclusive;
     private boolean breakfast;
     private boolean dinner;
+
+    @Column(name = "C_GROUP")
     private boolean group;
 
     @NotNull
@@ -43,7 +45,6 @@ public class Reservation implements Serializable {
     //    private List<ReservationGuest> guests;
 
     @ManyToOne
-    @JoinColumn(name = "USER_ID")
     private User lastModifiedBy;
 
     private String lastModifiedTime;
