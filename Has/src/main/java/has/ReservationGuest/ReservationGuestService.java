@@ -37,6 +37,10 @@ public class ReservationGuestService {
         return dbReservationGuest;
     }
 
+    public ReservationGuest findByReservationId(Long id) {
+        return repo.findByReservationId(id);
+    }
+
     public ReservationGuest remove(Long id) throws Exception {
         ReservationGuest dbReservationGuest = repo.findOne(id);
         if (dbReservationGuest == null) {
