@@ -37,8 +37,12 @@ public class ReservationGuestService {
         return dbReservationGuest;
     }
 
-    public ReservationGuest findByReservationId(Long id) {
-        return repo.findByReservationId(id);
+    public ReservationGuest findFirstByReservationId(Long id) {
+        return repo.findFirstByReservationId(id);
+    }
+
+    public ReservationGuest findByReservationIdAndOwner(Long id) {
+        return repo.findByReservationIdAndIsOwner(id, true);
     }
 
     public ReservationGuest remove(Long id) throws Exception {

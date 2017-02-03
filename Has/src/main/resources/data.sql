@@ -175,4 +175,7 @@ INSERT INTO ROOM (NUMBER, BEDS_DOUBLE, BEDS_SINGLE, ROOM_CLASS, STATUS, CHILDREN
 
 INSERT INTO RESERVATION
   (reservation_id, all_inclusive, breakfast, dinner, discount, end_date, C_GROUP, last_modified_by_user_id, last_modified_time, number_adults, number_children, price, employee_id, start_date, status)
-    VALUES('1', false, true, false, 0, '10/02/2017', false, null, null, 2, 1, 40.0, '5', '06/02/2017', 0);
+    VALUES('1', false, true, false, 0, '14/02/2017', false, null, null, 2, 1, 40.0, '5', '10/02/2017', 0);
+
+INSERT INTO RESERVATION_GUEST (reservation_guest_id, reservation_id, guest_id, room_id, is_owner)
+VALUES(1, 1, 1, 5, true);

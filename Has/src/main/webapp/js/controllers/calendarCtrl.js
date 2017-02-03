@@ -96,6 +96,23 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             .then(callback);
     };
 
+    $scope.getReservationOwner = function (resID, callback) {
+        $http({
+            method: "GET",
+            url: ("reservation-guest/by-reservation/" + resID),
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
+        }).then(
+            function (response) { //success
+                return response.data;
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+            }).then(callback);
+    };
+
     $scope.startDate = new Date();
     $scope.startDate.setDate($scope.startDate.getDate() - 3);
 
@@ -305,49 +322,42 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         return timeline;
     }
 
-    function isInArray(id, arr) {
-        angular.forEach(arr, function (value, key) {
-            if (value.id === id)
-                return true;
-        });
-
-        return false;
-    };
-
     function loadEvents() {
         $http({
             method: "GET",
-            url: "reservation-guest",
+            url: "reservations",
             responseType: "json",
             headers: {
                 "Authorization": $scope.authentication
             }
-        })
-            .then(
-                function (response) { //success
-                    //$scope.events.list = response.data;
-                    $scope.events.list = [];
+        }).then(
+            function (response) { //success
+                $scope.events.list = [];
 
-                    angular.forEach(response.data, function (value, key) {
+                angular.forEach(response.data, function (reservation, key) {
+                    $scope.getReservationOwner(reservation.id, function (data) {
+                        var arrStartDate = reservation.startDate.split('/');
+                        var arrEndDate = reservation.endDate.split('/');
+
                         var tmpEvent = {
-                            start: value.reservation.startDate,
-                            end: value.reservation.endDate,
-                            resource: (value.room.id - 1),
-                            status: value.reservation.status,
-                            text: value.guest.personalData.fullName,
-                            reservationGuest: value
+                            start: new Date(arrStartDate[2], parseInt(arrStartDate[1]) - 1, arrStartDate[0]),
+                            end: new Date(arrEndDate[2], parseInt(arrEndDate[1]) - 1, arrEndDate[0]),
+                            resource: (data.room.id - 1),
+                            status: reservation.status,
+                            text: data.guest.personalData.fullName,
+                            reservationGuest: data
                         };
 
-                        if (!isInArray(value.id, response.data))
-                            $scope.events.list.push(tmpEvent);
-                    });
-
-                    if ($scope.events.new.start)
-                        $scope.events.list.push($scope.events.new);
-                },
-                function (response) { //error
-                    alert(response.statusText);
+                        $scope.events.list.push(tmpEvent);
                 });
+                });
+
+                if ($scope.events.new.start)
+                    $scope.events.list.push($scope.events.new);
+            },
+            function (response) { //error
+                alert(response.statusText);
+            });
     }
 
     $scope.changeRoomType = function () {
@@ -366,10 +376,12 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
     $scope.addReservation = function () {
 
         $scope.getEmployeeByUserId($scope.loginData.id, function (data) {
+            var arrStartDate = $scope.events.new.start.value.substr(0, 10).split('-');
+            var arrEndDate = $scope.events.new.end.value.substr(0, 10).split('-');
 
             $scope.reservationGuest.reservation = {
-                startDate: $scope.events.new.start.value,
-                endDate: $scope.events.new.end.value,
+                startDate: (arrStartDate[2] + '/' + arrStartDate[1] + '/' + arrStartDate[0]),
+                endDate: (arrEndDate[2] + '/' + arrEndDate[1] + '/' + arrEndDate[0]),
                 price: 40.0,
                 discount: 0,
                 numberAdults: 1,
