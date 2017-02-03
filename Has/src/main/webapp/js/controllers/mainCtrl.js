@@ -4,28 +4,14 @@ app.controller("mainCtrl", function ($scope, $http) {
     };
 
     $scope.loginData = {};
-    $scope.roles = sampleRoles;
     $scope.roomTypes = sampleRoomTypes;
     $scope.roomStatuses = sampleRoomStatuses;
-    $scope.countries = [];
     $scope.documentElement = document.documentElement;
     $scope.credentials = {
         username: "",
         password: ""
     };
     $scope.authentication = "";
-
-    $http({
-        method: "GET",
-        url: "js/countries.json"
-    })
-        .then(
-            function (response) { //success
-                $scope.countries = response.data.countries;
-            },
-            function (response) { //error
-                alert(response.statusText);
-            });
 
     $scope.displayMessage = function (response) {
         if (!response)
@@ -61,7 +47,7 @@ app.controller("mainCtrl", function ($scope, $http) {
         $scope.authentication = "Basic " + btoa($scope.credentials.username + ":" + $scope.credentials.password);
         $scope.getPrincipal(function (data) {
             $scope.loginData = data.principal;
-            delete $scope.loginData.password;
+            //delete $scope.loginData.password;
 
             window.location.hash = "#/home";
         }, function (response) { //error

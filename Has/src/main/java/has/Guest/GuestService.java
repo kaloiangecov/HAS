@@ -68,7 +68,7 @@ public class GuestService {
         dbGuest.setNumberReservations(guest.getNumberReservations());
         dbGuest.setStatus(guest.getStatus());
         dbGuest.setPersonalData(guest.getPersonalData());
-        if (dbGuest.getUser().getId() != guest.getUser().getId())
+        if (guest.getUser() != null)
             dbGuest.setUser(guest.getUser());
 
         SendMailSSL.sendMail("shit@hotmail.com", MailTemplates.RESERVATION_CONFIRMATION);

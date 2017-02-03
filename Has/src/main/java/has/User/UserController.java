@@ -1,8 +1,8 @@
 package has.User;
 
-import has.Utils.DataTableResult;
 import has.Exceptions.UserAlreadyExists;
 import has.Roles.RoleRepository;
+import has.Utils.DataTableResult;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -81,7 +83,12 @@ public class UserController {
 
     @RequestMapping(value = "/user/login", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public Principal login(Principal user) {
+    public Principal login(Principal user) throws Exception {
+        User dbUser = userService.findByUsername(user.getName());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        dbUser.setLastLogin(sdf.format(new Date()));
+        userService.update(dbUser.getId(), dbUser);
+
         return user;
     }
 

@@ -23,17 +23,20 @@ public class ReservationGuest {
     private Long id;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "RESERVATION_ID")
     private Reservation reservation;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "GUEST_ID")
     private Guest guest;
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     private Room room;
 
+    @NotNull
     private boolean isOwner;
 
 

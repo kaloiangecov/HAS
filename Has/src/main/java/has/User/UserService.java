@@ -64,6 +64,14 @@ public class UserService {
         return dbUser;
     }
 
+    public User findByUsername(String username) throws Exception {
+        User dbUser = repo.findByUsername(username);
+        if (dbUser == null) {
+            throw new Exception("There is no user with such username");
+        }
+        return dbUser;
+    }
+
     public User remove(Long id) throws Exception {
         User dbUser = repo.findOne(id);
         if (dbUser == null) {

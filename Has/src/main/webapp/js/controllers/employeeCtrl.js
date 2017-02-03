@@ -1,4 +1,4 @@
-app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout, $interval, $resource, $http, DTOptionsBuilder, DTColumnBuilder) {
+app.controller("employeeCtrl", function ($scope, $state, $stateParams, $interval, $resource, $http, DTOptionsBuilder, DTColumnBuilder) {
     var ctrl = this;
     $scope.page.title = "Employees";
     $scope.master = {};
@@ -102,7 +102,6 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
                 }).then(
                     function (response) { //success
                         $scope.employee = response.data;
-                        $scope.employee.userID = $scope.employee.user.id;
                     },
                     function (response) { //error
                         $scope.displayMessage(response.data);
@@ -112,7 +111,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
                 $scope.isEdit = false;
                 $scope.employee = {
                     personalData: {},
-                    userID: $scope.usersList[0].id
+                    user: $scope.usersList[0]
                 };
             }
         });
@@ -121,19 +120,13 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
             if ($scope.employeeForm.$valid) {
                 $scope.master = angular.copy(employee);
 
-                delete $scope.master.userID;
-
-                $scope.getUser(employee.userID, function (data) {
-                    $scope.master.user = data;
-
-                    saveEmployee(function () {
-                        if ($scope.isEdit) {
-                            alert('Edited: ' + $scope.master.personalData.fullName);
-                        } else {
-                            alert('Created: ' + $scope.master.personalData.fullName);
-                        }
-                        window.location.hash = "#/employees/list";
-                    });
+                saveEmployee(function () {
+                    if ($scope.isEdit) {
+                        alert('Edited: ' + $scope.master.personalData.fullName);
+                    } else {
+                        alert('Created: ' + $scope.master.personalData.fullName);
+                    }
+                    window.location.hash = "#/employees/list";
                 });
             }
         };

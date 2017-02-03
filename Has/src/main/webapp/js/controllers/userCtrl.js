@@ -1,4 +1,4 @@
-app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $interval, $resource, $http, DTOptionsBuilder, DTColumnBuilder) {
+app.controller("userCtrl", function ($scope, $state, $stateParams, $interval, $resource, $http, DTOptionsBuilder, DTColumnBuilder) {
     var ctrl = this;
     $scope.page.title = "Users";
     $scope.master = {};
@@ -89,7 +89,7 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
         }
     }
     else {
-        $scope.getAllRoles(function(data) {
+        $scope.getAllRoles(function (data) {
             $scope.rolesList = data;
 
             if ($stateParams && $stateParams.id) {
@@ -98,14 +98,12 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
                     $scope.user = data;
                     if (!$scope.user.picture)
                         $scope.user.picture = 'img/user.png';
-                    $scope.user.roleID = $scope.user.userRole.id;
                 });
             }
             else {
                 $scope.isEdit = false;
                 $scope.user = {
-                    //userRole: $scope.rolesList[0],
-                    roleID: $scope.rolesList[0].id,
+                    userRole: $scope.rolesList[0],
                     picture: 'img/user.png'
                 };
             }
@@ -115,37 +113,31 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
             if ($scope.userForm.$valid) {
                 $scope.master = angular.copy(user);
                 $scope.master.regDate = (new Date()).toISOString();
-                $scope.master.lastLogin = (new Date()).toISOString();
+                //$scope.master.lastLogin = (new Date()).toISOString();
 
-                delete $scope.master.roleID;
+                var url = $scope.isEdit ? ("user/" + $stateParams.id) : "user";
+                var method = $scope.isEdit ? "PUT" : "POST";
 
-                $scope.getRole(user.roleID, function (data) {
-                    $scope.master.userRole = data;
-
-                    var url = $scope.isEdit ? ("user/" + $stateParams.id) : "user";
-                    var method = $scope.isEdit ? "PUT" : "POST";
-
-                    $http({
-                        method: method,
-                        url: url,
-                        data: $scope.master,
-                        responseType: "json",
-                        headers: {
-                            "Authorization": $scope.authentication
+                $http({
+                    method: method,
+                    url: url,
+                    data: $scope.master,
+                    responseType: "json",
+                    headers: {
+                        "Authorization": $scope.authentication
+                    }
+                }).then(
+                    function (response) { //success
+                        if ($scope.isEdit) {
+                            alert('Edited: ' + $scope.master.username);
+                        } else {
+                            alert('Created: ' + $scope.master.username);
                         }
-                    }).then(
-                        function (response) { //success
-                            if ($scope.isEdit) {
-                                alert('Edited: ' + $scope.master.username);
-                            } else {
-                                alert('Created: ' + $scope.master.username);
-                            }
-                            window.location.hash = "#/users/list";
-                        },
-                        function (response) { //error
-                            $scope.displayMessage(response.data);
-                        });
-                });
+                        window.location.hash = "#/users/list";
+                    },
+                    function (response) { //error
+                        $scope.displayMessage(response.data);
+                    });
             }
         };
     }
@@ -162,9 +154,9 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
                 if (files && files[0]) {
                     var reader = new FileReader();
                     reader.onload = function (e) {
-                        $timeout(function () {
+                        $scope.$apply(function () {
                             $scope.user.picture = e.target.result;
-                        }, 1);
+                        });
                     };
 
                     reader.readAsDataURL(files[0]);

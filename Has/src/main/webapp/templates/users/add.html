@@ -44,8 +44,9 @@
                 <div class="form-group">
                     <label class="control-label col-md-4 col-sm-4 col-xs-12" for="role">Role</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <select class="form-control roles" id="role" name="role" ng-model="user.roleID"
-                                ng-options="item.id as item.roleName for item in rolesList" required="required"
+                        <select class="form-control roles" id="role" name="role" ng-model="user.userRole"
+                                ng-options="item as item.roleName for item in rolesList track by item.id"
+                                required="required"
                                 style="width:100%">
                         </select>
                         <div ng-show="userForm.$submitted || userForm.role.$touched" class="validation-message">

@@ -36,6 +36,14 @@ public class ReservationGuestController {
         return reservationGuestService.getAllReservationGuestConnections();
     }
 
+    @RequestMapping(value = "/reservation-guest/by-reservation/{id}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_VIEW_RESERVATION_GUEST')")
+    public ReservationGuest findByReservationId(@PathVariable Long id) {
+        return reservationGuestService.findFirstByReservationId(id);
+    }
+
     @RequestMapping(value = "/reservation-guest/{id}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
