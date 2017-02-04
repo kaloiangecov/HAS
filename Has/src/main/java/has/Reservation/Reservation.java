@@ -1,6 +1,7 @@
 package has.Reservation;
 
 import has.Employee.Employee;
+import has.ReservationGuest.ReservationGuest;
 import has.User.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by kaloi on 12/20/2016.
@@ -69,6 +71,9 @@ public class Reservation implements Serializable {
     @Min(0)
     @Max(2)
     private int status;
+
+    @OneToMany(mappedBy = "reservation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ReservationGuest> reservationGuests;
 
     public Reservation() {
     }

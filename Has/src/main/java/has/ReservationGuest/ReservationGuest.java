@@ -37,7 +37,7 @@ public class ReservationGuest {
     private Room room;
 
     @NotNull
-    private boolean isOwner;
+    private boolean owner;
 
 
 }

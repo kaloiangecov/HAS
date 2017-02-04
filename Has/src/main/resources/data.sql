@@ -109,16 +109,18 @@ INSERT INTO ROLE_PERMISSION (USER_ROLE_ID, PERMISSION_ID) VALUES ('3', '40');
 INSERT INTO ROLE_PERMISSION (USER_ROLE_ID, PERMISSION_ID) VALUES ('3', '41');
 
 
-INSERT INTO T_USER (USER_ID, LAST_LOGIN, password, email, REG_DATE, username) VALUES ('1', '2017-01-10T12:30:00', 'password', 'ivan@gmail.com', '2016-11-12', 'ivan');
-INSERT INTO T_USER (USER_ID, LAST_LOGIN, password, email, REG_DATE, username) VALUES ('2', '2017-01-26T11:10:10', '123123123', 'grigorkata77@abv.com', '2016-12-29', 'grigor');
-INSERT INTO T_USER (USER_ID, LAST_LOGIN, password, email, REG_DATE, username) VALUES ('3', '2017-01-26T23:11:10', '123456789a', 'pena23@abv.com', '2014-07-12', 'baba_pena');
-INSERT INTO T_USER (USER_ID, LAST_LOGIN, password, email, REG_DATE, username) VALUES ('4', '2017-01-27T13:12:10', '123456789b', 'georgi@abv.com', '2017-01-27', 'georgi');
-INSERT INTO T_USER (USER_ID, LAST_LOGIN, password, email, REG_DATE, username) VALUES ('5', '2017-01-25T23:14:10', '123456789c', 'joshua@abv.com', '2017-01-25', 'joshua');
-INSERT INTO T_USER (USER_ID, LAST_LOGIN, password, email, REG_DATE, username) VALUES ('6', '2017-01-24T14:12:10', '123456789d', 'johnny@abv.com', '2017-01-24', 'johnny');
-INSERT INTO T_USER (USER_ID, LAST_LOGIN, password, email, REG_DATE, username) VALUES ('7', '2017-01-23T23:23:23', '123456789e', 'nikolai@abv.com', '2017-01-23', 'niksana');
-INSERT INTO T_USER (USER_ID, LAST_LOGIN, password, email, REG_DATE, username) VALUES ('8', '2017-01-28T14:12:10', '123456789f', 'david@abv.com', '2017-01-27', 'david');
-INSERT INTO T_USER (USER_ID, LAST_LOGIN, password, email, REG_DATE, username) VALUES ('9', '2017-01-29T15:15:10', '123456789g', 'stefcho@abv.com', '2017-01-28', 'stefcho');
-INSERT INTO T_USER (USER_ID, LAST_LOGIN, password, email, REG_DATE, username) VALUES ('10', '2017-01-30T13:12:10', '123456789b', 'iordan@abv.com', '2017-01-29', 'dakata');
+INSERT INTO T_USER (USER_ID, LAST_LOGIN, password, email, REG_DATE, username) VALUES
+('1', '2017-01-10T12:30:00', 'password', 'ivan@gmail.com', '2016-11-12', 'ivan'),
+('2', '2017-01-26T11:10:10', '123123123', 'grigorkata77@abv.com', '2016-12-29', 'grigor'),
+('3', '2017-01-26T23:11:10', '123456789a', 'pena23@abv.com', '2014-07-12', 'baba_pena'),
+('4', '2017-01-27T13:12:10', '123456789b', 'georgi@abv.com', '2017-01-27', 'georgi'),
+('5', '2017-01-25T23:14:10', '123456789c', 'joshua@abv.com', '2017-01-25', 'joshua'),
+('6', '2017-01-24T14:12:10', '123456789d', 'johnny@abv.com', '2017-01-24', 'johnny'),
+('7', '2017-01-23T23:23:23', '123456789e', 'nikolai@abv.com', '2017-01-23', 'niksana'),
+('8', '2017-01-28T14:12:10', '123456789f', 'david@abv.com', '2017-01-27', 'david'),
+('9', '2017-01-29T15:15:10', '123456789g', 'stefcho@abv.com', '2017-01-28', 'stefcho'),
+('10', '2017-01-30T13:12:10', '123456789b', 'iordan@abv.com', '2017-01-29', 'dakata'),
+('11', '2017-02-02T13:12:10', 'babatiestara', 'toni_nike@gmail.com', '2016-06-12', 'toni_nike');
 
 
 INSERT INTO USER_ROLE (USER_ID, USER_ROLE_ID) VALUES ('1', '1');
@@ -131,18 +133,21 @@ INSERT INTO USER_ROLE (USER_ID, USER_ROLE_ID) VALUES ('7', '4');
 INSERT INTO USER_ROLE (USER_ID, USER_ROLE_ID) VALUES ('8', '4');
 INSERT INTO USER_ROLE (USER_ID, USER_ROLE_ID) VALUES ('9', '4');
 INSERT INTO USER_ROLE (USER_ID, USER_ROLE_ID) VALUES ('10', '2');
+INSERT INTO USER_ROLE (USER_ID, USER_ROLE_ID) VALUES ('11', '5');
 
-INSERT INTO PERSONAL_DATA (PERSONAL_DATA_ID, address, egn, FULL_NAME, IDENTITY_EXPIRE_DATE, IDENTITY_ISSUE_DATE, IDENTITY_ISSUED_BY, IDENTITY_NUMBER, phone) VALUES ('1', 'some street', '9201275304', 'Spas Spasov', '10/12/2020', '10/12/2010', 'some MVR', '123456789', '213124124');
-INSERT INTO PERSONAL_DATA (PERSONAL_DATA_ID, address, egn, FULL_NAME, IDENTITY_EXPIRE_DATE, IDENTITY_ISSUE_DATE, IDENTITY_ISSUED_BY, IDENTITY_NUMBER, phone) VALUES ('2', 'street 11', '9105165327', 'Grigor Dimitrov', '15/12/2020', '15/12/2010', 'MVR Ruse', '526441710', '0883888888');
-INSERT INTO PERSONAL_DATA (PERSONAL_DATA_ID, address, egn, FULL_NAME, IDENTITY_EXPIRE_DATE, IDENTITY_ISSUE_DATE, IDENTITY_ISSUED_BY, IDENTITY_NUMBER, phone) VALUES ('3', 'street 12', '3102128936', 'Pena Ivanova', '17/11/2019', '17/11/2009', 'MVR Varna', '899121883', '0885455661');
-INSERT INTO PERSONAL_DATA (PERSONAL_DATA_ID, address, egn, FULL_NAME, IDENTITY_EXPIRE_DATE, IDENTITY_ISSUE_DATE, IDENTITY_ISSUED_BY, IDENTITY_NUMBER, phone) VALUES ('4', 'street 13', '9104023426', 'Georgi Petrov', '27/01/2018', '27/01/2008', 'MVR Varna', '947343109', '0886595959');
-INSERT INTO PERSONAL_DATA (PERSONAL_DATA_ID, address, egn, FULL_NAME, IDENTITY_EXPIRE_DATE, IDENTITY_ISSUE_DATE, IDENTITY_ISSUED_BY, IDENTITY_NUMBER, phone) VALUES ('5', 'street 14', '9107154482', 'Joshua Trump', '28/02/2021', '28/02/2011', 'MVR Ruse', '468127990', '0884789885');
-INSERT INTO PERSONAL_DATA (PERSONAL_DATA_ID, address, egn, FULL_NAME, IDENTITY_EXPIRE_DATE, IDENTITY_ISSUE_DATE, IDENTITY_ISSUED_BY, IDENTITY_NUMBER, phone) VALUES ('6', 'street 15', '9108239840', 'Johnny Depp', '29/03/2022', '29/03/2012', 'MVR Burgas', '505850482', '0898888777');
-INSERT INTO PERSONAL_DATA (PERSONAL_DATA_ID, address, egn, FULL_NAME, IDENTITY_EXPIRE_DATE, IDENTITY_ISSUE_DATE, IDENTITY_ISSUED_BY, IDENTITY_NUMBER, phone) VALUES ('7', 'street 16', '9109231762', 'Nikolai Nikolov', '13/04/2023', '13/04/2013', 'MVR Ruse', '672661246', '0898555123');
-INSERT INTO PERSONAL_DATA (PERSONAL_DATA_ID, address, egn, FULL_NAME, IDENTITY_EXPIRE_DATE, IDENTITY_ISSUE_DATE, IDENTITY_ISSUED_BY, IDENTITY_NUMBER, phone) VALUES ('8', 'street 17', '9109309304', 'David Beckham', '15/04/2023', '15/04/2013', 'MVR Sofiq', '701115038', '0897443556');
-INSERT INTO PERSONAL_DATA (PERSONAL_DATA_ID, address, egn, FULL_NAME, IDENTITY_EXPIRE_DATE, IDENTITY_ISSUE_DATE, IDENTITY_ISSUED_BY, IDENTITY_NUMBER, phone) VALUES ('9', 'street 18', '9201063964', 'Stefan Nedelchev', '17/05/2023', '17/05/2013', 'MVR Ruse', '394875313', '0883562412');
-INSERT INTO PERSONAL_DATA (PERSONAL_DATA_ID, address, egn, FULL_NAME, IDENTITY_EXPIRE_DATE, IDENTITY_ISSUE_DATE, IDENTITY_ISSUED_BY, IDENTITY_NUMBER, phone) VALUES ('10', 'street 19', '9202053964', 'Petar Nedelchev', '17/05/2023', '17/05/2013', 'MVR Ruse', '394875313', '0883562343');
-INSERT INTO PERSONAL_DATA (PERSONAL_DATA_ID, address, egn, FULL_NAME, IDENTITY_EXPIRE_DATE, IDENTITY_ISSUE_DATE, IDENTITY_ISSUED_BY, IDENTITY_NUMBER, phone) VALUES ('11', 'street 20', '9112053964', 'Bai Tanas Debelia', '17/05/2023', '17/05/2013', 'MVR Silistra', '114875313', '0883112341');
+INSERT INTO PERSONAL_DATA (PERSONAL_DATA_ID, address, egn, FULL_NAME, IDENTITY_EXPIRE_DATE, IDENTITY_ISSUE_DATE, IDENTITY_ISSUED_BY, IDENTITY_NUMBER, phone) VALUES
+('1', 'some street', '9201275304', 'Spas Spasov', '10/12/2020', '10/12/2010', 'some MVR', '123456789', '213124124'),
+('2', 'street 11', '9105165327', 'Grigor Dimitrov', '15/12/2020', '15/12/2010', 'MVR Ruse', '526441710', '0883888888'),
+('3', 'street 12', '3102128936', 'Pena Ivanova', '17/11/2019', '17/11/2009', 'MVR Varna', '899121883', '0885455661'),
+('4', 'street 13', '9104023426', 'Georgi Petrov', '27/01/2018', '27/01/2008', 'MVR Varna', '947343109', '0886595959'),
+('5', 'street 14', '9107154482', 'Joshua Trump', '28/02/2021', '28/02/2011', 'MVR Ruse', '468127990', '0884789885'),
+('6', 'street 15', '9108239840', 'Johnny Depp', '29/03/2022', '29/03/2012', 'MVR Burgas', '505850482', '0898888777'),
+('7', 'street 16', '9109231762', 'Nikolai Nikolov', '13/04/2023', '13/04/2013', 'MVR Ruse', '672661246', '0898555123'),
+('8', 'street 17', '9109309304', 'David Beckham', '15/04/2023', '15/04/2013', 'MVR Sofiq', '701115038', '0897443556'),
+('9', 'street 18', '9201063964', 'Stefan Nedelchev', '17/05/2023', '17/05/2013', 'MVR Ruse', '394875313', '0883562412'),
+('10', 'street 19', '9202053964', 'Petar Nedelchev', '17/05/2023', '17/05/2013', 'MVR Ruse', '394875313', '0883562343'),
+('11', 'street 20', '9112053964', 'Bai Tanas Debelia', '17/05/2023', '17/05/2013', 'MVR Silistra', '114875313', '0883112341'),
+('12', 'street 21', '9012053911', 'Toni Naika', '17/05/2024', '17/05/2014', 'MVR Sofia', '004875311', '0884135341');
 
 
 INSERT INTO EMPLOYEE (EMPLOYEE_ID, DATE_HIRED, PERSONAL_DATA_ID, USER_ID) VALUES ('1', '12/11/2016', '1', '1');
@@ -157,6 +162,7 @@ INSERT INTO EMPLOYEE (EMPLOYEE_ID, DATE_HIRED, PERSONAL_DATA_ID, USER_ID) VALUES
 INSERT INTO EMPLOYEE (EMPLOYEE_ID, DATE_HIRED, PERSONAL_DATA_ID, USER_ID) VALUES ('10', '29/01/2017', '10', '10');
 
 INSERT INTO GUEST (GUEST_ID, NUMBER_RESERVATIONS, STATUS, PERSONAL_DATA_ID) VALUES ('1', 2, 0, '11');
+INSERT INTO GUEST (GUEST_ID, NUMBER_RESERVATIONS, STATUS, PERSONAL_DATA_ID, USER_ID) VALUES ('2', 1, 0, '12', '11');
 
 
 INSERT INTO ROOM (NUMBER, BEDS_DOUBLE, BEDS_SINGLE, ROOM_CLASS, STATUS, CHILDREN, PETS, MINIBAR)  VALUES
@@ -174,8 +180,10 @@ INSERT INTO ROOM (NUMBER, BEDS_DOUBLE, BEDS_SINGLE, ROOM_CLASS, STATUS, CHILDREN
 (402, 1, 2, 0, 0, TRUE, TRUE, TRUE);
 
 INSERT INTO RESERVATION
-  (reservation_id, all_inclusive, breakfast, dinner, discount, end_date, C_GROUP, last_modified_by_user_id, last_modified_time, number_adults, number_children, price, employee_id, start_date, status)
-    VALUES('1', false, true, false, 0, '14/02/2017', false, null, null, 2, 1, 40.0, '5', '10/02/2017', 0);
+(reservation_id, all_inclusive, breakfast, dinner, discount, end_date, C_GROUP, last_modified_by_user_id, last_modified_time, number_adults, number_children, price, employee_id, start_date, status)
+VALUES('1', false, true, false, 0, '14/02/2017', false, null, null, 2, 1, 40.0, '5', '10/02/2017', 0),
+('2', true, true, true, 10, '18/02/2017', false, null, null, 1, 0, 45.0, '4', '15/02/2017', 1);
 
-INSERT INTO RESERVATION_GUEST (reservation_guest_id, reservation_id, guest_id, room_id, is_owner)
-VALUES(1, 1, 1, 5, true);
+INSERT INTO RESERVATION_GUEST (reservation_guest_id, reservation_id, guest_id, room_id, owner) VALUES
+(1, 1, 1, 5, true),
+(2, 2, 2, 8, true);

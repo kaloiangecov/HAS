@@ -1,6 +1,5 @@
 package has.ReservationGuest;
 
-import has.Guest.Guest;
 import has.Reservation.Reservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,16 +16,12 @@ public class ReservationGuestService {
     private ReservationGuestRepository repo;
 
     public ReservationGuest save(ReservationGuest reservationGuest) {
-        Guest guest = reservationGuest.getGuest();
-        guest.setNumberReservations(guest.getNumberReservations() + 1);
-
-        reservationGuest.setGuest(guest);
-
         return repo.save(reservationGuest);
     }
 
     public List<ReservationGuest> getAllReservationGuestConnections() {
-        return repo.findAll();
+        List<ReservationGuest> reservations = repo.findAll();
+        return reservations;
     }
 
     public ReservationGuest findById(Long id) throws Exception {
@@ -35,14 +30,6 @@ public class ReservationGuestService {
             throw new Exception("There is no ?? with such ID");
         }
         return dbReservationGuest;
-    }
-
-    public ReservationGuest findFirstByReservationId(Long id) {
-        return repo.findFirstByReservationId(id);
-    }
-
-    public ReservationGuest findByReservationIdAndOwner(Long id) {
-        return repo.findByReservationIdAndIsOwner(id, true);
     }
 
     public ReservationGuest remove(Long id) throws Exception {
