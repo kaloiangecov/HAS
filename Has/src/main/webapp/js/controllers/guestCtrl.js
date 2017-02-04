@@ -46,7 +46,7 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $interval, $
             DTColumnBuilder.newColumn('numberReservations', 'Number of Reservations'),
             DTColumnBuilder.newColumn('id').notSortable().withClass('actions-column')
                 .renderWith(function (data) {
-                    var html = '<a class="action-btn" href="#/guests/edit/' +
+                    var html = '<a class="action-btn" href="#!/guests/edit/' +
                         data +
                         '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
                     return html;
@@ -132,7 +132,7 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $interval, $
                     } else {
                         alert('Created: ' + $scope.master.personalData.fullName);
                     }
-                    window.location.hash = "#/guests/list";
+                    window.location.hash = "#!/guests/list";
                 });
             }
         };

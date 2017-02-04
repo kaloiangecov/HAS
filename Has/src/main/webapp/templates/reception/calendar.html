@@ -44,9 +44,10 @@
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-                            ng-click="resetReservation()"><span
+                            ng-click="reset()"><span
                             aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Add reservation</h4>
+                    <h4 class="modal-title" ng-hide="isAdditionalGuest">Add a New Reservation</h4>
+                    <h4 class="modal-title" ng-show="isAdditionalGuest">Add Additional Reservation</h4>
                 </div>
                 <div class="modal-body row">
 

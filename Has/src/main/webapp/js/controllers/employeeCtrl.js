@@ -51,7 +51,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $interval
             DTColumnBuilder.newColumn('user.username', 'User'),
             DTColumnBuilder.newColumn('id').notSortable().withClass('actions-column')
                 .renderWith(function (data) {
-                    var html = '<a class="action-btn" href="#/employees/edit/' +
+                    var html = '<a class="action-btn" href="#!/employees/edit/' +
                         data +
                         '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
                     return html;
@@ -126,7 +126,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $interval
                     } else {
                         alert('Created: ' + $scope.master.personalData.fullName);
                     }
-                    window.location.hash = "#/employees/list";
+                    window.location.hash = "#!/employees/list";
                 });
             }
         };

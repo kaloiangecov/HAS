@@ -22,9 +22,9 @@ app.controller("mainCtrl", function ($scope, $http) {
         if (response.status === 401) {
             $scope.authentication = "";
             $scope.loginData = {};
-            window.location.hash = "#/login";
+            window.location.hash = "#!/login";
         } else if (response.status === 403) {
-            window.location.hash = "#/home";
+            window.location.hash = "#!/home";
         }
     };
 
@@ -49,7 +49,7 @@ app.controller("mainCtrl", function ($scope, $http) {
             $scope.loginData = data.principal;
             //delete $scope.loginData.password;
 
-            window.location.hash = "#/home";
+            window.location.hash = "#!/home";
         }, function (response) { //error
             $scope.displayMessage(response.data);
         })
@@ -70,7 +70,7 @@ app.controller("mainCtrl", function ($scope, $http) {
             }).then(
             function (data) {
                 alert("Logged out!");
-                window.location.hash = "#/login";
+                window.location.hash = "#!/login";
             });
     };
 

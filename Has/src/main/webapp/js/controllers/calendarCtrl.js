@@ -522,6 +522,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             });
         }
 
+        $('#reservationModal').modal('hide');
         console.log($scope.reservationGuest);
     };
     $scope.resetGuest = function () {
