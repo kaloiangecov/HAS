@@ -44,9 +44,10 @@
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-                            ng-click="resetReservation()"><span
+                            ng-click="reset()"><span
                             aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Add reservation</h4>
+                    <h4 class="modal-title" ng-hide="isAdditionalGuest">Add a New Reservation</h4>
+                    <h4 class="modal-title" ng-show="isAdditionalGuest">Add Additional Reservation</h4>
                 </div>
                 <div class="modal-body row">
 
@@ -56,7 +57,7 @@
                             <input type="radio" name="isNewGuest" ng-model="isNewGuest" ng-value="false"/>
                             Select existing guest
                         </label>
-                        <select class="form-control roles" id="guest" name="guest" ng-model="guests.selectedGuest"
+                        <select class="form-control roles" ng-model="guests.selectedGuest"
                                 ng-options="item as item.personalData.fullName for item in guests.list track by item.id">
                         </select>
                     </div>
@@ -177,8 +178,8 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" ng-click="addReservation()" class="btn btn-primary">Submit</button>
-                    <button type="reset" ng-click="resetReservation()" class="btn btn-default">Reset</button>
+                    <button type="submit" ng-click="submit()" class="btn btn-primary">Submit</button>
+                    <button type="reset" ng-click="reset()" class="btn btn-default">Reset</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->

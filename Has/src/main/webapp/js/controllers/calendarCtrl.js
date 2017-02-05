@@ -16,16 +16,22 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
     $scope.guests = {
         list: [],
         selectedGuest: {}
-    }
+    };
     $scope.isNewGuest = true;
+    $scope.isAdditionalGuest = false;
     $scope.reservationGuest = {
+        reservation: {},
+        guest: {},
+        room: {}
+    };
+    $scope.newReservationGuest = {
         reservation: {},
         guest: {},
         room: {}
     };
     $scope.timer;
 
-    $scope.getResources = function (callback) {
+    $scope.getRooms = function (callback) {
         $http({
             method: "GET",
             url: "rooms",
@@ -43,7 +49,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             .then(callback);
     };
 
-    $scope.getAllGuestUsers = function (updateCallback) {
+    $scope.getAllGuests = function (updateCallback) {
         $http({
             method: "GET",
             url: "guests",
@@ -61,7 +67,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
     };
 
     $scope.getEmployeeByUserId = function (userID, updateCallback) {
-        var response = $http({
+        $http({
             method: "GET",
             url: ("employee/by-user/" + userID),
             responseType: "json",
@@ -96,10 +102,11 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             .then(callback);
     };
 
-    $scope.getReservationOwner = function (resID, callback) {
+    $scope.saveReservation = function (reservation, callback) {
         $http({
-            method: "GET",
-            url: ("reservation-guest/by-reservation/" + resID),
+            method: "POST",
+            url: "reservation",
+            data: reservation,
             responseType: "json",
             headers: {
                 "Authorization": $scope.authentication
@@ -110,7 +117,8 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             },
             function (response) { //error
                 $scope.displayMessage(response.data);
-            }).then(callback);
+            })
+            .then(callback);
     };
 
     $scope.startDate = new Date();
@@ -137,13 +145,31 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         contextMenu: new DayPilot.Menu({
             items: [
                 {
-                    text: "Show event info", onclick: function () {
-                    var dateRange = "\nEvent start: " +
-                        this.source.start().toStringSortable().substr(0, 10) +
-                        "\nEvent end: " +
-                        this.source.end().toStringSortable().substr(0, 10);
-                    alert("ID: " + this.source.value() + "\nGuest: " + this.source.text() + dateRange);
-                }
+                    text: '<i class="fa fa-info"></i> Show event info',
+                    onclick: function () {
+                        var dateRange = "\nEvent start: " +
+                            this.source.start().toStringSortable().substr(0, 10) +
+                            "\nEvent end: " +
+                            this.source.end().toStringSortable().substr(0, 10);
+                        alert("ID: " + this.source.value() + "\nGuest: " + this.source.text() + dateRange);
+                    }
+                },
+                {
+                    text: '<i class="fa fa-plus"></i> Add another guest',
+                    onclick: function () {
+                        $scope.reservationGuest = this.source.data.objReservation.reservationGuests[0];
+                        var tmpReservation = this.source.data.objReservation;
+                        delete tmpReservation.reservationGuests;
+
+                        $scope.reservationGuest.guest = {};
+                        $scope.reservationGuest.reservation = tmpReservation;
+                        $scope.reservationGuest.id = null;
+                        $scope.reservationGuest.owner = false;
+
+                        $scope.isAdditionalGuest = true;
+
+                        $('#reservationModal').modal('show');
+                    }
                 },
                 {
                     text: "Delete", onclick: function () {
@@ -335,21 +361,20 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 $scope.events.list = [];
 
                 angular.forEach(response.data, function (reservation, key) {
-                    $scope.getReservationOwner(reservation.id, function (data) {
-                        var arrStartDate = reservation.startDate.split('/');
-                        var arrEndDate = reservation.endDate.split('/');
+                    var arrStartDate = reservation.startDate.split('/');
+                    var arrEndDate = reservation.endDate.split('/');
 
-                        var tmpEvent = {
-                            start: new Date(arrStartDate[2], parseInt(arrStartDate[1]) - 1, arrStartDate[0]),
-                            end: new Date(arrEndDate[2], parseInt(arrEndDate[1]) - 1, arrEndDate[0]),
-                            resource: (data.room.id - 1),
-                            status: reservation.status,
-                            text: data.guest.personalData.fullName,
-                            reservationGuest: data
-                        };
+                    var tmpEvent = {
+                        start: new Date(arrStartDate[2], parseInt(arrStartDate[1]) - 1, parseInt(arrStartDate[0]) + 1),
+                        end: new Date(arrEndDate[2], parseInt(arrEndDate[1]) - 1, arrEndDate[0]),
+                        id: reservation.id,
+                        resource: (reservation.reservationGuests[0].room.id - 1),
+                        status: reservation.status,
+                        text: reservation.reservationGuests[0].guest.personalData.fullName,
+                        objReservation: reservation
+                    };
 
-                        $scope.events.list.push(tmpEvent);
-                });
+                    $scope.events.list.push(tmpEvent);
                 });
 
                 if ($scope.events.new.start)
@@ -361,7 +386,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
     }
 
     $scope.changeRoomType = function () {
-        $scope.getResources(function (data) {
+        $scope.getRooms(function (data) {
             $scope.events.resources = data;
 
             if (ctrl.selectedRoomType == 3) {
@@ -373,13 +398,30 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         });
     };
 
+    $scope.submit = function () {
+        if ($scope.isAdditionalGuest)
+            $scope.addGuest();
+        else
+            $scope.addReservation();
+    };
+
+    $scope.reset = function () {
+        if ($scope.isAdditionalGuest)
+            $scope.resetGuest();
+        else
+            $scope.resetReservation();
+    };
+
     $scope.addReservation = function () {
 
         $scope.getEmployeeByUserId($scope.loginData.id, function (data) {
+            $scope.reservationGuest.room = $scope.events.resources[$scope.events.new.resource];
+            $scope.reservationGuest.owner = true;
+
             var arrStartDate = $scope.events.new.start.value.substr(0, 10).split('-');
             var arrEndDate = $scope.events.new.end.value.substr(0, 10).split('-');
 
-            $scope.reservationGuest.reservation = {
+            var objReservation = {
                 startDate: (arrStartDate[2] + '/' + arrStartDate[1] + '/' + arrStartDate[0]),
                 endDate: (arrEndDate[2] + '/' + arrEndDate[1] + '/' + arrEndDate[0]),
                 price: 40.0,
@@ -390,73 +432,130 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 receptionist: data
             };
 
-            $scope.reservationGuest.room = $scope.events.resources[$scope.events.new.resource];
-            $scope.reservationGuest.isOwner = true;
-
             $scope.events.new.bubbleHtml = "Reservation details";
             $scope.events.new.status = 0;
 
-            if ($scope.isNewGuest) {
-                $scope.reservationGuest.guest.numberReservations = 0;
-                $scope.reservationGuest.guest.status = 0;
+            $scope.saveReservation(objReservation, function (newReservation) {
+                $scope.reservationGuest.reservation = newReservation;
 
-                $http({
-                    method: "POST",
-                    url: "guest",
-                    responseType: "json",
-                    headers: {
-                        "Authorization": $scope.authentication
-                    },
-                    data: $scope.reservationGuest.guest
-                }).then(
-                    function (response) { //success
-                        return response.data;
-                    },
-                    function (response) { //error
-                        $scope.displayMessage(response.data);
-                    })
-                    .then(function (data) {
-                        $scope.reservationGuest.guest = data;
+                if ($scope.isNewGuest) { // create new guest
+                    $scope.reservationGuest.guest.numberReservations = 0;
+                    $scope.reservationGuest.guest.status = 0;
 
-                        $scope.events.new.text = $scope.reservationGuest.guest.personalData.fullName;
+                    $http({
+                        method: "POST",
+                        url: "guest",
+                        responseType: "json",
+                        headers: {
+                            "Authorization": $scope.authentication
+                        },
+                        data: $scope.reservationGuest.guest
+                    }).then(
+                        function (response) { //success
+                            return response.data;
+                        },
+                        function (response) { //error
+                            $scope.displayMessage(response.data);
+                        })
+                        .then(function (data) {
+                            $scope.reservationGuest.guest = data;
 
-                        $scope.saveReservationGuest(function (data) {
-                            $scope.events.new.id = data.reservation.id;
-                            $scope.events.list.push($scope.events.new);
-                            $scope.scheduler.message("New event created!");
-                            console.log($scope.reservationGuest);
-                            $scope.resetReservation();
+                            $scope.events.new.text = $scope.reservationGuest.guest.personalData.fullName;
+
+                            $scope.saveReservationGuest(function (data) {
+                                $scope.events.new.id = data.reservation.id;
+                                $scope.events.list.push($scope.events.new);
+                                $scope.scheduler.message("New event created!");
+                                $scope.resetReservation();
+                                loadEvents();
+                            });
                         });
+
+                } else { // use existing guest
+                    $scope.reservationGuest.guest = $scope.guests.selectedGuest;
+                    $scope.reservationGuest.guest.numberReservations += 1;
+
+                    $scope.events.new.text = $scope.reservationGuest.guest.personalData.fullName;
+
+                    $scope.saveReservationGuest(function (data) {
+                        $scope.events.new.id = data.reservation.id;
+                        $scope.events.list.push($scope.events.new);
+                        $scope.scheduler.message("New event created!");
+                        $scope.resetReservation();
+                        loadEvents();
                     });
-            }
-            else {
-                $scope.reservationGuest.guest = $scope.guests.selectedGuest;
-                $scope.reservationGuest.guest.numberReservations++;
-
-                $scope.events.new.text = $scope.reservationGuest.guest.personalData.fullName;
-
-                $scope.saveReservationGuest(function (data) {
-                    $scope.events.new.id = data.reservation.id;
-                    $scope.events.list.push($scope.events.new);
-                    $scope.scheduler.message("New event created!");
-                    console.log($scope.reservationGuest);
-                    $scope.resetReservation();
-                });
-            }
+                }
+            });
 
             //$scope.timer = setInterval(loadEvents, 10000);
-
             $('#reservationModal').modal('hide');
         });
 
     };
 
     $scope.resetReservation = function () {
-        $scope.$apply(function () {
-            $scope.events.new = {};
-            $scope.reservationGuest = {};
-        });
+        $scope.events.new = {};
+        $scope.events.selected = [];
+        $scope.guests.selectedGuest = {};
+        $scope.reservationGuest = {
+            reservation: {},
+            guest: {},
+            room: {}
+        };
     };
+
+    $scope.addGuest = function () {
+        if ($scope.isNewGuest) {
+            $scope.reservationGuest.guest.numberReservations = 0;
+            $scope.reservationGuest.guest.status = 0;
+
+            $http({
+                method: "POST",
+                url: "guest",
+                responseType: "json",
+                headers: {
+                    "Authorization": $scope.authentication
+                },
+                data: $scope.reservationGuest.guest
+            }).then(function (response) { //success
+                return response.data;
+            }, function (response) { //error
+                $scope.displayMessage(response.data)
+            })
+                .then(function (data) {
+                    $scope.reservationGuest.guest = data;
+                    $scope.reservationGuest.reservation.lastModifiedBy = $scope.loginData;
+                    $scope.reservationGuest.reservation.lastModifiedTime = new Date().toISOString();
+
+                    $scope.saveReservationGuest(function (data) {
+                        $scope.scheduler.message("Added new guest to reservation!");
+                        $scope.resetGuest();
+                        loadEvents();
+                    });
+                });
+        } else {
+            $scope.reservationGuest.guest = $scope.guests.selectedGuest;
+            $scope.reservationGuest.reservation.lastModifiedBy = $scope.loginData;
+            $scope.reservationGuest.reservation.lastModifiedTime = new Date().toISOString();
+
+            $scope.saveReservationGuest(function (data) {
+                $scope.scheduler.message("Added new guest to reservation!");
+                $scope.resetGuest();
+                loadEvents();
+            });
+        }
+
+        $('#reservationModal').modal('hide');
+        console.log($scope.reservationGuest);
+    };
+    $scope.resetGuest = function () {
+        $scope.reservationGuest = {
+            reservation: {},
+            guest: {},
+            room: {}
+        };
+        $scope.isAdditionalGuest = false;
+    }
 
     $scope.scrollTo = function (date) {
         $scope.scheduler.scrollTo(date);
@@ -489,7 +588,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
         //$scope.timer = setInterval(loadEvents, 10000);
 
-        $scope.getAllGuestUsers(function (data) {
+        $scope.getAllGuests(function (data) {
             $scope.guests.list = data;
         });
 

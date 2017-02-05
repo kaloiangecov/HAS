@@ -53,13 +53,10 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $interval, $r
                     return new Date(date).toLocaleString();
                 }),
             DTColumnBuilder.newColumn('id').notSortable().withClass('actions-column')
-                .renderWith(function (data) {
-                    var html = '<a class="action-btn" href="#/users/edit/' +
-                        data +
-                        '"><i class="fa fa-pencil" aria-hidden="true"></i></a><a class="action-btn" id="ban_' +
-                        data +
-                        '" href="javascript:;" onclick="banUser(' +
-                        data + ')"><i class="fa fa-ban" aria-hidden="true"></i></a>';
+                .renderWith(function (id) {
+                    var html = '<a class="action-btn" href="#!/users/edit/' +
+                        id + '"><i class="fa fa-pencil" aria-hidden="true"></i></a><a class="action-btn delete-btn" id="ban_' +
+                        id + '" href="javascript:;"><i class="fa fa-trash-o" aria-hidden="true"></i></a>';
                     return html;
                 })
         ];
@@ -69,24 +66,6 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $interval, $r
                 console.log(list);
             }, resetPaging);
         };
-
-        var banUser = function (id) {
-            $http({
-                method: "DELETE",
-                url: ("user/" + id),
-                responseType: "json",
-                headers: {
-                    "Authorization": $scope.authentication
-                }
-            }).then(
-                function (response) { //success
-                    alert("User deleted");
-                    window.location.hash = "#/users/list";
-                },
-                function (response) { //error
-                    $scope.displayMessage(response.data);
-                });
-        }
     }
     else {
         $scope.getAllRoles(function (data) {
@@ -133,7 +112,7 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $interval, $r
                         } else {
                             alert('Created: ' + $scope.master.username);
                         }
-                        window.location.hash = "#/users/list";
+                        window.location.hash = "#!/users/list";
                     },
                     function (response) { //error
                         $scope.displayMessage(response.data);
@@ -144,8 +123,31 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $interval, $r
 
     angular.element(document).ready(function () {
 
+        function banUser(id) {
+            $http({
+                method: "DELETE",
+                url: ("user/" + id),
+                responseType: "json",
+                headers: {
+                    "Authorization": $scope.authentication
+                }
+            }).then(
+                function (response) { //success
+                    alert("User deleted");
+                    window.location.hash = "#!/users/list";
+                },
+                function (response) { //error
+                    $scope.displayMessage(response.data);
+                });
+        };
+
         if (window.location.hash.includes("list")) {
             $scope.reloadTableData();
+
+            $('.delete-btn').click(function () {
+                var id = this.id.split('_');
+                banUser(id[1]);
+            });
             //$interval($scope.reloadTableData, 30000);
         }
         else {

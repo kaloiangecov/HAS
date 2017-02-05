@@ -1,5 +1,6 @@
 package has.Reservation;
 
+import has.ReservationGuest.ReservationGuest;
 import has.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,15 @@ public class ReservationService {
     }
 
     public List<Reservation> getAllReservations() {
-        return repo.findAll();
+        List<Reservation> reservations = repo.findAll();
+
+        for (Reservation reservation : reservations) {
+            for (ReservationGuest reservationGuest : reservation.getReservationGuests()) {
+                reservationGuest.setReservation(null);
+            }
+        }
+
+        return reservations;
     }
 
     public Reservation findById(Long id) throws Exception {

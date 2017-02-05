@@ -49,7 +49,7 @@ app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resou
             DTColumnBuilder.newColumn('bedsDouble', 'Double Beds'),
             DTColumnBuilder.newColumn('id').notSortable().withClass('actions-column')
                 .renderWith(function (id) {
-                    var html = '<a class="action-btn" href="#/rooms/edit/' +
+                    var html = '<a class="action-btn" href="#!/rooms/edit/' +
                         id +
                         '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
                     return html;
@@ -82,7 +82,7 @@ app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resou
                     } else {
                         alert('Created: ' + $scope.master.number);
                     }
-                    window.location.hash = "#/rooms/list";
+                    window.location.hash = "#!/rooms/list";
                 },
                 function (response) { //error
                     $scope.displayMessage(response.data);
