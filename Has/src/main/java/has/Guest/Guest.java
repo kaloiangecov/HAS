@@ -23,8 +23,11 @@ public class Guest implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "GUEST_ID")
     private Long id;
+
     @NotNull
+    @Min(0)
     private int numberReservations;
+
     @NotNull
     @Min(0)
     @Max(2)

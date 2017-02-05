@@ -29,6 +29,8 @@ public class UserController {
     @Autowired
     RoleRepository repoRole;
 
+    UserRepository repo;
+
     @RequestMapping(value = "/user", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
