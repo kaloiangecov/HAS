@@ -6,6 +6,11 @@ app.controller("mainCtrl", function ($scope, $http) {
     $scope.loginData = {};
     $scope.roomTypes = sampleRoomTypes;
     $scope.roomStatuses = sampleRoomStatuses;
+    $scope.shifts = [
+        "Morning",
+        "Lunch",
+        "Evening"
+    ];
     $scope.documentElement = document.documentElement;
     $scope.credentials = {
         username: "",

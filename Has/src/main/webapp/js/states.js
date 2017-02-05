@@ -156,6 +156,15 @@ var stateEmployeeEdit = {
     }
 };
 
+var stateWorkingSchedule = {
+    url: '/employees/schedule',
+    views: {
+        'content@loggedin': {
+            templateUrl: 'templates/employees/schedule.html'
+        }
+    }
+};
+
 //------------------------------------------------//
 
 
