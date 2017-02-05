@@ -21,14 +21,18 @@ public class Meal {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "MEAL_ID")
     private Long id;
+
     @NotNull
     private String date;
+
     @NotNull
     @Size(min = 3, max = 100)
     private String description;
+
     @NotNull
     @Size(min = 3, max = 50)
     private String name;
+
     @NotNull
     private Double price;
 

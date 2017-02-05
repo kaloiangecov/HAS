@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import has.Roles.UserRole;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Email;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -36,6 +37,7 @@ public class User implements Serializable, UserDetails {
     private String password;
 
     @NotNull
+    @Email
     private String email;
 
     @NotNull
