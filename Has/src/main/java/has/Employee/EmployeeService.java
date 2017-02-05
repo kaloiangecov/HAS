@@ -1,5 +1,6 @@
 package has.Employee;
 
+import has.WorkingSchedule.WorkingSchedule;
 import has.mailsender.MailTemplates;
 import has.mailsender.SendMailSSL;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,12 +41,20 @@ public class EmployeeService {
 
     public Page<Employee> searchEmployees(int start, int length, String fullName, String phone, String dateHired) {
         PageRequest request = new PageRequest((start / length), length, Sort.Direction.ASC, "id");
-
+        Page<Employee> employeesPage = null;
         if (dateHired.isEmpty()) {
-            return repo.findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContaining(fullName, phone, request);
+            employeesPage = repo.findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContaining(fullName, phone, request);
         } else {
-            return repo.findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContainingAndDateHired(fullName, phone, dateHired, request);
+            employeesPage = repo.findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContainingAndDateHired(fullName, phone, dateHired, request);
         }
+
+        for (Employee emp : employeesPage) {
+            for (WorkingSchedule schedule : emp.getWorkingSchedules()) {
+                schedule.setEmployee(null);
+            }
+        }
+
+        return employeesPage;
     }
 
     public Employee findById(Long id) throws Exception {

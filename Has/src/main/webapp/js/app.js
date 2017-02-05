@@ -26,10 +26,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         .state('loggedin.root.users.edit', stateUserEdit);
 
     $stateProvider // Employees module
-     .state('loggedin.root.employees', { abstract: true })
-     .state('loggedin.root.employees.list', stateEmployeeList)
-     .state('loggedin.root.employees.add', stateEmployeeAdd)
-     .state('loggedin.root.employees.edit', stateEmployeeEdit);
+        .state('loggedin.root.employees', {abstract: true})
+        .state('loggedin.root.employees.list', stateEmployeeList)
+        .state('loggedin.root.employees.add', stateEmployeeAdd)
+        .state('loggedin.root.employees.edit', stateEmployeeEdit)
+        .state('loggedin.root.employees.schedule', stateWorkingSchedule);
 
     $stateProvider // Guests module
         .state('loggedin.root.guests', {abstract: true})
