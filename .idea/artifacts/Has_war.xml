@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="Has:war">
-    <output-path>$PROJECT_DIR$/Has/target</output-path>
-    <root id="archive" name="Has-0.0.1-SNAPSHOT.war">
-      <element id="artifact" artifact-name="Has:war exploded" />
-    </root>
-  </artifact>
-</component>
