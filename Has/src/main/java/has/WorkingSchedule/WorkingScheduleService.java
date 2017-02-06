@@ -55,6 +55,11 @@ public class WorkingScheduleService {
         if (dbSchedule == null) {
             throw new Exception("There is no schedule with such ID");
         }
+
+        Employee employee = dbSchedule.getEmployee();
+        employee.setWorkingSchedules(null);
+        dbSchedule.setEmployee(employee);
+
         return dbSchedule;
     }
 

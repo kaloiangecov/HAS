@@ -86,8 +86,7 @@ public class UserController {
     public Principal login(Principal user) throws Exception {
         User dbUser = userService.findByUsername(user.getName());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        dbUser.setLastLogin(sdf.format(new Date()));
-        userService.update(dbUser.getId(), dbUser);
+        userService.updateLastLogin(dbUser.getId(), sdf.format(new Date()));
 
         return user;
     }

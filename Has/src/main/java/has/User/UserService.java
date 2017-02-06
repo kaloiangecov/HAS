@@ -49,6 +49,17 @@ public class UserService {
         return repo.save(dbUser);
     }
 
+    public User updateLastLogin(Long id, String lastLogin) throws Exception {
+        User dbUser = repo.findOne(id);
+        if (dbUser == null) {
+            throw new Exception("There is no user with such ID");
+        }
+
+        dbUser.setLastLogin(lastLogin);
+
+        return repo.save(dbUser);
+    }
+
     public List<User> getAllUsers() {
         return repo.findAll();
     }

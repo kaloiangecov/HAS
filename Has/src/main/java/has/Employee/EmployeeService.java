@@ -62,11 +62,22 @@ public class EmployeeService {
         if (employee == null) {
             throw new Exception("There is no employee with such ID");
         }
+
+        for (WorkingSchedule schedule : employee.getWorkingSchedules()) {
+            schedule.setEmployee(null);
+        }
+
         return employee;
     }
 
     public Employee findByUserId(Long userId) throws Exception {
-        return repo.findByUserId(userId);
+        Employee employee = repo.findByUserId(userId);
+
+        for (WorkingSchedule schedule : employee.getWorkingSchedules()) {
+            schedule.setEmployee(null);
+        }
+
+        return employee;
     }
 
     public Employee remove(Long id) throws Exception {
