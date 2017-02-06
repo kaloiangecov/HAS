@@ -350,7 +350,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
     function loadEvents() {
         $http({
-            method: "GET",
+            method: "POST",
             url: "reservations",
             responseType: "json",
             headers: {
@@ -361,12 +361,9 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 $scope.events.list = [];
 
                 angular.forEach(response.data, function (reservation, key) {
-                    var arrStartDate = reservation.startDate.split('/');
-                    var arrEndDate = reservation.endDate.split('/');
-
                     var tmpEvent = {
-                        start: new Date(arrStartDate[2], parseInt(arrStartDate[1]) - 1, parseInt(arrStartDate[0]) + 1),
-                        end: new Date(arrEndDate[2], parseInt(arrEndDate[1]) - 1, arrEndDate[0]),
+                        start: new Date(reservation.startDate),
+                        end: new Date(reservation.endDate),
                         id: reservation.id,
                         resource: (reservation.reservationGuests[0].room.id - 1),
                         status: reservation.status,
@@ -418,12 +415,9 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             $scope.reservationGuest.room = $scope.events.resources[$scope.events.new.resource];
             $scope.reservationGuest.owner = true;
 
-            var arrStartDate = $scope.events.new.start.value.substr(0, 10).split('-');
-            var arrEndDate = $scope.events.new.end.value.substr(0, 10).split('-');
-
             var objReservation = {
-                startDate: (arrStartDate[2] + '/' + arrStartDate[1] + '/' + arrStartDate[0]),
-                endDate: (arrEndDate[2] + '/' + arrEndDate[1] + '/' + arrEndDate[0]),
+                startDate: $scope.events.new.start.value,
+                endDate: $scope.events.new.end.value,
                 price: 40.0,
                 discount: 0,
                 numberAdults: 1,

@@ -2,6 +2,7 @@ package has.Reservation;
 
 import has.ReservationGuest.ReservationGuest;
 import has.User.User;
+import has.WorkingSchedule.WorkingSchedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,10 @@ public class ReservationService {
             for (ReservationGuest reservationGuest : reservation.getReservationGuests()) {
                 reservationGuest.setReservation(null);
             }
+
+            for (WorkingSchedule schedule : reservation.getReceptionist().getWorkingSchedules()) {
+                schedule.setEmployee(null);
+            }
         }
 
         return reservations;
@@ -40,6 +45,15 @@ public class ReservationService {
         if(dbReservation == null){
             throw new Exception("There is no reservation with such ID");
         }
+
+        for (ReservationGuest reservationGuest : dbReservation.getReservationGuests()) {
+            reservationGuest.setReservation(null);
+        }
+
+        for (WorkingSchedule schedule : dbReservation.getReceptionist().getWorkingSchedules()) {
+            schedule.setEmployee(null);
+        }
+
         return dbReservation;
     }
 

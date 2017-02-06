@@ -45,8 +45,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $interval
             DTColumnBuilder.newColumn('personalData.phone', 'Phone Number'),
             DTColumnBuilder.newColumn('dateHired', 'Date Hired')
                 .renderWith(function (date) {
-                    var dateItems = date.split("/");
-                    return new Date(dateItems[2], (dateItems[1] - 1), dateItems[0]).toLocaleDateString();
+                    return new Date(date).toLocaleDateString();
                 }),
             DTColumnBuilder.newColumn('user.username', 'User'),
             DTColumnBuilder.newColumn('id').notSortable().withClass('actions-column')
@@ -141,7 +140,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $interval
                     autoUpdateInput: false
                 },
                 function (start) {
-                    ctrl.filters.dateHired = start.format("DD/MM/YYYY");
+                    ctrl.filters.dateHired = start.format("YYYY-MM-DD");
                     $('#filterDateHired').val(ctrl.filters.dateHired);
                 });
 
@@ -155,7 +154,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $interval
                     autoUpdateInput: false
                 },
                 function (start) {
-                    $scope.employee.dateHired = start.format("DD/MM/YYYY");
+                    $scope.employee.dateHired = start.format("YYYY-MM-DD");
                     $('#dateHired').val($scope.employee.dateHired);
                 });
             $('#identityIssueDate').daterangepicker({
@@ -164,7 +163,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $interval
                     autoUpdateInput: false
                 },
                 function (start) {
-                    $scope.employee.personalData.identityIssueDate = start.format("DD/MM/YYYY");
+                    $scope.employee.personalData.identityIssueDate = start.format("YYYY-MM-DD");
                     $('#identityIssueDate').val($scope.employee.personalData.identityIssueDate);
                 });
             $('#identityExpireDate').daterangepicker({
@@ -173,7 +172,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $interval
                     autoUpdateInput: false
                 },
                 function (start) {
-                    $scope.employee.personalData.identityExpireDate = start.format("DD/MM/YYYY");
+                    $scope.employee.personalData.identityExpireDate = start.format("YYYY-MM-DD");
                     $('#identityExpireDate').val($scope.employee.personalData.identityExpireDate);
                 });
         }

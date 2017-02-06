@@ -151,7 +151,7 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $interval, $
                     autoUpdateInput: false
                 },
                 function (start) {
-                    $scope.guest.personalData.identityIssueDate = start.format("DD/MM/YYYY");
+                    $scope.guest.personalData.identityIssueDate = start.format("YYYY-MM-DD");
                     $('#identityIssueDate').val($scope.guest.personalData.identityIssueDate);
                 });
             $('#identityExpireDate').daterangepicker({
@@ -160,7 +160,7 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $interval, $
                     autoUpdateInput: false
                 },
                 function (start) {
-                    $scope.guest.personalData.identityExpireDate = start.format("DD/MM/YYYY");
+                    $scope.guest.personalData.identityExpireDate = start.format("YYYY-MM-DD");
                     $('#identityExpireDate').val($scope.guest.personalData.identityExpireDate);
                 });
         }

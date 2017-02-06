@@ -29,7 +29,7 @@ public class ReservationController {
         return reservationService.save(reservation, user);
     }
 
-    @RequestMapping(value = "/reservations", method = RequestMethod.GET,
+    @RequestMapping(value = "/reservations", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('PERM_VIEW_RESERVATION')")
