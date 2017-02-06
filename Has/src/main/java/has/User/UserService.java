@@ -35,6 +35,10 @@ public class UserService {
             throw new Exception("There is no user with such ID");
         }
 
+        if (repo.findByUsername(user.getUsername()) != null) {
+            throw new UserAlreadyExists(user.getUsername());
+        }
+
         dbUser.setLastLogin(user.getLastLogin());
         dbUser.setPassword(user.getPassword());
         dbUser.setRegDate(user.getRegDate());
