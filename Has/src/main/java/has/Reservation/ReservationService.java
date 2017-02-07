@@ -102,14 +102,14 @@ public class ReservationService {
         return repo.save(dbReservation);
     }
 
-    public Reservation move(Long id, String start, String end, User user) throws Exception {
+    public Reservation move(Long id, Reservation reservation, User user) throws Exception {
         Reservation dbReservation = repo.findOne(id);
         if (dbReservation == null) {
             throw new Exception("There is no reservation with such ID");
         }
 
-        dbReservation.setStartDate(start);
-        dbReservation.setEndDate(end);
+        dbReservation.setStartDate(reservation.getStartDate());
+        dbReservation.setEndDate(reservation.getEndDate());
         dbReservation.setLastModifiedBy(user);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

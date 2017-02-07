@@ -68,6 +68,6 @@ public class ReservationController {
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('PERM_EDIT_RESERVATION')")
     public Reservation moveReservation(@PathVariable Long id, @RequestBody Reservation reservation, @AuthenticationPrincipal User user) throws Exception {
-        return reservationService.move(id, reservation.getStartDate(), reservation.getEndDate(), user);
+        return reservationService.move(id, reservation, user);
     }
 }

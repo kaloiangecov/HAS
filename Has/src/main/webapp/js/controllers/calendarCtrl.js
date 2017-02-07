@@ -222,6 +222,11 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             });
         },
         onEventMoved: function (args) {
+            if (!confirm("Are you sure you want to move the reservation?")) {
+                loadEvents();
+                return;
+            }
+
             var tmpReservatoin = args.e.data.objReservation;
             tmpReservatoin.startDate = args.newStart.value.substr(0, 10);
             tmpReservatoin.endDate = args.newEnd.value.substr(0, 10);
@@ -255,7 +260,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                             $scope.displayMessage(response.data);
                         })
                         .then(function (data) {
-                            $scope.scheduler.message("Reservation moved: " + data.id);
+                            $scope.scheduler.message("Reservation moved: " + args.e.text());
                             loadEvents();
                         });
 
@@ -265,7 +270,31 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 });
         },
         onEventResized: function (args) {
-            $scope.scheduler.message("Reservation period changed: " + args.e.text());
+            if (!confirm("Are you sure you want to resize the reservation?")) {
+                loadEvents();
+                return;
+            }
+
+            var tmpReservatoin = args.e.data.objReservation;
+            tmpReservatoin.startDate = args.newStart.value.substr(0, 10);
+            tmpReservatoin.endDate = args.newEnd.value.substr(0, 10);
+
+            $http({
+                method: "PUT",
+                url: ("reservation/move/" + tmpReservatoin.id),
+                responseType: "json",
+                headers: {
+                    "Authorization": $scope.authentication
+                },
+                data: tmpReservatoin
+            }).then(
+                function (response) { //success
+                    $scope.scheduler.message("Reservation duration resized: " + args.e.text());
+                    loadEvents();
+                },
+                function (response) { //error
+                    $scope.displayMessage(response.data);
+                });
         },
         onEventDeleted: function (args) {
             $scope.events.new = {};
