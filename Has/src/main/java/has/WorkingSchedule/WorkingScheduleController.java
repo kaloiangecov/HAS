@@ -65,7 +65,7 @@ public class WorkingScheduleController {
                 schedules.getContent());
     }
 
-    @RequestMapping(value = "/schedules/{id}", method = RequestMethod.GET,
+    @RequestMapping(value = "/schedule/{id}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('ADMIN')")

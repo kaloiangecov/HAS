@@ -19,7 +19,7 @@ a > i.fa-refresh:hover {
     color: #26DD9A;
 }
 
-a > i.fa-ban {
+a > i.fa-trash-o {
     color: #e55;
 }
 a > i.fa-ban:hover {

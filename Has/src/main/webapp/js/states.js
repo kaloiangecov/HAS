@@ -156,11 +156,34 @@ var stateEmployeeEdit = {
     }
 };
 
-var stateWorkingSchedule = {
-    url: '/employees/schedule',
+//------------------------------------------------//
+
+
+//--------------------SCHEDULE--------------------//
+
+var stateScheduleList = {
+    url: '/schedule/list',
     views: {
         'content@loggedin': {
-            templateUrl: 'templates/employees/schedule.html'
+            templateUrl: 'templates/schedule/list.html'
+        }
+    }
+};
+
+var stateScheduleAdd = {
+    url: '/schedule/add',
+    views: {
+        'content@loggedin': {
+            templateUrl: 'templates/schedule/add.html'
+        }
+    }
+};
+
+var stateScheduleEdit = {
+    url: '/schedule/edit/:id',
+    views: {
+        'content@loggedin': {
+            templateUrl: 'templates/schedule/add.html'
         }
     }
 };

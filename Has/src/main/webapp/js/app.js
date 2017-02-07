@@ -29,8 +29,13 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         .state('loggedin.root.employees', {abstract: true})
         .state('loggedin.root.employees.list', stateEmployeeList)
         .state('loggedin.root.employees.add', stateEmployeeAdd)
-        .state('loggedin.root.employees.edit', stateEmployeeEdit)
-        .state('loggedin.root.employees.schedule', stateWorkingSchedule);
+        .state('loggedin.root.employees.edit', stateEmployeeEdit);
+
+    $stateProvider // Working Schedule module
+        .state('loggedin.root.schedule', {abstract: true})
+        .state('loggedin.root.schedule.list', stateScheduleList)
+        .state('loggedin.root.schedule.add', stateScheduleAdd)
+        .state('loggedin.root.schedule.edit', stateScheduleEdit);
 
     $stateProvider // Guests module
         .state('loggedin.root.guests', {abstract: true})

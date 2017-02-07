@@ -36,7 +36,15 @@ public class EmployeeService {
     }
 
     public List<Employee> getAllEmployees() {
-        return repo.findAll();
+        List<Employee> employees = repo.findAll();
+
+        for (Employee emp : employees) {
+            for (WorkingSchedule schedule : emp.getWorkingSchedules()) {
+                schedule.setEmployee(null);
+            }
+        }
+
+        return employees;
     }
 
     public Page<Employee> searchEmployees(int start, int length, String fullName, String phone, String dateHired) {

@@ -13,7 +13,7 @@
                         <div class="col-md-8 col-sm-8 col-xs-12">
                             <input type="text" class="form-control" id="dateHired" name="dateHired"
                                    ng-model="employee.dateHired" minlength="7" maxlength="10" required="required"/>
-                            <div ng-show="employeeForm.$submitted || employeeForm.password.$touched"
+                            <div ng-show="employeeForm.$submitted || employeeForm.dateHired.$touched"
                                  class="validation-message">
                                 <span ng-show="employeeForm.dateHired.$error.required">This field is required</span>
                                 <span ng-show="employeeForm.dateHired.$error.minlength">Input too short</span>

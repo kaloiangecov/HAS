@@ -148,32 +148,12 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $interval
             //$interval($scope.reloadTableData, 30000);
         }
         else {
-            $('#dateHired').daterangepicker({
+            $('#dateHired,#identityIssueDate,#identityExpireDate').daterangepicker({
                     singleDatePicker: true,
                     showDropdowns: true,
-                    autoUpdateInput: false
-                },
-                function (start) {
-                    $scope.employee.dateHired = start.format("YYYY-MM-DD");
-                    $('#dateHired').val($scope.employee.dateHired);
-                });
-            $('#identityIssueDate').daterangepicker({
-                    singleDatePicker: true,
-                    showDropdowns: true,
-                    autoUpdateInput: false
-                },
-                function (start) {
-                    $scope.employee.personalData.identityIssueDate = start.format("YYYY-MM-DD");
-                    $('#identityIssueDate').val($scope.employee.personalData.identityIssueDate);
-                });
-            $('#identityExpireDate').daterangepicker({
-                    singleDatePicker: true,
-                    showDropdowns: true,
-                    autoUpdateInput: false
-                },
-                function (start) {
-                    $scope.employee.personalData.identityExpireDate = start.format("YYYY-MM-DD");
-                    $('#identityExpireDate').val($scope.employee.personalData.identityExpireDate);
+                locale: {
+                    format: "YYYY-MM-DD"
+                }
                 });
         }
     });
