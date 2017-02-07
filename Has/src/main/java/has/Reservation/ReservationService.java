@@ -6,6 +6,7 @@ import has.WorkingSchedule.WorkingSchedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -85,8 +86,27 @@ public class ReservationService {
         dbReservation.setStartDate(reservation.getStartDate());
         dbReservation.setNumberChildren(reservation.getNumberChildren());
         dbReservation.setLastModifiedBy(user);
-        dbReservation.setLastModifiedTime((new Date().toString()));
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        dbReservation.setLastModifiedTime(sdf.format(new Date()));
+
         dbReservation.setReceptionist(reservation.getReceptionist());
+
+        return repo.save(dbReservation);
+    }
+
+    public Reservation move(Long id, String start, String end, User user) throws Exception {
+        Reservation dbReservation = repo.findOne(id);
+        if (dbReservation == null) {
+            throw new Exception("There is no reservation with such ID");
+        }
+
+        dbReservation.setStartDate(start);
+        dbReservation.setEndDate(end);
+        dbReservation.setLastModifiedBy(user);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        dbReservation.setLastModifiedTime(sdf.format(new Date()));
 
         return repo.save(dbReservation);
     }

@@ -61,4 +61,13 @@ public class ReservationController {
     public Reservation updateReservation(@PathVariable Long id, @RequestBody @Valid Reservation reservation, @AuthenticationPrincipal User user) throws Exception {
         return reservationService.update(id, reservation, user);
     }
+
+    @RequestMapping(value = "/reservation/move/{id}", method = RequestMethod.PUT,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_EDIT_RESERVATION')")
+    public Reservation moveReservation(@PathVariable Long id, @RequestBody Reservation reservation, @AuthenticationPrincipal User user) throws Exception {
+        return reservationService.move(id, reservation.getStartDate(), reservation.getEndDate(), user);
+    }
 }
