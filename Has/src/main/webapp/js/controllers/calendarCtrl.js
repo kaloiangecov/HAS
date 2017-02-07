@@ -227,22 +227,41 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             tmpReservatoin.endDate = args.newEnd.value.substr(0, 10);
 
             $http({
-                method: "PUT",
-                url: ("reservation/move/" + args.e.data.objReservation.id),
-                data: tmpReservatoin,
+                method: "GET",
+                url: ("room/" + args.e.resource()),
                 responseType: "json",
                 headers: {
                     "Authorization": $scope.authentication
                 }
             }).then(
                 function (response) { //success
-                    return response.data;
+                    angular.forEach(tmpReservatoin.reservationGuests, function (value, key) {
+                        value.room = response.data;
+                    });
+
+                    $http({
+                        method: "PUT",
+                        url: ("reservation/" + tmpReservatoin.id),
+                        data: tmpReservatoin,
+                        responseType: "json",
+                        headers: {
+                            "Authorization": $scope.authentication
+                        }
+                    }).then(
+                        function (response) { //success
+                            return response.data;
+                        },
+                        function (response) { //error
+                            $scope.displayMessage(response.data);
+                        })
+                        .then(function (data) {
+                            $scope.scheduler.message("Reservation moved: " + data.id);
+                            loadEvents();
+                        });
+
                 },
                 function (response) { //error
                     $scope.displayMessage(response.data);
-                })
-                .then(function (data) {
-                    $scope.scheduler.message("Reservation moved: " + data.id);
                 });
         },
         onEventResized: function (args) {
@@ -391,7 +410,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                         start: reservation.startDate,
                         end: reservation.endDate,
                         id: reservation.id,
-                        resource: (reservation.reservationGuests[0].room.id - 1),
+                        resource: reservation.reservationGuests[0].room.id,
                         status: reservation.status,
                         text: reservation.reservationGuests[0].guest.personalData.fullName,
                         objReservation: reservation

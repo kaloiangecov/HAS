@@ -1,6 +1,7 @@
 package has.Reservation;
 
 import has.ReservationGuest.ReservationGuest;
+import has.Room.Room;
 import has.User.User;
 import has.WorkingSchedule.WorkingSchedule;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +79,7 @@ public class ReservationService {
         dbReservation.setAllInclusive(reservation.isAllInclusive());
         dbReservation.setBreakfast(reservation.isBreakfast());
         dbReservation.setDinner(reservation.isDinner());
+        dbReservation.setGroup(reservation.isGroup());
         dbReservation.setDiscount(reservation.getDiscount());
 
         dbReservation.setEndDate(reservation.getEndDate());
@@ -91,6 +93,11 @@ public class ReservationService {
         dbReservation.setLastModifiedTime(sdf.format(new Date()));
 
         dbReservation.setReceptionist(reservation.getReceptionist());
+
+        Room newRoom = reservation.getReservationGuests().get(0).getRoom();
+        for (ReservationGuest reservationGuest : dbReservation.getReservationGuests()) {
+            reservationGuest.setRoom(newRoom);
+        }
 
         return repo.save(dbReservation);
     }
