@@ -1,6 +1,5 @@
 package has.Reservation;
 
-import has.Employee.Employee;
 import has.User.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,6 +25,7 @@ public class Reservation {
     private boolean allInclusive;
     private boolean breakfast;
     private boolean dinner;
+    @Column(name = "F_GROUP")
     private boolean group;
 
     @NotNull
@@ -38,8 +38,6 @@ public class Reservation {
 
     @NotNull
     private String endDate;
-
-    //    private List<ReservationGuest> guests;
 
     @ManyToOne
     private User lastModifiedBy;
@@ -57,13 +55,13 @@ public class Reservation {
     @NotNull
     private Double price;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinTable(name = "RESERVATION_EMPLOYEE", joinColumns = {
-            @JoinColumn(name = "RESERVATION_ID", nullable = false, updatable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "EMPLOYEE_ID",
-                    nullable = false, updatable = false)})
-    private Employee receptionist;
+//    @NotNull
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinTable(name = "RESERVATION_EMPLOYEE", joinColumns = {
+//            @JoinColumn(name = "RESERVATION_ID", nullable = false, updatable = false)},
+//            inverseJoinColumns = {@JoinColumn(name = "EMPLOYEE_ID",
+//                    nullable = false, updatable = false)})
+//    private Employee receptionist;
 
     @NotNull
     @Min(0)

@@ -28,7 +28,7 @@ public class ReservationService {
 
     public Reservation findById(Long id) throws Exception {
         Reservation dbReservation = repo.findOne(id);
-        if(dbReservation == null){
+        if (dbReservation == null) {
             throw new Exception("There is no reservation with such ID");
         }
         return dbReservation;
@@ -36,7 +36,7 @@ public class ReservationService {
 
     public Reservation remove(Long id) throws Exception {
         Reservation dbReservation = repo.findOne(id);
-        if(dbReservation == null){
+        if (dbReservation == null) {
             throw new Exception("There is no reservation with such ID");
         }
         repo.delete(dbReservation);
@@ -45,7 +45,7 @@ public class ReservationService {
 
     public Reservation update(Long id, Reservation reservation, User user) throws Exception {
         Reservation dbReservation = repo.findOne(id);
-        if(dbReservation == null){
+        if (dbReservation == null) {
             throw new Exception("There is no reservation with such ID");
         }
 

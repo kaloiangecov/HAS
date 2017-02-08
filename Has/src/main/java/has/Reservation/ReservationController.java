@@ -25,7 +25,7 @@ public class ReservationController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('PERM_CREATE_RESERVATION')")
-    public Reservation save(@RequestBody Reservation reservation, @AuthenticationPrincipal @Valid User user) {
+    public Reservation save(@RequestBody Reservation reservation, @AuthenticationPrincipal User user) {
         return reservationService.save(reservation, user);
     }
 

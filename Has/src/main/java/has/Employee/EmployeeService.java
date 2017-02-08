@@ -1,5 +1,6 @@
 package has.Employee;
 
+import has.Utils.QueryToPageExecutor;
 import has.mailsender.MailTemplates;
 import has.mailsender.SendMailSSL;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 /**
@@ -18,6 +20,10 @@ public class EmployeeService {
 
     @Autowired
     private EmployeeRepository repo;
+
+    private EntityManager entityManager;
+
+    private QueryToPageExecutor queryToPageExecutor;
 
     public Employee save(Employee employee) throws Exception {
         Employee dbEmployee = repo.findByPersonalDataEgn(employee.getPersonalData().getEgn());
@@ -40,6 +46,23 @@ public class EmployeeService {
 
     public Page<Employee> searchEmployees(int start, int length, String fullName, String phone, String dateHired) {
         PageRequest request = new PageRequest((start / length), length, Sort.Direction.ASC, "id");
+//        Long page = Long.valueOf(start);
+//        has.Utils.PageRequest request = new has.Utils.PageRequest(page, length);
+//
+//        QEmployee employee = QEmployee.employee;
+//        JPQLQuery query = new JPAQuery(entityManager);
+//
+//        Page<Employee> employees = null;
+//        query.from(employee)
+//                .where(employee.personalData.fullName.containsIgnoreCase(fullName))
+//                .where(employee.personalData.phone.contains(phone));
+//        if (!dateHired.isEmpty()) {
+//            query.from(employee)
+//                    .where(employee.dateHired.eq(dateHired));
+//        }
+//
+//        return queryToPageExecutor.getPage(query, request);
+
 
         if (dateHired.isEmpty()) {
             return repo.findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContaining(fullName, phone, request);
