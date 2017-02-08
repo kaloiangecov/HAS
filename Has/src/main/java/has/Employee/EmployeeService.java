@@ -38,11 +38,9 @@ public class EmployeeService {
     public List<Employee> getAllEmployees() {
         List<Employee> employees = repo.findAll();
 
-        for (Employee emp : employees) {
-            for (WorkingSchedule schedule : emp.getWorkingSchedules()) {
+        for (Employee emp : employees)
+            for (WorkingSchedule schedule : emp.getWorkingSchedules())
                 schedule.setEmployee(null);
-            }
-        }
 
         return employees;
     }
@@ -56,11 +54,9 @@ public class EmployeeService {
             employeesPage = repo.findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContainingAndDateHired(fullName, phone, dateHired, request);
         }
 
-        for (Employee emp : employeesPage) {
-            for (WorkingSchedule schedule : emp.getWorkingSchedules()) {
+        for (Employee emp : employeesPage)
+            for (WorkingSchedule schedule : emp.getWorkingSchedules())
                 schedule.setEmployee(null);
-            }
-        }
 
         return employeesPage;
     }
@@ -81,9 +77,8 @@ public class EmployeeService {
     public Employee findByUserId(Long userId) throws Exception {
         Employee employee = repo.findByUserId(userId);
 
-        for (WorkingSchedule schedule : employee.getWorkingSchedules()) {
+        for (WorkingSchedule schedule : employee.getWorkingSchedules())
             schedule.setEmployee(null);
-        }
 
         return employee;
     }

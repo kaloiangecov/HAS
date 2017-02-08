@@ -26,11 +26,8 @@ public class WorkingScheduleService {
     public List<WorkingSchedule> getAllSchedules() {
         List<WorkingSchedule> schedules = repo.findAll();
 
-        for (WorkingSchedule schedule : schedules) {
-            Employee employee = schedule.getEmployee();
-            employee.setWorkingSchedules(null);
-            schedule.setEmployee(employee);
-        }
+        for (WorkingSchedule schedule : schedules)
+            schedule = removeRecursions(schedule);
 
         return schedules;
     }
@@ -41,11 +38,8 @@ public class WorkingScheduleService {
         Page<WorkingSchedule> schedulePage = repo.findByStartDateGreaterThanAndEndDateLessThan(startDate, endDate, request);
         //Page<WorkingSchedule> schedulePage = repo.findAll(request);
 
-        for (WorkingSchedule schedule : schedulePage) {
-            Employee employee = schedule.getEmployee();
-            employee.setWorkingSchedules(null);
-            schedule.setEmployee(employee);
-        }
+        for (WorkingSchedule schedule : schedulePage)
+            schedule = removeRecursions(schedule);
 
         return schedulePage;
     }
@@ -56,11 +50,7 @@ public class WorkingScheduleService {
             throw new Exception("There is no schedule with such ID");
         }
 
-        Employee employee = dbSchedule.getEmployee();
-        employee.setWorkingSchedules(null);
-        dbSchedule.setEmployee(employee);
-
-        return dbSchedule;
+        return removeRecursions(dbSchedule);
     }
 
     public WorkingSchedule remove(Long id) throws Exception {
@@ -69,7 +59,8 @@ public class WorkingScheduleService {
             throw new Exception("There is no schedule with such ID");
         }
         repo.delete(dbSchedule);
-        return dbSchedule;
+
+        return removeRecursions(dbSchedule);
     }
 
     public WorkingSchedule update(Long id, WorkingSchedule schedule) throws Exception {
@@ -80,6 +71,15 @@ public class WorkingScheduleService {
         dbSchedule.setStartDate(schedule.getStartDate());
         dbSchedule.setEndDate(schedule.getEndDate());
         dbSchedule.setShift(schedule.getShift());
-        return repo.save(dbSchedule);
+
+        return removeRecursions(repo.save(dbSchedule));
+    }
+
+    private WorkingSchedule removeRecursions(WorkingSchedule schedule) {
+        Employee employee = schedule.getEmployee();
+        employee.setWorkingSchedules(null);
+        schedule.setEmployee(employee);
+
+        return schedule;
     }
 }

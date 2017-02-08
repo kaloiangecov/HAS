@@ -30,15 +30,8 @@ public class ReservationService {
         List<Reservation> reservations = repo.findAll();
 
         for (Reservation reservation : reservations) {
-            for (ReservationGuest reservationGuest : reservation.getReservationGuests()) {
-                reservationGuest.setReservation(null);
-            }
-
-            for (WorkingSchedule schedule : reservation.getReceptionist().getWorkingSchedules()) {
-                schedule.setEmployee(null);
-            }
+            reservation = removeRecursions(reservation);
         }
-
         return reservations;
     }
 
@@ -48,15 +41,7 @@ public class ReservationService {
             throw new Exception("There is no reservation with such ID");
         }
 
-        for (ReservationGuest reservationGuest : dbReservation.getReservationGuests()) {
-            reservationGuest.setReservation(null);
-        }
-
-        for (WorkingSchedule schedule : dbReservation.getReceptionist().getWorkingSchedules()) {
-            schedule.setEmployee(null);
-        }
-
-        return dbReservation;
+        return removeRecursions(dbReservation);
     }
 
     public Reservation remove(Long id) throws Exception {
@@ -64,8 +49,10 @@ public class ReservationService {
         if(dbReservation == null){
             throw new Exception("There is no reservation with such ID");
         }
+
         repo.delete(dbReservation);
-        return dbReservation;
+
+        return removeRecursions(dbReservation);
     }
 
     public Reservation update(Long id, Reservation reservation, User user) throws Exception {
@@ -99,7 +86,7 @@ public class ReservationService {
             reservationGuest.setRoom(newRoom);
         }
 
-        return repo.save(dbReservation);
+        return removeRecursions(repo.save(dbReservation));
     }
 
     public Reservation move(Long id, Reservation reservation, User user) throws Exception {
@@ -115,6 +102,20 @@ public class ReservationService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         dbReservation.setLastModifiedTime(sdf.format(new Date()));
 
-        return repo.save(dbReservation);
+        return removeRecursions(repo.save(dbReservation));
+    }
+
+    private Reservation removeRecursions(Reservation reservation) {
+        for (ReservationGuest reservationGuest : reservation.getReservationGuests()) {
+            reservationGuest.setReservation(null);
+        }
+
+        List<WorkingSchedule> schedules = reservation.getReceptionist().getWorkingSchedules();
+        for (WorkingSchedule schedule : schedules) {
+            schedule.setEmployee(null);
+        }
+        reservation.getReceptionist().setWorkingSchedules(schedules);
+
+        return reservation;
     }
 }
