@@ -1,21 +1,25 @@
-app.controller("guestCtrl", function ($scope, $state, $stateParams, $interval, $resource, $http, DTOptionsBuilder, DTColumnBuilder) {
+app.controller("workingScheduleCtrl", function ($scope, $http, $stateParams, DTOptionsBuilder, DTColumnBuilder) {
     var ctrl = this;
-    $scope.page.title = "Guests";
-    $scope.master = {};
+    $scope.page.title = "Working Schedule";
+    $scope.rolesList = [];
     ctrl.filters = {
-        fullName: "",
-        phone: ""
+        roleID: 1,
+        startDate: new Date().toISOString().substr(0, 10),
+        endDate: new Date().toISOString().substr(0, 10)
     };
-    $scope.usersList = [];
+    $scope.master = {};
+    ctrl.employees = [];
     $scope.isEdit = false;
 
-    if (window.location.hash.includes("list")) {
-        // guests table
-        $scope.dtInstance = {};
 
+    if (window.location.hash.includes("list")) {
+        $scope.isEdit = false;
+
+        // schedule table
+        $scope.dtInstance = {};
         $scope.dtOptions = DTOptionsBuilder.newOptions()
             .withOption('ajax', {
-                url: 'guests/search',
+                url: 'schedules/search',
                 type: 'GET',
                 dataType: "json",
                 headers: {
@@ -39,14 +43,23 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $interval, $
             .withOption('dom', 'lrtip');
 
         $scope.dtColumns = [
-            DTColumnBuilder.newColumn('id', 'ID'),
-            DTColumnBuilder.newColumn('personalData.fullName', 'Full Name'),
-            DTColumnBuilder.newColumn('personalData.phone', 'Phone Number'),
-            DTColumnBuilder.newColumn('personalData.address', 'Address'),
-            DTColumnBuilder.newColumn('numberReservations', 'Number of Reservations'),
+            DTColumnBuilder.newColumn('employee.personalData.fullName', 'Employee'),
+            DTColumnBuilder.newColumn('employee.user.userRole.roleName', 'Post'),
+            DTColumnBuilder.newColumn('startDate', 'Start Date')
+                .renderWith(function (date) {
+                    return new Date(date).toLocaleString();
+                }),
+            DTColumnBuilder.newColumn('endDate', 'End Date')
+                .renderWith(function (date) {
+                    return new Date(date).toLocaleString();
+                }),
+            DTColumnBuilder.newColumn('shift', 'Shift')
+                .renderWith(function (data) {
+                    return $scope.shifts[data]
+                }),
             DTColumnBuilder.newColumn('id').notSortable().withClass('actions-column')
                 .renderWith(function (data) {
-                    var html = '<a class="action-btn" href="#!/guests/edit/' +
+                    var html = '<a class="action-btn" href="#!/schedule/edit/' +
                         data +
                         '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
                     return html;
@@ -58,10 +71,31 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $interval, $
                 console.log(list);
             }, resetPaging);
         };
-    }
-    else {
-        function saveGuest(callback) {
-            var url = $scope.isEdit ? ("guest/" + $stateParams.id) : "guest";
+
+        $scope.getAllRoles(function (data) {
+            $scope.rolesList = data;
+            $scope.filters.roleID = $scope.rolesList[0].id;
+        });
+    } else {
+        $scope.getAllEmployees = function (updateCallback) {
+            $http({
+                method: "GET",
+                url: "employees",
+                responseType: "json",
+                headers: {
+                    "Authorization": $scope.authentication
+                }
+            }).then(
+                function (response) { //success
+                    return response.data;
+                },
+                function (response) { //error
+                    $scope.displayMessage(response.data);
+                }).then(updateCallback);
+        };
+
+        function saveSchedule(callback) {
+            var url = $scope.isEdit ? ("schedule/" + $stateParams.id) : "schedule";
             var method = $scope.isEdit ? "PUT" : "POST";
 
             $http({
@@ -79,17 +113,13 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $interval, $
                 });
         }
 
-        $scope.getAllUsers(function (data) {
-            $scope.usersList = data;
-            $scope.usersList[data.length] = {
-                id: 0,
-                username: "-- None --"
-            };
+        $scope.getAllEmployees(function (data) {
+            ctrl.employees = data;
 
             if ($stateParams && $stateParams.id) {
                 $scope.isEdit = true;
 
-                var url = "guest/" + $stateParams.id;
+                var url = "schedule/" + $stateParams.id;
 
                 $http({
                     method: "GET",
@@ -100,52 +130,52 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $interval, $
                     }
                 }).then(
                     function (response) { //success
-                        return response.data;
+                        $scope.schedule = response.data;
                     },
                     function (response) { //error
                         $scope.displayMessage(response.data);
-                    }).then(
-                    function (data) {
-                        $scope.guest = data;
                     });
             }
             else {
                 $scope.isEdit = false;
-                $scope.guest = {
-                    numberReservations: 0,
-                    status: 0,
-                    personalData: {}
+                $scope.schedule = {
+                    startDate: new Date().toISOString().substr(0, 10),
+                    endDate: new Date().toISOString().substr(0, 10),
+                    employee: ctrl.employees[0],
+                    shift: 0
                 };
             }
         });
 
-        $scope.submit = function (guest) {
-            if ($scope.guestForm.$valid) {
-                $scope.master = angular.copy(guest);
+        $scope.submit = function (schedule) {
+            if ($scope.scheduleForm.$valid) {
+                $scope.master = angular.copy(schedule);
 
-                if ($scope.master.user.id === 0)
-                    delete $scope.master.user;
-
-                saveGuest(function () {
+                saveSchedule(function () {
                     if ($scope.isEdit) {
-                        alert('Edited: ' + $scope.master.personalData.fullName);
+                        alert('Edited!');
                     } else {
-                        alert('Created: ' + $scope.master.personalData.fullName);
+                        alert('Created!');
                     }
-                    window.location.hash = "#!/guests/list";
+                    window.location.hash = "#!/schedule/list";
                 });
             }
         };
     }
 
     angular.element(document).ready(function () {
-
         if (window.location.hash.includes("list")) {
+            $('#filterStartDate,#filterEndDate').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                locale: {
+                    format: "YYYY-MM-DD"
+                }
+            });
+
             $scope.reloadTableData();
-            //$interval($scope.reloadTableData, 30000);
-        }
-        else {
-            $('#dateHired,#identityIssueDate,#identityExpireDate').daterangepicker({
+        } else {
+            $('#startDate,#endDate').daterangepicker({
                 singleDatePicker: true,
                 showDropdowns: true,
                 locale: {
@@ -154,5 +184,4 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $interval, $
             });
         }
     });
-
 });

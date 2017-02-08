@@ -45,8 +45,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $interval
             DTColumnBuilder.newColumn('personalData.phone', 'Phone Number'),
             DTColumnBuilder.newColumn('dateHired', 'Date Hired')
                 .renderWith(function (date) {
-                    var dateItems = date.split("/");
-                    return new Date(dateItems[2], (dateItems[1] - 1), dateItems[0]).toLocaleDateString();
+                    return new Date(date).toLocaleDateString();
                 }),
             DTColumnBuilder.newColumn('user.username', 'User'),
             DTColumnBuilder.newColumn('id').notSortable().withClass('actions-column')
@@ -141,7 +140,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $interval
                     autoUpdateInput: false
                 },
                 function (start) {
-                    ctrl.filters.dateHired = start.format("DD/MM/YYYY");
+                    ctrl.filters.dateHired = start.format("YYYY-MM-DD");
                     $('#filterDateHired').val(ctrl.filters.dateHired);
                 });
 
@@ -149,32 +148,12 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $interval
             //$interval($scope.reloadTableData, 30000);
         }
         else {
-            $('#dateHired').daterangepicker({
+            $('#dateHired,#identityIssueDate,#identityExpireDate').daterangepicker({
                     singleDatePicker: true,
                     showDropdowns: true,
-                    autoUpdateInput: false
-                },
-                function (start) {
-                    $scope.employee.dateHired = start.format("DD/MM/YYYY");
-                    $('#dateHired').val($scope.employee.dateHired);
-                });
-            $('#identityIssueDate').daterangepicker({
-                    singleDatePicker: true,
-                    showDropdowns: true,
-                    autoUpdateInput: false
-                },
-                function (start) {
-                    $scope.employee.personalData.identityIssueDate = start.format("DD/MM/YYYY");
-                    $('#identityIssueDate').val($scope.employee.personalData.identityIssueDate);
-                });
-            $('#identityExpireDate').daterangepicker({
-                    singleDatePicker: true,
-                    showDropdowns: true,
-                    autoUpdateInput: false
-                },
-                function (start) {
-                    $scope.employee.personalData.identityExpireDate = start.format("DD/MM/YYYY");
-                    $('#identityExpireDate').val($scope.employee.personalData.identityExpireDate);
+                locale: {
+                    format: "YYYY-MM-DD"
+                }
                 });
         }
     });

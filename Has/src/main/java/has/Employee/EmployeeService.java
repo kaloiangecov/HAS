@@ -1,5 +1,6 @@
 package has.Employee;
 
+import has.WorkingSchedule.WorkingSchedule;
 import has.mailsender.MailTemplates;
 import has.mailsender.SendMailSSL;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,17 +36,29 @@ public class EmployeeService {
     }
 
     public List<Employee> getAllEmployees() {
-        return repo.findAll();
+        List<Employee> employees = repo.findAll();
+
+        for (Employee emp : employees)
+            for (WorkingSchedule schedule : emp.getWorkingSchedules())
+                schedule.setEmployee(null);
+
+        return employees;
     }
 
     public Page<Employee> searchEmployees(int start, int length, String fullName, String phone, String dateHired) {
         PageRequest request = new PageRequest((start / length), length, Sort.Direction.ASC, "id");
-
+        Page<Employee> employeesPage = null;
         if (dateHired.isEmpty()) {
-            return repo.findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContaining(fullName, phone, request);
+            employeesPage = repo.findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContaining(fullName, phone, request);
         } else {
-            return repo.findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContainingAndDateHired(fullName, phone, dateHired, request);
+            employeesPage = repo.findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContainingAndDateHired(fullName, phone, dateHired, request);
         }
+
+        for (Employee emp : employeesPage)
+            for (WorkingSchedule schedule : emp.getWorkingSchedules())
+                schedule.setEmployee(null);
+
+        return employeesPage;
     }
 
     public Employee findById(Long id) throws Exception {
@@ -53,11 +66,21 @@ public class EmployeeService {
         if (employee == null) {
             throw new Exception("There is no employee with such ID");
         }
+
+        for (WorkingSchedule schedule : employee.getWorkingSchedules()) {
+            schedule.setEmployee(null);
+        }
+
         return employee;
     }
 
     public Employee findByUserId(Long userId) throws Exception {
-        return repo.findByUserId(userId);
+        Employee employee = repo.findByUserId(userId);
+
+        for (WorkingSchedule schedule : employee.getWorkingSchedules())
+            schedule.setEmployee(null);
+
+        return employee;
     }
 
     public Employee remove(Long id) throws Exception {
@@ -74,6 +97,9 @@ public class EmployeeService {
         if (dbEmployee == null) {
             throw new Exception("There is no employee with such ID");
         }
+
+        if (repo.findByPersonalDataEgn(employee.getPersonalData().getEgn()) != null)
+            throw new Exception("Employee with EGN " + employee.getPersonalData().getEgn() + " already exists.");
 
         dbEmployee.setDateHired(employee.getDateHired());
         dbEmployee.setPersonalData(employee.getPersonalData());

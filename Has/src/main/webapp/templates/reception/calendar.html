@@ -47,37 +47,69 @@
                             ng-click="reset()"><span
                             aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" ng-hide="isAdditionalGuest">Add a New Reservation</h4>
-                    <h4 class="modal-title" ng-show="isAdditionalGuest">Add Additional Reservation</h4>
+                    <h4 class="modal-title" ng-hide="!isAdditionalGuest">Add Additional Reservation</h4>
                 </div>
                 <div class="modal-body row">
 
-
-                    <div class="form-group col-sm-12 col-xs-12">
-                        <label>
-                            <input type="radio" name="isNewGuest" ng-model="isNewGuest" ng-value="false"/>
-                            Select existing guest
-                        </label>
-                        <select class="form-control roles" ng-model="guests.selectedGuest"
-                                ng-options="item as item.personalData.fullName for item in guests.list track by item.id">
-                        </select>
+                    <div class="row-fluid">
+                        <div class="form-group col-xs-4">
+                            <label for="breakfast">
+                                <input type="checkbox" id="breakfast" name="breakfast"
+                                       ng-disabled="reservationGuest.reservation.allInclusive"
+                                       ng-model="reservationGuest.reservation.breakfast"/>
+                                Breakfast
+                            </label>
+                        </div>
+                        <div class="form-group col-xs-4">
+                            <label for="dinner">
+                                <input type="checkbox" id="dinner" name="dinner"
+                                       ng-disabled="reservationGuest.reservation.allInclusive"
+                                       ng-model="reservationGuest.reservation.dinner"/>
+                                Dinner
+                            </label>
+                        </div>
+                        <div class="form-group col-xs-4">
+                            <label for="allInclusive">
+                                <input type="checkbox" id="allInclusive" name="allInclusive"
+                                       ng-model="reservationGuest.reservation.allInclusive"/>
+                                All Inclusive
+                            </label>
+                        </div>
                     </div>
 
                     <div class="clearfix"></div>
 
-                    <div class="form-group col-sm-12 col-xs-12">
-                        <label>
-                            <input type="radio" name="isNewGuest" ng-model="isNewGuest" ng-value="true"/>
-                            ...or create new
-                        </label>
+                    <div class="row-fluid">
+                        <div class="form-group col-xs-12">
+                            <label>
+                                <input type="radio" name="isNewGuest" ng-model="isNewGuest" ng-value="false"/>
+                                Select existing guest
+                            </label>
+                            <select class="form-control roles" ng-model="guests.selectedGuest" id="selectGuest"
+                                    style="width:100%"
+                                    ng-options="item as (item.personalData.fullName + ' - ' + item.personalData.egn) for item in guests.list track by item.id">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="row-fluid">
+                        <div class="form-group col-xs-12">
+                            <label>
+                                <input type="radio" name="isNewGuest" ng-model="isNewGuest" ng-value="true"/>
+                                ...or create new
+                            </label>
+                        </div>
                     </div>
 
                     <form method="POST" name="reservationForm" novalidate ng-disabled="!isNewGuest">
 
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
                             <label for="fullName">Full Name *</label>
                             <input type="text" class="form-control" id="fullName" name="fullName"
                                    ng-model="reservationGuest.guest.personalData.fullName" minlength="4" maxlength="100"
-                                   required="required"/>
+                                   required="required" ng-disabled="!isNewGuest"/>
                             <div ng-show="reservationForm.$submitted || reservationForm.fullName.$touched"
                                  class="validation-message">
                                 <span ng-show="reservationForm.fullName.$error.required">This field is required</span>
@@ -85,11 +117,11 @@
                                 <span ng-show="reservationForm.fullName.$error.maxlength">Input too long</span>
                             </div>
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
                             <label for="phone">Phone Number *</label>
                             <input type="text" class="form-control" id="phone" name="phone"
                                    ng-model="reservationGuest.guest.personalData.phone" ng-pattern="/^[0-9]+$/"
-                                   minlength="10" maxlength="20" required="required"/>
+                                   minlength="10" maxlength="20" required="required" ng-disabled="!isNewGuest"/>
                             <div ng-show="reservationForm.$submitted || reservationForm.phone.$touched"
                                  class="validation-message">
                                 <span ng-show="reservationForm.phone.$error.required">This field is required</span>
@@ -98,11 +130,11 @@
                                 <span ng-show="reservationForm.phone.$error.pattern">Input should contain only digits</span>
                             </div>
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
                             <label for="egn">EGN *</label>
                             <input type="text" class="form-control" id="egn" name="egn"
                                    ng-model="reservationGuest.guest.personalData.egn" ng-pattern="/^[0-9]+$/"
-                                   minlength="10" maxlength="10" required="required"/>
+                                   minlength="10" maxlength="10" required="required" ng-disabled="!isNewGuest"/>
                             <div ng-show="reservationForm.$submitted || reservationForm.egn.$touched"
                                  class="validation-message">
                                 <span ng-show="reservationForm.egn.$error.required">This field is required</span>
@@ -111,11 +143,11 @@
                                 <span ng-show="reservationForm.egn.$error.pattern">Input should contain only digits</span>
                             </div>
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
                             <label for="address">Address *</label>
                             <input type="text" class="form-control" id="address" name="address"
                                    ng-model="reservationGuest.guest.personalData.address" minlength="4" maxlength="200"
-                                   required="required"/>
+                                   required="required" ng-disabled="!isNewGuest"/>
                             <div ng-show="reservationForm.$submitted || reservationForm.address.$touched"
                                  class="validation-message">
                                 <span ng-show="reservationForm.address.$error.required">This field is required</span>
@@ -123,11 +155,11 @@
                                 <span ng-show="reservationForm.address.$error.maxlength">Input too long</span>
                             </div>
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
                             <label for="identityNumber">Identity Number *</label>
                             <input type="text" class="form-control" id="identityNumber" name="identityNumber"
                                    ng-model="reservationGuest.guest.personalData.identityNumber" ng-pattern="/^[0-9]+$/"
-                                   minlength="9" maxlength="9" required="required"/>
+                                   minlength="9" maxlength="9" required="required" ng-disabled="!isNewGuest"/>
                             <div ng-show="reservationForm.$submitted || reservationForm.identityNumber.$touched"
                                  class="validation-message">
                                 <span ng-show="reservationForm.identityNumber.$error.required">This field is required</span>
@@ -136,12 +168,11 @@
                                 <span ng-show="reservationForm.identityNumber.$error.pattern">Input should contain only digits</span>
                             </div>
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
                             <label for="identityIssueDate">Identity Issue Date *</label>
                             <input type="text" class="form-control" id="identityIssueDate" name="identityIssueDate"
                                    ng-model="reservationGuest.guest.personalData.identityIssueDate" minlength="4"
-                                   maxlength="10"
-                                   required="required"/>
+                                   maxlength="10" required="required" ng-disabled="!isNewGuest"/>
                             <div ng-show="reservationForm.$submitted || reservationForm.identityIssueDate.$touched"
                                  class="validation-message">
                                 <span ng-show="reservationForm.identityIssueDate.$error.required">This field is required</span>
@@ -149,12 +180,11 @@
                                 <span ng-show="reservationForm.identityIssueDate.$error.maxlength">Input too long</span>
                             </div>
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
                             <label for="identityIssuedBy">Identity Issued By *</label>
                             <input type="text" class="form-control" id="identityIssuedBy" name="identityIssuedBy"
                                    ng-model="reservationGuest.guest.personalData.identityIssuedBy" minlength="4"
-                                   maxlength="50"
-                                   required="required"/>
+                                   maxlength="50" required="required" ng-disabled="!isNewGuest"/>
                             <div ng-show="reservationForm.$submitted || reservationForm.identityIssuedBy.$touched"
                                  class="validation-message">
                                 <span ng-show="reservationForm.identityIssuedBy.$error.required">This field is required</span>
@@ -162,12 +192,11 @@
                                 <span ng-show="reservationForm.identityIssuedBy.$error.maxlength">Input too long</span>
                             </div>
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
                             <label for="identityExpireDate">Identity Expire Date *</label>
                             <input type="text" class="form-control" id="identityExpireDate" name="identityExpireDate"
                                    ng-model="reservationGuest.guest.personalData.identityExpireDate" minlength="4"
-                                   maxlength="10"
-                                   required="required"/>
+                                   maxlength="10" required="required" ng-disabled="!isNewGuest"/>
                             <div ng-show="reservationForm.$submitted || reservationForm.identityExpireDate.$touched"
                                  class="validation-message">
                                 <span ng-show="reservationForm.identityExpireDate.$error.required">This field is required</span>

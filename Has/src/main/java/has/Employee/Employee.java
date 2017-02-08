@@ -2,12 +2,14 @@ package has.Employee;
 
 import has.PersonalData.PersonalData;
 import has.User.User;
+import has.WorkingSchedule.WorkingSchedule;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by kaloi on 12/19/2016.
@@ -33,6 +35,9 @@ public class Employee implements Serializable {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "PERSONAL_DATA_ID")
     private PersonalData personalData;
+
+    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<WorkingSchedule> workingSchedules;
 
     public Employee(String dateHired) {
         this.dateHired = dateHired;

@@ -159,6 +159,38 @@ var stateEmployeeEdit = {
 //------------------------------------------------//
 
 
+//--------------------SCHEDULE--------------------//
+
+var stateScheduleList = {
+    url: '/schedule/list',
+    views: {
+        'content@loggedin': {
+            templateUrl: 'templates/schedule/list.html'
+        }
+    }
+};
+
+var stateScheduleAdd = {
+    url: '/schedule/add',
+    views: {
+        'content@loggedin': {
+            templateUrl: 'templates/schedule/add.html'
+        }
+    }
+};
+
+var stateScheduleEdit = {
+    url: '/schedule/edit/:id',
+    views: {
+        'content@loggedin': {
+            templateUrl: 'templates/schedule/add.html'
+        }
+    }
+};
+
+//------------------------------------------------//
+
+
 //---------------------GUESTS---------------------//
 var stateGuestList = {
     url: '/guests/list',

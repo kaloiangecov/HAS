@@ -29,7 +29,7 @@ public class ReservationController {
         return reservationService.save(reservation, user);
     }
 
-    @RequestMapping(value = "/reservations", method = RequestMethod.GET,
+    @RequestMapping(value = "/reservations", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('PERM_VIEW_RESERVATION')")
@@ -60,5 +60,14 @@ public class ReservationController {
     @PreAuthorize("hasAuthority('PERM_EDIT_RESERVATION')")
     public Reservation updateReservation(@PathVariable Long id, @RequestBody @Valid Reservation reservation, @AuthenticationPrincipal User user) throws Exception {
         return reservationService.update(id, reservation, user);
+    }
+
+    @RequestMapping(value = "/reservation/move/{id}", method = RequestMethod.PUT,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_EDIT_RESERVATION')")
+    public Reservation moveReservation(@PathVariable Long id, @RequestBody Reservation reservation, @AuthenticationPrincipal User user) throws Exception {
+        return reservationService.move(id, reservation, user);
     }
 }

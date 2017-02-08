@@ -5,34 +5,34 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 /**
  * Created by Chokleet on 20.12.2016 г..
  */
 @Getter
 @Setter
-@Entity
+@Entity(name = "WORKING_SCHEDULE")
 public class WorkingSchedule {
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String endDate;
+
     @NotNull
-    @Pattern(regexp = "[0-9]+")
-    private String shift;
+    private String endDate;
+
+    @NotNull
+    @Min(0)
+    @Max(3)
+    private Integer shift;
+
+    @NotNull
     private String startDate;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "EMPLOYEE_ID")
     private Employee employee;
 
-    public WorkingSchedule(String endDate, String shift, String startDate) {
-        this.endDate = endDate;
-        this.shift = shift;
-        this.startDate = startDate;
-    }
 }

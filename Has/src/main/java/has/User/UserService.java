@@ -35,12 +35,27 @@ public class UserService {
             throw new Exception("There is no user with such ID");
         }
 
+        if (repo.findByUsername(user.getUsername()) != null) {
+            throw new UserAlreadyExists(user.getUsername());
+        }
+
         dbUser.setLastLogin(user.getLastLogin());
         dbUser.setPassword(user.getPassword());
         dbUser.setRegDate(user.getRegDate());
         dbUser.setUsername(user.getUsername());
         dbUser.setEmail(user.getEmail());
         dbUser.setUserRole(user.getUserRole());
+
+        return repo.save(dbUser);
+    }
+
+    public User updateLastLogin(Long id, String lastLogin) throws Exception {
+        User dbUser = repo.findOne(id);
+        if (dbUser == null) {
+            throw new Exception("There is no user with such ID");
+        }
+
+        dbUser.setLastLogin(lastLogin);
 
         return repo.save(dbUser);
     }

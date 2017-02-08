@@ -1,10 +1,13 @@
 package has.Reservation;
 
 import has.ReservationGuest.ReservationGuest;
+import has.Room.Room;
 import has.User.User;
+import has.WorkingSchedule.WorkingSchedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -27,11 +30,8 @@ public class ReservationService {
         List<Reservation> reservations = repo.findAll();
 
         for (Reservation reservation : reservations) {
-            for (ReservationGuest reservationGuest : reservation.getReservationGuests()) {
-                reservationGuest.setReservation(null);
-            }
+            reservation = removeRecursions(reservation);
         }
-
         return reservations;
     }
 
@@ -40,7 +40,8 @@ public class ReservationService {
         if(dbReservation == null){
             throw new Exception("There is no reservation with such ID");
         }
-        return dbReservation;
+
+        return removeRecursions(dbReservation);
     }
 
     public Reservation remove(Long id) throws Exception {
@@ -48,8 +49,10 @@ public class ReservationService {
         if(dbReservation == null){
             throw new Exception("There is no reservation with such ID");
         }
+
         repo.delete(dbReservation);
-        return dbReservation;
+
+        return removeRecursions(dbReservation);
     }
 
     public Reservation update(Long id, Reservation reservation, User user) throws Exception {
@@ -63,6 +66,7 @@ public class ReservationService {
         dbReservation.setAllInclusive(reservation.isAllInclusive());
         dbReservation.setBreakfast(reservation.isBreakfast());
         dbReservation.setDinner(reservation.isDinner());
+        dbReservation.setGroup(reservation.isGroup());
         dbReservation.setDiscount(reservation.getDiscount());
 
         dbReservation.setEndDate(reservation.getEndDate());
@@ -71,9 +75,47 @@ public class ReservationService {
         dbReservation.setStartDate(reservation.getStartDate());
         dbReservation.setNumberChildren(reservation.getNumberChildren());
         dbReservation.setLastModifiedBy(user);
-        dbReservation.setLastModifiedTime((new Date().toString()));
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        dbReservation.setLastModifiedTime(sdf.format(new Date()));
+
         dbReservation.setReceptionist(reservation.getReceptionist());
 
-        return repo.save(dbReservation);
+        Room newRoom = reservation.getReservationGuests().get(0).getRoom();
+        for (ReservationGuest reservationGuest : dbReservation.getReservationGuests()) {
+            reservationGuest.setRoom(newRoom);
+        }
+
+        return removeRecursions(repo.save(dbReservation));
+    }
+
+    public Reservation move(Long id, Reservation reservation, User user) throws Exception {
+        Reservation dbReservation = repo.findOne(id);
+        if (dbReservation == null) {
+            throw new Exception("There is no reservation with such ID");
+        }
+
+        dbReservation.setStartDate(reservation.getStartDate());
+        dbReservation.setEndDate(reservation.getEndDate());
+        dbReservation.setLastModifiedBy(user);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        dbReservation.setLastModifiedTime(sdf.format(new Date()));
+
+        return removeRecursions(repo.save(dbReservation));
+    }
+
+    private Reservation removeRecursions(Reservation reservation) {
+        for (ReservationGuest reservationGuest : reservation.getReservationGuests()) {
+            reservationGuest.setReservation(null);
+        }
+
+        List<WorkingSchedule> schedules = reservation.getReceptionist().getWorkingSchedules();
+        for (WorkingSchedule schedule : schedules) {
+            schedule.setEmployee(null);
+        }
+        reservation.getReceptionist().setWorkingSchedules(schedules);
+
+        return reservation;
     }
 }

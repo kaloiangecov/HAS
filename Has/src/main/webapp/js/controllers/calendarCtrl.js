@@ -31,6 +31,24 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
     };
     $scope.timer;
 
+    $scope.getRoom = function (roomId, callback) {
+        $http({
+            method: "GET",
+            url: ("room/" + roomId),
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
+        }).then(
+            function (response) { //success
+                return response.data;
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+                loadEvents();
+            }).then(callback);
+    };
+
     $scope.getRooms = function (callback) {
         $http({
             method: "GET",
@@ -98,15 +116,21 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             },
             function (response) { //error
                 $scope.displayMessage(response.data);
+                $scope.resetReservation();
+                loadEvents();
             })
             .then(callback);
     };
 
-    $scope.saveReservation = function (reservation, callback) {
+    $scope.saveReservation = function (reservation, callback, isEdit) {
+        var url = isEdit ? ("reservation/" + reservation.id) : "reservation";
+        var method = isEdit ? "PUT" : "POST";
+        var data = isEdit ? {user: $scope.loginData, reservation: reservation} : reservation;
+
         $http({
-            method: "POST",
-            url: "reservation",
-            data: reservation,
+            method: method,
+            url: url,
+            data: data,
             responseType: "json",
             headers: {
                 "Authorization": $scope.authentication
@@ -117,19 +141,42 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             },
             function (response) { //error
                 $scope.displayMessage(response.data);
+                $scope.resetReservation();
+                loadEvents();
             })
             .then(callback);
     };
 
-    $scope.startDate = new Date();
-    $scope.startDate.setDate($scope.startDate.getDate() - 3);
+    $scope.deleteReservation = function (id, callback) {
+        $http({
+            method: "DELETE",
+            url: ("reservation/" + id),
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
+        }).then(
+            function (response) { //success
+                response.data;
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+                $scope.resetReservation();
+                loadEvents();
+            })
+            .then(callback);
+    };
+
+    $scope.startDate = new DayPilot.Date(new Date());
+    $scope.endDate = $scope.startDate.addDays(21);
+    $scope.startDate = $scope.startDate.addDays(-3);
 
     $scope.config = {
-        //scale: "Day",
-        //startDate: $scope.startDate,
-        //days: 14,
-        scale: "Manual",
-        timeline: getTimeline(),
+        scale: "Day",
+        startDate: $scope.startDate,
+        days: 14,
+        //scale: "Manual",
+        //timeline: getTimeline(),
         resources: $scope.events.resources,
         timeHeaders: [{groupBy: "Month"}, {groupBy: "Day", format: "d"}],
         eventDeleteHandling: "Update",
@@ -174,10 +221,15 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 {
                     text: "Delete", onclick: function () {
                     if (confirm("Delete reservation?\n" + "Start: " + this.source.start() + "\nEnd:" + this.source.end())) {
-                        if (this.source.id() == "new_res")
-                            $scope.resetReservation();
                         $scope.scheduler.events.remove(this.source);
-                        $scope.scheduler.message("Reservation removed: " + this.source.text());
+
+                        $scope.deleteReservation(this.source.data.objReservation.id, function (data) {
+                            $scope.scheduler.message("Reservation deleted: " + args.e.text());
+                            $scope.resetReservation();
+                            loadEvents();
+                        });
+                    } else {
+                        loadEvents();
                     }
                 }
                 },
@@ -217,13 +269,97 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             });
         },
         onEventMoved: function (args) {
-            $scope.scheduler.message("Reservation moved: " + args.e.text());
+            $scope.scheduler.clearSelection();
+
+            if (!confirm("Are you sure you want to move the reservation?")) {
+                loadEvents();
+                return;
+            }
+
+            var tmpReservatoin = args.e.data.objReservation;
+            tmpReservatoin.startDate = args.newStart.value.substr(0, 10);
+            tmpReservatoin.endDate = args.newEnd.value.substr(0, 10);
+
+            $scope.getRoom(args.e.resource(), function (room) {
+                angular.forEach(tmpReservatoin.reservationGuests, function (value, key) {
+                    value.room = room;
+                });
+
+                $http({
+                    method: "PUT",
+                    url: ("reservation/" + tmpReservatoin.id),
+                    data: tmpReservatoin,
+                    responseType: "json",
+                    headers: {
+                        "Authorization": $scope.authentication
+                    }
+                }).then(
+                    function (response) { //success
+                        return response.data;
+                    },
+                    function (response) { //error
+                        $scope.displayMessage(response.data);
+                        $scope.resetReservation();
+                        loadEvents();
+                    })
+                    .then(function (data) {
+                        $scope.scheduler.message("Reservation moved: " + args.e.text());
+                        $scope.resetReservation();
+                        loadEvents();
+                    });
+            });
         },
         onEventResized: function (args) {
-            $scope.scheduler.message("Reservation period changed: " + args.e.text());
+            $scope.scheduler.clearSelection();
+
+            if (!confirm("Are you sure you want to resize the reservation?")) {
+                loadEvents();
+                return;
+            }
+
+            var tmpReservatoin = args.e.data.objReservation;
+            tmpReservatoin.startDate = args.newStart.value.substr(0, 10);
+            tmpReservatoin.endDate = args.newEnd.value.substr(0, 10);
+
+            $http({
+                method: "PUT",
+                url: ("reservation/move/" + tmpReservatoin.id),
+                responseType: "json",
+                headers: {
+                    "Authorization": $scope.authentication
+                },
+                data: tmpReservatoin
+            }).then(
+                function (response) { //success
+                    response.data;
+                },
+                function (response) { //error
+                    $scope.displayMessage(response.data);
+                    $scope.resetReservation();
+                    loadEvents();
+                })
+                .then(function (data) {
+                    $scope.scheduler.message("Reservation duration resized: " + args.e.text());
+                    $scope.resetReservation();
+                    loadEvents();
+                });
         },
         onEventDeleted: function (args) {
-            $scope.events.new = {};
+            $scope.scheduler.clearSelection();
+
+            if (confirm("Delete reservation?\n" + "Start: " + args.e.start() + "\nEnd:" + args.e.end())) {
+                $scope.scheduler.events.remove(args.e);
+
+                $scope.deleteReservation(args.e.data.objReservation.id, function (data) {
+                    $scope.scheduler.message("Reservation deleted: " + args.e.text());
+                    $scope.resetReservation();
+                    loadEvents();
+                });
+            } else {
+                loadEvents();
+            }
+
+
         },
         onTimeRangeSelected: function (args) {
             $scope.scheduler.clearSelection();
@@ -293,27 +429,6 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
             // reservation tooltip that appears on hover - displays the status text
             args.e.toolTip = status;
-
-            // add a bar highlighting how much has been paid already (using an "active area")
-            /*
-             var paid = args.e.paid;
-             var paidColor = "#aaa";
-             args.data.areas = [
-             {
-             bottom: 10,
-             right: 4,
-             html: "<div style='color:" + paidColor + "; font-size: 8pt;'>Paid: " + paid + "%</div>",
-             v: "Visible"
-             },
-             {
-             left: 4,
-             bottom: 8,
-             right: 4,
-             height: 2,
-             html: "<div style='background-color:" + paidColor + "; height: 100%; width:" + paid + "%'></div>"
-             }
-             ];
-             */
         },
         onEventFilter: function (args) {
             var filteredRes = $filter('filter')($scope.events.resources, {type: args.filter});
@@ -350,7 +465,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
     function loadEvents() {
         $http({
-            method: "GET",
+            method: "POST",
             url: "reservations",
             responseType: "json",
             headers: {
@@ -361,14 +476,11 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 $scope.events.list = [];
 
                 angular.forEach(response.data, function (reservation, key) {
-                    var arrStartDate = reservation.startDate.split('/');
-                    var arrEndDate = reservation.endDate.split('/');
-
                     var tmpEvent = {
-                        start: new Date(arrStartDate[2], parseInt(arrStartDate[1]) - 1, parseInt(arrStartDate[0]) + 1),
-                        end: new Date(arrEndDate[2], parseInt(arrEndDate[1]) - 1, arrEndDate[0]),
+                        start: reservation.startDate,
+                        end: reservation.endDate,
                         id: reservation.id,
-                        resource: (reservation.reservationGuests[0].room.id - 1),
+                        resource: reservation.reservationGuests[0].room.id,
                         status: reservation.status,
                         text: reservation.reservationGuests[0].guest.personalData.fullName,
                         objReservation: reservation
@@ -415,20 +527,21 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
     $scope.addReservation = function () {
 
         $scope.getEmployeeByUserId($scope.loginData.id, function (data) {
-            $scope.reservationGuest.room = $scope.events.resources[$scope.events.new.resource];
+            $scope.reservationGuest.room = $scope.events.resources[$scope.events.new.resource - 1];
             $scope.reservationGuest.owner = true;
 
-            var arrStartDate = $scope.events.new.start.value.substr(0, 10).split('-');
-            var arrEndDate = $scope.events.new.end.value.substr(0, 10).split('-');
-
             var objReservation = {
-                startDate: (arrStartDate[2] + '/' + arrStartDate[1] + '/' + arrStartDate[0]),
-                endDate: (arrEndDate[2] + '/' + arrEndDate[1] + '/' + arrEndDate[0]),
+                startDate: $scope.events.new.start.value.substr(0, 10),
+                endDate: $scope.events.new.end.value.substr(0, 10),
+                breakfast: $scope.reservationGuest.reservation.breakfast,
+                dinner: $scope.reservationGuest.reservation.dinner,
+                allInclusive: $scope.reservationGuest.reservation.allInclusive,
                 price: 40.0,
                 discount: 0,
                 numberAdults: 1,
                 numberChildren: 0,
                 status: 0,
+                group: false,
                 receptionist: data
             };
 
@@ -577,7 +690,10 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
     function setDateRange(start, end, label) {
         $scope.$apply(function () {
             var tmp = end._d.getTime() - start._d.getTime();
-            $scope.config.timeline = getTimeline(start._d, tmp / 86400000);
+            //$scope.config.timeline = getTimeline(start._d, tmp / 86400000);
+            $scope.config.startDate = start._d;
+            $scope.config.days = tmp / 86400000;
+
         });
     }
 
@@ -595,7 +711,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         $('#dateRange').daterangepicker({
             parentEl: "#scheduleContainer",
             startDate: $scope.startDate,
-            endDate: addDays($scope.startDate, 21),
+            endDate: $scope.endDate,
             locale: {
                 format: "DD/MM/YY"
             }
@@ -603,6 +719,6 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
         $('.calendar').css({float: 'left'});
 
-        //$('#country').select2();
+        //$('#selectGuest').select2();
     });
 });
