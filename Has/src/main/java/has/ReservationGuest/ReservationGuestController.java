@@ -1,5 +1,6 @@
 package has.ReservationGuest;
 
+import freemarker.template.TemplateException;
 import has.Reservation.Reservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -24,7 +26,7 @@ public class ReservationGuestController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('PERM_CREATE_RESERVATION_GUEST')")
-    public ReservationGuest save(@RequestBody ReservationGuest reservationGuest) {
+    public ReservationGuest save(@RequestBody ReservationGuest reservationGuest) throws IOException, TemplateException {
         return reservationGuestService.save(reservationGuest);
     }
 
