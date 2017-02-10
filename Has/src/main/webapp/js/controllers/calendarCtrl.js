@@ -497,20 +497,18 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
     function loadEvents() {
         var range = {
-            startDate: $scope.config.startDate,
+            startDate: $scope.config.startDate.value.substr(0, 10),
             endDate: moment($scope.config.startDate).add($scope.config.days, 'days').format("YYYY-MM-DD")
         };
 
         $http({
             method: "POST",
-            url: "reservations",
+            url: "reservations/search",
             responseType: "json",
             headers: {
-                //'Accept': 'application/json',
-                //'Content-Type': 'application/json',
                 "Authorization": $scope.authentication
             },
-            //data: range
+            data: range
         }).then(
             function (response) { //success
                 $scope.events.list = [];

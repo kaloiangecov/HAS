@@ -1,7 +1,6 @@
 package has.Reservation;
 
 import has.User.User;
-import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by kaloi on 12/20/2016.
@@ -46,12 +44,11 @@ public class ReservationController {
     @PreAuthorize("hasAuthority('PERM_SEARCH_EMPLOYEE')")
     public
     @ResponseBody
-    List<Reservation> search(HttpServletRequest request) {
-        Map<String, String[]> parameterMap = request.getParameterMap();
+    List<Reservation> search(@RequestBody Reservation jsonParams) {
 
         return reservationService.searchReservations(
-                parameterMap.get("startDate")[0],
-                parameterMap.get("endDate")[0]
+                jsonParams.getStartDate(),
+                jsonParams.getEndDate()
         );
     }
 
