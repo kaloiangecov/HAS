@@ -10,7 +10,7 @@ import java.util.Properties;
  * Created by gundev on 18.1.2017 г..
  */
 public class SendMailSSL {
-    public static void sendMail(String recipient, MailTemplates templates) {
+    public static void sendMail(String recipient, String mailText) {
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.socketFactory.port", "465");
@@ -33,7 +33,8 @@ public class SendMailSSL {
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(recipient));
             message.setSubject("Hotel Administration Notifier <noreply>");
-            message.setText(templates.getString());
+            message.setText(mailText);
+           message.setContent(mailText, "text/html; charset=utf-8");
 
             Transport.send(message);
         } catch (MessagingException e) {
