@@ -50,8 +50,8 @@ app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resou
             DTColumnBuilder.newColumn('id').notSortable().withClass('actions-column')
                 .renderWith(function (id) {
                     var html = '<a class="action-btn" href="#!/rooms/edit/' +
-                        id +
-                        '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+                        id + '"><i class="fa fa-pencil" aria-hidden="true"></i></a><a class="action-btn delete-btn" id="delete_' +
+                        id + '" href="javascript:;"><i class="fa fa-trash-o" aria-hidden="true"></i></a>';
                     return html;
                 })
         ];
