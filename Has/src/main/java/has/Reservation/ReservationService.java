@@ -35,6 +35,17 @@ public class ReservationService {
         return reservations;
     }
 
+    public List<Reservation> searchReservations(String startDate, String endDate) {
+
+        List<Reservation> reservations = repo.findByStatusNotAndStartDateGreaterThanAndEndDateLessThan(2, startDate, endDate);
+
+        for (Reservation reservation : reservations) {
+            reservation = removeRecursions(reservation);
+        }
+
+        return reservations;
+    }
+
     public Reservation findById(Long id) throws Exception {
         Reservation dbReservation = repo.findOne(id);
         if(dbReservation == null){
@@ -97,6 +108,21 @@ public class ReservationService {
 
         dbReservation.setStartDate(reservation.getStartDate());
         dbReservation.setEndDate(reservation.getEndDate());
+        dbReservation.setLastModifiedBy(user);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        dbReservation.setLastModifiedTime(sdf.format(new Date()));
+
+        return removeRecursions(repo.save(dbReservation));
+    }
+
+    public Reservation close(Long id, User user) throws Exception {
+        Reservation dbReservation = repo.findOne(id);
+        if (dbReservation == null) {
+            throw new Exception("There is no reservation with such ID");
+        }
+
+        dbReservation.setStatus(2);
         dbReservation.setLastModifiedBy(user);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

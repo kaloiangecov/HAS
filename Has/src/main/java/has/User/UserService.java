@@ -35,7 +35,8 @@ public class UserService {
             throw new Exception("There is no user with such ID");
         }
 
-        if (repo.findByUsername(user.getUsername()) != null) {
+        User dbUserCheck = repo.findByUsername(user.getUsername());
+        if ((dbUserCheck != null) && (dbUserCheck.getId() != user.getId())) {
             throw new UserAlreadyExists(user.getUsername());
         }
 
