@@ -19,11 +19,18 @@ public enum MailTemplates {
         return this.message;
     }
 
+    public String getMessage() {
+        return this.message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     /**
      * Parameterized constructor.
      *
-     * @param cDuty
-     *            cashiers duty
+     * @param cDuty cashiers duty
      */
     private MailTemplates(String cDuty) {
         this.message = cDuty;

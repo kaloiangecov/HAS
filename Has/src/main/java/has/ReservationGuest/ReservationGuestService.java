@@ -2,6 +2,8 @@ package has.ReservationGuest;
 
 import freemarker.template.*;
 import has.Reservation.Reservation;
+import has.mailsender.MailTemplates;
+import has.mailsender.SendMailSSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +44,13 @@ public class ReservationGuestService {
 
         //TODO: do something with the result
         String result = writer.toString();
+
+        new Thread(
+                new Runnable() {
+                    public void run() {
+                        SendMailSSL.sendMail("shit@hotmail.com", MailTemplates.RESERVATION_CONFIRMATION);
+                    }
+                }).start();
     }
 
     private Configuration configureTemplate(ReservationGuest reservationGuest) throws IOException {
