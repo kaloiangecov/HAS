@@ -497,7 +497,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
     function loadEvents() {
         var range = {
-            startDate: $scope.config.startDate.value.substr(0, 10),
+            startDate: $scope.config.startDate,
             endDate: moment($scope.config.startDate).add($scope.config.days, 'days').format("YYYY-MM-DD")
         };
 
