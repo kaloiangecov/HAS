@@ -41,7 +41,7 @@ public class ReservationController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('PERM_SEARCH_EMPLOYEE')")
+    @PreAuthorize("hasAuthority('PERM_VIEW_RESERVATION')")
     public
     @ResponseBody
     List<Reservation> search(@RequestBody Reservation jsonParams) {

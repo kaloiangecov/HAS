@@ -618,7 +618,11 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                                 $scope.events.list.push($scope.events.new);
                                 $scope.scheduler.message("New event created!");
                                 $scope.resetReservation();
+
                                 loadEvents();
+                                $scope.getAllGuests(function (data) {
+                                    $scope.guests.list = data;
+                                });
                             });
                         });
 
@@ -633,7 +637,11 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                         $scope.events.list.push($scope.events.new);
                         $scope.scheduler.message("New event created!");
                         $scope.resetReservation();
+
                         loadEvents();
+                        $scope.getAllGuests(function (data) {
+                            $scope.guests.list = data;
+                        });
                     });
                 }
             });
@@ -681,7 +689,11 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                     $scope.saveReservationGuest(function (data) {
                         $scope.scheduler.message("Added new guest to reservation!");
                         $scope.resetGuest();
+
                         loadEvents();
+                        $scope.getAllGuests(function (data) {
+                            $scope.guests.list = data;
+                        });
                     });
                 });
         } else {
@@ -692,7 +704,11 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             $scope.saveReservationGuest(function (data) {
                 $scope.scheduler.message("Added new guest to reservation!");
                 $scope.resetGuest();
+
                 loadEvents();
+                $scope.getAllGuests(function (data) {
+                    $scope.guests.list = data;
+                });
             });
         }
 
