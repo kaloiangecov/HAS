@@ -11,6 +11,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,6 +31,8 @@ public class Reservation implements Serializable {
     private boolean breakfast;
     private boolean dinner;
 
+    private String reservationCode;
+
     @Column(name = "C_GROUP")
     private boolean group;
 
@@ -39,12 +42,10 @@ public class Reservation implements Serializable {
     private int discount;
 
     @NotNull
-    private String startDate;
+    private Date startDate;
 
     @NotNull
-    private String endDate;
-
-    //    private List<ReservationGuest> guests;
+    private Date endDate;
 
     @ManyToOne
     private User lastModifiedBy;

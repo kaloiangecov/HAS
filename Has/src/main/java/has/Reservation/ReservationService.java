@@ -20,9 +20,9 @@ public class ReservationService {
     @Autowired
     private ReservationRepository repo;
 
-
     public Reservation save(Reservation reservation, User user) {
         reservation.setLastModifiedBy(user);
+        reservation.setLastModifiedTime(new Date().toString());
         return repo.save(reservation);
     }
 
