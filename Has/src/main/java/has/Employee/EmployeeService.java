@@ -93,7 +93,8 @@ public class EmployeeService {
             throw new Exception("There is no employee with such ID");
         }
 
-        if (repo.findByPersonalDataEgn(employee.getPersonalData().getEgn()) != null)
+        Employee dbEmployee2 = repo.findByPersonalDataEgn(employee.getPersonalData().getEgn());
+        if (dbEmployee2 != null && dbEmployee2.getId() != employee.getId())
             throw new Exception("Employee with EGN " + employee.getPersonalData().getEgn() + " already exists.");
 
         dbEmployee.setDateHired(employee.getDateHired());

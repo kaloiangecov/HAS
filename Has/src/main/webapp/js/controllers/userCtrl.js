@@ -38,6 +38,7 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $interval, $r
                 }
             })
             .withDataProp('data')
+            .withOption('responsive', true)
             .withOption('processing', true)
             .withOption('serverSide', true)
             .withOption('pagingType', 'full_numbers')
@@ -54,9 +55,13 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $interval, $r
                 }),
             DTColumnBuilder.newColumn('id').notSortable().withClass('actions-column')
                 .renderWith(function (id) {
-                    var html = '<a class="action-btn" href="#!/users/edit/' +
-                        id + '"><i class="fa fa-pencil" aria-hidden="true"></i></a><a class="action-btn delete-btn" id="ban_' +
-                        id + '" href="javascript:;"><i class="fa fa-trash-o" aria-hidden="true"></i></a>';
+                    var html =
+                        '<div class="btn-group btn-group-sm">' +
+                        '<a class="btn btn-default action-btn" href="#!/users/edit/' +
+                        id + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
+                        '<a class="btn btn-default action-btn delete-btn" id="ban_' +
+                        id + '" href="javascript:;"><i class="fa fa-trash-o" aria-hidden="true"></i></a>' +
+                        '</div>';
                     return html;
                 })
         ];

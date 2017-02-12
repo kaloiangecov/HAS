@@ -71,6 +71,7 @@ public class WorkingScheduleService {
         dbSchedule.setStartDate(schedule.getStartDate());
         dbSchedule.setEndDate(schedule.getEndDate());
         dbSchedule.setShift(schedule.getShift());
+        dbSchedule.setEmployee(schedule.getEmployee());
 
         return removeRecursions(repo.save(dbSchedule));
     }

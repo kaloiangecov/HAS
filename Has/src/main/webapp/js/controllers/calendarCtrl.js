@@ -687,7 +687,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                     $scope.reservationGuest.reservation.lastModifiedTime = new Date().toISOString();
 
                     $scope.saveReservationGuest(function (data) {
-                        $scope.scheduler.message("Added new guest to reservation!");
+                        $scope.scheduler.message("Added new guest: " + $scope.reservationGuest.guest.personalData.fullName);
                         $scope.resetGuest();
 
                         loadEvents();
