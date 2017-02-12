@@ -9,11 +9,29 @@ app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resou
     };
     $scope.isEdit = false;
 
+    ctrl.deleteRoom = function (id) {
+        $http({
+            method: "DELETE",
+            url: ("room/" + id),
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
+        }).then(
+            function (response) { //success
+                alert("Room deleted");
+                window.location.hash = "#!/rooms/list";
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+            });
+    };
+
     if (window.location.hash.includes("list")) {
         // rooms table
-        $scope.dtInstance = {};
+        ctrl.dtInstance = {};
 
-        $scope.dtOptions = DTOptionsBuilder.newOptions()
+        ctrl.dtOptions = DTOptionsBuilder.newOptions()
             .withOption('ajax', {
                 url: 'rooms/search',
                 type: 'GET',
@@ -38,7 +56,7 @@ app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resou
             .withOption('pagingType', 'full_numbers')
             .withOption('dom', 'lrtip');
 
-        $scope.dtColumns = [
+        ctrl.dtColumns = [
             DTColumnBuilder.newColumn('number', 'Number'),
             DTColumnBuilder.newColumn('roomClass', 'Type')
                 .renderWith(function (typeIndex) {
@@ -49,15 +67,19 @@ app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resou
             DTColumnBuilder.newColumn('bedsDouble', 'Double Beds'),
             DTColumnBuilder.newColumn('id').notSortable().withClass('actions-column')
                 .renderWith(function (id) {
-                    var html = '<a class="action-btn" href="#!/rooms/edit/' +
-                        id + '"><i class="fa fa-pencil" aria-hidden="true"></i></a><a class="action-btn delete-btn" id="delete_' +
-                        id + '" href="javascript:;"><i class="fa fa-trash-o" aria-hidden="true"></i></a>';
+                    var html =
+                        '<div class="btn-group btn-group-sm">' +
+                        '<a class="btn btn-default action-btn" href="#!/rooms/edit/' +
+                        id + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
+                        '<a class="btn btn-default action-btn delete-btn" id="ban_' +
+                        id + '" href="javascript:;"><i class="fa fa-trash-o" aria-hidden="true"></i></a>' +
+                        '</div>';
                     return html;
                 })
         ];
         $scope.reloadTableData = function () {
             var resetPaging = false;
-            $scope.dtInstance.reloadData(function (list) {
+            ctrl.dtInstance.reloadData(function (list) {
                 console.log(list);
             }, resetPaging);
         };
