@@ -42,7 +42,7 @@ public class EmployeeService {
 
     public Page<Employee> searchEmployees(int start, int length, String fullName, String phone, String dateHired) {
         PageRequest request = new PageRequest((start / length), length, Sort.Direction.ASC, "id");
-        Page<Employee> employeesPage = null;
+        Page<Employee> employeesPage;
         if (dateHired.isEmpty()) {
             employeesPage = repo.findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContaining(fullName, phone, request);
         } else {
@@ -65,16 +65,15 @@ public class EmployeeService {
         for (WorkingSchedule schedule : employee.getWorkingSchedules()) {
             schedule.setEmployee(null);
         }
-
         return employee;
     }
 
     public Employee findByUserId(Long userId) throws Exception {
         Employee employee = repo.findByUserId(userId);
 
-        for (WorkingSchedule schedule : employee.getWorkingSchedules())
+        for (WorkingSchedule schedule : employee.getWorkingSchedules()) {
             schedule.setEmployee(null);
-
+        }
         return employee;
     }
 

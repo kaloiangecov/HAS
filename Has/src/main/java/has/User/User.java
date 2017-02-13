@@ -15,6 +15,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,7 +42,7 @@ public class User implements Serializable, UserDetails {
     private String email;
 
     @NotNull
-    private String regDate;
+    private Date regDate;
 
     @NotNull
     @Size(min = 3, max = 16)
@@ -52,35 +53,11 @@ public class User implements Serializable, UserDetails {
     @JoinTable(name = "USER_ROLE", joinColumns = {
             @JoinColumn(name = "USER_ID", nullable = false, updatable = false)},
             inverseJoinColumns = {@JoinColumn(name = "USER_ROLE_ID",
-                    nullable = false, updatable = true)})
+                    nullable = false)})
     private UserRole userRole;
 
     public User() {
 
-    }
-
-    public User(String lastLogin, String password, String regDate, String username) {
-        this.lastLogin = lastLogin;
-        this.password = password;
-        this.regDate = regDate;
-        this.username = username;
-    }
-
-    public User(String lastLogin, String password, String regDate, String username, UserRole userRole) {
-        this.lastLogin = lastLogin;
-        this.password = password;
-        this.regDate = regDate;
-        this.username = username;
-        this.userRole = userRole;
-    }
-
-    public User(String lastLogin, String password, String email, String regDate, String username, UserRole userRole) {
-        this.lastLogin = lastLogin;
-        this.password = password;
-        this.email = email;
-        this.regDate = regDate;
-        this.username = username;
-        this.userRole = userRole;
     }
 
     @Override

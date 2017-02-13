@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 /**
  * Created by Chokleet on 20.12.2016 г..
@@ -21,7 +22,7 @@ public class WorkingSchedule {
     private Long id;
 
     @NotNull
-    private String endDate;
+    private Date endDate;
 
     @NotNull
     @Min(0)

@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -65,7 +66,7 @@ public class EmployeeServiceTest {
     @Test
     public void testUpdate() throws Exception {
         Employee emp1 = new Employee();
-        Employee emp2 = new Employee("today");
+        Employee emp2 = new Employee(new Date().toString());
         Mockito.when(employeeRepository.findOne(23456L)).thenReturn(emp1);
         Mockito.when(employeeRepository.save(emp1)).thenReturn(emp2);
         assertEquals(employeeService.update(23456L, emp2), emp2);

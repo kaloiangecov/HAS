@@ -20,9 +20,10 @@ public class ReservationService {
     @Autowired
     private ReservationRepository repo;
 
-
     public Reservation save(Reservation reservation, User user) {
         reservation.setLastModifiedBy(user);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        reservation.setLastModifiedTime(sdf.format(new Date()));
         return repo.save(reservation);
     }
 
