@@ -230,6 +230,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
                         $scope.reservationGuest.guest = {};
                         $scope.reservationGuest.reservation = tmpReservation;
+                        $scope.reservationGuest.room = $scope.events.resources[this.source.resource() - 1];
                         $scope.reservationGuest.id = null;
                         $scope.reservationGuest.owner = false;
 
@@ -240,19 +241,20 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                     }
                 },
                 {
-                    text: "Delete", onclick: function () {
-                    if (confirm("Delete reservation?\n" + "Start: " + this.source.start() + "\nEnd:" + this.source.end())) {
-                        $scope.scheduler.events.remove(this.source);
+                    text: '<i class="fa fa-trash"></i> Delete',
+                    onclick: function () {
+                        if (confirm("Delete reservation?\n" + "Start: " + this.source.start() + "\nEnd:" + this.source.end())) {
+                            $scope.scheduler.events.remove(this.source);
 
-                        $scope.deleteReservation(this.source.data.objReservation.id, function (data) {
-                            $scope.scheduler.message("Reservation deleted: " + args.e.text());
-                            $scope.resetReservation();
+                            $scope.deleteReservation(this.source.data.objReservation.id, function (data) {
+                                $scope.scheduler.message("Reservation deleted: " + this.source.text());
+                                $scope.resetReservation();
+                                loadEvents();
+                            });
+                        } else {
                             loadEvents();
-                        });
-                    } else {
-                        loadEvents();
+                        }
                     }
-                }
                 },
                 {
                     text: "Close reservation",
@@ -261,7 +263,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                             $scope.scheduler.events.remove(this.source);
 
                             $scope.closeReservation(this.source.data.objReservation.id, function (data) {
-                                $scope.scheduler.message("Reservation closed: " + args.e.text());
+                                $scope.scheduler.message("Reservation closed: " + this.source.text());
                                 $scope.resetReservation();
                                 loadEvents();
                             });
@@ -517,14 +519,37 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                     var tmpEvent = {
                         start: reservation.startDate,
                         end: reservation.endDate,
-                        id: reservation.id,
-                        resource: reservation.reservationGuests[0].room.id,
+                        //id: reservation.id,
+                        //resource: reservation.reservationGuests[0].room.id,
                         status: reservation.status,
                         text: reservation.reservationGuests[0].guest.personalData.fullName,
                         objReservation: reservation
                     };
 
-                    $scope.events.list.push(tmpEvent);
+                    if (!reservation.group) {
+                        tmpEvent.id = reservation.id;
+                        tmpEvent.resource = reservation.reservationGuests[0].room.id;
+                        $scope.events.list.push(tmpEvent);
+                    } else {
+                        var resRooms = [];
+                        angular.forEach(reservation.reservationGuests, function (resGuest, index) {
+                            if (resRooms.indexOf(resGuest.room.id) == -1) {
+                                resRooms.push(resGuest.room.id);
+
+                                var tmpEvent2 = angular.extend(
+                                    {},
+                                    tmpEvent,
+                                    {
+                                        id: (key + '_' + (index + 1)),
+                                        resource: resGuest.room.id
+                                    }
+                                );
+
+                                $scope.events.list.push(tmpEvent2);
+                            }
+                        });
+                    }
+                    ;
                 });
 
                 if ($scope.events.new.start)
