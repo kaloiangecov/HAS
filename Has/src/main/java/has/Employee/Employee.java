@@ -9,7 +9,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,7 +24,7 @@ public class Employee implements Serializable {
     @Column(name = "EMPLOYEE_ID")
     private Long id;
 
-    private Date dateHired;
+    private String dateHired;
 
     @NotNull
     @OneToOne
@@ -40,11 +39,11 @@ public class Employee implements Serializable {
     @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<WorkingSchedule> workingSchedules;
 
-    public Employee(Date dateHired) {
+    public Employee(String dateHired) {
         this.dateHired = dateHired;
     }
 
-    public Employee(Date dateHired, User user, PersonalData personalData) {
+    public Employee(String dateHired, User user, PersonalData personalData) {
         this.dateHired = dateHired;
         this.user = user;
         this.personalData = personalData;

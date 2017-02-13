@@ -22,7 +22,8 @@ public class ReservationService {
 
     public Reservation save(Reservation reservation, User user) {
         reservation.setLastModifiedBy(user);
-        reservation.setLastModifiedTime(new Date().toString());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        reservation.setLastModifiedTime(sdf.format(new Date()));
         return repo.save(reservation);
     }
 

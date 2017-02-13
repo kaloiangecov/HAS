@@ -70,16 +70,15 @@ public class EmployeeService {
         for (WorkingSchedule schedule : employee.getWorkingSchedules()) {
             schedule.setEmployee(null);
         }
-
         return employee;
     }
 
     public Employee findByUserId(Long userId) throws Exception {
         Employee employee = repo.findByUserId(userId);
 
-        for (WorkingSchedule schedule : employee.getWorkingSchedules())
+        for (WorkingSchedule schedule : employee.getWorkingSchedules()) {
             schedule.setEmployee(null);
-
+        }
         return employee;
     }
 

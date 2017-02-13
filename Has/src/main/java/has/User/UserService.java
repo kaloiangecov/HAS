@@ -1,7 +1,7 @@
 package has.User;
 
+import has.Exceptions.EmailAlreadyExists;
 import has.Exceptions.UserAlreadyExists;
-import has.Roles.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,25 +19,17 @@ public class UserService {
     @Autowired
     private UserRepository repo;
 
-    @Autowired
-    private RoleRepository repoRole;
-
-    public User save(User user) throws UserAlreadyExists {
-        if (repo.findByUsername(user.getUsername()) != null) {
-            throw new UserAlreadyExists(user.getUsername());
-        }
+    public User save(User user) throws UserAlreadyExists, EmailAlreadyExists {
+        validateAlreadyExists(user);
         return repo.save(user);
     }
 
-    public User update(Long id, User user) throws Exception {
+    public User update(Long id, User user) throws UserAlreadyExists, EmailAlreadyExists, Exception {
         User dbUser = repo.findOne(id);
         if (dbUser == null) {
             throw new Exception("There is no user with such ID");
         }
-
-        if (repo.findByUsername(user.getUsername()) != null) {
-            throw new UserAlreadyExists(user.getUsername());
-        }
+        validateAlreadyExists(user);
 
         dbUser.setLastLogin(user.getLastLogin());
         dbUser.setPassword(user.getPassword());
@@ -94,5 +86,14 @@ public class UserService {
         }
         repo.delete(dbUser);
         return dbUser;
+    }
+
+    public void validateAlreadyExists(User user) throws UserAlreadyExists, EmailAlreadyExists {
+        if (repo.findByUsername(user.getUsername()) != null) {
+            throw new UserAlreadyExists(user.getUsername());
+        }
+        if (repo.findByEmail(user.getEmail()) != null) {
+            throw new EmailAlreadyExists(user.getEmail());
+        }
     }
 }

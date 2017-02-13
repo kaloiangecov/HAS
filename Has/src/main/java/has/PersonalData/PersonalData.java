@@ -7,7 +7,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.Date;
 
 /**
  * Created by kaloi on 12/23/2016.
@@ -37,10 +36,10 @@ public class PersonalData {
     private String fullName;
 
     @NotNull
-    private Date identityExpireDate;
+    private String identityExpireDate;
 
     @NotNull
-    private Date identityIssueDate;
+    private String identityIssueDate;
 
     @NotNull
     private String identityIssuedBy;
@@ -59,7 +58,7 @@ public class PersonalData {
     }
 
     public PersonalData(String address, String egn, String fullName,
-                        Date identityExpireDate, Date identityIssueDate,
+                        String identityExpireDate, String identityIssueDate,
                         String identityIssuedBy, String identityNumber, String phone) {
         this.address = address;
         this.egn = egn;
