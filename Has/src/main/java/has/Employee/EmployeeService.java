@@ -1,7 +1,6 @@
 package has.Employee;
 
 import has.WorkingSchedule.WorkingSchedule;
-import has.mailsender.MailTemplates;
 import has.mailsender.SendMailSSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,15 +21,11 @@ public class EmployeeService {
 
     public Employee save(Employee employee) throws Exception {
         Employee dbEmployee = repo.findByPersonalDataEgn(employee.getPersonalData().getEgn());
-        if (dbEmployee != null)
+        if (dbEmployee != null) {
             throw new Exception("Employee with EGN " + employee.getPersonalData().getEgn() + " already exists.");
+        }
 
-        new Thread(
-                new Runnable() {
-                    public void run() {
-                        SendMailSSL.sendMail("shit@hotmail.com", MailTemplates.RESERVATION_CONFIRMATION);
-                    }
-                }).start();
+                        SendMailSSL.sendMail("shit@hotmail.com", "");
 
         return repo.save(employee);
     }
@@ -97,7 +92,8 @@ public class EmployeeService {
             throw new Exception("There is no employee with such ID");
         }
 
-        if (repo.findByPersonalDataEgn(employee.getPersonalData().getEgn()) != null)
+        Employee dbEmployee2 = repo.findByPersonalDataEgn(employee.getPersonalData().getEgn());
+        if (dbEmployee2 != null && dbEmployee2.getId() != employee.getId())
             throw new Exception("Employee with EGN " + employee.getPersonalData().getEgn() + " already exists.");
 
         dbEmployee.setDateHired(employee.getDateHired());
@@ -105,7 +101,7 @@ public class EmployeeService {
         if (dbEmployee.getUser().getId() != employee.getUser().getId()) {
             dbEmployee.setUser(employee.getUser());
         }
-        SendMailSSL.sendMail("shit@shit.com", MailTemplates.RESERVATION_CONFIRMATION);
+        SendMailSSL.sendMail("shit@shit.com", "");
         return repo.save(dbEmployee);
     }
 }

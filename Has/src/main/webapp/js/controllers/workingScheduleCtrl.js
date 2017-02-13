@@ -37,6 +37,7 @@ app.controller("workingScheduleCtrl", function ($scope, $http, $stateParams, DTO
                 }
             })
             .withDataProp('data')
+            .withOption('responsive', true)
             .withOption('processing', true)
             .withOption('serverSide', true)
             .withOption('pagingType', 'full_numbers')

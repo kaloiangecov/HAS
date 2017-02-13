@@ -21,23 +21,6 @@
         <a ng-click="setScale('Week')" href="javascript:void(0)">Weeks</a>
     </div>
 
-    <!--
-    <div>
-        <div>Event list:</div>
-        <ul>
-            <li ng-repeat="eventItem in events.list">
-                {{eventItem}}
-            </li>
-        </ul>
-        <div>Selected events (click or Ctrl+click to select):</div>
-        <ul>
-            <li ng-repeat="selectedEvent in events.selected">
-                {{selectedEvent.text()}} - {{selectedEvent.start()}}
-            </li>
-        </ul>
-    </div>
-    -->
-
     <div class="modal fade" id="reservationModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -47,11 +30,11 @@
                             ng-click="reset()"><span
                             aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" ng-hide="isAdditionalGuest">Add a New Reservation</h4>
-                    <h4 class="modal-title" ng-hide="!isAdditionalGuest">Add Additional Reservation</h4>
+                    <h4 class="modal-title" ng-hide="!isAdditionalGuest">Add Additional Guest</h4>
                 </div>
                 <div class="modal-body row">
 
-                    <div class="row-fluid">
+                    <div class="row-fluid" ng-hide="isAdditionalGuest">
                         <div class="form-group col-xs-4">
                             <label for="breakfast">
                                 <input type="checkbox" id="breakfast" name="breakfast"

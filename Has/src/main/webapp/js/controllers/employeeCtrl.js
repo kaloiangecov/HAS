@@ -34,6 +34,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $interval
                 }
             })
             .withDataProp('data')
+            .withOption('responsive', true)
             .withOption('processing', true)
             .withOption('serverSide', true)
             .withOption('pagingType', 'full_numbers')
@@ -49,10 +50,14 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $interval
                 }),
             DTColumnBuilder.newColumn('user.username', 'User'),
             DTColumnBuilder.newColumn('id').notSortable().withClass('actions-column')
-                .renderWith(function (data) {
-                    var html = '<a class="action-btn" href="#!/employees/edit/' +
-                        data +
-                        '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+                .renderWith(function (id) {
+                    var html =
+                        '<div class="btn-group btn-group-sm">' +
+                        '<a class="btn btn-default action-btn" href="#!/employees/edit/' +
+                        id + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
+                        '<a class="btn btn-default action-btn delete-btn" id="ban_' +
+                        id + '" href="javascript:;"><i class="fa fa-trash-o" aria-hidden="true"></i></a>' +
+                        '</div>';
                     return html;
                 })
         ];

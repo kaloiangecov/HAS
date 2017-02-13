@@ -2,14 +2,9 @@
     width: 80px;
 }
 
-a.action-btn {
-    padding: 5px;
-    margin-right: 6px;
-}
-
-a.action-btn:hover {
-    background-color: rgba(50,50,50,0.1);
-    border-radius: 10px;
+a.action-btn,
+button.action-btn {
+    padding: 8px;
 }
 
 a > i.fa-refresh {
@@ -19,7 +14,8 @@ a > i.fa-refresh:hover {
     color: #26DD9A;
 }
 
-a > i.fa-trash-o {
+a > i.fa-trash-o,
+button > i.fa-trash-o {
     color: #e55;
 }
 a > i.fa-ban:hover {

@@ -37,6 +37,21 @@ public class ReservationController {
         return reservationService.getAllReservations();
     }
 
+    @RequestMapping(value = "/reservations/search", method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_VIEW_RESERVATION')")
+    public
+    @ResponseBody
+    List<Reservation> search(@RequestBody Reservation jsonParams) {
+
+        return reservationService.searchReservations(
+                jsonParams.getStartDate(),
+                jsonParams.getEndDate()
+        );
+    }
+
     @RequestMapping(value = "/reservation/{id}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
@@ -69,5 +84,14 @@ public class ReservationController {
     @PreAuthorize("hasAuthority('PERM_EDIT_RESERVATION')")
     public Reservation moveReservation(@PathVariable Long id, @RequestBody Reservation reservation, @AuthenticationPrincipal User user) throws Exception {
         return reservationService.move(id, reservation, user);
+    }
+
+    @RequestMapping(value = "/reservation/close/{id}", method = RequestMethod.PUT,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_EDIT_RESERVATION')")
+    public Reservation closeReservation(@PathVariable Long id, @AuthenticationPrincipal User user) throws Exception {
+        return reservationService.close(id, user);
     }
 }

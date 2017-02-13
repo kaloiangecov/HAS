@@ -1,6 +1,5 @@
 package has.Guest;
 
-import has.mailsender.MailTemplates;
 import has.mailsender.SendMailSSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,15 +20,12 @@ public class GuestService {
 
     public Guest save(Guest guest) throws Exception {
         Guest dbGuest = repo.findByPersonalDataEgn(guest.getPersonalData().getEgn());
-        if (dbGuest != null)
+        if (dbGuest != null) {
             throw new Exception("Guest with EGN " + guest.getPersonalData().getEgn() + " already exists.");
+        }
 
-        new Thread(
-                new Runnable() {
-                    public void run() {
-                        SendMailSSL.sendMail("shit@hotmail.com", MailTemplates.RESERVATION_CONFIRMATION);
-                    }
-                }).start();
+                        SendMailSSL.sendMail("shit@hotmail.com", "" );
+
         return repo.save(guest);
     }
 
@@ -65,13 +61,16 @@ public class GuestService {
             throw new Exception("There is no guest with such ID");
         }
 
+        Guest dbGuest2 = repo.findByPersonalDataEgn(guest.getPersonalData().getEgn());
+        if (dbGuest2 != null && dbGuest2.getId() != guest.getId())
+            throw new Exception("Employee with EGN " + guest.getPersonalData().getEgn() + " already exists.");
+
         dbGuest.setNumberReservations(guest.getNumberReservations());
         dbGuest.setStatus(guest.getStatus());
         dbGuest.setPersonalData(guest.getPersonalData());
-        if (guest.getUser() != null)
-            dbGuest.setUser(guest.getUser());
+        dbGuest.setUser(guest.getUser());
 
-        SendMailSSL.sendMail("shit@hotmail.com", MailTemplates.RESERVATION_CONFIRMATION);
+        SendMailSSL.sendMail("gunesh.shefkedov@gmail.com", "");
         return repo.save(dbGuest);
     }
 }

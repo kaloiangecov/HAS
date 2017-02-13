@@ -167,6 +167,26 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             .then(callback);
     };
 
+    $scope.closeReservation = function (id, callback) {
+        $http({
+            method: "PUT",
+            url: ("reservation/close/" + id),
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
+        }).then(
+            function (response) { //success
+                response.data;
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+                $scope.resetReservation();
+                loadEvents();
+            })
+            .then(callback);
+    };
+
     $scope.startDate = new DayPilot.Date(new Date());
     $scope.endDate = $scope.startDate.addDays(21);
     $scope.startDate = $scope.startDate.addDays(-3);
@@ -214,6 +234,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                         $scope.reservationGuest.owner = false;
 
                         $scope.isAdditionalGuest = true;
+                        $scope.$apply();
 
                         $('#reservationModal').modal('show');
                     }
@@ -234,9 +255,20 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 }
                 },
                 {
-                    text: "Disabled menu item", onclick: function () {
-                    alert("disabled")
-                }, disabled: true
+                    text: "Close reservation",
+                    onclick: function () {
+                        if (confirm("Close reservation?\n" + "Start: " + this.source.start() + "\nEnd:" + this.source.end())) {
+                            $scope.scheduler.events.remove(this.source);
+
+                            $scope.closeReservation(this.source.data.objReservation.id, function (data) {
+                                $scope.scheduler.message("Reservation closed: " + args.e.text());
+                                $scope.resetReservation();
+                                loadEvents();
+                            });
+                        } else {
+                            loadEvents();
+                        }
+                    }
                 }
             ]
         }),
@@ -464,13 +496,19 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
     }
 
     function loadEvents() {
+        var range = {
+            startDate: $scope.config.startDate,
+            endDate: moment($scope.config.startDate).add($scope.config.days, 'days').format("YYYY-MM-DD")
+        };
+
         $http({
             method: "POST",
-            url: "reservations",
+            url: "reservations/search",
             responseType: "json",
             headers: {
                 "Authorization": $scope.authentication
-            }
+            },
+            data: range
         }).then(
             function (response) { //success
                 $scope.events.list = [];
@@ -580,7 +618,11 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                                 $scope.events.list.push($scope.events.new);
                                 $scope.scheduler.message("New event created!");
                                 $scope.resetReservation();
+
                                 loadEvents();
+                                $scope.getAllGuests(function (data) {
+                                    $scope.guests.list = data;
+                                });
                             });
                         });
 
@@ -595,7 +637,11 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                         $scope.events.list.push($scope.events.new);
                         $scope.scheduler.message("New event created!");
                         $scope.resetReservation();
+
                         loadEvents();
+                        $scope.getAllGuests(function (data) {
+                            $scope.guests.list = data;
+                        });
                     });
                 }
             });
@@ -641,9 +687,13 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                     $scope.reservationGuest.reservation.lastModifiedTime = new Date().toISOString();
 
                     $scope.saveReservationGuest(function (data) {
-                        $scope.scheduler.message("Added new guest to reservation!");
+                        $scope.scheduler.message("Added new guest: " + $scope.reservationGuest.guest.personalData.fullName);
                         $scope.resetGuest();
+
                         loadEvents();
+                        $scope.getAllGuests(function (data) {
+                            $scope.guests.list = data;
+                        });
                     });
                 });
         } else {
@@ -654,7 +704,11 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             $scope.saveReservationGuest(function (data) {
                 $scope.scheduler.message("Added new guest to reservation!");
                 $scope.resetGuest();
+
                 loadEvents();
+                $scope.getAllGuests(function (data) {
+                    $scope.guests.list = data;
+                });
             });
         }
 
@@ -691,10 +745,12 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         $scope.$apply(function () {
             var tmp = end._d.getTime() - start._d.getTime();
             //$scope.config.timeline = getTimeline(start._d, tmp / 86400000);
-            $scope.config.startDate = start._d;
+            $scope.config.startDate = start._d.toISOString().substr(0, 10);
             $scope.config.days = tmp / 86400000;
 
+            loadEvents();
         });
+
     }
 
     angular.element(document).ready(function () {
