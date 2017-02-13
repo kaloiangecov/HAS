@@ -1,5 +1,6 @@
 package has.User;
 
+import has.Exceptions.EmailAlreadyExists;
 import has.Exceptions.UserAlreadyExists;
 import has.Roles.RoleRepository;
 import has.Utils.DataTableResult;
@@ -34,7 +35,7 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('PERM_CREATE_USER')")
-    public User save(@RequestBody @Valid User user) throws UserAlreadyExists {
+    public User save(@RequestBody @Valid User user) throws UserAlreadyExists, EmailAlreadyExists {
         return userService.save(user);
     }
 
