@@ -11,7 +11,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,10 +41,10 @@ public class Reservation implements Serializable {
     private int discount;
 
     @NotNull
-    private Date startDate;
+    private String startDate;
 
     @NotNull
-    private Date endDate;
+    private String endDate;
 
     @ManyToOne
     private User lastModifiedBy;
