@@ -172,7 +172,8 @@ INSERT INTO PERSONAL_DATA (PERSONAL_DATA_ID, address, egn, FULL_NAME, IDENTITY_E
 ('9', 'street 18', '9201063964', 'Stefan Nedelchev', '2023-05-17', '2013-05-17', 'MVR Ruse', '394875313', '0883562412'),
 ('10', 'street 19', '9202053964', 'Petar Nedelchev', '2023-05-17', '2013-05-17', 'MVR Ruse', '394875313', '0883562343'),
 ('11', 'street 20', '9112053964', 'Bai Tanas Debelia', '2023-05-17', '2013-05-17', 'MVR Silistra', '114875313', '0883112341'),
-('12', 'street 21', '9012053911', 'Toni Naika', '2014-05-12', '2024-05-12', 'MVR Sofia', '004875311', '0884135341');
+('12', 'street 21', '9012053911', 'Toni Naika', '2024-05-12', '2014-05-12', 'MVR Sofia', '004875311', '0884135341'),
+('13', 'street 22', '8801054212', 'Atanas Kolev', '2025-05-12', '2015-05-12', 'MVR Sofia', '112875303', '0871115341');
 
 
 INSERT INTO EMPLOYEE (EMPLOYEE_ID, DATE_HIRED, PERSONAL_DATA_ID, USER_ID) VALUES ('1', '2016-11-12', '1', '1');
@@ -195,8 +196,9 @@ INSERT INTO WORKING_SCHEDULE(EMPLOYEE_ID, SHIFT, START_DATE, END_DATE) VALUES
 (2, 0, '2017-02-18', '2017-02-20'),
 (9, 1, '2017-02-10', '2017-02-12');
 
-INSERT INTO GUEST (GUEST_ID, NUMBER_RESERVATIONS, STATUS, PERSONAL_DATA_ID) VALUES ('1', 2, 0, '11');
-INSERT INTO GUEST (GUEST_ID, NUMBER_RESERVATIONS, STATUS, PERSONAL_DATA_ID, USER_ID) VALUES ('2', 1, 0, '12', '11');
+INSERT INTO GUEST (GUEST_ID, NUMBER_RESERVATIONS, STATUS, PERSONAL_DATA_ID) VALUES (1, 2, 0, '11');
+INSERT INTO GUEST (GUEST_ID, NUMBER_RESERVATIONS, STATUS, PERSONAL_DATA_ID, USER_ID) VALUES (2, 1, 0, '12', '11');
+INSERT INTO GUEST (GUEST_ID, NUMBER_RESERVATIONS, STATUS, PERSONAL_DATA_ID) VALUES (3, 2, 0, '13');
 
 
 INSERT INTO ROOM (NUMBER, BEDS_DOUBLE, BEDS_SINGLE, ROOM_CLASS, STATUS, CHILDREN, PETS, MINIBAR)  VALUES
@@ -216,8 +218,12 @@ INSERT INTO ROOM (NUMBER, BEDS_DOUBLE, BEDS_SINGLE, ROOM_CLASS, STATUS, CHILDREN
 INSERT INTO RESERVATION
 (reservation_id, all_inclusive, breakfast, dinner, discount, end_date, C_GROUP, last_modified_by_user_id, last_modified_time, number_adults, number_children, price, employee_id, start_date, status)
 VALUES('1', false, true, false, 0, '2017-02-14', false, null, null, 2, 1, 40.0, '5', '2017-02-10', 0),
-('2', true, true, true, 10, '2017-02-18', false, null, null, 1, 0, 45.0, '4', '2017-02-15', 1);
+('2', true, true, true, 10, '2017-02-18', true, null, null, 1, 1, 50.0, '4', '2017-02-15', 1),
+('3', false, false, true, 10, '2017-02-22', false, null, null, 2, 0, 45.0, '4', '2017-02-19', 1);
 
-INSERT INTO RESERVATION_GUEST (reservation_guest_id, reservation_id, guest_id, room_id, owner) VALUES
-(1, 1, 1, 5, true),
-(2, 2, 2, 8, true);
+INSERT INTO RESERVATION_GUEST (reservation_id, guest_id, room_id, owner) VALUES
+(1, 1, 5, true),
+(2, 2, 8, true),
+(2, 3, 10, false),
+(3, 1, 2, true),
+(3, 2, 2, false);
