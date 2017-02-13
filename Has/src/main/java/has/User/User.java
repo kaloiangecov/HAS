@@ -15,7 +15,6 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,7 +41,7 @@ public class User implements Serializable, UserDetails {
     private String email;
 
     @NotNull
-    private Date regDate;
+    private String regDate;
 
     @NotNull
     @Size(min = 3, max = 16)
