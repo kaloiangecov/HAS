@@ -22,11 +22,13 @@
                     <label class="control-label col-md-4 col-sm-4 col-xs-12" for="password">Password *</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         <input type="password" class="form-control" id="password" name="password"
-                               ng-model="user.password" minlength="8" maxlength="16" required="required"/>
+                               ng-model="user.password" minlength="8" maxlength="16"
+                               pattern="(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}" required="required"/>
                         <div ng-show="userForm.$submitted || userForm.password.$touched" class="validation-message">
                             <span ng-show="userForm.password.$error.required">This field is required</span>
                             <span ng-show="userForm.password.$error.minlength">Input too short</span>
                             <span ng-show="userForm.password.$error.maxlength">Input too long</span>
+                            <span ng-show="userForm.password.$error.pattern">Incorrect pattern!</span>
                         </div>
                     </div>
                 </div>
