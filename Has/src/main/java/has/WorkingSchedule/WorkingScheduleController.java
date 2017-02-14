@@ -26,7 +26,7 @@ public class WorkingScheduleController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_CREATE_SCHEDULE')")
     public WorkingSchedule save(@RequestBody @Valid WorkingSchedule schedule) {
         return wsService.save(schedule);
     }
