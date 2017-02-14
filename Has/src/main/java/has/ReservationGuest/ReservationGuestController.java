@@ -1,7 +1,6 @@
 package has.ReservationGuest;
 
 import freemarker.template.TemplateException;
-import has.Reservation.Reservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -60,7 +59,7 @@ public class ReservationGuestController {
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('PERM_EDIT_RESERVATION_GUEST')")
     public ReservationGuest updateReservation(@PathVariable Long id,
-                                              @RequestBody @Valid Reservation reservation) throws Exception {
-        return reservationGuestService.update(id, reservation);
+                                              @RequestBody @Valid ReservationGuest reservationGuest) throws Exception {
+        return reservationGuestService.update(id, reservationGuest);
     }
 }

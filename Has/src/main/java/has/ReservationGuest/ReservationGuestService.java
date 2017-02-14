@@ -1,7 +1,6 @@
 package has.ReservationGuest;
 
 import freemarker.template.*;
-import has.Reservation.Reservation;
 import has.mailsender.SendMailSSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -87,11 +86,16 @@ public class ReservationGuestService {
         return dbReservationGuest;
     }
 
-    public ReservationGuest update(Long id, Reservation reservation) throws Exception {
+    public ReservationGuest update(Long id, ReservationGuest reservationGuest) throws Exception {
         ReservationGuest dbReservationGuest = repo.findOne(id);
         if (dbReservationGuest == null) {
             throw new Exception("There is no ?? with such ID");
         }
+
+        dbReservationGuest.setReservation(reservationGuest.getReservation());
+        dbReservationGuest.setGuest(reservationGuest.getGuest());
+        dbReservationGuest.setRoom(reservationGuest.getRoom());
+        dbReservationGuest.setOwner(reservationGuest.isOwner());
 
         return repo.save(dbReservationGuest);
     }
