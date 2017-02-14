@@ -41,10 +41,17 @@ public class ReservationGuestService {
         StringWriter writer = new StringWriter();
         template.process(model, writer);
 
-        //TODO: do something with the result
-        String result = writer.toString();
+        String templateMessage = writer.toString();
 
-        SendMailSSL.sendMail("gunesh.shefkedov@gmail.com", result);
+        new Thread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        SendMailSSL.sendMail("gunesh.shefkedov@gmail.com", templateMessage);
+                    }
+                }
+        ).start();
+
     }
 
     private Configuration configureTemplate(ReservationGuest reservationGuest) throws IOException {
