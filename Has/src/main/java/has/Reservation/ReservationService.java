@@ -1,7 +1,6 @@
 package has.Reservation;
 
 import has.ReservationGuest.ReservationGuest;
-import has.Room.Room;
 import has.User.User;
 import has.WorkingSchedule.WorkingSchedule;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,9 +91,10 @@ public class ReservationService {
 
         dbReservation.setReceptionist(reservation.getReceptionist());
 
-        Room newRoom = reservation.getReservationGuests().get(0).getRoom();
-        for (ReservationGuest reservationGuest : dbReservation.getReservationGuests()) {
-            reservationGuest.setRoom(newRoom);
+        int i = 0;
+        for (ReservationGuest dbReservationGuest : dbReservation.getReservationGuests()) {
+            dbReservationGuest.setRoom(reservation.getReservationGuests().get(i).getRoom());
+            i++;
         }
 
         return removeRecursions(repo.save(dbReservation));

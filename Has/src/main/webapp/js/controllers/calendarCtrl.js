@@ -314,10 +314,22 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             tmpReservatoin.startDate = args.newStart.value.substr(0, 10);
             tmpReservatoin.endDate = args.newEnd.value.substr(0, 10);
 
-            $scope.getRoom(args.e.resource(), function (room) {
-                angular.forEach(tmpReservatoin.reservationGuests, function (value, key) {
-                    value.room = room;
-                });
+            $scope.getRoom(args.newResource, function (room) {
+                if (!tmpReservatoin.group) {
+                    angular.forEach(tmpReservatoin.reservationGuests, function (value, key) {
+                        value.room = room;
+                    });
+                } else {
+                    var oldRoomId = args.e.data.roomId;
+
+                    angular.forEach(tmpReservatoin.reservationGuests, function (resGuest, key) {
+                        if (resGuest.room.id == oldRoomId) {
+                            resGuest.room = room;
+                        }
+                    });
+
+                    args.e.data.roomId = room.id;
+                }
 
                 $http({
                     method: "PUT",
@@ -541,7 +553,8 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                                     tmpEvent,
                                     {
                                         id: (key + '_' + (index + 1)),
-                                        resource: resGuest.room.id
+                                        resource: resGuest.room.id,
+                                        roomId: resGuest.room.id
                                     }
                                 );
 
