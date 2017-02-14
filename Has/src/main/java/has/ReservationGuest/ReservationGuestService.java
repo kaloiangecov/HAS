@@ -20,12 +20,14 @@ public class ReservationGuestService {
     @Autowired
     private ReservationGuestRepository repo;
 
+    @Autowired
+    private Configuration configuration;
+
     public ReservationGuest save(ReservationGuest reservationGuest) throws IOException, TemplateException {
         ReservationGuest savedGuest = null;
         savedGuest = repo.save(reservationGuest);
         sendEmaiNotification(savedGuest);
         return savedGuest;
-
     }
 
     private void sendEmaiNotification(ReservationGuest savedGuest) throws IOException, TemplateException {
@@ -36,6 +38,7 @@ public class ReservationGuestService {
         Configuration cfg;
         cfg = configureTemplate(savedGuest);
         Template template = cfg.getTemplate("register.ftl");
+//        Template template = configuration.getTemplate("register.ftl");
 
         StringWriter writer = new StringWriter();
         template.process(model, writer);
@@ -46,11 +49,10 @@ public class ReservationGuestService {
                 new Runnable() {
                     @Override
                     public void run() {
-                        SendMailSSL.sendMail("gunesh.shefkedov@gmail.com", templateMessage);
+                        SendMailSSL.sendMail("", templateMessage);
                     }
                 }
         ).start();
-
     }
 
     private Configuration configureTemplate(ReservationGuest reservationGuest) throws IOException {

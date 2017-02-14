@@ -150,8 +150,6 @@ public class ReservationService {
         reservation.setLastModifiedTime(sdf.format(new Date()));
 
         if (reservation.getStatus() == RESERVATION_STATUS_ARRIVED) {
-            String abc = reservation.getReservationCode();
-            System.out.println(abc);
         }
     }
 }
