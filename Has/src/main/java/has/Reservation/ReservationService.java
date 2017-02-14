@@ -19,10 +19,10 @@ public class ReservationService {
     @Autowired
     private ReservationRepository repo;
 
+    public static final int RESERVATION_STATUS_ARRIVED = 1;
+
     public Reservation save(Reservation reservation, User user) {
-        reservation.setLastModifiedBy(user);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        reservation.setLastModifiedTime(sdf.format(new Date()));
+        setLastModifiedAndNotifyCustommer(reservation, user);
         return repo.save(reservation);
     }
 
@@ -48,7 +48,7 @@ public class ReservationService {
 
     public Reservation findById(Long id) throws Exception {
         Reservation dbReservation = repo.findOne(id);
-        if(dbReservation == null){
+        if (dbReservation == null) {
             throw new Exception("There is no reservation with such ID");
         }
 
@@ -57,7 +57,7 @@ public class ReservationService {
 
     public Reservation remove(Long id) throws Exception {
         Reservation dbReservation = repo.findOne(id);
-        if(dbReservation == null){
+        if (dbReservation == null) {
             throw new Exception("There is no reservation with such ID");
         }
 
@@ -68,7 +68,7 @@ public class ReservationService {
 
     public Reservation update(Long id, Reservation reservation, User user) throws Exception {
         Reservation dbReservation = repo.findOne(id);
-        if(dbReservation == null){
+        if (dbReservation == null) {
             throw new Exception("There is no reservation with such ID");
         }
 
@@ -85,10 +85,8 @@ public class ReservationService {
         dbReservation.setNumberAdults(reservation.getNumberAdults());
         dbReservation.setStartDate(reservation.getStartDate());
         dbReservation.setNumberChildren(reservation.getNumberChildren());
-        dbReservation.setLastModifiedBy(user);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        dbReservation.setLastModifiedTime(sdf.format(new Date()));
+        setLastModifiedAndNotifyCustommer(dbReservation, user);
 
         dbReservation.setReceptionist(reservation.getReceptionist());
 
@@ -144,5 +142,16 @@ public class ReservationService {
         reservation.getReceptionist().setWorkingSchedules(schedules);
 
         return reservation;
+    }
+
+    private void setLastModifiedAndNotifyCustommer(Reservation reservation, User user) {
+        reservation.setLastModifiedBy(user);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        reservation.setLastModifiedTime(sdf.format(new Date()));
+
+        if (reservation.getStatus() == RESERVATION_STATUS_ARRIVED) {
+            String abc = reservation.getReservationCode();
+            System.out.println(abc);
+        }
     }
 }

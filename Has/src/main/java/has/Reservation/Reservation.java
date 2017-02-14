@@ -11,6 +11,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.security.SecureRandom;
 import java.util.List;
 
 /**
@@ -21,6 +22,8 @@ import java.util.List;
 @Entity(name = "RESERVATION")
 public class Reservation implements Serializable {
 
+    SecureRandom random = new SecureRandom();
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "RESERVATION_ID")
@@ -30,7 +33,7 @@ public class Reservation implements Serializable {
     private boolean breakfast;
     private boolean dinner;
 
-    private String reservationCode;
+    private String reservationCode = random.getAlgorithm();
 
     @Column(name = "C_GROUP")
     private boolean group;
