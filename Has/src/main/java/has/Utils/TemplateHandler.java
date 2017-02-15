@@ -30,14 +30,16 @@ public class TemplateHandler {
 
         String templateMessage = writer.toString();
 
-        new Thread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        SendMailSSL.sendMail(reservationGuest.getGuest().getUser().getEmail(), templateMessage);
+        if (reservationGuest.getGuest().getUser() != null) {
+            new Thread(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            SendMailSSL.sendMail(reservationGuest.getGuest().getUser().getEmail(), templateMessage);
+                        }
                     }
-                }
-        ).start();
+            ).start();
+        }
     }
 
     public TemplateHandler() {
