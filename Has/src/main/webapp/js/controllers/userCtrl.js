@@ -49,6 +49,10 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $interval, $r
             DTColumnBuilder.newColumn('username', 'Username'),
             DTColumnBuilder.newColumn('email', 'E-Mail'),
             DTColumnBuilder.newColumn('userRole.roleName', 'Role'),
+            DTColumnBuilder.newColumn('regDate', 'Registration Date')
+                .renderWith(function (date) {
+                    return new Date(date).toLocaleString();
+                }),
             DTColumnBuilder.newColumn('lastLogin', 'Last Login')
                 .renderWith(function (date) {
                     return new Date(date).toLocaleString();

@@ -19,6 +19,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
     };
     $scope.isNewGuest = true;
     $scope.isAdditionalGuest = false;
+    $scope.isExistingGroup = false;
     $scope.reservationGuest = {
         reservation: {},
         guest: {},
@@ -173,6 +174,8 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             url: ("reservation/close/" + id),
             responseType: "json",
             headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
                 "Authorization": $scope.authentication
             }
         }).then(
@@ -260,9 +263,9 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                     text: "Close reservation",
                     onclick: function () {
                         if (confirm("Close reservation?\n" + "Start: " + this.source.start() + "\nEnd:" + this.source.end())) {
-                            $scope.scheduler.events.remove(this.source);
 
                             $scope.closeReservation(this.source.data.objReservation.id, function (data) {
+                                $scope.scheduler.events.remove(this.source);
                                 $scope.scheduler.message("Reservation closed: " + this.source.text());
                                 $scope.resetReservation();
                                 loadEvents();
@@ -606,20 +609,87 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             $scope.reservationGuest.room = $scope.events.resources[$scope.events.new.resource - 1];
             $scope.reservationGuest.owner = true;
 
-            var objReservation = {
-                startDate: $scope.events.new.start.value.substr(0, 10),
-                endDate: $scope.events.new.end.value.substr(0, 10),
-                breakfast: $scope.reservationGuest.reservation.breakfast,
-                dinner: $scope.reservationGuest.reservation.dinner,
-                allInclusive: $scope.reservationGuest.reservation.allInclusive,
-                price: 40.0,
-                discount: 0,
-                numberAdults: 1,
-                numberChildren: 0,
-                status: 0,
-                group: false,
-                receptionist: data
-            };
+            var objReservation = {};
+
+            //TODO optimize repetitive code here
+            if ($scope.isExistingGroup && $scope.reservationGuest.reservation.id) {
+                objReservation = $scope.reservationGuest.reservation;
+                $scope.reservationGuest.owner = false;
+
+                if ($scope.isNewGuest) { // create new guest
+                    $scope.reservationGuest.guest.numberReservations = 0;
+                    $scope.reservationGuest.guest.status = 0;
+
+                    $http({
+                        method: "POST",
+                        url: "guest",
+                        responseType: "json",
+                        headers: {
+                            "Authorization": $scope.authentication
+                        },
+                        data: $scope.reservationGuest.guest
+                    }).then(
+                        function (response) { //success
+                            return response.data;
+                        },
+                        function (response) { //error
+                            $scope.displayMessage(response.data);
+                        })
+                        .then(function (data) {
+                            $scope.reservationGuest.guest = data;
+
+                            $scope.events.new.text = $scope.reservationGuest.guest.personalData.fullName;
+
+                            $scope.saveReservationGuest(function (data) {
+                                $scope.events.new.id = data.reservation.id;
+                                $scope.events.list.push($scope.events.new);
+                                $scope.scheduler.message("New event created!");
+                                $scope.resetReservation();
+
+                                loadEvents();
+                                $scope.getAllGuests(function (data) {
+                                    $scope.guests.list = data;
+                                });
+                            });
+                        });
+
+                } else { // use existing guest
+                    $scope.reservationGuest.guest = $scope.guests.selectedGuest;
+                    $scope.reservationGuest.guest.numberReservations += 1;
+
+                    $scope.events.new.text = $scope.reservationGuest.guest.personalData.fullName;
+
+                    $scope.saveReservationGuest(function (data) {
+                        $scope.events.new.id = data.reservation.id;
+                        $scope.events.list.push($scope.events.new);
+                        $scope.scheduler.message("New event created!");
+                        $scope.resetReservation();
+
+                        loadEvents();
+                        $scope.getAllGuests(function (data) {
+                            $scope.guests.list = data;
+                        });
+                    });
+                }
+
+                $('#reservationModal').modal('hide');
+                return;
+            } else {
+                objReservation = {
+                    startDate: $scope.events.new.start.value.substr(0, 10),
+                    endDate: $scope.events.new.end.value.substr(0, 10),
+                    breakfast: $scope.reservationGuest.reservation.breakfast,
+                    dinner: $scope.reservationGuest.reservation.dinner,
+                    allInclusive: $scope.reservationGuest.reservation.allInclusive,
+                    price: 40.0,
+                    discount: 0,
+                    numberAdults: 1,
+                    numberChildren: 0,
+                    status: 0,
+                    group: $scope.reservationGuest.reservation.group,
+                    receptionist: data
+                };
+            }
 
             $scope.events.new.bubbleHtml = "Reservation details";
             $scope.events.new.status = 0;
