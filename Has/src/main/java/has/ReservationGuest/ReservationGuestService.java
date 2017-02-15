@@ -1,12 +1,12 @@
 package has.ReservationGuest;
 
-import freemarker.template.*;
-import has.mailsender.SendMailSSL;
+import freemarker.template.Configuration;
+import freemarker.template.TemplateException;
+import has.Utils.TemplateHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,48 +20,26 @@ public class ReservationGuestService {
     @Autowired
     private ReservationGuestRepository repo;
 
+    @Autowired
+    private TemplateHandler templateHandler;
+
+    @Autowired
+    private Configuration configuration;
+
     public ReservationGuest save(ReservationGuest reservationGuest) throws IOException, TemplateException {
         ReservationGuest savedGuest = null;
         savedGuest = repo.save(reservationGuest);
         sendEmaiNotification(savedGuest);
         return savedGuest;
-
     }
 
-    private void sendEmaiNotification(ReservationGuest savedGuest) throws IOException, TemplateException {
+    private void sendEmaiNotification(ReservationGuest reservationGuest) throws IOException, TemplateException {
         Map model = new HashMap();
-        model.put("guest", savedGuest.getGuest());
-        model.put("reservation", savedGuest.getReservation());
+        model.put("guest", reservationGuest.getGuest());
+        model.put("reservation", reservationGuest.getReservation());
+        String templatePath = "register.ftl";
 
-        Configuration cfg;
-        cfg = configureTemplate(savedGuest);
-        Template template = cfg.getTemplate("register.ftl");
-
-        StringWriter writer = new StringWriter();
-        template.process(model, writer);
-
-        String templateMessage = writer.toString();
-
-        new Thread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        SendMailSSL.sendMail("gunesh.shefkedov@gmail.com", templateMessage);
-                    }
-                }
-        ).start();
-
-    }
-
-    private Configuration configureTemplate(ReservationGuest reservationGuest) throws IOException {
-        Configuration cfg = new Configuration();
-
-        cfg.setClassForTemplateLoading(ReservationGuest.class, "/templates");
-        cfg.setIncompatibleImprovements(new Version(2, 3, 20));
-        cfg.setDefaultEncoding("UTF-8");
-        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-
-        return cfg;
+        templateHandler.sendMail(model, templatePath, reservationGuest);
     }
 
     public List<ReservationGuest> getAllReservationGuestConnections() {

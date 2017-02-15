@@ -12,6 +12,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by kaloi on 12/20/2016.
@@ -20,6 +21,8 @@ import java.util.List;
 @Setter
 @Entity(name = "RESERVATION")
 public class Reservation implements Serializable {
+
+    UUID code = UUID.randomUUID();
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,7 +33,7 @@ public class Reservation implements Serializable {
     private boolean breakfast;
     private boolean dinner;
 
-    private String reservationCode;
+    private String reservationCode = String.valueOf(code);
 
     @Column(name = "C_GROUP")
     private boolean group;

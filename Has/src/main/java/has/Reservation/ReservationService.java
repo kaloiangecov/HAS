@@ -1,14 +1,19 @@
 package has.Reservation;
 
+import freemarker.template.TemplateException;
 import has.ReservationGuest.ReservationGuest;
 import has.User.User;
+import has.Utils.TemplateHandler;
 import has.WorkingSchedule.WorkingSchedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by kaloi on 12/20/2016.
@@ -17,18 +22,20 @@ import java.util.List;
 public class ReservationService {
 
     @Autowired
+    private TemplateHandler templateHandler;
+
+    @Autowired
     private ReservationRepository repo;
 
-    public Reservation save(Reservation reservation, User user) {
-        reservation.setLastModifiedBy(user);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        reservation.setLastModifiedTime(sdf.format(new Date()));
+    public static final int RESERVATION_STATUS_ARRIVED = 1;
+
+    public Reservation save(Reservation reservation, User user) throws IOException, TemplateException {
+        setLastModifiedAndNotifyCustommer(reservation, user);
         return repo.save(reservation);
     }
 
     public List<Reservation> getAllReservations() {
         List<Reservation> reservations = repo.findAll();
-
         for (Reservation reservation : reservations) {
             reservation = removeRecursions(reservation);
         }
@@ -48,7 +55,7 @@ public class ReservationService {
 
     public Reservation findById(Long id) throws Exception {
         Reservation dbReservation = repo.findOne(id);
-        if(dbReservation == null){
+        if (dbReservation == null) {
             throw new Exception("There is no reservation with such ID");
         }
 
@@ -57,18 +64,17 @@ public class ReservationService {
 
     public Reservation remove(Long id) throws Exception {
         Reservation dbReservation = repo.findOne(id);
-        if(dbReservation == null){
+        if (dbReservation == null) {
             throw new Exception("There is no reservation with such ID");
         }
 
         repo.delete(dbReservation);
-
         return removeRecursions(dbReservation);
     }
 
     public Reservation update(Long id, Reservation reservation, User user) throws Exception {
         Reservation dbReservation = repo.findOne(id);
-        if(dbReservation == null){
+        if (dbReservation == null) {
             throw new Exception("There is no reservation with such ID");
         }
 
@@ -85,10 +91,8 @@ public class ReservationService {
         dbReservation.setNumberAdults(reservation.getNumberAdults());
         dbReservation.setStartDate(reservation.getStartDate());
         dbReservation.setNumberChildren(reservation.getNumberChildren());
-        dbReservation.setLastModifiedBy(user);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        dbReservation.setLastModifiedTime(sdf.format(new Date()));
+        setLastModifiedAndNotifyCustommer(dbReservation, user);
 
         dbReservation.setReceptionist(reservation.getReceptionist());
 
@@ -144,5 +148,30 @@ public class ReservationService {
         reservation.getReceptionist().setWorkingSchedules(schedules);
 
         return reservation;
+    }
+
+    private void setLastModifiedAndNotifyCustommer(Reservation reservation, User user) throws IOException, TemplateException {
+        reservation.setLastModifiedBy(user);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        reservation.setLastModifiedTime(sdf.format(new Date()));
+
+        if (reservation.getStatus() == RESERVATION_STATUS_ARRIVED) {
+            notifyCustommer(reservation, user);
+        }
+    }
+
+    private void notifyCustommer(Reservation reservation, User user) throws IOException, TemplateException {
+        ReservationGuest reservationGuest = null;
+        for (ReservationGuest singleReservationGuest : reservation.getReservationGuests()) {
+            if (singleReservationGuest.isOwner() == true) {
+                reservationGuest = singleReservationGuest;
+            }
+        }
+        Map model = new HashMap();
+        model.put("reservation", reservation);
+        model.put("guest", reservationGuest.getGuest());
+        String templatePath = "roomCode.ftl";
+
+        templateHandler.sendMail(model, templatePath, reservationGuest);
     }
 }

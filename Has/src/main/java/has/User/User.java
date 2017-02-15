@@ -34,6 +34,7 @@ public class User implements Serializable, UserDetails {
 
     @NotNull
     @Size(min = 6, max = 16)
+//    @Pattern(regexp = "(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}")
     private String password;
 
     @NotNull
