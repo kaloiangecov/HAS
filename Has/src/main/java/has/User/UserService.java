@@ -89,10 +89,13 @@ public class UserService {
     }
 
     public void validateAlreadyExists(User user) throws UserAlreadyExists, EmailAlreadyExists {
-        if (repo.findByUsername(user.getUsername()) != null) {
+        User dbUser1 = repo.findByUsername(user.getUsername());
+        if (dbUser1 != null && dbUser1.getId() != user.getId()) {
             throw new UserAlreadyExists(user.getUsername());
         }
-        if (repo.findByEmail(user.getEmail()) != null) {
+
+        User dbUser2 = repo.findByEmail(user.getEmail());
+        if (dbUser2 != null && dbUser2.getId() != dbUser2.getId()) {
             throw new EmailAlreadyExists(user.getEmail());
         }
     }

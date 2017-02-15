@@ -163,8 +163,9 @@ public class ReservationService {
     private void notifyCustommer(Reservation reservation, User user) throws IOException, TemplateException {
         ReservationGuest reservationGuest = null;
         for (ReservationGuest singleReservationGuest : reservation.getReservationGuests()) {
-            if (singleReservationGuest.isOwner() == true) {
+            if (singleReservationGuest.isOwner()) {
                 reservationGuest = singleReservationGuest;
+                break;
             }
         }
         Map model = new HashMap();
