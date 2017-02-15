@@ -89,8 +89,7 @@ public class ReservationController {
     }
 
     @RequestMapping(value = "/reservation/close/{id}", method = RequestMethod.PUT,
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('PERM_EDIT_RESERVATION')")
     public Reservation closeReservation(@PathVariable Long id, @AuthenticationPrincipal User user) throws Exception {
