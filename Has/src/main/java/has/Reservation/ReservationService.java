@@ -1,14 +1,19 @@
 package has.Reservation;
 
+import freemarker.template.TemplateException;
 import has.ReservationGuest.ReservationGuest;
 import has.User.User;
+import has.Utils.TemplateHandler;
 import has.WorkingSchedule.WorkingSchedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by kaloi on 12/20/2016.
@@ -17,18 +22,20 @@ import java.util.List;
 public class ReservationService {
 
     @Autowired
+    private TemplateHandler templateHandler;
+
+    @Autowired
     private ReservationRepository repo;
 
     public static final int RESERVATION_STATUS_ARRIVED = 1;
 
-    public Reservation save(Reservation reservation, User user) {
+    public Reservation save(Reservation reservation, User user) throws IOException, TemplateException {
         setLastModifiedAndNotifyCustommer(reservation, user);
         return repo.save(reservation);
     }
 
     public List<Reservation> getAllReservations() {
         List<Reservation> reservations = repo.findAll();
-
         for (Reservation reservation : reservations) {
             reservation = removeRecursions(reservation);
         }
@@ -62,7 +69,6 @@ public class ReservationService {
         }
 
         repo.delete(dbReservation);
-
         return removeRecursions(dbReservation);
     }
 
@@ -144,12 +150,28 @@ public class ReservationService {
         return reservation;
     }
 
-    private void setLastModifiedAndNotifyCustommer(Reservation reservation, User user) {
+    private void setLastModifiedAndNotifyCustommer(Reservation reservation, User user) throws IOException, TemplateException {
         reservation.setLastModifiedBy(user);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         reservation.setLastModifiedTime(sdf.format(new Date()));
 
         if (reservation.getStatus() == RESERVATION_STATUS_ARRIVED) {
+            notifyCustommer(reservation, user);
         }
+    }
+
+    private void notifyCustommer(Reservation reservation, User user) throws IOException, TemplateException {
+        ReservationGuest reservationGuest = null;
+        for (ReservationGuest singleReservationGuest : reservation.getReservationGuests()) {
+            if (singleReservationGuest.isOwner() == true) {
+                reservationGuest = singleReservationGuest;
+            }
+        }
+        Map model = new HashMap();
+        model.put("reservation", reservation);
+        model.put("guest", reservationGuest.getGuest());
+        String templatePath = "roomCode.ftl";
+
+        templateHandler.sendMail(model, templatePath, reservationGuest);
     }
 }

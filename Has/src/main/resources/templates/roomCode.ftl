@@ -1,5 +1,5 @@
 <#assign fullName = guest.personalData.fullName >
-<#assign code = reservation.numberAdults >
+<#assign code = reservation.reservationCode >
 
 <!DOCTYPE html>
 <html>
