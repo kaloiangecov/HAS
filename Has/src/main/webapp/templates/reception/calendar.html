@@ -31,6 +31,24 @@
                             aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" ng-hide="isAdditionalGuest">Add a New Reservation</h4>
                     <h4 class="modal-title" ng-hide="!isAdditionalGuest">Add Additional Guest</h4>
+
+                    <div class="row" ng-hide="isAdditionalGuest">
+                        <div class="col-sm-4">
+                            <label for="group">
+                                <input type="checkbox" id="group" ng-model="reservationGuest.reservation.group"/> Group
+                            </label>
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="groupExisting">
+                                <input type="checkbox" id="groupExisting" ng-model="isExistingGroup"/>
+                                Part of
+                            </label>
+                            <select ng-model="reservationGuest.reservation"
+                                    ng-options="item as (item.startDate + ' - ' + item.endDate + ' : ' + item.reservationGuests[0].guest.personalData.fullName) for item in groupReservationsList track by item.id"
+                                    ng-disabled="!isExistingGroup">
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-body row">
 

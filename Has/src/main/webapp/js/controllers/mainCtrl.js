@@ -147,19 +147,46 @@ app.controller("mainCtrl", function ($scope, $http) {
             }).then(updateCallback);
     };
 
-    $scope.exportForm = function (data) {
-        var text = JSON.stringify(data);
+    $scope.deleteData = function (dataType, id, callback) {
+        $http({
+            method: "DELETE",
+            url: (dataType + "/" + id),
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
+        }).then(
+            function (response) { //success
+                response.data;
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+            })
+            .then(callback);
+    };
 
-        var a = window.document.createElement('a');
-        a.href = window.URL.createObjectURL(new Blob([text], {type: 'text/csv'}));
-        a.download = ('form.txt');
+    $scope.saveData = function (dataType, data, successCallback, errorCallback, isEdit) {
+        var url = isEdit ? (dataType + "/" + data.id) : dataType;
+        var method = isEdit ? "PUT" : "POST";
 
-        // Append anchor to body.
-        document.body.appendChild(a)
-        a.click();
-
-        // Remove anchor from body
-        document.body.removeChild(a)
+        $http({
+            method: method,
+            url: url,
+            data: data,
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
+        }).then(
+            function (response) { //success
+                return response.data;
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+                if (errorCallback)
+                    errorCallback;
+            })
+            .then(successCallback);
     };
 
     $scope.fullscreen = function () {

@@ -13,7 +13,7 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $interval, $r
     if (window.location.hash.includes("list")) {
         $scope.getAllRoles(function (data) {
             $scope.rolesList = data;
-            $scope.filters.roleID = $scope.rolesList[0].id;
+            ctrl.filters.roleID = $scope.rolesList[0].id;
         });
 
         // users table
@@ -49,6 +49,10 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $interval, $r
             DTColumnBuilder.newColumn('username', 'Username'),
             DTColumnBuilder.newColumn('email', 'E-Mail'),
             DTColumnBuilder.newColumn('userRole.roleName', 'Role'),
+            DTColumnBuilder.newColumn('regDate', 'Registration Date')
+                .renderWith(function (date) {
+                    return new Date(date).toLocaleString();
+                }),
             DTColumnBuilder.newColumn('lastLogin', 'Last Login')
                 .renderWith(function (date) {
                     return new Date(date).toLocaleString();
