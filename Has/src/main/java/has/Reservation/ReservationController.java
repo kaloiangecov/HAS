@@ -50,7 +50,8 @@ public class ReservationController {
 
         return reservationService.searchReservations(
                 jsonParams.getStartDate(),
-                jsonParams.getEndDate()
+                jsonParams.getEndDate(),
+                jsonParams.isGroup()
         );
     }
 

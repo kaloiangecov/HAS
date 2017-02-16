@@ -10,10 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by kaloi on 12/20/2016.
@@ -42,9 +39,15 @@ public class ReservationService {
         return reservations;
     }
 
-    public List<Reservation> searchReservations(String startDate, String endDate) {
+    public List<Reservation> searchReservations(String startDate, String endDate, Boolean isGroup) {
 
-        List<Reservation> reservations = repo.findByStatusNotAndStartDateGreaterThanAndEndDateLessThan(2, startDate, endDate);
+        List<Reservation> reservations = new ArrayList<Reservation>();
+
+        if (isGroup != null && isGroup == true) {
+            reservations = repo.findByGroupAndStatusNotAndStartDateGreaterThanAndEndDateLessThan(true, 2, startDate, endDate);
+        } else {
+            reservations = repo.findByStatusNotAndStartDateGreaterThanAndEndDateLessThan(2, startDate, endDate);
+        }
 
         for (Reservation reservation : reservations) {
             reservation = removeRecursions(reservation);

@@ -42,11 +42,11 @@
                             <label for="groupExisting">
                                 <input type="checkbox" id="groupExisting" ng-model="isExistingGroup"/>
                                 Part of
-                                <select ng-model="reservationGuest.reservation"
-                                        ng-options="item.objReservation as (item.objReservation.startDate + ' - ' + item.objReservation.endDate + ' : ' + item.objReservation.reservationGuests[0].guest.personalData.fullName) for item in events.list track by item.id"
-                                        ng-disabled="!isExistingGroup">
-                                </select>
                             </label>
+                            <select ng-model="reservationGuest.reservation"
+                                    ng-options="item as (item.startDate + ' - ' + item.endDate + ' : ' + item.reservationGuests[0].guest.personalData.fullName) for item in groupReservationsList track by item.id"
+                                    ng-disabled="!isExistingGroup">
+                            </select>
                         </div>
                     </div>
                 </div>

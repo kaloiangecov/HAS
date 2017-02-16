@@ -30,6 +30,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         guest: {},
         room: {}
     };
+    $scope.groupReservationsList = [];
     $scope.timer;
 
     $scope.getRoom = function (roomId, callback) {
@@ -148,6 +149,32 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 $scope.resetReservation();
             })
             .then(callback);
+    };
+
+    $scope.getGroupReservations = function () {
+        var searchFilters = {
+            startDate: $scope.config.startDate,
+            endDate: moment($scope.config.startDate).add($scope.config.days, 'days').format("YYYY-MM-DD"),
+            group: true
+        };
+
+        $http({
+            method: "POST",
+            url: "reservations/search",
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            },
+            data: searchFilters
+        })
+            .then(
+                function (response) {
+                    $scope.groupReservationsList = response.data;
+                },
+                function (response) {
+                    $scope.displayMessage(response.data);
+                }
+            );
     };
 
     $scope.startDate = new DayPilot.Date(new Date());
@@ -361,6 +388,9 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                         resource: args.resource
                     };
                 });
+
+                $scope.getGroupReservations();
+
                 $('#reservationModal').modal('show');
             }
         },

@@ -183,7 +183,8 @@ app.controller("mainCtrl", function ($scope, $http) {
             },
             function (response) { //error
                 $scope.displayMessage(response.data);
-                errorCallback;
+                if (errorCallback)
+                    errorCallback;
             })
             .then(successCallback);
     };
