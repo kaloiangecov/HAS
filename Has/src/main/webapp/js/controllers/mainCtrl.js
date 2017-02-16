@@ -22,7 +22,12 @@ app.controller("mainCtrl", function ($scope, $http) {
         if (!response)
             return;
 
-        alert(response.error + '\n' + response.message);
+        $scope.page.message = {
+            type: 'danger',
+            title: response.error,
+            text: response.message
+        };
+        $('#messageModal').modal('show');
 
         if (response.status === 401) {
             $scope.authentication = "";

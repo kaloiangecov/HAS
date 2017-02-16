@@ -31,6 +31,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         room: {}
     };
     $scope.groupReservationsList = [];
+    $scope.reservationInfo = {};
     $scope.timer;
 
     $scope.getRoom = function (roomId, callback) {
@@ -202,13 +203,14 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         contextMenu: new DayPilot.Menu({
             items: [
                 {
-                    text: '<i class="fa fa-info"></i> Show event info',
+                    text: '<i class="fa fa-info"></i> Show reservation info',
                     onclick: function () {
-                        var dateRange = "\nEvent start: " +
-                            this.source.start().toStringSortable().substr(0, 10) +
-                            "\nEvent end: " +
-                            this.source.end().toStringSortable().substr(0, 10);
-                        alert("ID: " + this.source.value() + "\nGuest: " + this.source.text() + dateRange);
+                        var tmp = this.source.data.objReservation;
+                        $scope.$apply(function () {
+                            $scope.reservationInfo = tmp;
+                            $('#infoModal').modal('show');
+                        });
+
                     }
                 },
                 {

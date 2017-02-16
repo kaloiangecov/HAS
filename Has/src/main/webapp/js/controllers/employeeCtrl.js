@@ -125,11 +125,18 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $interval
                 $scope.master = angular.copy(employee);
 
                 saveEmployee(function () {
+                    $scope.page.message = {
+                        type: 'success',
+                        title: 'Success!'
+                    };
+
                     if ($scope.isEdit) {
-                        alert('Edited: ' + $scope.master.personalData.fullName);
+                        $scope.page.message.text = ('Edited: ' + $scope.master.personalData.fullName);
                     } else {
-                        alert('Created: ' + $scope.master.personalData.fullName);
+                        $scope.page.message.text = ('Created: ' + $scope.master.personalData.fullName);
                     }
+
+                    $('#messageModal').modal('show');
                     window.location.hash = "#!/employees/list";
                 });
             }
