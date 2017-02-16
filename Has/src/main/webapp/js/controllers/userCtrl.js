@@ -13,7 +13,7 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $interval, $r
     if (window.location.hash.includes("list")) {
         $scope.getAllRoles(function (data) {
             $scope.rolesList = data;
-            $scope.filters.roleID = $scope.rolesList[0].id;
+            ctrl.filters.roleID = $scope.rolesList[0].id;
         });
 
         // users table

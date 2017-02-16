@@ -75,7 +75,7 @@ app.controller("workingScheduleCtrl", function ($scope, $http, $stateParams, DTO
 
         $scope.getAllRoles(function (data) {
             $scope.rolesList = data;
-            $scope.filters.roleID = $scope.rolesList[0].id;
+            ctrl.filters.roleID = $scope.rolesList[0].id;
         });
     } else {
         $scope.getAllEmployees = function (updateCallback) {
