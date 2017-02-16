@@ -165,7 +165,7 @@ app.controller("mainCtrl", function ($scope, $http) {
             .then(callback);
     };
 
-    $scope.saveData = function (dataType, data, callback, isEdit) {
+    $scope.saveData = function (dataType, data, successCallback, errorCallback, isEdit) {
         var url = isEdit ? (dataType + "/" + data.id) : dataType;
         var method = isEdit ? "PUT" : "POST";
 
@@ -183,8 +183,9 @@ app.controller("mainCtrl", function ($scope, $http) {
             },
             function (response) { //error
                 $scope.displayMessage(response.data);
+                errorCallback;
             })
-            .then(callback);
+            .then(successCallback);
     };
 
     $scope.fullscreen = function () {
