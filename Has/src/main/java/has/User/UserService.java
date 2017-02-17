@@ -63,6 +63,14 @@ public class UserService {
         return repo.findByUsernameContainingIgnoreCaseAndEmailContainingIgnoreCaseAndUserRoleId(username, email, roleID, request);
     }
 
+    public List<User> findFreeUsers() {
+        //TODO: fix this shit and try to use it
+        //List<User> users = repo.findFreeUsers();
+
+        List<User> users = repo.findAll();
+        return users;
+    }
+
     public User findById(Long id) throws Exception {
         User dbUser = repo.findOne(id);
         if (dbUser == null) {

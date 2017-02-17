@@ -107,10 +107,10 @@ app.controller("mainCtrl", function ($scope, $http) {
             }).then(updateCallback);
     };
 
-    $scope.getAllUsers = function (updateCallback) {
+    $scope.getFreeUsers = function (updateCallback) {
         $http({
             method: "GET",
-            url: "users",
+            url: "users/free",
             responseType: "json",
             headers: {
                 "Authorization": $scope.authentication

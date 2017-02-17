@@ -1,4 +1,4 @@
-app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resource, $interval, DTOptionsBuilder, DTColumnBuilder) {
+app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resource, $timeout, $interval, DTOptionsBuilder, DTColumnBuilder) {
     var ctrl = this;
     $scope.page.title = "Rooms";
     $scope.roomsTable;
@@ -8,24 +8,6 @@ app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resou
         type: 0
     };
     $scope.isEdit = false;
-
-    ctrl.deleteRoom = function (id) {
-        $http({
-            method: "DELETE",
-            url: ("room/" + id),
-            responseType: "json",
-            headers: {
-                "Authorization": $scope.authentication
-            }
-        }).then(
-            function (response) { //success
-                alert("Room deleted");
-                window.location.hash = "#!/rooms/list";
-            },
-            function (response) { //error
-                $scope.displayMessage(response.data);
-            });
-    };
 
     if (window.location.hash.includes("list")) {
         // rooms table
@@ -71,16 +53,39 @@ app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resou
                         '<div class="btn-group btn-group-sm">' +
                         '<a class="btn btn-default action-btn" href="#!/rooms/edit/' +
                         id + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
-                        '<a class="btn btn-default action-btn delete-btn" id="ban_' +
-                        id + '" href="javascript:;"><i class="fa fa-trash-o" aria-hidden="true"></i></a>' +
+                        '<button class="btn btn-default action-btn delete-btn" id="del_' +
+                        id + '"><i class="fa fa-trash-o" aria-hidden="true"></i></button>' +
                         '</div>';
                     return html;
                 })
         ];
+
+        $scope.addDeleteFunctions = function () {
+            $timeout(function () {
+                var btns = $('table').find('td').find('button');
+                $(btns).off('click');
+                $(btns).on('click', function () {
+                    var id = this.id.split('_')[1];
+                    $scope.deleteData('room', id, function () {
+                        $scope.page.message = {
+                            type: 'success',
+                            title: 'Deleted!',
+                            text: ('Room with id ' + id + ' was successfully deleted!')
+                        };
+                        $('#messageModal').modal('show');
+                    });
+                });
+            }, 300);
+        };
+
+        $scope.$watch("ctrl.filters.number", $scope.addDeleteFunctions);
+        $scope.$watch("ctrl.filters.type", $scope.addDeleteFunctions);
+
         $scope.reloadTableData = function () {
             var resetPaging = false;
             ctrl.dtInstance.reloadData(function (list) {
-                console.log(list);
+                //console.log(list);
+                $scope.addDeleteFunctions();
             }, resetPaging);
         };
     }
