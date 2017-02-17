@@ -4,6 +4,10 @@ import has.Exceptions.IdentityNumberAlreadyExists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,9 +19,12 @@ public class PersonalDataService {
     @Autowired
     private PersonalDataRepository repo;
 
-    public PersonalData save(PersonalData personalData) throws IdentityNumberAlreadyExists {
+    public PersonalData save(PersonalData personalData) throws Exception {
         if (repo.findByEgn(personalData.getEgn()) != null) {
             throw new IdentityNumberAlreadyExists(personalData.getEgn());
+        }
+        if (!isValid(personalData.getIdentityIssueDate(), personalData.getIdentityExpireDate())){
+            throw new Exception("Invalid issue date");
         }
         return repo.save(personalData);
     }
@@ -58,5 +65,18 @@ public class PersonalDataService {
         dbPersonalData.setPhone(personalData.getPhone());
 
         return repo.save(dbPersonalData);
+    }
+
+    public boolean isValid(String issueDate, String expirationDate) throws ParseException {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd ");
+        Date issue = format.parse(issueDate);
+        Date expiration = format.parse(expirationDate);
+        if(issue.after(expiration)){
+            return false;
+        }
+        if(issue.getTime() > new Date().getTime()){
+            return false;
+        }
+        return true;
     }
 }
