@@ -1,18 +1,19 @@
 app2.controller("mainCtrl2", function ($scope, $http, $timeout) {
+    var ctrl = this;
     $scope.page = {
         title: "Booking"
     };
 
     $scope.roomTypes = sampleRoomTypes;
     $scope.roomStatuses = sampleRoomStatuses;
-    $scope.documentElement = document.documentElement;
     $scope.credentials = {
         username: "",
         password: ""
     };
     $scope.authentication = "";
 
-    $scope.filters = {};
+    ctrl.filters = {};
+    $scope.results = [];
 
     $scope.myInterval = 5000;
     $scope.noWrapSlides = false;
@@ -30,32 +31,36 @@ app2.controller("mainCtrl2", function ($scope, $http, $timeout) {
         }
     ];
 
-
-    $scope.fullscreen = function () {
-        if (!document.mozFullScreen && !document.webkitFullScreen) {
-            if ($scope.documentElement.mozRequestFullScreen) {
-                $scope.documentElement.mozRequestFullScreen();
-            } else {
-                $scope.documentElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-            }
-        } else {
-            if (document.mozCancelFullScreen) {
-                document.mozCancelFullScreen();
-            } else {
-                document.webkitCancelFullScreen();
-            }
-        }
-    };
-
     function setDateRange(start, end, label) {
         $scope.$apply(function () {
             var tmp = end._d.getTime() - start._d.getTime();
             //$scope.config.timeline = getTimeline(start._d, tmp / 86400000);
-            $scope.filters.startDate = start._d.toISOString().substr(0, 10);
-            $scope.filters.endDate = end._d.toISOString().substr(0, 10);
+            ctrl.filters.startDate = start._d.toISOString().substr(0, 10);
+            ctrl.filters.endDate = end._d.toISOString().substr(0, 10);
         });
 
-    }
+    };
+
+    $scope.submit = function () {
+        $http({
+            method: "POST",
+            url: "booking/search",
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            },
+            data: ctrl.filters
+        }).then(
+            function (response) { //success
+                return response.data;
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+            })
+            .then(function (results) {
+                $scope.results = results;
+            });
+    };
 
     angular.element(document).ready(function () {
         $timeout(function () {

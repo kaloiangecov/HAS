@@ -48,9 +48,14 @@ public class GuestController {
     DataTableResult searchGuests(HttpServletRequest request) throws Exception {
         Map<String, String[]> parameterMap = request.getParameterMap();
 
+        char sortColumnNumber = parameterMap.get("order[0][column]")[0].charAt(0);
+        String sortColumnParam = "columns[" + sortColumnNumber + "][data]";
+
         Page<Guest> guests = guestService.searchGuests(
                 Integer.parseInt(parameterMap.get("start")[0]),
                 Integer.parseInt(parameterMap.get("length")[0]),
+                parameterMap.get(sortColumnParam)[0],
+                parameterMap.get("order[0][dir]")[0],
                 parameterMap.get("fullName")[0],
                 parameterMap.get("phone")[0]
         );
