@@ -30,8 +30,8 @@ public class RoomService {
         return repo.findAll();
     }
 
-    public Page<Room> searchRooms(int start, int length, int number) {
-        PageRequest request = new PageRequest((start / length), length, Sort.Direction.ASC, "id");
+    public Page<Room> searchRooms(int start, int length, String sortColumn, String sortDirection, int number) {
+        PageRequest request = new PageRequest((start / length), length, Sort.Direction.fromString(sortDirection), sortColumn);
         if (number > 0)
             return repo.findByNumber(number, request);
         else

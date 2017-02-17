@@ -49,6 +49,9 @@ public class RoomController {
     DataTableResult searchRooms(HttpServletRequest request) throws Exception {
         Map<String, String[]> parameterMap = request.getParameterMap();
 
+        char sortColumnNumber = parameterMap.get("order[0][column]")[0].charAt(0);
+        String sortColumnParam = "columns[" + sortColumnNumber + "][data]";
+
         int roomNumber = 0;
         if (parameterMap.get("number") != null && !parameterMap.get("number")[0].isEmpty())
             roomNumber = Integer.parseInt(parameterMap.get("number")[0]);
@@ -56,6 +59,8 @@ public class RoomController {
         Page<Room> rooms = roomService.searchRooms(
                 Integer.parseInt(parameterMap.get("start")[0]),
                 Integer.parseInt(parameterMap.get("length")[0]),
+                parameterMap.get(sortColumnParam)[0],
+                parameterMap.get("order[0][dir]")[0],
                 roomNumber
         );
 
