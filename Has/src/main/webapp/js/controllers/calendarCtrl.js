@@ -539,7 +539,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 });
             },
             function (response) { //error
-                alert(response.statusText);
+                $scope.displayMessage(response.data);
             });
     }
 

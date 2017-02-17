@@ -132,11 +132,18 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $interval, $
                     delete $scope.master.user;
 
                 saveGuest(function () {
+                    $scope.page.message = {
+                        type: 'success',
+                        title: 'Success!'
+                    };
+
                     if ($scope.isEdit) {
-                        alert('Edited: ' + $scope.master.personalData.fullName);
+                        $scope.page.message.text = ('Edited: ' + $scope.master.personalData.fullName);
                     } else {
-                        alert('Created: ' + $scope.master.personalData.fullName);
+                        $scope.page.message.text = ('Created: ' + $scope.master.personalData.fullName);
                     }
+
+                    $('#messageModal').modal('show');
                     window.location.hash = "#!/guests/list";
                 });
             }

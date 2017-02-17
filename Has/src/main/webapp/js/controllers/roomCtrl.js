@@ -99,11 +99,18 @@ app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resou
                 }
             }).then(
                 function (response) { //success
+                    $scope.page.message = {
+                        type: 'success',
+                        title: 'Success!'
+                    };
+
                     if ($scope.isEdit) {
-                        alert('Edited: ' + $scope.master.number);
+                        $scope.page.message.text = ('Edited: ' + $scope.master.number);
                     } else {
-                        alert('Created: ' + $scope.master.number);
+                        $scope.page.message.text = ('Created: ' + $scope.master.number);
                     }
+
+                    $('#messageModal').modal('show');
                     window.location.hash = "#!/rooms/list";
                 },
                 function (response) { //error

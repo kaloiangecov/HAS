@@ -116,11 +116,18 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $interval, $r
                     }
                 }).then(
                     function (response) { //success
+                        $scope.page.message = {
+                            type: 'success',
+                            title: 'Success!'
+                        };
+
                         if ($scope.isEdit) {
-                            alert('Edited: ' + $scope.master.username);
+                            $scope.page.message.text = ('Edited: ' + $scope.master.username);
                         } else {
-                            alert('Created: ' + $scope.master.username);
+                            $scope.page.message.text = ('Created: ' + $scope.master.username);
                         }
+
+                        $('#messageModal').modal('show');
                         window.location.hash = "#!/users/list";
                     },
                     function (response) { //error

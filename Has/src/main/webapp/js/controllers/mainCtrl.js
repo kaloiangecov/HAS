@@ -17,6 +17,7 @@ app.controller("mainCtrl", function ($scope, $http) {
         password: ""
     };
     $scope.authentication = "";
+    $scope.isLoginError = false;
 
     $scope.displayMessage = function (response) {
         if (!response)
@@ -59,9 +60,14 @@ app.controller("mainCtrl", function ($scope, $http) {
             $scope.loginData = data.principal;
             //delete $scope.loginData.password;
 
+            $scope.isLoginError = false;
             window.location.hash = "#!/home";
         }, function (response) { //error
-            $scope.displayMessage(response.data);
+            if (response.status === 401) {
+                $scope.isLoginError = true;
+            } else {
+                $scope.displayMessage(response.data);
+            }
         })
     };
 
@@ -79,7 +85,7 @@ app.controller("mainCtrl", function ($scope, $http) {
                 $scope.displayMessage(response.data);
             }).then(
             function (data) {
-                alert("Logged out!");
+                //alert("Logged out!");
                 window.location.hash = "#!/login";
             });
     };
