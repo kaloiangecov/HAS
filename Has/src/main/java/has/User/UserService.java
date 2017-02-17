@@ -56,9 +56,9 @@ public class UserService {
         return repo.findAll();
     }
 
-    public Page<User> searchUsers(int start, int length, String username, String email, Long roleID) {
+    public Page<User> searchUsers(int start, int length, String sortColumn, String sortDirection, String username, String email, Long roleID) {
 
-        PageRequest request = new PageRequest((start / length), length, Sort.Direction.ASC, "id");
+        PageRequest request = new PageRequest((start / length), length, Sort.Direction.fromString(sortDirection), sortColumn);
 
         return repo.findByUsernameContainingAndEmailContainingAndUserRoleId(username, email, roleID, request);
     }

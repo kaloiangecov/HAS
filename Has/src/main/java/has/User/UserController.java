@@ -57,9 +57,14 @@ public class UserController {
     DataTableResult searchUsers(HttpServletRequest request) throws Exception {
         Map<String, String[]> parameterMap = request.getParameterMap();
 
+        char sortColumnNumber = parameterMap.get("order[0][column]")[0].charAt(0);
+        String sortColumnParam = "columns[" + sortColumnNumber + "][data]";
+
         Page<User> users = userService.searchUsers(
                 Integer.parseInt(parameterMap.get("start")[0]),
                 Integer.parseInt(parameterMap.get("length")[0]),
+                parameterMap.get(sortColumnParam)[0],
+                parameterMap.get("order[0][dir]")[0],
                 parameterMap.get("username")[0],
                 parameterMap.get("email")[0],
                 Long.parseLong(parameterMap.get("roleID")[0])

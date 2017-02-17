@@ -32,8 +32,8 @@ public class WorkingScheduleService {
         return schedules;
     }
 
-    public Page<WorkingSchedule> searchSchedule(int start, int length, String startDate, String endDate, Long roleID) {
-        PageRequest request = new PageRequest((start / length), length, Sort.Direction.ASC, "id");
+    public Page<WorkingSchedule> searchSchedule(int start, int length, String sortColumn, String sortDirection, String startDate, String endDate, Long roleID) {
+        PageRequest request = new PageRequest((start / length), length, Sort.Direction.fromString(sortDirection), sortColumn);
 
         Page<WorkingSchedule> schedulePage = repo.findByStartDateGreaterThanAndEndDateLessThan(startDate, endDate, request);
         //Page<WorkingSchedule> schedulePage = repo.findAll(request);

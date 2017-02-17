@@ -39,8 +39,8 @@ public class EmployeeService {
         return employees;
     }
 
-    public Page<Employee> searchEmployees(int start, int length, String fullName, String phone, String dateHired) {
-        PageRequest request = new PageRequest((start / length), length, Sort.Direction.ASC, "id");
+    public Page<Employee> searchEmployees(int start, int length, String sortColumn, String sortDirection, String fullName, String phone, String dateHired) {
+        PageRequest request = new PageRequest((start / length), length, Sort.Direction.fromString(sortDirection), sortColumn);
         Page<Employee> employeesPage;
         if (dateHired.isEmpty()) {
             employeesPage = repo.findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContaining(fullName, phone, request);
