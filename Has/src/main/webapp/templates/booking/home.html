@@ -1,6 +1,6 @@
 <div id="booking" class="row">
     <div id="filters">
-        <form id="bookingForm" name="bookingForm">
+        <form id="bookingForm" name="bookingForm" ng-submit="submit()">
             <div class="form-group col-xs-12 col-sm-4 xol-md-3" id="checkDate">
                 <label>Check in / Check out</label>
                 <div class="input-group">
@@ -15,7 +15,8 @@
                         <i class="fa fa-male" aria-hidden="true"></i>
                         <i class="fa fa-female" aria-hidden="true"></i>
                     </span>
-                    <select id="numberAdults" name="numberAdults" class="form-control">
+                    <select id="numberAdults" name="numberAdults" class="form-control"
+                            ng-model="ctrl.filters.numberAdults">
                         <option>1</option>
                         <option>2</option>
                         <option>3</option>
@@ -27,7 +28,8 @@
                 <label>Children</label>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-child" aria-hidden="true"></i></span>
-                    <select id="numberChildren" name="numberChildren" class="form-control">
+                    <select id="numberChildren" name="numberChildren" class="form-control"
+                            ng-model="ctrl.filters.numberChildren">
                         <option>0</option>
                         <option>1</option>
                         <option>2</option>
@@ -36,11 +38,34 @@
                     </select>
                 </div>
             </div>
+            <button type="submit"><i class="fa fa-search"></i> Search</button>
         </form>
     </div>
 </div>
 <div id="results" class="row">
     <div class="col-xs-12 col-sm-6 col-md-4">
-        <h2>Results:</h2>
+        <h3>Results:</h3>
+        <table class="table table-condensed table-striped">
+            <thead>
+            <tr>
+                <th>Room Class</th>
+                <th>Big Beds</th>
+                <th>Small Beds</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="res in results">
+                <td>{{res.bedsDouble}}</td>
+                <td>{{res.bedsSingle}}</td>
+                <td>{{res.roomClass}}</td>
+                <td>
+                    <span class="label label-primary" ng-show="res.children">Children</span>
+                    <span class="label label-primary" ng-show="res.pets">Pets</span>
+                    <span class="label label-primary" ng-show="res.minibar">Mininbar</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
