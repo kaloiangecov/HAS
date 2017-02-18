@@ -60,7 +60,15 @@ public class UserService {
 
         PageRequest request = new PageRequest((start / length), length, Sort.Direction.fromString(sortDirection), sortColumn);
 
-        return repo.findByUsernameContainingAndEmailContainingAndUserRoleId(username, email, roleID, request);
+        return repo.findByUsernameContainingIgnoreCaseAndEmailContainingIgnoreCaseAndUserRoleId(username, email, roleID, request);
+    }
+
+    public List<User> findFreeUsers() {
+        //TODO: fix this shit and try to use it
+        //List<User> users = repo.findFreeUsers();
+
+        List<User> users = repo.findAll();
+        return users;
     }
 
     public User findById(Long id) throws Exception {

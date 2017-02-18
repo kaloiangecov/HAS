@@ -47,6 +47,14 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @RequestMapping(value = "/users/free", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_VIEW_USER')")
+    public List<User> getFreeUsers() throws Exception {
+        return userService.findFreeUsers();
+    }
+
     @RequestMapping(value = "/users/search", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)

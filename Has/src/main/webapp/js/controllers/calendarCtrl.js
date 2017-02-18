@@ -208,6 +208,8 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                         var tmp = this.source.data.objReservation;
                         $scope.$apply(function () {
                             $scope.reservationInfo = tmp;
+                            $scope.reservationInfo.startDate = new Date($scope.reservationInfo.startDate).toLocaleDateString();
+                            $scope.reservationInfo.endDate = new Date($scope.reservationInfo.endDate).toLocaleDateString();
                             $('#infoModal').modal('show');
                         });
 
@@ -539,7 +541,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 });
             },
             function (response) { //error
-                alert(response.statusText);
+                $scope.displayMessage(response.data);
             });
     }
 

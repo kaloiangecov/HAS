@@ -3,26 +3,29 @@
         <form name="loginForm" ng-submit="login()">
             <h2><img src="img/has_logo.png" style="width:100%" alt="HAS logo"/></h2>
             <h1>Hotel Administration System</h1>
-            <div>
+            <div class="form-group">
                 <input type="text" id="username" name="username" class="form-control" ng-model="credentials.username"
                        placeholder="Username" minlength="3" maxlength="32"
-                       required="required"/>
-                <div ng-show="loginForm.$submitted || loginForm.username.$touched" class="validation-message">
+                       required="required" style="margin-bottom:3px"/>
+                <div ng-show="loginForm.$submitted" class="validation-message">
                     <span ng-show="loginForm.username.$error.required">This field is required</span>
                     <span ng-show="loginForm.username.$error.minlength">Input too short</span>
                     <span ng-show="loginForm.username.$error.maxlength">Input too long</span>
                 </div>
             </div>
-            <div>
+            <div class="form-group">
                 <input type="password" id="password" name="password" class="form-control"
                        ng-model="credentials.password" placeholder="Password"
-                       minlength="8" maxlength="16" required="required"/>
-                <div ng-show="loginForm.$submitted || loginForm.password.$touched" class="validation-message">
+                       minlength="8" maxlength="16" required="required" style="margin-bottom:3px"/>
+                <div ng-show="loginForm.$submitted" class="validation-message">
                     <span ng-show="loginForm.password.$error.required">This field is required</span>
                     <span ng-show="loginForm.password.$error.minlength">Input too short</span>
                     <span ng-show="loginForm.password.$error.maxlength">Input too long</span>
                     <!-- <span ng-show="loginForm.password.$error.pattern">Incorrect pattern!</span> -->
                 </div>
+            </div>
+            <div class="alert alert-danger" role="alert" ng-show="isLoginError"><strong>Error!</strong> Wrong
+                username/password!
             </div>
             <div>
                 <button type="submit" class="btn btn-default submit">Log in</button>

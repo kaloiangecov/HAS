@@ -153,11 +153,18 @@ app.controller("workingScheduleCtrl", function ($scope, $http, $stateParams, DTO
                 $scope.master = angular.copy(schedule);
 
                 saveSchedule(function () {
+                    $scope.page.message = {
+                        type: 'success',
+                        title: 'Success!'
+                    };
+
                     if ($scope.isEdit) {
-                        alert('Edited!');
+                        $scope.page.message.text = ('Edited.');
                     } else {
-                        alert('Created!');
+                        $scope.page.message.text = ('Created.');
                     }
+
+                    $('#messageModal').modal('show');
                     window.location.hash = "#!/schedule/list";
                 });
             }

@@ -1,4 +1,4 @@
-app.controller("guestCtrl", function ($scope, $state, $stateParams, $interval, $resource, $http, DTOptionsBuilder, DTColumnBuilder) {
+app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $interval, $resource, $http, DTOptionsBuilder, DTColumnBuilder) {
     var ctrl = this;
     $scope.page.title = "Guests";
     $scope.master = {};
@@ -51,16 +51,39 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $interval, $
                         '<div class="btn-group btn-group-sm">' +
                         '<a class="btn btn-default action-btn" href="#!/guests/edit/' +
                         id + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
-                        '<a class="btn btn-default action-btn delete-btn" id="ban_' +
-                        id + '" href="javascript:;"><i class="fa fa-trash-o" aria-hidden="true"></i></a>' +
+                        '<button class="btn btn-default action-btn delete-btn" id="del_' +
+                        id + '"><i class="fa fa-trash-o" aria-hidden="true"></i></button>' +
                         '</div>';
                     return html;
                 })
         ];
+
+        $scope.addDeleteFunctions = function () {
+            $timeout(function () {
+                var btns = $('table').find('td').find('button');
+                $(btns).off('click');
+                $(btns).on('click', function () {
+                    var id = this.id.split('_')[1];
+                    $scope.deleteData('guest', id, function () {
+                        $scope.page.message = {
+                            type: 'success',
+                            title: 'Deleted!',
+                            text: ('Guest with id ' + id + ' was successfully deleted!')
+                        };
+                        $('#messageModal').modal('show');
+                    });
+                });
+            }, 300);
+        };
+
+        $scope.$watch("ctrl.filters.fullName", $scope.addDeleteFunctions);
+        $scope.$watch("ctrl.filters.phone", $scope.addDeleteFunctions);
+
         $scope.reloadTableData = function () {
             var resetPaging = false;
             $scope.dtInstance.reloadData(function (list) {
-                console.log(list);
+                //console.log(list);
+                $scope.addDeleteFunctions();
             }, resetPaging);
         };
     }
@@ -84,7 +107,7 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $interval, $
                 });
         }
 
-        $scope.getAllUsers(function (data) {
+        $scope.getFreeUsers(function (data) {
             $scope.usersList = data;
             $scope.usersList[data.length] = {
                 id: 0,
@@ -132,11 +155,18 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $interval, $
                     delete $scope.master.user;
 
                 saveGuest(function () {
+                    $scope.page.message = {
+                        type: 'success',
+                        title: 'Success!'
+                    };
+
                     if ($scope.isEdit) {
-                        alert('Edited: ' + $scope.master.personalData.fullName);
+                        $scope.page.message.text = ('Edited: ' + $scope.master.personalData.fullName);
                     } else {
-                        alert('Created: ' + $scope.master.personalData.fullName);
+                        $scope.page.message.text = ('Created: ' + $scope.master.personalData.fullName);
                     }
+
+                    $('#messageModal').modal('show');
                     window.location.hash = "#!/guests/list";
                 });
             }
