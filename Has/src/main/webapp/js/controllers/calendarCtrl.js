@@ -235,6 +235,21 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                     }
                 },
                 {
+                    text: '<i class="fa fa-play"></i> Start reservation',
+                    onclick: function () {
+                        if (confirm("Start reservation?\n" + "Start: " + this.source.start() + "\nEnd:" + this.source.end())) {
+                            var tmp = this.source.data.objReservation;
+                            tmp.status = 1;
+                            $scope.saveData('reservation', tmp, function () {
+                                $scope.scheduler.message("Reservation started: " + tmp.reservationGuests[0].guest.personalData.fullName);
+                                loadEvents();
+                            }, $scope.resetReservation, true);
+                        } else {
+                            loadEvents();
+                        }
+                    }
+                },
+                {
                     text: '<i class="fa fa-trash-o"></i> Delete reservation',
                     onclick: function () {
                         if (confirm("Delete reservation?\n" + "Start: " + this.source.start() + "\nEnd:" + this.source.end())) {
