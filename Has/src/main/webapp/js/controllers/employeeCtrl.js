@@ -112,37 +112,38 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
                 });
         }
 
-        $scope.getFreeUsers(function (data) {
-            $scope.usersList = data;
+        if ($stateParams && $stateParams.id) {
+            $scope.isEdit = true;
 
-            if ($stateParams && $stateParams.id) {
-                $scope.isEdit = true;
+            var url = "employee/" + $stateParams.id;
 
-                var url = "employee/" + $stateParams.id;
-
-                $http({
-                    method: "GET",
-                    url: url,
-                    responseType: "json",
-                    headers: {
-                        "Authorization": $scope.authentication
-                    }
-                }).then(
-                    function (response) { //success
-                        $scope.employee = response.data;
-                    },
-                    function (response) { //error
-                        $scope.displayMessage(response.data);
+            $http({
+                method: "GET",
+                url: url,
+                responseType: "json",
+                headers: {
+                    "Authorization": $scope.authentication
+                }
+            }).then(
+                function (response) { //success
+                    $scope.employee = response.data;
+                    $scope.getFreeUsers($scope.employee.user.id, function (data) {
+                        $scope.usersList = data;
                     });
-            }
-            else {
-                $scope.isEdit = false;
-                $scope.employee = {
-                    personalData: {},
-                    user: $scope.usersList[0]
-                };
-            }
-        });
+                },
+                function (response) { //error
+                    $scope.displayMessage(response.data);
+                });
+        }
+        else {
+            $scope.isEdit = false;
+            $scope.employee = {
+                personalData: {}
+            };
+            $scope.getFreeUsers(-1, function (data) {
+                $scope.usersList = data;
+            });
+        }
 
         $scope.submit = function (employee) {
             if ($scope.employeeForm.$valid) {
@@ -185,12 +186,12 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
         }
         else {
             $('#dateHired,#identityIssueDate,#identityExpireDate').daterangepicker({
-                    singleDatePicker: true,
-                    showDropdowns: true,
+                singleDatePicker: true,
+                showDropdowns: true,
                 locale: {
                     format: "YYYY-MM-DD"
                 }
-                });
+            });
         }
     });
 

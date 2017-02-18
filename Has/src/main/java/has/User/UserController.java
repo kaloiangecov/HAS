@@ -47,12 +47,12 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @RequestMapping(value = "/users/free", method = RequestMethod.GET,
+    @RequestMapping(value = "/users/free/{id}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('PERM_VIEW_USER')")
-    public List<User> getFreeUsers() throws Exception {
-        return userService.findFreeUsers();
+    public List<User> getFreeUsers(@PathVariable Long id) throws Exception {
+        return userService.findFreeUsers(id);
     }
 
     @RequestMapping(value = "/users/search", method = RequestMethod.GET,

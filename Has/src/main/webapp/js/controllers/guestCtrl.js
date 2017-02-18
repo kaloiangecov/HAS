@@ -107,45 +107,57 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
                 });
         }
 
-        $scope.getFreeUsers(function (data) {
-            $scope.usersList = data;
-            $scope.usersList[data.length] = {
-                id: 0,
-                username: "-- None --"
-            };
+        if ($stateParams && $stateParams.id) {
+            $scope.isEdit = true;
 
-            if ($stateParams && $stateParams.id) {
-                $scope.isEdit = true;
+            var url = "guest/" + $stateParams.id;
 
-                var url = "guest/" + $stateParams.id;
-
-                $http({
-                    method: "GET",
-                    url: url,
-                    responseType: "json",
-                    headers: {
-                        "Authorization": $scope.authentication
-                    }
+            $http({
+                method: "GET",
+                url: url,
+                responseType: "json",
+                headers: {
+                    "Authorization": $scope.authentication
+                }
+            }).then(
+                function (response) { //success
+                    return response.data;
+                },
+                function (response) { //error
+                    $scope.displayMessage(response.data);
                 }).then(
-                    function (response) { //success
-                        return response.data;
-                    },
-                    function (response) { //error
-                        $scope.displayMessage(response.data);
-                    }).then(
-                    function (data) {
-                        $scope.guest = data;
+                function (data) {
+                    $scope.guest = data;
+
+                    var userID = -1;
+                    if ($scope.guest.user)
+                        userID = $scope.guest.user.id;
+
+                    $scope.getFreeUsers(userID, function (data) {
+                        $scope.usersList = data;
+                        $scope.usersList[data.length] = {
+                            id: 0,
+                            username: "-- None --"
+                        };
                     });
-            }
-            else {
-                $scope.isEdit = false;
-                $scope.guest = {
-                    numberReservations: 0,
-                    status: 0,
-                    personalData: {}
+                });
+        }
+        else {
+            $scope.isEdit = false;
+            $scope.guest = {
+                numberReservations: 0,
+                status: 0,
+                personalData: {}
+            };
+            $scope.getFreeUsers(-1, function (data) {
+                $scope.usersList = data;
+                $scope.usersList[data.length] = {
+                    id: 0,
+                    username: "-- None --"
                 };
-            }
-        });
+            });
+        }
+
 
         $scope.submit = function (guest) {
             if ($scope.guestForm.$valid) {

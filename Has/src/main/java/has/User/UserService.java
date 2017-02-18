@@ -8,10 +8,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -67,8 +63,15 @@ public class UserService {
         return repo.findByUsernameContainingIgnoreCaseAndEmailContainingIgnoreCaseAndUserRoleId(username, email, roleID, request);
     }
 
-    public List<User> findFreeUsers() {
+    public List<User> findFreeUsers(Long id) {
         List<User> users = repo.findFreeUsers();
+
+        if (id > 0) {
+            User dbUser = repo.findOne(id);
+            if (dbUser != null)
+                users.add(dbUser);
+        }
+
         return users;
     }
 
