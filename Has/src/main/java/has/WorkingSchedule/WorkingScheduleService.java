@@ -7,6 +7,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,8 +22,11 @@ public class WorkingScheduleService {
     @Autowired
     private WorkingScheduleRepository repo;
 
-    public WorkingSchedule save(WorkingSchedule schedule) {
+    public WorkingSchedule save(WorkingSchedule schedule) throws Exception {
 
+        if (!isValid(schedule.getStartDate(), schedule.getEndDate())){
+            throw new Exception("Invalid date");
+        }
         return repo.save(schedule);
     }
 
@@ -82,5 +89,15 @@ public class WorkingScheduleService {
         schedule.setEmployee(employee);
 
         return schedule;
+    }
+
+    public boolean isValid(String startDate, String endDate) throws ParseException {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date start = format.parse(startDate);
+        Date end = format.parse(endDate);
+        if(start.after(end)){
+            return false;
+        }
+        return true;
     }
 }

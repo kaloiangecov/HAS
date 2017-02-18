@@ -24,7 +24,7 @@ public class PersonalDataController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('PERM_CREATE_PERSONAL_DATA')")
-    public PersonalData save(@RequestBody @Valid PersonalData personalData) throws IdentityNumberAlreadyExists {
+    public PersonalData save(@RequestBody @Valid PersonalData personalData) throws Exception {
         return personalDataService.save(personalData);
     }
 
