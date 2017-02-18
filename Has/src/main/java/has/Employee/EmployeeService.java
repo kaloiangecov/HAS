@@ -7,6 +7,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,10 +28,14 @@ public class EmployeeService {
             throw new Exception("Employee with EGN " + employee.getPersonalData().getEgn() + " already exists.");
         }
 
-//        SendMailSSL.sendMail("shit@hotmail.com", "");
+        if (!isValid(employee.getPersonalData().getIdentityIssueDate(), employee.getPersonalData().getIdentityExpireDate())){
+            throw new Exception("Invalid issue date");
+        }
 
         return repo.save(employee);
     }
+
+
 
     public List<Employee> getAllEmployees() {
         List<Employee> employees = repo.findAll();
@@ -90,6 +98,9 @@ public class EmployeeService {
         if (dbEmployee == null) {
             throw new Exception("There is no employee with such ID");
         }
+        if (!isValid(employee.getPersonalData().getIdentityIssueDate(), employee.getPersonalData().getIdentityExpireDate())){
+            throw new Exception("Invalid issue date");
+        }
 
         Employee dbEmployee2 = repo.findByPersonalDataEgn(employee.getPersonalData().getEgn());
         if (dbEmployee2 != null && dbEmployee2.getId() != employee.getId())
@@ -102,5 +113,18 @@ public class EmployeeService {
         }
 //        SendMailSSL.sendMail("shit@shit.com", "");
         return repo.save(dbEmployee);
+    }
+
+    public boolean isValid(String issueDate, String expirationDate) throws ParseException {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date issue = format.parse(issueDate);
+        Date expiration = format.parse(expirationDate);
+        if(issue.after(expiration)){
+            return false;
+        }
+        if(issue.getTime() > new Date().getTime()){
+            return false;
+        }
+        return true;
     }
 }
