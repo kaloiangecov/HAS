@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
-import has.Configuration.CsrfHeaderFilter;
 
 /**
  * Created by kaloi on 12/17/2016.
@@ -41,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/#/login").permitAll()
                 .and().httpBasic()
                 .and().csrf().csrfTokenRepository(csrfTokenRepository())
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .and().authorizeRequests().antMatchers("/**", "/#/*").permitAll().anyRequest().authenticated()
                 .and().addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);
 

@@ -220,11 +220,29 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                     onclick: function () {
                         $scope.reservationGuest = this.source.data.objReservation.reservationGuests[0];
                         var tmpReservation = this.source.data.objReservation;
+
+                        var nGuests = tmpReservation.reservationGuests.length;
+
                         delete tmpReservation.reservationGuests;
+
+                        var selectedRoom = $scope.events.resources[this.source.resource() - 1];
+                        var roomCapacity = (selectedRoom.bedsDouble * 2) + selectedRoom.bedsSingle;
+
+                        if (nGuests >= roomCapacity) {
+                            $scope.page.message = {
+                                type: 'danger',
+                                title: "Can't add guest!",
+                                text: "This room has reached its guest capacity!"
+                            };
+                            $('#messageModal').modal('show');
+
+                            $scope.resetReservation();
+                            return;
+                        }
 
                         $scope.reservationGuest.guest = {};
                         $scope.reservationGuest.reservation = tmpReservation;
-                        $scope.reservationGuest.room = $scope.events.resources[this.source.resource() - 1];
+                        $scope.reservationGuest.room = selectedRoom;
                         $scope.reservationGuest.id = null;
                         $scope.reservationGuest.owner = false;
 
@@ -237,6 +255,10 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 {
                     text: '<i class="fa fa-play"></i> Start reservation',
                     onclick: function () {
+                        if (this.source.data.objReservation.status > 0
+                            || this.source.data.objReservation.startDate != moment().format("YYYY-MM-DD"))
+                            return;
+
                         if (confirm("Start reservation?\n" + "Start: " + this.source.start() + "\nEnd:" + this.source.end())) {
                             var tmp = this.source.data.objReservation;
                             tmp.status = 1;
