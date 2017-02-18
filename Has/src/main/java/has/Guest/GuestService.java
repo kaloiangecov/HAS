@@ -7,6 +7,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,8 +27,11 @@ public class GuestService {
         if (dbGuest != null) {
             throw new Exception("Guest with EGN " + guest.getPersonalData().getEgn() + " already exists.");
         }
+        if (!isValid(guest.getPersonalData().getIdentityIssueDate(), guest.getPersonalData().getIdentityExpireDate())){
+            throw new Exception("Invalid issue date");
+        }
 
-                        SendMailSSL.sendMail("shit@hotmail.com", "" );
+        SendMailSSL.sendMail("shit@hotmail.com", "" );
 
         return repo.save(guest);
     }
@@ -60,7 +67,9 @@ public class GuestService {
         if(dbGuest == null){
             throw new Exception("There is no guest with such ID");
         }
-
+        if (!isValid(guest.getPersonalData().getIdentityIssueDate(), guest.getPersonalData().getIdentityExpireDate())){
+            throw new Exception("Invalid issue date");
+        }
         Guest dbGuest2 = repo.findByPersonalDataEgn(guest.getPersonalData().getEgn());
         if (dbGuest2 != null && dbGuest2.getId() != guest.getId())
             throw new Exception("Employee with EGN " + guest.getPersonalData().getEgn() + " already exists.");
@@ -70,7 +79,20 @@ public class GuestService {
         dbGuest.setPersonalData(guest.getPersonalData());
         dbGuest.setUser(guest.getUser());
 
-        SendMailSSL.sendMail("gunesh.shefkedov@gmail.com", "");
+        SendMailSSL.sendMail("asdffgdf@423.com", "");
         return repo.save(dbGuest);
+    }
+
+    public boolean isValid(String issueDate, String expirationDate) throws ParseException {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date issue = format.parse(issueDate);
+        Date expiration = format.parse(expirationDate);
+        if(issue.after(expiration)){
+            return false;
+        }
+        if(issue.getTime() > new Date().getTime()){
+            return false;
+        }
+        return true;
     }
 }

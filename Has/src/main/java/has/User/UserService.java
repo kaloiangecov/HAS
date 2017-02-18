@@ -8,6 +8,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -103,8 +107,9 @@ public class UserService {
         }
 
         User dbUser2 = repo.findByEmail(user.getEmail());
-        if (dbUser2 != null && dbUser2.getId() != dbUser2.getId()) {
+        if (dbUser2 != null && dbUser2.getId() != user.getId()) {
             throw new EmailAlreadyExists(user.getEmail());
         }
     }
+    
 }

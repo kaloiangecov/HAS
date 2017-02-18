@@ -13,8 +13,10 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -102,4 +104,9 @@ public class User implements Serializable, UserDetails {
         this.userRole = userRole;
     }
 
+    @PrePersist
+    public void setDate(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        setLastLogin(sdf.format(new Date()));
+    }
 }
