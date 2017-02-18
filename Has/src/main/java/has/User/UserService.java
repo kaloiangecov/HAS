@@ -68,10 +68,7 @@ public class UserService {
     }
 
     public List<User> findFreeUsers() {
-        //TODO: fix this shit and try to use it
-        //List<User> users = repo.findFreeUsers();
-
-        List<User> users = repo.findAll();
+        List<User> users = repo.findFreeUsers();
         return users;
     }
 

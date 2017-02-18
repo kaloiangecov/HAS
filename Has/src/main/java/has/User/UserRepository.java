@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByUsernameAndPassword(String username, String Password);
 
-    @Query(value = "select * from T_USER where T_USER.USER_ID NOT IN (select E.USER_ID from EMPLOYEE E, T_USER U2 where U2.USER_ID = E.USER_ID)", nativeQuery = true)
+    @Query("select u from has.User.User u where u not in (select e.user from has.Employee.Employee e) and u not in (select g.user from has.Guest.Guest g)")
     List<User> findFreeUsers();
 
     List<User> findByUsernameContainingAndEmailContaining(String username, String email);
