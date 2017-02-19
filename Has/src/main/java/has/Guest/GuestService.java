@@ -1,5 +1,6 @@
 package has.Guest;
 
+import has.Utils.DateUtil;
 import has.mailsender.SendMailSSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class GuestService {
         if (dbGuest != null) {
             throw new Exception("Guest with EGN " + guest.getPersonalData().getEgn() + " already exists.");
         }
-        if (!isValid(guest.getPersonalData().getIdentityIssueDate(), guest.getPersonalData().getIdentityExpireDate())){
+        if (!DateUtil.isValid(guest.getPersonalData().getIdentityIssueDate(), guest.getPersonalData().getIdentityExpireDate())){
             throw new Exception("Invalid issue date");
         }
 
@@ -67,7 +69,7 @@ public class GuestService {
         if(dbGuest == null){
             throw new Exception("There is no guest with such ID");
         }
-        if (!isValid(guest.getPersonalData().getIdentityIssueDate(), guest.getPersonalData().getIdentityExpireDate())){
+        if (!DateUtil.isValid(guest.getPersonalData().getIdentityIssueDate(), guest.getPersonalData().getIdentityExpireDate())){
             throw new Exception("Invalid issue date");
         }
         Guest dbGuest2 = repo.findByPersonalDataEgn(guest.getPersonalData().getEgn());
@@ -83,16 +85,4 @@ public class GuestService {
         return repo.save(dbGuest);
     }
 
-    public boolean isValid(String issueDate, String expirationDate) throws ParseException {
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date issue = format.parse(issueDate);
-        Date expiration = format.parse(expirationDate);
-        if(issue.after(expiration)){
-            return false;
-        }
-        if(issue.getTime() > new Date().getTime()){
-            return false;
-        }
-        return true;
-    }
 }

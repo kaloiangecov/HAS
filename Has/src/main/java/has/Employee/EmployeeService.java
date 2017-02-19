@@ -1,5 +1,6 @@
 package has.Employee;
 
+import has.Utils.DateUtil;
 import has.WorkingSchedule.WorkingSchedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -28,7 +30,7 @@ public class EmployeeService {
             throw new Exception("Employee with EGN " + employee.getPersonalData().getEgn() + " already exists.");
         }
 
-        if (!isValid(employee.getPersonalData().getIdentityIssueDate(), employee.getPersonalData().getIdentityExpireDate())){
+        if (!DateUtil.isValid(employee.getPersonalData().getIdentityIssueDate(), employee.getPersonalData().getIdentityExpireDate())){
             throw new Exception("Invalid issue date");
         }
 
@@ -98,7 +100,7 @@ public class EmployeeService {
         if (dbEmployee == null) {
             throw new Exception("There is no employee with such ID");
         }
-        if (!isValid(employee.getPersonalData().getIdentityIssueDate(), employee.getPersonalData().getIdentityExpireDate())){
+        if (!DateUtil.isValid(employee.getPersonalData().getIdentityIssueDate(), employee.getPersonalData().getIdentityExpireDate())){
             throw new Exception("Invalid issue date");
         }
 
@@ -113,18 +115,5 @@ public class EmployeeService {
         }
 //        SendMailSSL.sendMail("shit@shit.com", "");
         return repo.save(dbEmployee);
-    }
-
-    public boolean isValid(String issueDate, String expirationDate) throws ParseException {
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date issue = format.parse(issueDate);
-        Date expiration = format.parse(expirationDate);
-        if(issue.after(expiration)){
-            return false;
-        }
-        if(issue.getTime() > new Date().getTime()){
-            return false;
-        }
-        return true;
     }
 }
