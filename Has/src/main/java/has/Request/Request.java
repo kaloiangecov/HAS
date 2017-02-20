@@ -1,6 +1,7 @@
 package has.Request;
 
 import has.Meal.Meal;
+import has.ReservationGuest.ReservationGuest;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,7 +26,12 @@ public class Request {
     @NotNull
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "requests", cascade = CascadeType.ALL)
     private List<Meal> meals;
-//    private ReservationGuest reservationGuest;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "RESERVATION_GUEST_ID")
+    private ReservationGuest reservationGuest;
+
     @NotNull
     @Min(0)
     @Max(2)

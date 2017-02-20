@@ -65,7 +65,6 @@ public class Employee implements Serializable {
             user.setIsEnabled(false);
             this.status = status;
         }
-
         this.status = status;
     }
 }

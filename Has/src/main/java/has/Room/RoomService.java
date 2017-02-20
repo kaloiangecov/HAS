@@ -26,7 +26,7 @@ public class RoomService {
         return repo.save(room);
     }
 
-    public List<Room> getAllRooms(){
+    public List<Room> getAllRooms() {
         return repo.findAll();
     }
 
@@ -38,28 +38,23 @@ public class RoomService {
             return repo.findAll(request);
     }
 
-    public Room findById(Long id)throws Exception{
-        Room dbRoom = repo.findOne(id);
-        if(dbRoom==null){
-            throw new Exception("There is no room with such ID");
-        }
-        return dbRoom;
+    public Room findById(Long id) throws Exception {
+        Room room = repo.findOne(id);
+        validateIdNotNull(room);
+        return room;
     }
 
     public Room remove(Long id) throws Exception {
-        Room dbRoom = repo.findOne(id);
-        if(dbRoom == null){
-            throw new Exception("There is no room with such ID");
-        }
-        repo.delete(dbRoom);
-        return dbRoom;
+        Room room = repo.findOne(id);
+        validateIdNotNull(room);
+        repo.delete(room);
+        return room;
     }
 
     public Room update(Long id, Room room) throws Exception {
         Room dbRoom = repo.findOne(id);
-        if(dbRoom == null) {
-            throw new Exception("There is no room with such ID");
-        }
+        validateIdNotNull(room);
+
         dbRoom.setNumber(room.getNumber());
         dbRoom.setRoomClass(room.getRoomClass());
         dbRoom.setStatus(room.getStatus());
@@ -69,5 +64,11 @@ public class RoomService {
         dbRoom.setPets(room.isPets());
         dbRoom.setMinibar(room.isMinibar());
         return repo.save(dbRoom);
+    }
+
+    private void validateIdNotNull(Room room) throws Exception {
+        if (room == null) {
+            throw new Exception("There is no room with such ID");
+        }
     }
 }

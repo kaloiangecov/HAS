@@ -23,32 +23,33 @@ public class RequestService {
     }
 
     public Request findById(Long id) throws Exception {
-        Request dbRequest = repo.findOne(id);
-        if(dbRequest == null){
-            throw new Exception("There is no request with such ID");
-        }
-        return dbRequest;
+        Request request = repo.findOne(id);
+        validateIdNotNull(request);
+        return request;
     }
 
     public Request remove(Long id) throws Exception {
-        Request dbRequest = repo.findOne(id);
-        if(dbRequest == null){
-            throw new Exception("There is no request with such ID");
-        }
-        repo.delete(dbRequest);
-        return dbRequest;
+        Request request = repo.findOne(id);
+        validateIdNotNull(request);
+        repo.delete(request);
+        return request;
     }
 
     public Request update(Long id, Request request) throws Exception {
         Request dbRequest = repo.findOne(id);
-        if(dbRequest == null){
-            throw new Exception("There is no request with such ID");
-        }
+        validateIdNotNull(dbRequest);
+
         dbRequest.setStatus(request.getStatus());
         dbRequest.setTimeFinished(request.getTimeFinished());
         dbRequest.setTimePlaced(request.getTimePlaced());
         dbRequest.setType(request.getType());
 
         return repo.save(dbRequest);
+    }
+
+    private void validateIdNotNull(Request request) throws Exception {
+        if (request == null) {
+            throw new Exception("There is no request with such ID");
+        }
     }
 }

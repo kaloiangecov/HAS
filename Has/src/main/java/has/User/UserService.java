@@ -26,9 +26,7 @@ public class UserService {
 
     public User update(Long id, User user) throws UserAlreadyExists, EmailAlreadyExists, Exception {
         User dbUser = repo.findOne(id);
-        if (dbUser == null) {
-            throw new Exception("There is no user with such ID");
-        }
+        validateIdNotNull(dbUser);
         validateAlreadyExists(user);
 
         dbUser.setLastLogin(user.getLastLogin());
@@ -42,14 +40,11 @@ public class UserService {
     }
 
     public User updateLastLogin(Long id, String lastLogin) throws Exception {
-        User dbUser = repo.findOne(id);
-        if (dbUser == null) {
-            throw new Exception("There is no user with such ID");
-        }
+        User user = repo.findOne(id);
+        validateIdNotNull(user);
 
-        dbUser.setLastLogin(lastLogin);
-
-        return repo.save(dbUser);
+        user.setLastLogin(lastLogin);
+        return repo.save(user);
     }
 
     public List<User> getAllUsers() {
@@ -76,28 +71,22 @@ public class UserService {
     }
 
     public User findById(Long id) throws Exception {
-        User dbUser = repo.findOne(id);
-        if (dbUser == null) {
-            throw new Exception("There is no user with such ID");
-        }
-        return dbUser;
+        User user = repo.findOne(id);
+        validateIdNotNull(user);
+        return user;
     }
 
     public User findByUsername(String username) throws Exception {
-        User dbUser = repo.findByUsername(username);
-        if (dbUser == null) {
-            throw new Exception("There is no user with such username");
-        }
-        return dbUser;
+        User user = repo.findByUsername(username);
+        validateIdNotNull(user);
+        return user;
     }
 
     public User remove(Long id) throws Exception {
-        User dbUser = repo.findOne(id);
-        if (dbUser == null) {
-            throw new Exception("There is no user with such ID");
-        }
-        repo.delete(dbUser);
-        return dbUser;
+        User user = repo.findOne(id);
+        validateIdNotNull(user);
+        repo.delete(user);
+        return user;
     }
 
     public void validateAlreadyExists(User user) throws UserAlreadyExists, EmailAlreadyExists {
@@ -111,5 +100,8 @@ public class UserService {
             throw new EmailAlreadyExists(user.getEmail());
         }
     }
-    
+
+    private void validateIdNotNull(User user) throws Exception {
+
+    }
 }

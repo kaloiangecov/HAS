@@ -32,7 +32,7 @@ public class PersonalData {
 
     @NotNull
     @Size(min = 3, max = 100)
-    //@Pattern(regexp = "[a-zA-Z]+")
+    @Pattern(regexp = "[a-zA-Z]+")
     private String fullName;
 
     @NotNull
@@ -55,18 +55,5 @@ public class PersonalData {
 
     public PersonalData() {
 
-    }
-
-    public PersonalData(String address, String egn, String fullName,
-                        String identityExpireDate, String identityIssueDate,
-                        String identityIssuedBy, String identityNumber, String phone) {
-        this.address = address;
-        this.egn = egn;
-        this.fullName = fullName;
-        this.identityExpireDate = identityExpireDate;
-        this.identityIssueDate = identityIssueDate;
-        this.identityIssuedBy = identityIssuedBy;
-        this.identityNumber = identityNumber;
-        this.phone = phone;
     }
 }

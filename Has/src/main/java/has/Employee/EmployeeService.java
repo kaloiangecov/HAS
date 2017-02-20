@@ -1,5 +1,6 @@
 package has.Employee;
 
+import has.Utils.Validator;
 import has.WorkingSchedule.WorkingSchedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -7,10 +8,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,14 +20,8 @@ public class EmployeeService {
     private EmployeeRepository repo;
 
     public Employee save(Employee employee) throws Exception {
-        Employee dbEmployee = repo.findByPersonalDataEgn(employee.getPersonalData().getEgn());
-        if (dbEmployee != null) {
-            throw new Exception("Employee with EGN " + employee.getPersonalData().getEgn() + " already exists.");
-        }
-
-        if (!isValid(employee.getPersonalData().getIdentityIssueDate(), employee.getPersonalData().getIdentityExpireDate())) {
-            throw new Exception("Invalid issue date");
-        }
+        validateEgn(employee);
+        validateIssueDate(employee);
 
         return repo.save(employee);
     }
@@ -39,10 +30,11 @@ public class EmployeeService {
     public List<Employee> getAllEmployees() {
         List<Employee> employees = repo.findAll();
 
-        for (Employee emp : employees)
-            for (WorkingSchedule schedule : emp.getWorkingSchedules())
+        for (Employee emp : employees) {
+            for (WorkingSchedule schedule : emp.getWorkingSchedules()) {
                 schedule.setEmployee(null);
-
+            }
+        }
         return employees;
     }
 
@@ -64,9 +56,7 @@ public class EmployeeService {
 
     public Employee findById(Long id) throws Exception {
         Employee employee = repo.findOne(id);
-        if (employee == null) {
-            throw new Exception("There is no employee with such ID");
-        }
+        validateIdNotNull(employee);
 
         for (WorkingSchedule schedule : employee.getWorkingSchedules()) {
             schedule.setEmployee(null);
@@ -85,26 +75,19 @@ public class EmployeeService {
 
     public Employee remove(Long id) throws Exception {
         Employee employee = repo.findOne(id);
-        if (employee == null) {
-            throw new Exception("There is no employee with such ID");
-        }
+        validateIdNotNull(employee);
         repo.delete(employee);
         return employee;
     }
 
     public Employee update(Long id, Employee employee) throws Exception {
         Employee dbEmployee = repo.findOne(id);
-        if (dbEmployee == null) {
-            throw new Exception("There is no employee with such ID");
-        }
-        if (!isValid(employee.getPersonalData().getIdentityIssueDate(), employee.getPersonalData().getIdentityExpireDate())) {
-            throw new Exception("Invalid issue date");
-        }
 
-        Employee dbEmployee2 = repo.findByPersonalDataEgn(employee.getPersonalData().getEgn());
-        if (dbEmployee2 != null && dbEmployee2.getId() != employee.getId())
-            throw new Exception("Employee with EGN " + employee.getPersonalData().getEgn() + " already exists.");
+        validateIdNotNull(dbEmployee);
+        validateIssueDate(employee);
+        validateEgn(employee);
 
+        //TODO: status for employee not added yet probably needs to be handled in different method
         dbEmployee.setDateHired(employee.getDateHired());
         dbEmployee.setPersonalData(employee.getPersonalData());
         if (dbEmployee.getUser().getId() != employee.getUser().getId()) {
@@ -113,16 +96,22 @@ public class EmployeeService {
         return repo.save(dbEmployee);
     }
 
-    public boolean isValid(String issueDate, String expirationDate) throws ParseException {
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date issue = format.parse(issueDate);
-        Date expiration = format.parse(expirationDate);
-        if (issue.after(expiration)) {
-            return false;
+    private void validateIssueDate(Employee employee) throws Exception {
+        if (!Validator.isValidIssueDate(employee.getPersonalData().getIdentityIssueDate(), employee.getPersonalData().getIdentityExpireDate())) {
+            throw new Exception("Invalid issue date");
         }
-        if (issue.getTime() > new Date().getTime()) {
-            return false;
+    }
+
+    private void validateEgn(Employee employee) throws Exception {
+        Employee dbEmployee2 = repo.findByPersonalDataEgn(employee.getPersonalData().getEgn());
+        if (dbEmployee2 != null && dbEmployee2.getId() != employee.getId()) {
+            throw new Exception("Employee with EGN " + employee.getPersonalData().getEgn() + " already exists.");
         }
-        return true;
+    }
+
+    private void validateIdNotNull(Employee employee) throws Exception {
+        if (employee == null) {
+            throw new Exception("There is no employee with such ID");
+        }
     }
 }

@@ -48,27 +48,21 @@ public class ReservationGuestService {
     }
 
     public ReservationGuest findById(Long id) throws Exception {
-        ReservationGuest dbReservationGuest = repo.findOne(id);
-        if (dbReservationGuest == null) {
-            throw new Exception("There is no ?? with such ID");
-        }
-        return dbReservationGuest;
+        ReservationGuest reservationGuest = repo.findOne(id);
+        validateIdNotNull(reservationGuest);
+        return reservationGuest;
     }
 
     public ReservationGuest remove(Long id) throws Exception {
-        ReservationGuest dbReservationGuest = repo.findOne(id);
-        if (dbReservationGuest == null) {
-            throw new Exception("There is no ?? with such ID");
-        }
-        repo.delete(dbReservationGuest);
-        return dbReservationGuest;
+        ReservationGuest reservationGuest = repo.findOne(id);
+        validateIdNotNull(reservationGuest);
+        repo.delete(reservationGuest);
+        return reservationGuest;
     }
 
     public ReservationGuest update(Long id, ReservationGuest reservationGuest) throws Exception {
         ReservationGuest dbReservationGuest = repo.findOne(id);
-        if (dbReservationGuest == null) {
-            throw new Exception("There is no ?? with such ID");
-        }
+        validateIdNotNull(dbReservationGuest);
 
         dbReservationGuest.setReservation(reservationGuest.getReservation());
         dbReservationGuest.setGuest(reservationGuest.getGuest());
@@ -76,5 +70,11 @@ public class ReservationGuestService {
         dbReservationGuest.setOwner(reservationGuest.isOwner());
 
         return repo.save(dbReservationGuest);
+    }
+
+    private void validateIdNotNull(ReservationGuest reservationGuest) throws Exception {
+        if (reservationGuest == null) {
+            throw new Exception("There is no ?? with such ID");
+        }
     }
 }
