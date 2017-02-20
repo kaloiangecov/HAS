@@ -3,10 +3,12 @@ package has.Meal;
 import has.Request.Request;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.context.annotation.Scope;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -15,7 +17,8 @@ import java.util.List;
 @Getter
 @Setter
 @Entity(name = "MEAL")
-public class Meal {
+@Scope("session")
+public class Meal implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

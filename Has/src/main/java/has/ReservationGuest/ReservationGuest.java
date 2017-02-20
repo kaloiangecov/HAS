@@ -5,9 +5,11 @@ import has.Reservation.Reservation;
 import has.Room.Room;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.context.annotation.Scope;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * Created by kaloi on 1/4/2017.
@@ -15,7 +17,8 @@ import javax.validation.constraints.NotNull;
 @Entity(name = "RESERVATION_GUEST")
 @Getter
 @Setter
-public class ReservationGuest {
+@Scope("session")
+public class ReservationGuest implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

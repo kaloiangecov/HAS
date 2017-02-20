@@ -4,11 +4,13 @@ import has.Meal.Meal;
 import has.ReservationGuest.ReservationGuest;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.context.annotation.Scope;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -17,7 +19,8 @@ import java.util.List;
 @Getter
 @Setter
 @Entity(name = "REQUEST")
-public class Request {
+@Scope("session")
+public class Request implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

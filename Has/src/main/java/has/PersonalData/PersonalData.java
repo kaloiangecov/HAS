@@ -2,11 +2,13 @@ package has.PersonalData;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.context.annotation.Scope;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 /**
  * Created by kaloi on 12/23/2016.
@@ -14,7 +16,8 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @Entity(name = "PERSONAL_DATA")
-public class PersonalData {
+@Scope("session")
+public class PersonalData implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

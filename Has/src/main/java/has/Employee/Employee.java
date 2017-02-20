@@ -5,6 +5,7 @@ import has.User.User;
 import has.WorkingSchedule.WorkingSchedule;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.context.annotation.Scope;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -19,6 +20,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity(name = "EMPLOYEE")
+@Scope("session")
 public class Employee implements Serializable {
 
     @Id
