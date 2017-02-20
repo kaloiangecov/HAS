@@ -196,14 +196,14 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         cellWidthSpec: "Auto",
         eventHeight: 50,
         rowHeaderColumns: [
-            {title: "Room"},
-            {title: "Capacity", width: 80},
-            {title: "Status", width: 80}
+            {title: "Room", width: 46},
+            {title: "Capacity", width: 57},
+            //{title: "Status", width: 80}
         ],
         contextMenu: new DayPilot.Menu({
             items: [
                 {
-                    text: '<i class="fa fa-info"></i> Show reservation info',
+                    text: '<i class="fa fa-info"></i> Show info',
                     onclick: function () {
                         var tmp = this.source.data.objReservation;
                         $scope.$apply(function () {
@@ -216,7 +216,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                     }
                 },
                 {
-                    text: '<i class="fa fa-plus"></i> Add another guest',
+                    text: '<i class="fa fa-user-plus"></i> Add another guest',
                     onclick: function () {
                         $scope.reservationGuest = this.source.data.objReservation.reservationGuests[0];
                         var tmpReservation = this.source.data.objReservation;
@@ -253,7 +253,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                     }
                 },
                 {
-                    text: '<i class="fa fa-play"></i> Start reservation',
+                    text: '<i class="fa fa-check"></i> Check in',
                     onclick: function () {
                         if (this.source.data.objReservation.status > 0
                             || this.source.data.objReservation.startDate != moment().format("YYYY-MM-DD"))
@@ -272,13 +272,13 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                     }
                 },
                 {
-                    text: '<i class="fa fa-trash-o"></i> Delete reservation',
+                    text: '<i class="fa fa-times"></i> Check out',
                     onclick: function () {
-                        if (confirm("Delete reservation?\n" + "Start: " + this.source.start() + "\nEnd:" + this.source.end())) {
-                            $scope.scheduler.events.remove(this.source);
+                        if (confirm("Close reservation?\n" + "Start: " + this.source.start() + "\nEnd:" + this.source.end())) {
+                            //$scope.scheduler.events.remove(this.source);
 
-                            $scope.deleteData("reservation", this.source.data.objReservation.id, function (data) {
-                                $scope.scheduler.message("Reservation deleted: " + data.reservationGuests[0].guest.personalData.fullName);
+                            $scope.closeReservation(this.source.data.objReservation.id, function (data) {
+                                $scope.scheduler.message("Reservation closed: " + data.reservationGuests[0].guest.personalData.fullName);
                                 $scope.resetReservation();
                             });
                         } else {
@@ -287,13 +287,13 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                     }
                 },
                 {
-                    text: '<i class="fa fa-times"></i> Close reservation',
+                    text: '<i class="fa fa-ban"></i> Cancel',
                     onclick: function () {
-                        if (confirm("Close reservation?\n" + "Start: " + this.source.start() + "\nEnd:" + this.source.end())) {
-                            //$scope.scheduler.events.remove(this.source);
+                        if (confirm("Delete reservation?\n" + "Start: " + this.source.start() + "\nEnd:" + this.source.end())) {
+                            $scope.scheduler.events.remove(this.source);
 
-                            $scope.closeReservation(this.source.data.objReservation.id, function (data) {
-                                $scope.scheduler.message("Reservation closed: " + data.reservationGuests[0].guest.personalData.fullName);
+                            $scope.deleteData("reservation", this.source.data.objReservation.id, function (data) {
+                                $scope.scheduler.message("Reservation deleted: " + data.reservationGuests[0].guest.personalData.fullName);
                                 $scope.resetReservation();
                             });
                         } else {
@@ -310,13 +310,23 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         },
         onBeforeResHeaderRender: function (args) {
             var beds = function (single, double) {
-                return (single + " single, " + double + " double");
+                var html = '<div class="bed">';
+                html += single + 'x<br/>';
+                html += '<img src="img/bed-single.png" alt="beds single"/>';
+                html += '</div>';
+
+                html += '<div class="bed">';
+                html += double + 'x<br/>';
+                html += '<img src="img/bed-double.png" alt="beds double"/>';
+                html += '</div>';
+
+                return html;
             };
 
             args.resource.name = args.resource.number;
 
             args.resource.columns[0].html = beds(args.resource.bedsSingle, args.resource.bedsDouble);
-            args.resource.columns[1].html = $scope.roomStatuses[args.resource.status];
+            //args.resource.columns[1].html = $scope.roomStatuses[args.resource.status];
             switch (args.resource.status) {
                 case 1:
                     args.resource.cssClass = "status_dirty";
@@ -376,8 +386,28 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             }
 
             var tmpReservatoin = args.e.data.objReservation;
-            tmpReservatoin.startDate = args.newStart.value.substr(0, 10);
-            tmpReservatoin.endDate = args.newEnd.value.substr(0, 10);
+            var newRange = {
+                start: args.newStart.value.substr(0, 10),
+                end: args.newStart.value.substr(0, 10)
+            };
+            var today = new Date().toISOString().substr(0, 10);
+
+            if (tmpReservatoin.startDate > newRange.start && newRange.start <= today) {
+                $scope.page.message = {
+                    type: 'danger',
+                    title: "Check in date error",
+                    text: ("Check in at " + newRange.start + " is not allowed!")
+                };
+                $('#messageModal').modal('show');
+
+                loadEvents();
+                return;
+            }
+
+            tmpReservatoin.startDate = newRange.start;
+            tmpReservatoin.endDate = newRange.end;
+
+            if (tmpResr)
 
             $http({
                 method: "PUT",
@@ -549,6 +579,15 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                         text: reservation.reservationGuests[0].guest.personalData.fullName,
                         objReservation: reservation
                     };
+
+                    if (reservation.status > 0) {
+                        tmpEvent.deleteEnabled = false;
+
+                        if (reservation.status == 2) {
+                            tmpEvent.moveEnabled = false;
+                            tmpEvent.resizeEnabled = false;
+                        }
+                    }
 
                     if (!reservation.group) {
                         tmpEvent.id = reservation.id;
