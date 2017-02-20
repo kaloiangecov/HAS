@@ -3,6 +3,7 @@ package has.Room;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.context.annotation.Scope;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,6 +16,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @Entity(name = "ROOM")
+@Scope("session")
 public class Room {
 
     @Id

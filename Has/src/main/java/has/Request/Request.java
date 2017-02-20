@@ -1,13 +1,16 @@
 package has.Request;
 
 import has.Meal.Meal;
+import has.ReservationGuest.ReservationGuest;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.context.annotation.Scope;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -16,7 +19,8 @@ import java.util.List;
 @Getter
 @Setter
 @Entity(name = "REQUEST")
-public class Request {
+@Scope("session")
+public class Request implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,7 +29,12 @@ public class Request {
     @NotNull
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "requests", cascade = CascadeType.ALL)
     private List<Meal> meals;
-//    private ReservationGuest reservationGuest;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "RESERVATION_GUEST_ID")
+    private ReservationGuest reservationGuest;
+
     @NotNull
     @Min(0)
     @Max(2)

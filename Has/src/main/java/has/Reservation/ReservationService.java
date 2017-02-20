@@ -27,7 +27,8 @@ public class ReservationService {
     public static final int RESERVATION_STATUS_ARRIVED = 1;
 
     public Reservation save(Reservation reservation, User user) throws IOException, TemplateException {
-        setLastModifiedAndNotifyCustommer(reservation, user);
+        setLastModified(reservation, user);
+        notifyCustomer(reservation, user);
         return repo.save(reservation);
     }
 
@@ -57,12 +58,10 @@ public class ReservationService {
     }
 
     public Reservation findById(Long id) throws Exception {
-        Reservation dbReservation = repo.findOne(id);
-        if (dbReservation == null) {
-            throw new Exception("There is no reservation with such ID");
-        }
+        Reservation reservation = repo.findOne(id);
+        validateIdNotNull(reservation);
 
-        return removeRecursions(dbReservation);
+        return removeRecursions(reservation);
     }
 
     public Reservation remove(Long id) throws Exception {
@@ -77,9 +76,7 @@ public class ReservationService {
 
     public Reservation update(Long id, Reservation reservation, User user) throws Exception {
         Reservation dbReservation = repo.findOne(id);
-        if (dbReservation == null) {
-            throw new Exception("There is no reservation with such ID");
-        }
+        validateIdNotNull(dbReservation);
 
         dbReservation.setStatus(reservation.getStatus());
         dbReservation.setPrice(reservation.getPrice());
@@ -95,7 +92,8 @@ public class ReservationService {
         dbReservation.setStartDate(reservation.getStartDate());
         dbReservation.setNumberChildren(reservation.getNumberChildren());
 
-        setLastModifiedAndNotifyCustommer(dbReservation, user);
+        setLastModified(dbReservation, user);
+        notifyCustomer(dbReservation, user);
 
         dbReservation.setReceptionist(reservation.getReceptionist());
 
@@ -125,18 +123,16 @@ public class ReservationService {
     }
 
     public Reservation close(Long id, User user) throws Exception {
-        Reservation dbReservation = repo.findOne(id);
-        if (dbReservation == null) {
-            throw new Exception("There is no reservation with such ID");
-        }
+        Reservation reservation = repo.findOne(id);
+        validateIdNotNull(reservation);
 
-        dbReservation.setStatus(2);
-        dbReservation.setLastModifiedBy(user);
+        reservation.setStatus(2);
+        reservation.setLastModifiedBy(user);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        dbReservation.setLastModifiedTime(sdf.format(new Date()));
+        reservation.setLastModifiedTime(sdf.format(new Date()));
 
-        return removeRecursions(repo.save(dbReservation));
+        return removeRecursions(repo.save(reservation));
     }
 
     private Reservation removeRecursions(Reservation reservation) {
@@ -153,29 +149,33 @@ public class ReservationService {
         return reservation;
     }
 
-    private void setLastModifiedAndNotifyCustommer(Reservation reservation, User user) throws IOException, TemplateException {
+    private void setLastModified(Reservation reservation, User user) throws IOException, TemplateException {
         reservation.setLastModifiedBy(user);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         reservation.setLastModifiedTime(sdf.format(new Date()));
+    }
 
+    private void notifyCustomer(Reservation reservation, User user) throws IOException, TemplateException {
         if (reservation.getStatus() == RESERVATION_STATUS_ARRIVED) {
-            notifyCustommer(reservation, user);
+            ReservationGuest reservationGuest = null;
+            for (ReservationGuest singleReservationGuest : reservation.getReservationGuests()) {
+                if (singleReservationGuest.isOwner()) {
+                    reservationGuest = singleReservationGuest;
+                    break;
+                }
+            }
+            Map model = new HashMap();
+            model.put("reservation", reservation);
+            model.put("guest", reservationGuest.getGuest());
+            String templatePath = "roomCode.ftl";
+
+            templateHandler.sendMail(model, templatePath, reservationGuest);
         }
     }
 
-    private void notifyCustommer(Reservation reservation, User user) throws IOException, TemplateException {
-        ReservationGuest reservationGuest = null;
-        for (ReservationGuest singleReservationGuest : reservation.getReservationGuests()) {
-            if (singleReservationGuest.isOwner()) {
-                reservationGuest = singleReservationGuest;
-                break;
-            }
+    private void validateIdNotNull(Reservation reservation) throws Exception {
+        if (reservation == null) {
+            throw new Exception("There is no reservation with such ID");
         }
-        Map model = new HashMap();
-        model.put("reservation", reservation);
-        model.put("guest", reservationGuest.getGuest());
-        String templatePath = "roomCode.ftl";
-
-        templateHandler.sendMail(model, templatePath, reservationGuest);
     }
 }

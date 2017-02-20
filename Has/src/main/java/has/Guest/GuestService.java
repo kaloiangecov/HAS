@@ -1,16 +1,12 @@
 package has.Guest;
 
-import has.mailsender.SendMailSSL;
+import has.Utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,15 +19,8 @@ public class GuestService {
     private GuestRepository repo;
 
     public Guest save(Guest guest) throws Exception {
-        Guest dbGuest = repo.findByPersonalDataEgn(guest.getPersonalData().getEgn());
-        if (dbGuest != null) {
-            throw new Exception("Guest with EGN " + guest.getPersonalData().getEgn() + " already exists.");
-        }
-        if (!isValid(guest.getPersonalData().getIdentityIssueDate(), guest.getPersonalData().getIdentityExpireDate())){
-            throw new Exception("Invalid issue date");
-        }
-
-        SendMailSSL.sendMail("shit@hotmail.com", "" );
+        validateEgn(guest);
+        validateIssueDate(guest);
 
         return repo.save(guest);
     }
@@ -46,53 +35,49 @@ public class GuestService {
     }
 
     public Guest findById(Long id) throws Exception {
-        Guest dbGuest = repo.findOne(id);
-        if(dbGuest == null){
-            throw new Exception("There is no guest with such ID");
-        }
-        return dbGuest;
+        Guest guest = repo.findOne(id);
+        validateIdNotNull(guest);
+        return guest;
     }
 
     public Guest remove(Long id) throws Exception {
-        Guest dbGuest = repo.findOne(id);
-        if(dbGuest == null){
-            throw new Exception("There is no guest with such ID");
-        }
-        repo.delete(dbGuest);
-        return dbGuest;
+        Guest guest = repo.findOne(id);
+        validateIdNotNull(guest);
+        repo.delete(guest);
+        return guest;
     }
 
     public Guest update(Long id, Guest guest) throws Exception {
         Guest dbGuest = repo.findOne(id);
-        if(dbGuest == null){
-            throw new Exception("There is no guest with such ID");
-        }
-        if (!isValid(guest.getPersonalData().getIdentityIssueDate(), guest.getPersonalData().getIdentityExpireDate())){
-            throw new Exception("Invalid issue date");
-        }
-        Guest dbGuest2 = repo.findByPersonalDataEgn(guest.getPersonalData().getEgn());
-        if (dbGuest2 != null && dbGuest2.getId() != guest.getId())
-            throw new Exception("Employee with EGN " + guest.getPersonalData().getEgn() + " already exists.");
+
+        validateIssueDate(guest);
+        validateEgn(guest);
+        validateIdNotNull(dbGuest);
 
         dbGuest.setNumberReservations(guest.getNumberReservations());
         dbGuest.setStatus(guest.getStatus());
         dbGuest.setPersonalData(guest.getPersonalData());
         dbGuest.setUser(guest.getUser());
 
-        SendMailSSL.sendMail("asdffgdf@423.com", "");
         return repo.save(dbGuest);
     }
 
-    public boolean isValid(String issueDate, String expirationDate) throws ParseException {
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date issue = format.parse(issueDate);
-        Date expiration = format.parse(expirationDate);
-        if(issue.after(expiration)){
-            return false;
+    private void validateEgn(Guest guest) throws Exception {
+        Guest dbGuest = repo.findByPersonalDataEgn(guest.getPersonalData().getEgn());
+        if (dbGuest != null) {
+            throw new Exception("Guest with EGN " + guest.getPersonalData().getEgn() + " already exists.");
         }
-        if(issue.getTime() > new Date().getTime()){
-            return false;
+    }
+
+    private void validateIssueDate(Guest guest) throws Exception {
+        if (!Validator.isValidIssueDate(guest.getPersonalData().getIdentityIssueDate(), guest.getPersonalData().getIdentityExpireDate())) {
+            throw new Exception("Invalid issue date");
         }
-        return true;
+    }
+
+    private void validateIdNotNull(Guest guest) throws Exception {
+        if (guest == null) {
+            throw new Exception("There is no guest with such ID");
+        }
     }
 }

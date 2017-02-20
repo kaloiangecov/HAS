@@ -6,6 +6,7 @@ import has.Roles.UserRole;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
+import org.springframework.context.annotation.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -25,6 +26,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity(name = "T_USER")
+@Scope("session")
 public class User implements Serializable, UserDetails {
 
     @Id

@@ -26,27 +26,22 @@ public class MealService {
     }
 
     public Meal findById(Long id) throws Exception {
-        Meal dbMeal = repo.findOne(id);
-        if (dbMeal == null) {
-            throw new Exception("There is no meal with such ID");
-        }
-        return dbMeal;
+        Meal meal = repo.findOne(id);
+        validateIdNotNull(meal);
+        return meal;
     }
 
     public Meal remove(Long id) throws Exception {
-        Meal dbMeal = repo.findOne(id);
-        if (dbMeal == null) {
-            throw new Exception("There is no meal with such ID");
-        }
-        repo.delete(dbMeal);
-        return dbMeal;
+        Meal meal = repo.findOne(id);
+        validateIdNotNull(meal);
+        repo.delete(meal);
+        return meal;
     }
 
     public Meal update(Long id, Meal meal) throws Exception {
         Meal dbMeal = repo.findOne(id);
-        if (dbMeal == null) {
-            throw new Exception("There is no meal with such ID");
-        }
+        validateIdNotNull(dbMeal);
+
         dbMeal.setDate(meal.getDate());
         dbMeal.setDescription(meal.getDescription());
         dbMeal.setName(meal.getName());
@@ -59,5 +54,11 @@ public class MealService {
         PageRequest request = new PageRequest((start / length), length, Sort.Direction.ASC, "id");
 
         return repo.findByNameContaining(name, request);
+    }
+
+    private void validateIdNotNull(Meal meal) throws Exception {
+        if (meal == null) {
+            throw new Exception("There is no meal with such ID");
+        }
     }
 }

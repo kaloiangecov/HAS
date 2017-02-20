@@ -5,6 +5,7 @@ import has.ReservationGuest.ReservationGuest;
 import has.User.User;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.context.annotation.Scope;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -20,6 +21,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity(name = "RESERVATION")
+@Scope("session")
 public class Reservation implements Serializable {
 
     @Id

@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
@@ -97,7 +98,10 @@ public class UserController {
 
     @RequestMapping(value = "/user/login", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public Principal login(Principal user) throws Exception {
+    public Principal login(Principal user, HttpServletRequest request, HttpSession session) throws Exception {
+        session.invalidate();
+        HttpSession newSession = request.getSession();
+
         User dbUser = userService.findByUsername(user.getName());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         userService.updateLastLogin(dbUser.getId(), sdf.format(new Date()));

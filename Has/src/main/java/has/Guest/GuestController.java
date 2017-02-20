@@ -44,7 +44,8 @@ public class GuestController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('PERM_SEARCH_GUEST')")
-    public @ResponseBody
+    public
+    @ResponseBody
     DataTableResult searchGuests(HttpServletRequest request) throws Exception {
         Map<String, String[]> parameterMap = request.getParameterMap();
 

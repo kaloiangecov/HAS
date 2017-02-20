@@ -4,6 +4,7 @@ import has.PersonalData.PersonalData;
 import has.User.User;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.context.annotation.Scope;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -17,6 +18,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Entity(name = "GUEST")
+@Scope("session")
 public class Guest implements Serializable {
 
     @Id

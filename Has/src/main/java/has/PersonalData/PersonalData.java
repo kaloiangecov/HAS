@@ -2,11 +2,13 @@ package has.PersonalData;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.context.annotation.Scope;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 /**
  * Created by kaloi on 12/23/2016.
@@ -14,7 +16,8 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @Entity(name = "PERSONAL_DATA")
-public class PersonalData {
+@Scope("session")
+public class PersonalData implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,7 +35,7 @@ public class PersonalData {
 
     @NotNull
     @Size(min = 3, max = 100)
-    //@Pattern(regexp = "[a-zA-Z]+")
+    @Pattern(regexp = "[a-zA-Z]+")
     private String fullName;
 
     @NotNull
@@ -55,18 +58,5 @@ public class PersonalData {
 
     public PersonalData() {
 
-    }
-
-    public PersonalData(String address, String egn, String fullName,
-                        String identityExpireDate, String identityIssueDate,
-                        String identityIssuedBy, String identityNumber, String phone) {
-        this.address = address;
-        this.egn = egn;
-        this.fullName = fullName;
-        this.identityExpireDate = identityExpireDate;
-        this.identityIssueDate = identityIssueDate;
-        this.identityIssuedBy = identityIssuedBy;
-        this.identityNumber = identityNumber;
-        this.phone = phone;
     }
 }
