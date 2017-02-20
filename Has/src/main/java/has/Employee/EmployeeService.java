@@ -28,13 +28,12 @@ public class EmployeeService {
             throw new Exception("Employee with EGN " + employee.getPersonalData().getEgn() + " already exists.");
         }
 
-        if (!isValid(employee.getPersonalData().getIdentityIssueDate(), employee.getPersonalData().getIdentityExpireDate())){
+        if (!isValid(employee.getPersonalData().getIdentityIssueDate(), employee.getPersonalData().getIdentityExpireDate())) {
             throw new Exception("Invalid issue date");
         }
 
         return repo.save(employee);
     }
-
 
 
     public List<Employee> getAllEmployees() {
@@ -98,7 +97,7 @@ public class EmployeeService {
         if (dbEmployee == null) {
             throw new Exception("There is no employee with such ID");
         }
-        if (!isValid(employee.getPersonalData().getIdentityIssueDate(), employee.getPersonalData().getIdentityExpireDate())){
+        if (!isValid(employee.getPersonalData().getIdentityIssueDate(), employee.getPersonalData().getIdentityExpireDate())) {
             throw new Exception("Invalid issue date");
         }
 
@@ -111,7 +110,6 @@ public class EmployeeService {
         if (dbEmployee.getUser().getId() != employee.getUser().getId()) {
             dbEmployee.setUser(employee.getUser());
         }
-//        SendMailSSL.sendMail("shit@shit.com", "");
         return repo.save(dbEmployee);
     }
 
@@ -119,10 +117,10 @@ public class EmployeeService {
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date issue = format.parse(issueDate);
         Date expiration = format.parse(expirationDate);
-        if(issue.after(expiration)){
+        if (issue.after(expiration)) {
             return false;
         }
-        if(issue.getTime() > new Date().getTime()){
+        if (issue.getTime() > new Date().getTime()) {
             return false;
         }
         return true;

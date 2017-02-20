@@ -22,8 +22,6 @@ import java.util.UUID;
 @Entity(name = "RESERVATION")
 public class Reservation implements Serializable {
 
-    UUID code = UUID.randomUUID();
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "RESERVATION_ID")
@@ -33,7 +31,7 @@ public class Reservation implements Serializable {
     private boolean breakfast;
     private boolean dinner;
 
-    private String reservationCode = String.valueOf(code);
+    private String reservationCode;
 
     @Column(name = "C_GROUP")
     private boolean group;
@@ -79,5 +77,7 @@ public class Reservation implements Serializable {
     private List<ReservationGuest> reservationGuests;
 
     public Reservation() {
+        UUID code = UUID.randomUUID();
+        reservationCode = String.valueOf(code);
     }
 }

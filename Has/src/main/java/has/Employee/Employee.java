@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
@@ -39,6 +41,12 @@ public class Employee implements Serializable {
     @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<WorkingSchedule> workingSchedules;
 
+    @NotNull
+    @Min(0)
+    @Max(2)
+    //0 = unemployed, 1 = employed, 2 = on leave
+    private int status;
+
     public Employee(String dateHired) {
         this.dateHired = dateHired;
     }
@@ -50,5 +58,14 @@ public class Employee implements Serializable {
     }
 
     public Employee() {
+    }
+
+    public void setStatus(int status) {
+        if (status == 0) {
+            user.setIsEnabled(false);
+            this.status = status;
+        }
+
+        this.status = status;
     }
 }

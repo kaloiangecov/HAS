@@ -50,6 +50,8 @@ public class User implements Serializable, UserDetails {
     @Size(min = 3, max = 16)
     private String username;
 
+    private boolean enabled = true;
+
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinTable(name = "USER_ROLE", joinColumns = {
@@ -91,7 +93,11 @@ public class User implements Serializable, UserDetails {
     @Override
     @JsonIgnore
     public boolean isEnabled() {
-        return true;
+        return enabled;
+    }
+
+    public void setIsEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public UserRole getUserRole() {
@@ -105,7 +111,7 @@ public class User implements Serializable, UserDetails {
     }
 
     @PrePersist
-    public void setDate(){
+    public void setDate() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         setLastLogin(sdf.format(new Date()));
     }
