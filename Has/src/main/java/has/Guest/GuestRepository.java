@@ -13,6 +13,8 @@ public interface GuestRepository extends JpaRepository<Guest, Long> {
 
     Guest findByPersonalDataEgn(String egn);
 
+    Guest findByPersonalDataIdentityNumber(String identityNumber);
+
     Page<Guest> findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContaining(String fullName, String phone, Pageable pageRequest);
 
 }
