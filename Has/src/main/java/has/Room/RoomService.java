@@ -18,11 +18,7 @@ public class RoomService {
     private RoomRepository repo;
 
     public Room save(Room room) throws Exception {
-        Room dbRoom = repo.findByNumber(room.getNumber());
-        if (dbRoom != null) {
-            throw new Exception("Room with number " + room.getNumber() + " already exists!");
-        }
-
+        validateRoomNumber(room);
         return repo.save(room);
     }
 
@@ -53,7 +49,8 @@ public class RoomService {
 
     public Room update(Long id, Room room) throws Exception {
         Room dbRoom = repo.findOne(id);
-        validateIdNotNull(room);
+        validateIdNotNull(dbRoom);
+        validateRoomNumber(room);
 
         dbRoom.setNumber(room.getNumber());
         dbRoom.setRoomClass(room.getRoomClass());
@@ -69,6 +66,13 @@ public class RoomService {
     private void validateIdNotNull(Room room) throws Exception {
         if (room == null) {
             throw new Exception("There is no room with such ID");
+        }
+    }
+
+    private void validateRoomNumber(Room room) throws Exception {
+        Room dbRoom = repo.findByNumber(room.getNumber());
+        if (dbRoom != null) {
+            throw new Exception("Room with number " + room.getNumber() + " already exists!");
         }
     }
 }

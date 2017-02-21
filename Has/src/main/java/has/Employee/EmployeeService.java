@@ -26,6 +26,16 @@ public class EmployeeService {
         return repo.save(employee);
     }
 
+    public List<Employee> getAllEmployedEmployees() {
+        List<Employee> employees = repo.findByEmployedTrue();
+
+        for (Employee emp : employees) {
+            for (WorkingSchedule schedule : emp.getWorkingSchedules()) {
+                schedule.setEmployee(null);
+            }
+        }
+        return employees;
+    }
 
     public List<Employee> getAllEmployees() {
         List<Employee> employees = repo.findAll();
@@ -38,13 +48,13 @@ public class EmployeeService {
         return employees;
     }
 
-    public Page<Employee> searchEmployees(int start, int length, String sortColumn, String sortDirection, String fullName, String phone, String dateHired) {
+    public Page<Employee> searchEmployees(int start, int length, String sortColumn, String sortDirection, String fullName, String phone, String dateHired, boolean employed) {
         PageRequest request = new PageRequest((start / length), length, Sort.Direction.fromString(sortDirection), sortColumn);
         Page<Employee> employeesPage;
         if (dateHired.isEmpty()) {
-            employeesPage = repo.findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContaining(fullName, phone, request);
+            employeesPage = repo.findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContainingAndEmployed(fullName, phone, request, employed);
         } else {
-            employeesPage = repo.findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContainingAndDateHired(fullName, phone, dateHired, request);
+            employeesPage = repo.findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContainingAndDateHiredAndEmployed(fullName, phone, dateHired, request, employed);
         }
 
         for (Employee emp : employeesPage)
@@ -82,18 +92,28 @@ public class EmployeeService {
 
     public Employee update(Long id, Employee employee) throws Exception {
         Employee dbEmployee = repo.findOne(id);
-
         validateIdNotNull(dbEmployee);
         validateIssueDate(employee);
         validateEgn(employee);
 
-        //TODO: status for employee not added yet probably needs to be handled in different method
         dbEmployee.setDateHired(employee.getDateHired());
         dbEmployee.setPersonalData(employee.getPersonalData());
         if (dbEmployee.getUser().getId() != employee.getUser().getId()) {
             dbEmployee.setUser(employee.getUser());
         }
         return repo.save(dbEmployee);
+    }
+
+    public Employee changeEmployment(Long id) throws Exception {
+        Employee employee = repo.findOne(id);
+        validateIdNotNull(employee);
+
+        if (employee.isEmployed() == true) {
+            employee.setEmployed(false);
+        } else {
+            employee.setEmployed(true);
+        }
+        return repo.save(employee);
     }
 
     private void validateIssueDate(Employee employee) throws Exception {
