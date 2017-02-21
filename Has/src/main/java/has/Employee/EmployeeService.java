@@ -22,6 +22,7 @@ public class EmployeeService {
     public Employee save(Employee employee) throws Exception {
         validateEgn(employee);
         validateIssueDate(employee);
+        validateIdentityNumber(employee);
 
         return repo.save(employee);
     }
@@ -104,6 +105,7 @@ public class EmployeeService {
         validateIdNotNull(dbEmployee);
         validateIssueDate(employee);
         validateEgn(employee);
+        validateIdentityNumber(employee);
 
         dbEmployee.setDateHired(employee.getDateHired());
         dbEmployee.setPersonalData(employee.getPersonalData());
@@ -132,8 +134,8 @@ public class EmployeeService {
     }
 
     private void validateEgn(Employee employee) throws Exception {
-        Employee dbEmployee2 = repo.findByPersonalDataEgn(employee.getPersonalData().getEgn());
-        if (dbEmployee2 != null && dbEmployee2.getId() != employee.getId()) {
+        Employee dbEmployee = repo.findByPersonalDataEgn(employee.getPersonalData().getEgn());
+        if (dbEmployee != null && dbEmployee.getId() != employee.getId()) {
             throw new Exception("Employee with EGN " + employee.getPersonalData().getEgn() + " already exists.");
         }
     }
@@ -141,6 +143,13 @@ public class EmployeeService {
     private void validateIdNotNull(Employee employee) throws Exception {
         if (employee == null) {
             throw new Exception("There is no employee with such ID");
+        }
+    }
+
+    private void validateIdentityNumber(Employee employee) throws Exception {
+        Employee dbEmployee = repo.findByPersonalDataIdentityNumber(employee.getPersonalData().getIdentityNumber());
+        if (dbEmployee != null && dbEmployee.getId() != employee.getId()) {
+            throw new Exception("Employee with Identity Number " + employee.getPersonalData().getIdentityNumber() + " already exists.");
         }
     }
 }

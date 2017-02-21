@@ -21,6 +21,7 @@ public class GuestService {
     public Guest save(Guest guest) throws Exception {
         validateEgn(guest);
         validateIssueDate(guest);
+        validateIdentityNumber(guest);
 
         return repo.save(guest);
     }
@@ -52,6 +53,7 @@ public class GuestService {
 
         validateIssueDate(guest);
         validateEgn(guest);
+        validateIdentityNumber(guest);
         validateIdNotNull(dbGuest);
 
         dbGuest.setNumberReservations(guest.getNumberReservations());
@@ -78,6 +80,13 @@ public class GuestService {
     private void validateIdNotNull(Guest guest) throws Exception {
         if (guest == null) {
             throw new Exception("There is no guest with such ID");
+        }
+    }
+
+    private void validateIdentityNumber(Guest guest) throws Exception {
+        Guest dbGuest = repo.findByPersonalDataIdentityNumber(guest.getPersonalData().getIdentityNumber());
+        if (dbGuest != null && dbGuest.getId() != guest.getId()) {
+            throw new Exception("Guest with Identity Number " + guest.getPersonalData().getIdentityNumber() + " already exists.");
         }
     }
 }
