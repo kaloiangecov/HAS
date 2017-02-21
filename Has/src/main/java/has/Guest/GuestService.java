@@ -64,7 +64,7 @@ public class GuestService {
 
     private void validateEgn(Guest guest) throws Exception {
         Guest dbGuest = repo.findByPersonalDataEgn(guest.getPersonalData().getEgn());
-        if (dbGuest != null) {
+        if (dbGuest != null && dbGuest.getId() != guest.getId()) {
             throw new Exception("Guest with EGN " + guest.getPersonalData().getEgn() + " already exists.");
         }
     }
