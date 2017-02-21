@@ -387,11 +387,6 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 return;
             }
 
-            if (!confirm("Are you sure you want to move the reservation?")) {
-                loadEvents();
-                return;
-            }
-
             var newRange = {
                 start: args.newStart.value.substr(0, 10),
                 end: args.newEnd.value.substr(0, 10)
@@ -399,6 +394,11 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
             if (!$scope.validateCheckInDate(tmpReservation, newRange)) {
                 $('#messageModal').modal('show');
+                loadEvents();
+                return;
+            }
+
+            if (!confirm("Are you sure you want to move the reservation?")) {
                 loadEvents();
                 return;
             }
@@ -433,11 +433,6 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         onEventResized: function (args) {
             $scope.scheduler.clearSelection();
 
-            if (!confirm("Are you sure you want to resize the reservation?")) {
-                loadEvents();
-                return;
-            }
-
             var tmpReservation = args.e.data.objReservation;
             var newRange = {
                 start: args.newStart.value.substr(0, 10),
@@ -446,6 +441,11 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
             if (!$scope.validateCheckInDate(tmpReservation, newRange)) {
                 $('#messageModal').modal('show');
+                loadEvents();
+                return;
+            }
+
+            if (!confirm("Are you sure you want to resize the reservation?")) {
                 loadEvents();
                 return;
             }

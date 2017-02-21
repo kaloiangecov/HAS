@@ -45,9 +45,9 @@ public class ReservationService {
         List<Reservation> reservations = new ArrayList<Reservation>();
 
         if (isGroup != null && isGroup == true) {
-            reservations = repo.findByGroupAndStatusNotAndStartDateGreaterThanAndEndDateLessThan(true, 2, startDate, endDate);
+            reservations = repo.findGroupReservationsForCalendar(true, 2, startDate, endDate);
         } else {
-            reservations = repo.findByStatusNotAndStartDateGreaterThanAndEndDateLessThan(2, startDate, endDate);
+            reservations = repo.findAllReservationsForCalendar(2, startDate, endDate);
         }
 
         for (Reservation reservation : reservations) {
