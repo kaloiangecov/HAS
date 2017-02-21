@@ -35,7 +35,7 @@ public class PersonalData implements Serializable {
 
     @NotNull
     @Size(min = 3, max = 100)
-    @Pattern(regexp = "[a-zA-Z]+")
+//    @Pattern(regexp = "[a-zA-Z]+")
     private String fullName;
 
     @NotNull
