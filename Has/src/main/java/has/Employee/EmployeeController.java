@@ -105,8 +105,7 @@ public class EmployeeController {
     }
 
     @RequestMapping(value = "/employee/employed/{id}", method = RequestMethod.PUT,
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('PERM_REMOVE_EMPLOYEE')")
     public Employee changeStatus(@PathVariable Long id) throws Exception {

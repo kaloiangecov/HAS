@@ -7,10 +7,13 @@ button.action-btn {
     padding: 8px;
 }
 
-a > i.fa-refresh {
+a > i.fa-refresh,
+button > i.fa-refresh {
     color: #26B99A;
 }
-a > i.fa-refresh:hover {
+
+a > i.fa-refresh:hover,
+button > i.fa-refresh:hover {
     color: #26DD9A;
 }
 

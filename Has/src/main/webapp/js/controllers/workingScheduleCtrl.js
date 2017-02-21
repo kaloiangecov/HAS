@@ -169,6 +169,7 @@ app.controller("workingScheduleCtrl", function ($scope, $http, $stateParams, DTO
                 });
             }
         };
+
     }
 
     angular.element(document).ready(function () {
@@ -183,6 +184,14 @@ app.controller("workingScheduleCtrl", function ($scope, $http, $stateParams, DTO
 
             $scope.reloadTableData();
         } else {
+            $scope.$watch("schedule.startDate", function (newVal, oldVal) {
+                if ($scope.schedule.shift == 3) {
+                    $scope.schedule.endDate = moment(newVal).add(1, 'days').format('YYYY-MM-DD');
+                } else {
+                    $scope.schedule.endDate = newVal;
+                }
+            })
+
             $('#startDate,#endDate').daterangepicker({
                 singleDatePicker: true,
                 showDropdowns: true,

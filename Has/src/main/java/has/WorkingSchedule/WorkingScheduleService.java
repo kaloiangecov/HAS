@@ -39,7 +39,7 @@ public class WorkingScheduleService {
 
     public Page<WorkingSchedule> searchSchedule(int start, int length, String sortColumn, String sortDirection, String startDate, String endDate, Long roleID) {
         PageRequest request = new PageRequest((start / length), length, Sort.Direction.fromString(sortDirection), sortColumn);
-        Page<WorkingSchedule> schedulePage = repo.findByStartDateGreaterThanAndEndDateLessThan(startDate, endDate, request);
+        Page<WorkingSchedule> schedulePage = repo.findByRangeAndRole(startDate, endDate, roleID, request);
 
         for (WorkingSchedule schedule : schedulePage)
             schedule = removeRecursions(schedule);
@@ -92,7 +92,8 @@ public class WorkingScheduleService {
 
     private void validateOneShiftPerDay(WorkingSchedule workingSchedule) throws Exception {
         WorkingSchedule dbWorkingSchedule =
-                repo.findByEmployeeIdAndStartDate(workingSchedule.getEmployee().getId(),
+                repo.findByEmployeeIdAndStartDate(
+                        workingSchedule.getEmployee().getId(),
                         workingSchedule.getStartDate());
         if (dbWorkingSchedule != null && dbWorkingSchedule != workingSchedule) {
             throw new Exception("This employee has already got shift on this day: " + workingSchedule.getStartDate());

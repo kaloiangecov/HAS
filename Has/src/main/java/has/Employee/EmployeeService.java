@@ -119,11 +119,8 @@ public class EmployeeService {
         Employee employee = repo.findOne(id);
         validateIdNotNull(employee);
 
-        if (employee.isEmployed() == true) {
-            employee.setEmployed(false);
-        } else {
-            employee.setEmployed(true);
-        }
+        employee.setEmployed(!employee.isEmployed());
+
         return repo.save(employee);
     }
 

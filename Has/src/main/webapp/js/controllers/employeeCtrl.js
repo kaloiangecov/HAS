@@ -11,6 +11,24 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
     $scope.usersList = [];
     $scope.isEdit = false;
 
+    $scope.changeEmployed = function (id, callback) {
+        $http({
+            method: "PUT",
+            url: ('employee/employed/' + id),
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
+        }).then(
+            function (response) { //success
+                response.data;
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+            })
+            .then(callback);
+    };
+
     if (window.location.hash.includes("list")) {
         // employees table
         $scope.dtInstance = {};
@@ -51,14 +69,19 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
                 }),
             DTColumnBuilder.newColumn('user.username', 'User'),
             DTColumnBuilder.newColumn('id').notSortable().withClass('actions-column')
-                .renderWith(function (id) {
+                .renderWith(function (id, type, full) {
                     var html =
                         '<div class="btn-group btn-group-sm">' +
                         '<a class="btn btn-default action-btn" href="#!/employees/edit/' +
                         id + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
                         '<button type="button" class="btn btn-default action-btn delete-btn" id="del_' +
-                        id + '"><i class="fa fa-trash-o" aria-hidden="true"></i></button>' +
-                        '</div>';
+                        id + '">'
+
+                    if (full.employed)
+                        html += '<i class="fa fa-trash-o" aria-hidden="true"></i></button></div>';
+                    else
+                        html += '<i class="fa fa-refresh" aria-hidden="true"></i></button></div>';
+
                     return html;
                 })
         ];
@@ -69,13 +92,15 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
                 $(btns).off('click');
                 $(btns).on('click', function () {
                     var id = this.id.split('_')[1];
-                    $scope.deleteData('employee', id, function () {
+                    $scope.changeEmployed(id, function () {
                         $scope.page.message = {
                             type: 'success',
                             title: 'Deleted!',
-                            text: ('Employee with id ' + id + ' was successfully deleted!')
+                            text: ('Employee with id ' + id + ' was successfully disabled!')
                         };
                         $('#messageModal').modal('show');
+                        $scope.reloadTableData();
+                        $scope.addDeleteFunctions();
                     });
                 });
             }, 300);
@@ -84,12 +109,12 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
         $scope.$watch("ctrl.filters.fullName", $scope.addDeleteFunctions);
         $scope.$watch("ctrl.filters.phone", $scope.addDeleteFunctions);
         $scope.$watch("ctrl.filters.dateHired", $scope.addDeleteFunctions);
+        $scope.$watch("ctrl.filters.showDisabled", $scope.addDeleteFunctions);
 
         $scope.reloadTableData = function () {
             var resetPaging = false;
             $scope.dtInstance.reloadData(function (list) {
                 //console.log(list);
-                $scope.addDeleteFunctions();
             }, resetPaging);
         };
     }
@@ -172,6 +197,10 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
     angular.element(document).ready(function () {
 
         if (window.location.hash.includes("list")) {
+            var showDisabledSwitch = new Switchery(document.getElementById('showDisabled'), {color: "#26B99A"});
+
+            $scope.addDeleteFunctions();
+
             $('#filterDateHired').daterangepicker({
                     singleDatePicker: true,
                     showDropdowns: true,
