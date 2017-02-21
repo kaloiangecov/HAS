@@ -182,13 +182,14 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         var today = new Date().toISOString().substr(0, 10);
 
         if ((reservation.status == 0 && newRange.start < today)
-            || (reservation.status == 1 && reservation.start < reservation.startDate)) {
+            || (reservation.status == 1
+            && (newRange.start != reservation.startDate
+            || newRange.end < today))) {
             $scope.page.message = {
                 type: 'danger',
                 title: "Check in date error",
                 text: ("Check in date " + newRange.start + " is not allowed for this reservation!")
             };
-            $('#messageModal').modal('show');
 
             return false;
         }
@@ -397,6 +398,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             };
 
             if (!$scope.validateCheckInDate(tmpReservation, newRange)) {
+                $('#messageModal').modal('show');
                 loadEvents();
                 return;
             }
@@ -443,6 +445,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             };
 
             if (!$scope.validateCheckInDate(tmpReservation, newRange)) {
+                $('#messageModal').modal('show');
                 loadEvents();
                 return;
             }
