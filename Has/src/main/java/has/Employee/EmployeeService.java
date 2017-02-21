@@ -48,13 +48,22 @@ public class EmployeeService {
         return employees;
     }
 
-    public Page<Employee> searchEmployees(int start, int length, String sortColumn, String sortDirection, String fullName, String phone, String dateHired, boolean employed) {
+    public Page<Employee> searchEmployees(int start, int length, String sortColumn, String sortDirection, String fullName, String phone, String dateHired, Boolean showDisabled) {
         PageRequest request = new PageRequest((start / length), length, Sort.Direction.fromString(sortDirection), sortColumn);
+
         Page<Employee> employeesPage;
+
         if (dateHired.isEmpty()) {
-            employeesPage = repo.findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContainingAndEmployed(fullName, phone, request, employed);
+            if (showDisabled == null || !showDisabled)
+                employeesPage = repo.findByEmployedAndPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContaining(true, fullName, phone, request);
+            else
+                employeesPage = repo.findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContaining(fullName, phone, request);
+
         } else {
-            employeesPage = repo.findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContainingAndDateHiredAndEmployed(fullName, phone, dateHired, request, employed);
+            if (showDisabled == null || !showDisabled)
+                employeesPage = repo.findByEmployedAndPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContainingAndDateHired(true, fullName, phone, dateHired, request);
+            else
+                employeesPage = repo.findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContainingAndDateHired(fullName, phone, dateHired, request);
         }
 
         for (Employee emp : employeesPage)

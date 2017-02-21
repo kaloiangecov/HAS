@@ -55,7 +55,10 @@ public class UserService {
 
         PageRequest request = new PageRequest((start / length), length, Sort.Direction.fromString(sortDirection), sortColumn);
 
-        return repo.findByUsernameContainingIgnoreCaseAndEmailContainingIgnoreCaseAndUserRoleId(username, email, roleID, request);
+        if (roleID != -1)
+            return repo.findByUsernameContainingIgnoreCaseAndEmailContainingIgnoreCaseAndUserRoleId(username, email, roleID, request);
+        else
+            return repo.findByUsernameContainingIgnoreCaseAndEmailContainingIgnoreCase(username, email, request);
     }
 
     public List<User> findFreeUsers(Long id) {
