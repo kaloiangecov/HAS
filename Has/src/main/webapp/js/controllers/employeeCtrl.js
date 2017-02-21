@@ -5,7 +5,8 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
     ctrl.filters = {
         fullName: "",
         phone: "",
-        dateHired: ""
+        dateHired: "",
+        showDisabled: false
     };
     $scope.usersList = [];
     $scope.isEdit = false;

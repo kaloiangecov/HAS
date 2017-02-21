@@ -19,7 +19,11 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     Employee findByUserId(Long id);
 
-    Page<Employee> findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContainingAndEmployed(String fullName, String phone, Pageable request, boolean employed);
+    Page<Employee> findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContaining(String fullName, String phone, Pageable pageRequest);
 
-    Page<Employee> findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContainingAndDateHiredAndEmployed(String fullName, String phone, String dateHired, Pageable pageRequest, boolean employed);
+    Page<Employee> findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContainingAndDateHired(String fullName, String phone, String dateHired, Pageable pageRequest);
+
+    Page<Employee> findByEmployedAndPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContaining(Boolean employed, String fullName, String phone, Pageable request);
+
+    Page<Employee> findByEmployedAndPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContainingAndDateHired(Boolean employed, String fullName, String phone, String dateHired, Pageable pageRequest);
 }

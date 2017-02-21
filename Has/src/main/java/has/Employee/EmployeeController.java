@@ -60,8 +60,7 @@ public class EmployeeController {
                 parameterMap.get("fullName")[0],
                 parameterMap.get("phone")[0],
                 parameterMap.get("dateHired")[0],
-                true);
-//                Boolean.valueOf(parameterMap.get("employed")[0]));
+                Boolean.parseBoolean(parameterMap.get("showDisabled")[0]));
 
         return new DataTableResult(
                 Integer.parseInt(parameterMap.get("draw")[0]),
