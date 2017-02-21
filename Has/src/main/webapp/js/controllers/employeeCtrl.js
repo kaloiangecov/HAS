@@ -11,6 +11,24 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
     $scope.usersList = [];
     $scope.isEdit = false;
 
+    $scope.changeEmployed = function (id, callback) {
+        $http({
+            method: "PUT",
+            url: ('employee/employed/' + id),
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
+        }).then(
+            function (response) { //success
+                response.data;
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+            })
+            .then(callback);
+    };
+
     if (window.location.hash.includes("list")) {
         // employees table
         $scope.dtInstance = {};
@@ -69,13 +87,14 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
                 $(btns).off('click');
                 $(btns).on('click', function () {
                     var id = this.id.split('_')[1];
-                    $scope.deleteData('employee', id, function () {
+                    $scope.changeEmployed(id, function () {
                         $scope.page.message = {
                             type: 'success',
                             title: 'Deleted!',
-                            text: ('Employee with id ' + id + ' was successfully deleted!')
+                            text: ('Employee with id ' + id + ' was successfully disabled!')
                         };
                         $('#messageModal').modal('show');
+                        $scope.reloadTableData(true);
                     });
                 });
             }, 300);
@@ -85,11 +104,12 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
         $scope.$watch("ctrl.filters.phone", $scope.addDeleteFunctions);
         $scope.$watch("ctrl.filters.dateHired", $scope.addDeleteFunctions);
 
-        $scope.reloadTableData = function () {
+        $scope.reloadTableData = function (afterDelete) {
             var resetPaging = false;
             $scope.dtInstance.reloadData(function (list) {
                 //console.log(list);
-                $scope.addDeleteFunctions();
+                if (!afterDelete)
+                    $scope.addDeleteFunctions();
             }, resetPaging);
         };
     }
@@ -172,6 +192,8 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
     angular.element(document).ready(function () {
 
         if (window.location.hash.includes("list")) {
+            var showDisabledSwitch = new Switchery(document.getElementById('showDisabled'), {color: "#26B99A"});
+
             $('#filterDateHired').daterangepicker({
                     singleDatePicker: true,
                     showDropdowns: true,
