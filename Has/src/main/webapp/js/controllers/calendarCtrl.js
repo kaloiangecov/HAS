@@ -336,12 +336,12 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         onBeforeResHeaderRender: function (args) {
             var beds = function (single, double) {
                 var html = '<div class="bed">';
-                html += single + 'x<br/>';
+                html += single + '<br/>';
                 html += '<img src="img/bed-single.png" alt="beds single"/>';
                 html += '</div>';
 
                 html += '<div class="bed">';
-                html += double + 'x<br/>';
+                html += double + '<br/>';
                 html += '<img src="img/bed-double.png" alt="beds double"/>';
                 html += '</div>';
 
