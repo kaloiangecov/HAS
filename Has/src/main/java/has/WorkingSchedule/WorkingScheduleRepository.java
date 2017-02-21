@@ -12,4 +12,5 @@ import org.springframework.stereotype.Repository;
 public interface WorkingScheduleRepository extends JpaRepository<WorkingSchedule, Long> {
     Page<WorkingSchedule> findByStartDateGreaterThanAndEndDateLessThan(String startDate, String endDate, Pageable request);
 
+    WorkingSchedule findByEmployeeIdAndStartDate(Long id, String startDate);
 }
