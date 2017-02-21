@@ -59,7 +59,9 @@ public class EmployeeController {
                 parameterMap.get("order[0][dir]")[0],
                 parameterMap.get("fullName")[0],
                 parameterMap.get("phone")[0],
-                parameterMap.get("dateHired")[0]);
+                parameterMap.get("dateHired")[0],
+                true);
+//                Boolean.valueOf(parameterMap.get("employed")[0]));
 
         return new DataTableResult(
                 Integer.parseInt(parameterMap.get("draw")[0]),
@@ -101,5 +103,14 @@ public class EmployeeController {
     @PreAuthorize("hasAuthority('PERM_EDIT_EMPLOYEE')")
     public Employee updateEmployee(@PathVariable Long id, @RequestBody @Valid Employee employee) throws Exception {
         return employeeService.update(id, employee);
+    }
+
+    @RequestMapping(value = "/employee/employed/{id}", method = RequestMethod.PUT,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_REMOVE_EMPLOYEE')")
+    public Employee changeStatus(@PathVariable Long id) throws Exception {
+        return employeeService.changeEmployment(id);
     }
 }
