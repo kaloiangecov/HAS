@@ -72,7 +72,7 @@ public class GuestService {
     }
 
     private void validateIssueDate(Guest guest) throws Exception {
-        if (!Validator.isValidIssueDate(guest.getPersonalData().getIdentityIssueDate(), guest.getPersonalData().getIdentityExpireDate())) {
+        if (!Validator.isValidIssueExpireDate(guest.getPersonalData().getIdentityIssueDate(), guest.getPersonalData().getIdentityExpireDate())) {
             throw new Exception("Invalid issue date");
         }
     }

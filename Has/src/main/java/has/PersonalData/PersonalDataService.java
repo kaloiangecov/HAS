@@ -20,7 +20,7 @@ public class PersonalDataService {
         if (repo.findByEgn(personalData.getEgn()) != null) {
             throw new IdentityNumberAlreadyExists(personalData.getEgn());
         }
-        if (!Validator.isValidIssueDate(personalData.getIdentityIssueDate(), personalData.getIdentityExpireDate())) {
+        if (!Validator.isValidIssueExpireDate(personalData.getIdentityIssueDate(), personalData.getIdentityExpireDate())) {
             throw new Exception("Invalid issue date");
         }
         return repo.save(personalData);

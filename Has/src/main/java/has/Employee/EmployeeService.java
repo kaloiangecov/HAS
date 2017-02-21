@@ -128,7 +128,7 @@ public class EmployeeService {
     }
 
     private void validateIssueDate(Employee employee) throws Exception {
-        if (!Validator.isValidIssueDate(employee.getPersonalData().getIdentityIssueDate(), employee.getPersonalData().getIdentityExpireDate())) {
+        if (!Validator.isValidIssueExpireDate(employee.getPersonalData().getIdentityIssueDate(), employee.getPersonalData().getIdentityExpireDate())) {
             throw new Exception("Invalid issue date");
         }
     }
