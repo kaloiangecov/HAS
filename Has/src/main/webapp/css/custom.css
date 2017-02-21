@@ -88,26 +88,39 @@ table.table-info > tbody > tr > td {
     background-color: white;
 }
 
-.scheduler_default_rowheadercol2
+.scheduler_default_rowheadercol1
 {
     background-color: white;
 }
-.scheduler_default_rowheadercol2 .scheduler_default_rowheader_inner 
+
+.scheduler_default_rowheadercol1 .scheduler_default_rowheader_inner
 {
     top: 2px;
     bottom: 2px;
     left: 2px;
     background-color: transparent;
-    border-left: 5px solid #1ABB9C; /* status: "free" (default), green color */
-    border-right: 0px none;
+    border-right: 5px solid #1ABB9C; /* status: "free" (default), green color */
+    border-left: 1px solid #999;
 }
-.status_dirty.scheduler_default_rowheadercol2 .scheduler_default_rowheader_inner
+
+.status_dirty.scheduler_default_rowheadercol1 .scheduler_default_rowheader_inner
 {
-    border-left: 5px solid #e55; /* status: "dirty", red color */
+    border-right: 5px solid #e55; /* status: "dirty", red color */
 }
-.status_cleanup.scheduler_default_rowheadercol2 .scheduler_default_rowheader_inner
+
+.status_cleanup.scheduler_default_rowheadercol1 .scheduler_default_rowheader_inner
 {
-    border-left: 5px solid #feda55; /* status: "cleanup", orange color */
+    border-right: 5px solid #feda55; /* status: "cleanup", orange color */
+}
+
+.scheduler_default_rowheader_inner .bed {
+    text-align: center;
+    float: left;
+    width: 50%;
+}
+
+.scheduler_default_rowheader_inner .bed img {
+    height: 24px;
 }
 
 .login_wrapper {
