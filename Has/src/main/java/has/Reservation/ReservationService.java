@@ -58,6 +58,19 @@ public class ReservationService {
         return reservations;
     }
 
+    public List<Reservation> searchReservationsWeb(String startDate, String endDate, int numberAdults) {
+
+        List<Reservation> reservations = new ArrayList<Reservation>();
+
+        reservations = repo.findInSite(startDate, endDate, numberAdults);
+
+        for (Reservation reservation : reservations) {
+            reservation = removeRecursions(reservation);
+        }
+
+        return reservations;
+    }
+
     public Reservation findById(Long id) throws Exception {
         Reservation reservation = repo.findOne(id);
         validateIdNotNull(reservation);

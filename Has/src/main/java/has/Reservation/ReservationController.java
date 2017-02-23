@@ -2,6 +2,7 @@ package has.Reservation;
 
 import freemarker.template.TemplateException;
 import has.User.User;
+import has.Utils.BookingSearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -52,6 +53,22 @@ public class ReservationController {
                 jsonParams.getStartDate(),
                 jsonParams.getEndDate(),
                 jsonParams.isGroup()
+        );
+    }
+
+    @RequestMapping(value = "/reservations/booking", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    //@PreAuthorize("hasAuthority('PERM_VIEW_RESERVATION')")
+    public
+    @ResponseBody
+    List<Reservation> search(BookingSearchRequest request) {
+
+        return reservationService.searchReservationsWeb(
+                request.getStartDate(),
+                request.getEndDate(),
+                request.getNumberAdults()
         );
     }
 
