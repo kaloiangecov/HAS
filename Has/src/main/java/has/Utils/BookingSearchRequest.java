@@ -9,6 +9,10 @@ public class BookingSearchRequest {
     private int numberAdults;
     private int numberChildren;
 
+    public BookingSearchRequest() {
+
+    }
+
     public BookingSearchRequest(String startDate, String endDate, int numberAdults, int numberChildren) {
         this.startDate = startDate;
         this.endDate = endDate;

@@ -2,6 +2,7 @@ package has.Reservation;
 
 import freemarker.template.TemplateException;
 import has.ReservationGuest.ReservationGuest;
+import has.Room.Room;
 import has.User.User;
 import has.Utils.TemplateHandler;
 import has.WorkingSchedule.WorkingSchedule;
@@ -57,17 +58,13 @@ public class ReservationService {
         return reservations;
     }
 
-    public List<Reservation> searchReservationsWeb(String startDate, String endDate, int numberAdults) {
+    public List<Room> searchReservationsWeb(String startDate, String endDate, int numberAdults) {
 
-        List<Reservation> reservations = new ArrayList<Reservation>();
+        List<Room> freeRooms;
 
-        reservations = repo.findInSite(startDate, endDate, numberAdults);
+        freeRooms = repo.findInSite(startDate, endDate, numberAdults);
 
-        for (Reservation reservation : reservations) {
-            reservation = removeRecursions(reservation);
-        }
-
-        return reservations;
+        return freeRooms;
     }
 
     public Reservation findById(Long id) throws Exception {

@@ -43,7 +43,7 @@ app2.controller("mainCtrl2", function ($scope, $http, $timeout) {
 
     $scope.submit = function () {
         $http({
-            method: "GET",
+            method: "POST",
             url: "reservations/booking",
             responseType: "json",
             headers: {
