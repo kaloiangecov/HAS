@@ -1,6 +1,7 @@
 package has.Reservation;
 
 import freemarker.template.TemplateException;
+import has.Room.Room;
 import has.User.User;
 import has.Utils.BookingSearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,14 +57,14 @@ public class ReservationController {
         );
     }
 
-    @RequestMapping(value = "/reservations/booking", method = RequestMethod.GET,
+    @RequestMapping(value = "/reservations/booking", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     //@PreAuthorize("hasAuthority('PERM_VIEW_RESERVATION')")
     public
     @ResponseBody
-    List<Reservation> search(BookingSearchRequest request) {
+    List<Room> bookingSearch(@RequestBody BookingSearchRequest request) {
 
         return reservationService.searchReservationsWeb(
                 request.getStartDate(),
