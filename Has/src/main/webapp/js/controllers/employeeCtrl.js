@@ -111,8 +111,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
         $scope.$watch("ctrl.filters.dateHired", $scope.addDeleteFunctions);
         $scope.$watch("ctrl.filters.showDisabled", $scope.addDeleteFunctions);
 
-        $scope.reloadTableData = function () {
-            var resetPaging = false;
+        $scope.reloadTableData = function (resetPaging) {
             $scope.dtInstance.reloadData(function (list) {
                 //console.log(list);
             }, resetPaging);
@@ -211,7 +210,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
                     $('#filterDateHired').val(ctrl.filters.dateHired);
                 });
 
-            $scope.reloadTableData();
+            $scope.reloadTableData(false);
             //$interval($scope.reloadTableData, 30000);
         }
         else {
