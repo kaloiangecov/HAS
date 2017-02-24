@@ -50,7 +50,11 @@ public class RoomService {
     public Room update(Long id, Room room) throws Exception {
         Room dbRoom = repo.findOne(id);
         validateIdNotNull(dbRoom);
-        validateRoomNumber(room);
+
+        Room dbRoom2 = repo.findByNumber(room.getNumber());
+        if (dbRoom2 != null && dbRoom2.getId() != id) {
+            throw new Exception("Room with number " + room.getNumber() + " already exists!");
+        }
 
         dbRoom.setNumber(room.getNumber());
         dbRoom.setRoomClass(room.getRoomClass());

@@ -25,6 +25,7 @@ public class ReservationService {
     private ReservationRepository repo;
 
     public static final int RESERVATION_STATUS_ARRIVED = 1;
+    public static final int RESERVATION_STATUS_CLOSED = 2;
 
     public Reservation save(Reservation reservation, User user) throws IOException, TemplateException {
         setLastModified(reservation, user);
@@ -65,18 +66,24 @@ public class ReservationService {
     }
 
     public Reservation remove(Long id) throws Exception {
-        Reservation dbReservation = repo.findOne(id);
-        if (dbReservation == null) {
-            throw new Exception("There is no reservation with such ID");
-        }
+        Reservation reservation = repo.findOne(id);
+        validateIdNotNull(reservation);
 
-        repo.delete(dbReservation);
-        return removeRecursions(dbReservation);
+        repo.delete(reservation);
+        return removeRecursions(reservation);
     }
 
     public Reservation update(Long id, Reservation reservation, User user) throws Exception {
         Reservation dbReservation = repo.findOne(id);
         validateIdNotNull(dbReservation);
+
+        //TODO: closed does not work too well should remove it and use this one instead
+//        if (reservation.getStatus() == RESERVATION_STATUS_CLOSED) {
+//            for (ReservationGuest reservationGuest : dbReservation.getReservationGuests()) {
+//                int reservationsMade = reservationGuest.getGuest().getNumberReservations();
+//                reservationGuest.getGuest().setNumberReservations(reservationsMade + 1);
+//            }
+//        }
 
         dbReservation.setStatus(reservation.getStatus());
         dbReservation.setPrice(reservation.getPrice());
@@ -126,8 +133,16 @@ public class ReservationService {
         Reservation reservation = repo.findOne(id);
         validateIdNotNull(reservation);
 
-        reservation.setStatus(2);
+        if ((reservation.getStatus() == RESERVATION_STATUS_ARRIVED)) {
+            for (ReservationGuest reservationGuest : reservation.getReservationGuests()) {
+                int reservationsMade = reservationGuest.getGuest().getNumberReservations();
+                reservationGuest.getGuest().setNumberReservations(reservationsMade + 1);
+            }
+        }
+
+        reservation.setStatus(RESERVATION_STATUS_CLOSED);
         reservation.setLastModifiedBy(user);
+
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         reservation.setLastModifiedTime(sdf.format(new Date()));
