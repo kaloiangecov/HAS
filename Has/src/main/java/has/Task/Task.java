@@ -1,8 +1,10 @@
 package has.Task;
 
+import has.Employee.Employee;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -23,5 +25,11 @@ public class Task implements Serializable{
     private String startTime;
     private String finishTime;
     private Integer priority;
+    private String assigner;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "EMPLOYEE_ID")
+    private Employee assignee;
 
 }

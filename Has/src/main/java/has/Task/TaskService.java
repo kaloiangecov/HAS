@@ -16,7 +16,8 @@ public class TaskService  {
     @Autowired
     private TaskRepository repo;
 
-    public Task save(Task task) {
+    public Task save(Task task, String assigner) {
+        task.setAssigner(assigner);
         return repo.save(task);
     }
 
@@ -47,6 +48,8 @@ public class TaskService  {
         dbTask.setFinishTime(task.getFinishTime());
         dbTask.setTimePlaced(task.getTimePlaced());
         dbTask.setStatus(task.getStatus());
+        dbTask.setAssigner(task.getAssigner());
+        dbTask.setAssignee(task.getAssignee());
         return repo.save(dbTask);
     }
 
