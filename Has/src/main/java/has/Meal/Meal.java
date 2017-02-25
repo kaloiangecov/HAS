@@ -11,7 +11,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created by kaloi on 12/20/2016.
@@ -28,6 +27,7 @@ public class Meal implements Serializable {
     private Long id;
 
     @NotNull
+    @Column(name = "DATE_POSTED")
     private String date;
 
     @NotNull
@@ -36,6 +36,7 @@ public class Meal implements Serializable {
 
     @NotNull
     @Size(min = 3, max = 50)
+    @Column(name = "MEAL_NAME")
     private String name;
 
     @NotNull
@@ -45,13 +46,13 @@ public class Meal implements Serializable {
     @NotNull
     private Double price;
 
-    @NotNull
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "MEAL_REQUEST", joinColumns = {
-            @JoinColumn(name = "MEAL_ID", nullable = false, updatable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "REQUEST_ID",
-                    nullable = false, updatable = false)})
-    public List<Request> requests;
+//    @NotNull
+//    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    @JoinTable(name = "MEAL_REQUEST", joinColumns = {
+//            @JoinColumn(name = "MEAL_ID", nullable = false, updatable = false)},
+//            inverseJoinColumns = {@JoinColumn(name = "REQUEST_ID",
+//                    nullable = false, updatable = false)})
+//    public List<Request> requests;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
