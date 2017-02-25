@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * Created by kaloi on 12/20/2016.
  */
-@Controller
+@RestController
 public class MealController {
 
     @Autowired
