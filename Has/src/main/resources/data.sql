@@ -282,8 +282,8 @@ INSERT INTO RESERVATION_GUEST (reservation_id, guest_id, room_id, owner) VALUES
 INSERT INTO MEAL (MEAL_ID, DATE_POSTED, DESCRIPTION, MEAL_NAME, PRICE) VALUES
 (1, 2017-02-14, 'Home made beans with vegetables and sausage', 'Beans and sausage', '10'),
 (2, 2017-02-14, 'Fried eggs with red pepper', 'Fried eggs', '5'),
-(3, 2017-02-14, 'Steamed vegetables include: carrots, peas, corn and a gram of pure coke', 'Steamed vegetables', '15'),
-(4, 2017-02-14, 'Pasta Bolognese includes: chopped vegetables, minced beef and red wine', 'Pasta Bolognese', '10'),
-(5, 2017-02-14, 'Freshly baked tost bread', 'Toast', '2');
+(3, 2017-02-14, 'Steamed vegetables. Include: carrots, peas, corn and a gram of pure coke', 'Steamed vegetables', '15'),
+(4, 2017-02-14, 'Pasta Bolognese. Includes: chopped vegetables, minced beef and red wine', 'Pasta Bolognese', '10'),
+(5, 2017-02-14, 'Freshly baked toast bread', 'Toast', '2');
 
 
