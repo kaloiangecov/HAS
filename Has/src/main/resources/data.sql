@@ -253,3 +253,26 @@ INSERT INTO RESERVATION_GUEST (reservation_id, guest_id, room_id, owner) VALUES
 (2, 3, 10, false),
 (3, 1, 2, true),
 (3, 2, 2, false);
+
+
+INSERT INTO MEAL_CATEGORY (MEAL_CATEGORY_ID, TITLE, IMG, DESCRIPTION) VALUES
+(1, 'Dessert', 'img/cake.jpg', 'Find the best desserts here.'),
+(2, 'Salad', 'img/salad.jpg','Find the best salads here.'),
+(3, 'BBQ', 'img/bbq.jpg','Find the best BBQs here.'),
+(4, 'Pizza', 'img/pizza.jpg','Find the best Italian pizzas here.'),
+(5, 'Pasta', 'img/pasta.jpg','Find the best Italian pastas here.'),
+(6, 'Drinks', 'img/whiskey.jpg','Find the best beverages here.');
+
+INSERT INTO MEAL(MEAL_ID, NAME, IMG, DESCRIPTION, PRICE, MEAL_CATEGORY_ID, DATE) VALUES
+ (1, 'Chocolate cake', 'img/chocolate-cake.jpg', 'This is chocolate cake', 5.50, 1 , '2017-02-10'),
+ (2, 'Vanilla cake', 'img/vanilla.jpg', 'This is chocolate cake', 4.30, 1 , '2017-02-10'),
+ (3, 'Fruit cake', 'img/fruit.jpg', 'This is chocolate cake', 5.60, 1, '2017-02-10' ),
+ (4, 'Chocolate muffin', 'img/muffin.jpg', 'This is chocolate cake', 2.50, 1, '2017-02-10' ),
+ (5, 'Italian salad', 'img/salad.jpg', 'Delicious italian salad.', 4.50, 2 , '2017-02-10'),
+ (6, 'Ceasar salad', 'img/selska.jpg', 'Delicious ceasar salad.', 5.90, 2 , '2017-02-10'),
+ (7, 'Greece salad ', 'img/greece.jpg', 'Delicious greece salad.', 4.70, 2 , '2017-02-10'),
+ (8, 'Shopska salad', 'img/shopska.jpg', 'Delicious shopska salad.', 3.50, 2 , '2017-02-10'),
+ (9, 'Veal bbq', 'img/telesko.jpg', 'This is veal bbq.', 12.50, 3 , '2017-02-10'),
+ (10, 'Chicken bbq', 'img/chicken.jpg', 'This is chicken bbq', 9.90, 3 , '2017-02-10'),
+ (11, 'Fork bbq', 'img/fork.jpg', 'This is fork bbq.', 7.90, 3, '2017-02-10' ),
+ (12, 'Shol bbq', 'img/shol.jpg', 'This is most delicious meat from veal', 15.50, 3 , '2017-02-10')

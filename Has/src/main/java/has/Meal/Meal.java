@@ -1,5 +1,7 @@
 package has.Meal;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import has.MealType.Meal.MealCategory;
 import has.Request.Request;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,6 +39,10 @@ public class Meal implements Serializable {
     private String name;
 
     @NotNull
+    @Size(min = 3, max = 50)
+    private String img;
+
+    @NotNull
     private Double price;
 
     @NotNull
@@ -46,6 +52,11 @@ public class Meal implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "REQUEST_ID",
                     nullable = false, updatable = false)})
     public List<Request> requests;
+
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "meal_category_id")
+    private MealCategory mealCategory;
 
     public Meal() {
 
