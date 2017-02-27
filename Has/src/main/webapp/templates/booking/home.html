@@ -54,16 +54,16 @@
             <thead>
             <tr>
                 <th>Room Class</th>
-                <th>Big Beds</th>
                 <th>Small Beds</th>
+                <th>Big Beds</th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="res in results">
-                <td>{{res.bedsDouble}}</td>
-                <td>{{res.bedsSingle}}</td>
                 <td>{{res.roomClass}}</td>
+                <td>{{res.bedsSingle}}</td>
+                <td>{{res.bedsDouble}}</td>
                 <td>
                     <span class="label label-primary" ng-show="res.children">Children</span>
                     <span class="label label-primary" ng-show="res.pets">Pets</span>
