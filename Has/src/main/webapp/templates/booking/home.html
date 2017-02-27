@@ -1,14 +1,14 @@
 <div id="booking" class="row">
     <div id="filters">
         <form id="bookingForm" name="bookingForm" ng-submit="submit()">
-            <div class="form-group col-xs-12 col-sm-4 xol-md-3" id="checkDate">
+            <div class="form-group col-xs-12 col-sm-4 xol-md-3 col-lg-3" id="checkDate">
                 <label>Check in / Check out</label>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
                     <input type="text" id="dateRange" name="dateRange" class="form-control"/>
                 </div>
             </div>
-            <div class="form-group col-xs-6 col-sm-3 xol-md-2">
+            <div class="form-group col-xs-6 col-sm-3 xol-md-2 col-lg-2">
                 <label>Adults</label>
                 <div class="input-group">
                     <span class="input-group-addon">
@@ -24,7 +24,7 @@
                     </select>
                 </div>
             </div>
-            <div class="form-group col-xs-6 col-sm-3 xol-md-2">
+            <div class="form-group col-xs-6 col-sm-3 xol-md-2 col-lg-2">
                 <label>Children</label>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-child" aria-hidden="true"></i></span>
@@ -38,7 +38,12 @@
                     </select>
                 </div>
             </div>
-            <button type="submit"><i class="fa fa-search"></i> Search</button>
+            <div class="form-group col-xs-12 col-sm-3 xol-md-2 col-lg-2">
+                <label></label>
+                <button type="submit" class="btn btn-primary btn-block" style="position:relative;top:+4px;"><i
+                        class="fa fa-search"></i> Search
+                </button>
+            </div>
         </form>
     </div>
 </div>

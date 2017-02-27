@@ -194,7 +194,22 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             return false;
         }
         return true;
-    }
+    };
+
+    $scope.calculateRoomGuests = function (event) {
+        var n = 0;
+
+        if (event.objReservation.group) {
+            angular.forEach(event.objReservation.reservationGuests, function (reservationGuest, key) {
+                if (reservationGuest.room.id == event.roomId)
+                    n++;
+            });
+        } else {
+            n = event.objReservation.reservationGuests.length;
+        }
+
+        return n;
+    };
 
     $scope.startDate = new DayPilot.Date(new Date());
     $scope.endDate = $scope.startDate.addDays(21);
@@ -237,13 +252,9 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                     text: '<i class="fa fa-user-plus"></i> Add another guest',
                     onclick: function () {
                         $scope.reservationGuest = this.source.data.objReservation.reservationGuests[0];
-                        var tmpReservation = this.source.data.objReservation;
-
-                        var nGuests = tmpReservation.reservationGuests.length;
-
-                        delete tmpReservation.reservationGuests;
 
                         var selectedRoom = $scope.events.resources[this.source.resource() - 1];
+                        var nGuests = $scope.calculateRoomGuests(this.source.data);
                         var roomCapacity = (selectedRoom.bedsDouble * 2) + selectedRoom.bedsSingle;
 
                         if (nGuests >= roomCapacity) {
@@ -259,10 +270,12 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                         }
 
                         $scope.reservationGuest.guest = {};
-                        $scope.reservationGuest.reservation = tmpReservation;
+                        $scope.reservationGuest.reservation = angular.copy(this.source.data.objReservation);
                         $scope.reservationGuest.room = selectedRoom;
                         $scope.reservationGuest.id = null;
                         $scope.reservationGuest.owner = false;
+
+                        delete $scope.reservationGuest.reservation.reservationGuests;
 
                         $scope.isAdditionalGuest = true;
                         $scope.$apply();
@@ -370,9 +383,8 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             $scope.scheduler.clearSelection();
 
             var tmpReservation = args.e.data.objReservation;
-
-            var nGuests = tmpReservation.reservationGuests.length;
             var selectedRoom = $scope.events.resources[args.newResource - 1];
+            var nGuests = $scope.calculateRoomGuests(args.e.data);
             var roomCapacity = (selectedRoom.bedsDouble * 2) + selectedRoom.bedsSingle;
 
             if (nGuests > roomCapacity) {

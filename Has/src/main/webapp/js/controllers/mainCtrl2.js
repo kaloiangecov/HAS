@@ -33,7 +33,7 @@ app2.controller("mainCtrl2", function ($scope, $http, $timeout) {
 
     function setDateRange(start, end, label) {
         $scope.$apply(function () {
-            var tmp = end._d.getTime() - start._d.getTime();
+            //var tmp = end._d.getTime() - start._d.getTime();
             //$scope.config.timeline = getTimeline(start._d, tmp / 86400000);
             ctrl.filters.startDate = start._d.toISOString().substr(0, 10);
             ctrl.filters.endDate = end._d.toISOString().substr(0, 10);
@@ -44,9 +44,11 @@ app2.controller("mainCtrl2", function ($scope, $http, $timeout) {
     $scope.submit = function () {
         $http({
             method: "POST",
-            url: "booking/search",
+            url: "reservations/booking",
             responseType: "json",
             headers: {
+                //'Accept': 'application/json',
+                'Content-Type': 'application/json',
                 "Authorization": $scope.authentication
             },
             data: ctrl.filters
@@ -55,7 +57,7 @@ app2.controller("mainCtrl2", function ($scope, $http, $timeout) {
                 return response.data;
             },
             function (response) { //error
-                $scope.displayMessage(response.data);
+                console.log(response);
             })
             .then(function (results) {
                 $scope.results = results;
