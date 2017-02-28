@@ -47,6 +47,11 @@ div#booking {
 }
 
 div#results {
-    background-color: #ffffde;
+    background-color: #fefefe;
     padding-top: 8px;
+}
+
+.validation-message span {
+    color: #e55;
+    font-weight: bold;
 }

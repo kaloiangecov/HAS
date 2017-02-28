@@ -1,6 +1,6 @@
 <div id="booking" class="row">
     <div id="filters">
-        <form id="bookingForm" name="bookingForm" ng-submit="submit()">
+        <form id="bookingSearchForm" name="bookingSearchForm" ng-submit="search()">
             <div class="form-group col-xs-12 col-sm-4 xol-md-3 col-lg-3" id="checkDate">
                 <label>Check in / Check out</label>
                 <div class="input-group">
@@ -48,20 +48,21 @@
     </div>
 </div>
 <div id="results" class="row">
-    <div class="col-xs-12 col-sm-6 col-md-4">
+    <form name="bookingSubmitForm" class="col-xs-12 col-sm-6 col-md-4" ng-submit="submit()">
         <h3>Results:</h3>
-        <table class="table table-condensed table-striped">
+        <table class="table">
             <thead>
             <tr>
                 <th>Room Class</th>
                 <th>Small Beds</th>
                 <th>Big Beds</th>
-                <th></th>
+                <th>Extras</th>
+                <th>Select</th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="res in results">
-                <td>{{res.roomClass}}</td>
+                <td>{{roomTypes[res.roomClass]}}</td>
                 <td>{{res.bedsSingle}}</td>
                 <td>{{res.bedsDouble}}</td>
                 <td>
@@ -69,8 +70,13 @@
                     <span class="label label-primary" ng-show="res.pets">Pets</span>
                     <span class="label label-primary" ng-show="res.minibar">Mininbar</span>
                 </td>
+                <td>
+                    <input type="checkbox" name="selectedRooms[]" value="{{res.id}}" ng-model=""/>
+                </td>
             </tr>
             </tbody>
         </table>
-    </div>
+
+        <button type="submit" class="btn btn-default">Continue <i class="fa fa-hand-o-right"></i></button>
+    </form>
 </div>

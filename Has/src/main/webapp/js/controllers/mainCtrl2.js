@@ -1,4 +1,4 @@
-app2.controller("mainCtrl2", function ($scope, $http, $timeout) {
+app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
     var ctrl = this;
     $scope.page = {
         title: "Booking"
@@ -6,13 +6,13 @@ app2.controller("mainCtrl2", function ($scope, $http, $timeout) {
 
     $scope.roomTypes = sampleRoomTypes;
     $scope.roomStatuses = sampleRoomStatuses;
-    $scope.credentials = {
-        username: "",
-        password: ""
-    };
-    $scope.authentication = "";
 
-    ctrl.filters = {};
+    ctrl.filters = {
+        numberAdults: 1,
+        numberChildren: 0,
+        startDate: moment().format('YYYY-MM-DD'),
+        endDate: moment().format('YYYY-MM-DD')
+    };
     $scope.results = [];
 
     $scope.myInterval = 5000;
@@ -41,7 +41,7 @@ app2.controller("mainCtrl2", function ($scope, $http, $timeout) {
 
     };
 
-    $scope.submit = function () {
+    $scope.search = function () {
         $http({
             method: "POST",
             url: "reservations/booking",
@@ -64,16 +64,28 @@ app2.controller("mainCtrl2", function ($scope, $http, $timeout) {
             });
     };
 
+    $scope.submit = function () {
+        $state.go('app.root.personalData');
+    };
+
     angular.element(document).ready(function () {
         $timeout(function () {
             $('#dateRange').daterangepicker({
                 parentEl: "#filters",
-                startDate: new Date(),
-                endDate: new Date(),
+                startDate: new Date(ctrl.filters.startDate),
+                endDate: new Date(ctrl.filters.endDate),
                 locale: {
                     format: "DD/MM/YY"
                 }
             }, setDateRange);
+
+            $('#identityIssueDate,#identityExpireDate').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                locale: {
+                    format: "YYYY-MM-DD"
+                }
+            });
 
             $('.calendar').css({float: 'left'});
         }, 500);
