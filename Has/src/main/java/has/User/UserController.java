@@ -96,6 +96,14 @@ public class UserController {
         return userService.findById(id);
     }
 
+    @RequestMapping(value = "/user/by-email/{email}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    //@PreAuthorize("hasAuthority('PERM_VIEW_USER')")
+    public User findUserByEmail(@PathVariable String email) throws Exception {
+        return userService.findByEmail(email);
+    }
+
     @RequestMapping(value = "/user/login", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public Principal login(Principal user, HttpServletRequest request, HttpSession session) throws Exception {

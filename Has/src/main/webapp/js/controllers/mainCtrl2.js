@@ -15,6 +15,10 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
     };
     $scope.results = [];
 
+    $scope.reservation = {};
+    $scope.guest = {};
+    $scope.selectedRooms = [];
+
     $scope.myInterval = 5000;
     $scope.noWrapSlides = false;
     $scope.active = 0;
@@ -30,6 +34,65 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
             alt: 'Carousel Image'
         }
     ];
+
+    $scope.displayMessage = function (response) {
+        if (!response)
+            return;
+
+        $scope.page.message = {
+            type: 'danger',
+            title: response.error,
+            text: response.message
+        };
+        $('#messageModal').modal('show');
+
+        if (response.status === 401) {
+            $scope.authentication = "";
+            $scope.loginData = {};
+            window.location.hash = "#!/login";
+        } else if (response.status === 403) {
+            window.location.hash = "#!/home";
+        }
+    };
+
+    $scope.getRole = function (roleID, callback) {
+        $http({
+            method: "GET",
+            url: ("role/" + roleID),
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
+        }).then(
+            function (response) { //success
+                return response.data;
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+            }).then(callback);
+    };
+
+    $scope.getGuestUserByEmail = function (email) {
+        $http({
+            method: "GET",
+            url: ("user/by-email/" + email),
+            responseType: "json"
+        }).then(
+            function (response) { //success
+                return response.data;
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+            })
+            .then(function (user) {
+                $scope.guest.uesr = user;
+            });
+    };
+
+    $scope.$watch('guest.user.email', function (newValue, oldValue) {
+        if (newValue)
+            $scope.getGuestUserByEmail(newValue);
+    });
 
     function setDateRange(start, end, label) {
         $scope.$apply(function () {
@@ -64,7 +127,35 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
             });
     };
 
-    $scope.submit = function () {
+    $scope.selectRooms = function () {
+        $scope.reservation = {
+            startDate: ctrl.filters.startDate,
+            endDate: ctrl.filters.endDate,
+            group: ($scope.selectedRooms.length > 0),
+            status: 0,
+            numberAdults: ctrl.filters.numberAdults,
+            numberChildren: ctrl.filters.numberChildren,
+            dinner: false,
+            breakfast: true,
+            allInclusive: false
+        };
+        $state.go('app.root.personalData');
+    };
+
+    $scope.submitReservation = function () {
+
+        $scope.getRole(5, function (role) {
+            $scope.guest.user.username = $scope.guest.user.email;
+            $scope.guest.user.userRole = role;
+
+            $scope.reservationGuest = {
+                reservation: $scope.reservation,
+                guest: $scope.guest,
+                room: $scope.selectedRooms[0],
+                isOwner: true
+            };
+        });
+
         $state.go('app.root.personalData');
     };
 
