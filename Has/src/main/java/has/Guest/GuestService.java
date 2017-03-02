@@ -64,6 +64,12 @@ public class GuestService {
         return repo.save(dbGuest);
     }
 
+    public Guest findByUserEmail(String email) throws Exception {
+        Guest guest = repo.findByUserEmail(email);
+        validateIdNotNull(guest);
+        return guest;
+    }
+
     private void validateEgn(Guest guest) throws Exception {
         Guest dbGuest = repo.findByPersonalDataEgn(guest.getPersonalData().getEgn());
         if (dbGuest != null && dbGuest.getId() != guest.getId()) {
