@@ -284,8 +284,8 @@ INSERT INTO MEAL_CATEGORY (MEAL_CATEGORY_ID, TITLE, IMG, DESCRIPTION) VALUES
 (4, 'Pizza', 'img/pizza.jpg','Find the best Italian pizzas here.'),
 (5, 'Pasta', 'img/pasta.jpg','Find the best Italian pastas here.'),
 (6, 'Drinks', 'img/whiskey.jpg','Find the best beverages here.');
-
-INSERT INTO MEAL(MEAL_ID, NAME, IMG, DESCRIPTION, PRICE, MEAL_CATEGORY_ID, DATE) VALUES
+--
+INSERT INTO MEAL(MEAL_ID, MEAL_NAME, IMG, DESCRIPTION, PRICE, MEAL_CATEGORY_ID, DATE_POSTED) VALUES
  (1, 'Chocolate cake', 'img/chocolate-cake.jpg', 'This is chocolate cake', 5.50, 1 , '2017-02-10'),
  (2, 'Vanilla cake', 'img/vanilla.jpg', 'This is chocolate cake', 4.30, 1 , '2017-02-10'),
  (3, 'Fruit cake', 'img/fruit.jpg', 'This is chocolate cake', 5.60, 1, '2017-02-10' ),
@@ -297,12 +297,12 @@ INSERT INTO MEAL(MEAL_ID, NAME, IMG, DESCRIPTION, PRICE, MEAL_CATEGORY_ID, DATE)
  (9, 'Veal bbq', 'img/telesko.jpg', 'This is veal bbq.', 12.50, 3 , '2017-02-10'),
  (10, 'Chicken bbq', 'img/chicken.jpg', 'This is chicken bbq', 9.90, 3 , '2017-02-10'),
  (11, 'Fork bbq', 'img/fork.jpg', 'This is fork bbq.', 7.90, 3, '2017-02-10' ),
- (12, 'Shol bbq', 'img/shol.jpg', 'This is most delicious meat from veal', 15.50, 3 , '2017-02-10')
- 
-INSERT INTO MEAL (MEAL_ID, DATE_POSTED, DESCRIPTION, MEAL_NAME, PRICE) VALUES
-(13, 2017-02-14, 'Home made beans with vegetables and sausage', 'Beans and sausage', '10'),
-(14, 2017-02-14, 'Fried eggs with red pepper', 'Fried eggs', '5'),
-(15, 2017-02-14, 'Steamed vegetables include: carrots, peas, corn and a gram of pure coke', 'Steamed vegetables', '15'),
-(16, 2017-02-14, 'Pasta Bolognese includes: chopped vegetables, minced beef and red wine', 'Pasta Bolognese', '10'),
-(17, 2017-02-14, 'Freshly baked tost bread', 'Toast', '2');
+ (12, 'Shol bbq', 'img/shol.jpg', 'This is most delicious meat from veal', 15.50, 3 , '2017-02-10');
+
+INSERT INTO MEAL (MEAL_ID, MEAl_CATEGORY_ID, IMG, DATE_POSTED, DESCRIPTION, MEAL_NAME, PRICE) VALUES
+(13, 1, 2017-02-14, 'img/test.jpg', 'Home made beans with vegetables and sausage', 'Beans and sausage', '10'),
+(14, 1, 2017-02-14, 'img/test.jpg', 'Fried eggs with red pepper', 'Fried eggs', '5'),
+(15, 2, 2017-02-14, 'img/test.jpg', 'Steamed vegetables include: carrots, peas, corn and a gram of pure coke', 'Steamed vegetables', '15'),
+(16, 2, 2017-02-14, 'img/test.jpg', 'Pasta Bolognese includes: chopped vegetables, minced beef and red wine', 'Pasta Bolognese', '10'),
+(17, 3, 2017-02-14, 'img/test.jpg', 'Freshly baked tost bread', 'Toast', '2');
 
