@@ -113,15 +113,12 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
                 $scope.isEdit = true;
                 $scope.getUser($stateParams.id, function (data) {
                     $scope.user = data;
-                    if (!$scope.user.picture)
-                        $scope.user.picture = 'img/user.png';
                 });
             }
             else {
                 $scope.isEdit = false;
                 $scope.user = {
-                    userRole: $scope.rolesList[0],
-                    picture: 'img/user.png'
+                    userRole: $scope.rolesList[0]
                 };
             }
         });
@@ -177,23 +174,7 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
             //$interval($scope.reloadTableData, 30000);
         }
         else {
-            $('#inputPicture').on('change', function () {
-                var files = $(this).prop('files');
-                if (files && files[0]) {
-                    var reader = new FileReader();
-                    reader.onload = function (e) {
-                        $scope.$apply(function () {
-                            $scope.user.picture = e.target.result;
-                        });
-                    };
 
-                    reader.readAsDataURL(files[0]);
-                }
-            });
-
-            $scope.chooseProfilePicture = function () {
-                $('#inputPicture').trigger('click');
-            };
         }
     });
 

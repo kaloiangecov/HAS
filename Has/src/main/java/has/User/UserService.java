@@ -79,6 +79,12 @@ public class UserService {
         return user;
     }
 
+    public User findByEmail(String email) throws Exception {
+        User user = repo.findByEmail(email);
+        validateIdNotNull(user);
+        return user;
+    }
+
     public User findByUsername(String username) throws Exception {
         User user = repo.findByUsername(username);
         validateIdNotNull(user);

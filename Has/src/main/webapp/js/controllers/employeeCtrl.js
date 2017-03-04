@@ -96,7 +96,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
                         $scope.page.message = {
                             type: 'success',
                             title: 'Deleted!',
-                            text: ('Employee with id ' + id + ' was successfully disabled!')
+                            text: ('Employee with id ' + id + ' was successfully updated!')
                         };
                         $('#messageModal').modal('show');
                         $scope.reloadTableData();

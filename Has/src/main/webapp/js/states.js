@@ -254,3 +254,35 @@ var stateRoomEdit = {
 };
 
 //------------------------------------------------//
+
+
+//---------------------MEALS----------------------//
+
+var stateMealList = {
+    url: '/meals/list',
+    views: {
+        'content@loggedin': {
+            templateUrl: 'templates/meals/list.html'
+        }
+    }
+};
+
+var stateMealAdd = {
+    url: '/meals/add',
+    views: {
+        'content@loggedin': {
+            templateUrl: 'templates/meals/add.html'
+        }
+    }
+};
+
+var stateMealEdit = {
+    url: '/meals/edit/:id',
+    views: {
+        'content@loggedin': {
+            templateUrl: 'templates/meals/add.html'
+        }
+    }
+};
+
+//------------------------------------------------//

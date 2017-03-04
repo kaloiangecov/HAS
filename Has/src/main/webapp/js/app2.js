@@ -37,6 +37,15 @@ app2.config(function ($stateProvider, $urlRouterProvider) {
                 }
             }
         })
+        .state('app.root.personalData', {
+            url: '/step2',
+            views: {
+                'content@app': {
+                    templateUrl: 'templates/booking/personalData.html'
+                    //controller: "mainCtrl2"
+                }
+            }
+        })
 
     $urlRouterProvider.otherwise('/home');
 });

@@ -41,12 +41,17 @@ div.carousel .fill {
     background-size: cover;
 }
 
-div#booking {
+.booking-search {
     background-color: #fff0b3;
     padding-top: 8px;
 }
 
-div#results {
-    background-color: #ffffde;
+.booking-results {
+    background-color: #fefefe;
     padding-top: 8px;
+}
+
+.validation-message span {
+    color: #e55;
+    font-weight: bold;
 }

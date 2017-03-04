@@ -700,8 +700,10 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
     };
 
     $scope.reset = function () {
-        if ($scope.isAdditionalGuest)
+        if ($scope.isAdditionalGuest) {
             $scope.resetGuest();
+            loadEvents();
+        }
         else
             $scope.resetReservation();
     };

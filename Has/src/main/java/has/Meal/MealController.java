@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -66,7 +65,8 @@ public class MealController {
     }
 
     @RequestMapping(value = "/meal/search", method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('PERM_SEARCH_MEAL')")
     public
@@ -74,9 +74,14 @@ public class MealController {
     DataTableResult findMealByName(HttpServletRequest request) throws Exception {
         Map<String, String[]> parameterMap = request.getParameterMap();
 
+        char sortColumnNumber = parameterMap.get("order[0][column]")[0].charAt(0);
+        String sortColumnParam = "columns[" + sortColumnNumber + "][data]";
+
         Page<Meal> meals = mealService.search(
                 Integer.parseInt(parameterMap.get("start")[0]),
                 Integer.parseInt(parameterMap.get("length")[0]),
+                parameterMap.get(sortColumnParam)[0],
+                parameterMap.get("order[0][dir]")[0],
                 parameterMap.get("name")[0]);
 
 

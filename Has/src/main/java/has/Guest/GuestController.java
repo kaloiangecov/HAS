@@ -1,5 +1,6 @@
 package has.Guest;
 
+import has.User.User;
 import has.Utils.DataTableResult;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,5 +94,13 @@ public class GuestController {
     @PreAuthorize("hasAuthority('PERM_EDIT_GUEST')")
     public Guest updateGuest(@PathVariable Long id, @RequestBody @Valid Guest guest) throws Exception {
         return guestService.update(id, guest);
+    }
+
+    @RequestMapping(value = "/guest/by-email", method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    //@PreAuthorize("hasAuthority('PERM_VIEW_USER')")
+    public Guest findByUserEmail(@RequestBody User user) throws Exception {
+        return guestService.findByUserEmail(user.getEmail());
     }
 }

@@ -1,0 +1,88 @@
+<div class="col-xs-12" ng-controller="mealCtrl as ctrl">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-cutlery"></i><i class="fa fa-plus"></i> Add Meal</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content form-horizontal form-label-left">
+            <form method="POST" name="mealForm" novalidate>
+
+                <div class="form-group">
+                    <label class="control-label col-md-4 col-sm-4 col-xs-12" for="name"> Name *</label>
+                    <div class="col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" id="name" name="name"
+                               ng-model="meal.name" minlength="3" maxlength="50" required="required"/>
+                        <div ng-show="mealForm.$submitted || mealForm.name.$touched"
+                             class="validation-message">
+                            <span ng-show="mealForm.name.$error.required">This field is required</span>
+                            <span ng-show="mealForm.name.$error.minlength">Input too short</span>
+                            <span ng-show="mealForm.name.$error.maxlength">Input too long</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-4 col-sm-4 col-xs-12" for="description"> Description *</label>
+                    <div class="col-md-8 col-sm-8 col-xs-12">
+                        <textarea class="form-control" id="description" name="description" ng-model="meal.description"
+                                  minlength="3" maxlength="100" rows="3" required="required" style="resize: vertical;"/>
+                        <div ng-show="mealForm.$submitted || mealForm.description.$touched"
+                             class="validation-message">
+                            <span ng-show="mealForm.description.$error.required">This field is required</span>
+                            <span ng-show="mealForm.description.$error.minlength">Input too short</span>
+                            <span ng-show="mealForm.description.$error.maxlength">Input too long</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-4 col-sm-4 col-xs-12" for="price"> Price *</label>
+                    <div class="col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" id="price" name="price"
+                               ng-model="meal.price" min="0" max="999.9" required="required"/>
+                        <div ng-show="mealForm.$submitted || mealForm.price.$touched"
+                             class="validation-message">
+                            <span ng-show="mealForm.price.$error.required">This field is required</span>
+                            <span ng-show="mealForm.price.$error.min">Number is too small</span>
+                            <span ng-show="mealForm.price.$error.max">Number is too big</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-4 col-sm-4 col-xs-12" for="mealCategory"> Category *</label>
+                    <div class="col-md-8 col-sm-8 col-xs-12">
+                        <select type="text" class="form-control" id="mealCategory" name="mealCategory"
+                                ng-options="item as item.title for item in mealCategories track by item.id"
+                                ng-model="meal.mealCategory" required="required"/>
+                        <div ng-show="mealForm.$submitted || mealForm.price.$touched" class="validation-message">
+                            <span ng-show="mealForm.mealCategory.$error.required">This field is required</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-4 col-sm-4 col-xs-12" for="inputPicture">Meal Picture</label>
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div class="img-profile-holder">
+                            <img src="{{meal.img}}" alt="Meal Picture"/>
+                        </div>
+                        <button type="button" class="btn btn-default" ng-click="chooseMealPicture()">Change Picture
+                        </button>
+                        <input type="file" style="display:none" name="inputPicture" id="inputPicture"/>
+                    </div>
+                </div>
+
+                <div class="ln_solid"></div>
+                <div class="form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-4">
+                        <button type="submit" ng-click="submit(meal)" class="btn btn-success">Submit</button>
+                        <button type="reset" class="btn btn-default">Reset</button>
+                        <a type="button" class="btn btn-primary" href="#!/meals/list">Back</a>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

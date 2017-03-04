@@ -1,6 +1,6 @@
-<div id="booking" class="row">
+<div class="row booking-search">
     <div id="filters">
-        <form id="bookingForm" name="bookingForm" ng-submit="submit()">
+        <form id="bookingSearchForm" name="bookingSearchForm" ng-submit="search()">
             <div class="form-group col-xs-12 col-sm-4 xol-md-3 col-lg-3" id="checkDate">
                 <label>Check in / Check out</label>
                 <div class="input-group">
@@ -47,30 +47,38 @@
         </form>
     </div>
 </div>
-<div id="results" class="row">
-    <div class="col-xs-12 col-sm-6 col-md-4">
+<div class="row booking-results">
+    <form name="bookingSubmitForm" class="col-md-8 col-sm-12" ng-submit="selectRooms()">
         <h3>Results:</h3>
-        <table class="table table-condensed table-striped">
+        <table class="table">
             <thead>
             <tr>
                 <th>Room Class</th>
-                <th>Big Beds</th>
                 <th>Small Beds</th>
-                <th></th>
+                <th>Big Beds</th>
+                <th>Extras</th>
+                <th>Select</th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="res in results">
-                <td>{{res.bedsDouble}}</td>
+                <td>{{roomTypes[res.roomClass]}}</td>
                 <td>{{res.bedsSingle}}</td>
-                <td>{{res.roomClass}}</td>
+                <td>{{res.bedsDouble}}</td>
                 <td>
                     <span class="label label-primary" ng-show="res.children">Children</span>
                     <span class="label label-primary" ng-show="res.pets">Pets</span>
                     <span class="label label-primary" ng-show="res.minibar">Mininbar</span>
                 </td>
+                <td>
+                    <input type="checkbox" name="selectedRooms[]" value="{{res}}"
+                           ng-checked="selectedRooms.indexOf(res) != -1"
+                           ng-click="toggleSelection(res)"/>
+                </td>
             </tr>
             </tbody>
         </table>
-    </div>
+
+        <button type="submit" class="btn btn-default">Continue <i class="fa fa-hand-o-right"></i></button>
+    </form>
 </div>

@@ -142,7 +142,7 @@ app.controller("mainCtrl", function ($scope, $http) {
     };
 
     $scope.getRole = function (roleID, updateCallback) {
-        var response = $http({
+        $http({
             method: "GET",
             url: ("role/" + roleID),
             responseType: "json",
