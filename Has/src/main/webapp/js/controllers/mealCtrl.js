@@ -55,9 +55,25 @@ app.controller("mealCtrl", function ($scope, $http, $state, $stateParams, $resou
             .withOption('dom', 'lrtip');
 
         ctrl.dtColumns = [
-            DTColumnBuilder.newColumn('id', 'ID'),
-            DTColumnBuilder.newColumn('name', 'Name'),
+            DTColumnBuilder.newColumn('id', 'ID').notVisible(),
+            DTColumnBuilder.newColumn('name', 'Meal')
+                .renderWith(function (data, type, full) {
+                    var html = data;
+                    html += '<br/><img alt="meal picture" src="' + full.img + '" />';
+                    return html;
+                }),
+            DTColumnBuilder.newColumn('description', 'Description')
+                .renderWith(function (data) {
+                    if (data.length >= 40)
+                        return data.substr(0, 40) + '...';
+                    else
+                        return data;
+                }),
             DTColumnBuilder.newColumn('price', 'Price'),
+            DTColumnBuilder.newColumn('mealCategory', 'Category')
+                .renderWith(function (mealCategory) {
+                    return mealCategory.title;
+                }),
             DTColumnBuilder.newColumn('id').notSortable().withClass('actions-column')
                 .renderWith(function (id) {
                     var html =

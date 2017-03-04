@@ -129,3 +129,7 @@ table.table-info > tbody > tr > td {
 .login_wrapper {
     display: none;
 }
+
+table#mealsTable img {
+    height: 64px;
+}
