@@ -49,5 +49,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         .state('loggedin.root.rooms.add', stateRoomAdd)
         .state('loggedin.root.rooms.edit', stateRoomEdit);
 
+    $stateProvider // Meals module
+        .state('loggedin.root.meals', {abstract: true})
+        .state('loggedin.root.meals.list', stateMealList)
+        .state('loggedin.root.meals.add', stateMealAdd)
+        .state('loggedin.root.meals.edit', stateMealEdit);
+
     $urlRouterProvider.otherwise('/login');
 });

@@ -2,9 +2,6 @@ package has.MealType.Meal;
 
 import has.Meal.Meal;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +20,13 @@ public class MealCategoryService {
     }
 
     public List<MealCategory> getAllMealCategories() {
-        return repo.findAll();
+        List<MealCategory> categories = repo.findAll();
+
+        for (MealCategory cat : categories) {
+            cat.setMeals(null);
+        }
+
+        return categories;
     }
 
     public MealCategory findById(Long id) throws Exception {
@@ -53,7 +56,7 @@ public class MealCategoryService {
             throw new Exception("There is no meal with such ID");
         }
         dbMeal.setTitle(meal.getTitle());
-        dbMeal.setImg(meal.getImg());
+        //dbMeal.setImg(meal.getImg());
 
         return dbMeal;
     }

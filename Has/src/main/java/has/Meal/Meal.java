@@ -1,8 +1,6 @@
 package has.Meal;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import has.MealType.Meal.MealCategory;
-import has.Request.Request;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.annotation.Scope;
@@ -40,7 +38,7 @@ public class Meal implements Serializable {
     private String name;
 
     @NotNull
-    @Size(min = 3, max = 50)
+    @Column(columnDefinition = "text")
     private String img;
 
     @NotNull
@@ -54,7 +52,7 @@ public class Meal implements Serializable {
 //                    nullable = false, updatable = false)})
 //    public List<Request> requests;
 
-    @JsonBackReference
+    //@JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "meal_category_id")
     private MealCategory mealCategory;
