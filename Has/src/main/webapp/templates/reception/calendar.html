@@ -4,8 +4,22 @@
         <select class="form-control" ng-model="ctrl.selectedRoomType" ng-change="changeRoomType()"
                 ng-options="roomTypes.indexOf(item) as item for item in roomTypes">
         </select>
-    </div>
 
+        <div class="legend">
+            <div>
+                <div class="available"></div>
+                <span>Available</span>
+            </div>
+            <div>
+                <div class="in-use"></div>
+                <span>Taken</span>
+            </div>
+            <div>
+                <div class="for-cleaning"></div>
+                <span>For cleaning</span>
+            </div>
+        </div>
+    </div>
 
     <daypilot-scheduler id="scheduler"
                         config="config"

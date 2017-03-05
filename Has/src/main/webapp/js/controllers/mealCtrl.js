@@ -56,7 +56,7 @@ app.controller("mealCtrl", function ($scope, $http, $state, $stateParams, $resou
 
         ctrl.dtColumns = [
             DTColumnBuilder.newColumn('id', 'ID').notVisible(),
-            DTColumnBuilder.newColumn('name', 'Meal')
+            DTColumnBuilder.newColumn('name', 'Meal').withClass('meal-cell')
                 .renderWith(function (data, type, full) {
                     var html = data;
                     html += '<br/><img alt="meal picture" src="' + full.img + '" />';
