@@ -266,8 +266,8 @@ INSERT INTO ROOM (NUMBER, BEDS_DOUBLE, BEDS_SINGLE, ROOM_CLASS, STATUS, CHILDREN
 
 INSERT INTO RESERVATION
 (reservation_id, all_inclusive, breakfast, dinner, discount, end_date, C_GROUP, last_modified_by_user_id, last_modified_time, number_adults, number_children, price, employee_id, start_date, status)
-VALUES('1', false, true, false, 0, '2017-03-14', false, null, null, 2, 1, 40.0, '5', '2017-03-10', 0),
-('2', true, true, true, 10, '2017-03-18', true, null, null, 1, 1, 50.0, '4', '2017-03-12', 1),
+VALUES('1', false, true, false, 0, '2017-03-10', false, null, null, 2, 1, 40.0, '5', '2017-03-05', 0),
+('2', true, true, true, 10, '2017-03-08', true, null, null, 1, 1, 50.0, '4', '2017-03-05', 1),
 ('3', false, false, true, 10, '2017-03-22', false, null, null, 2, 0, 45.0, '4', '2017-03-19', 1);
 
 INSERT INTO RESERVATION_GUEST (RESERVATION_GUEST_ID, reservation_id, guest_id, room_id, owner) VALUES
@@ -306,9 +306,6 @@ INSERT INTO MEAL (MEAL_ID, MEAl_CATEGORY_ID, DATE_POSTED, IMG, DESCRIPTION, MEAL
 (16, 2, '2017-02-14', 'img/meal.png', 'Pasta Bolognese includes: chopped vegetables, minced beef and red wine', 'Pasta Bolognese', '10'),
 (17, 3, '2017-02-14', 'img/meal.png', 'Freshly baked tost bread', 'Toast', '2');
 
-INSERT INTO REQUEST (REQUEST_ID, RESERVATION_GUEST_ID, STATUS, TIME_PLACED, TIME_FINISHED, REQUEST_TYPE) VALUES
-(1, 1, 0, '2017-03-12T19:30:11','2017-03-12T19:41:20', 2),
-(2, 2, 0, '2017-03-12T20:00:11','2017-03-12T20:08:44', 1);
-
-INSERT INTO REQUEST_MEAL (REQUEST_ID, MEAL_ID, QUANTITY) VALUES
-(2, 5, 2);
+INSERT INTO REQUEST (REQUEST_ID, RESERVATION_GUEST_ID, EMPLOYEE_ID, STATUS, TIME_PLACED, TIME_FINISHED, REQUEST_TYPE) VALUES
+(1, 1, 7, 0, '2017-03-06T19:30:11','2017-03-06T19:41:20', 2),
+(2, 2, 8, 0, '2017-03-06T20:00:11','2017-03-06T20:08:44', 1);

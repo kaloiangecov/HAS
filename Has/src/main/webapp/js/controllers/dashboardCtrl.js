@@ -53,8 +53,9 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http) {
                 {
                     text: '<i class="fa fa-info"></i> Show info',
                     onclick: function () {
+                        var task = this.source.data.objRequest;
                         $scope.$apply(function () {
-                            $scope.requestInfo = this.source.data.objRequest;
+                            $scope.requestInfo = task;
 
                             $('#infoModal').modal('show');
                         });
@@ -63,7 +64,8 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http) {
             ]
         }),
         onBeforeCellRender: function (args) {
-            if (args.cell.start <= DayPilot.Date.today() && DayPilot.Date.today() < args.cell.end) {
+            var today = new DayPilot.Date(new Date());
+            if (args.cell.start <= today && today < args.cell.end) {
                 args.cell.backColor = "#fff0b3";
             }
         },
@@ -74,14 +76,6 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http) {
             $scope.$apply(function () {
                 $scope.events.selected = $scope.dashboard.multiselect.events();
             });
-        },
-        onEventMoved: function (args) {
-            $scope.dashboard.clearSelection();
-
-            if (!confirm("Are you sure you want to move the task?")) {
-                loadEvents();
-                return;
-            }
         },
         onEventDeleted: function (args) {
             $scope.dashboard.clearSelection();

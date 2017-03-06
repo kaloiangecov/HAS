@@ -1,6 +1,5 @@
 package has.Request;
 
-import has.RequestMeal.RequestMeal;
 import has.Reservation.Reservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,10 +60,11 @@ public class RequestService {
         reservation.getReceptionist().setWorkingSchedules(null);
 
         request.getReservationGuest().setReservation(reservation);
+        request.getEmployee().setWorkingSchedules(null);
 
-        for (RequestMeal rm : request.getRequestMeals()) {
-            rm.setRequest(null);
-        }
+        //for (RequestMeal rm : request.getRequestMeals()) {
+        //    rm.setRequest(null);
+        //}
 
         return request;
     }
