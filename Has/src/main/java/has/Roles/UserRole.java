@@ -1,5 +1,6 @@
 package has.Roles;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -36,7 +37,7 @@ public class UserRole {
         this.permissions = permissions;
     }
 
-    //@JsonIgnore
+    @JsonIgnore
     public List<RolePermission> getPermissions() {
         return permissions;
     }

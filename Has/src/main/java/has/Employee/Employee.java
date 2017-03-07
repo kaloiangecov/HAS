@@ -1,5 +1,6 @@
 package has.Employee;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import has.PersonalData.PersonalData;
 import has.User.User;
 import has.WorkingSchedule.WorkingSchedule;
@@ -39,6 +40,7 @@ public class Employee implements Serializable {
     private PersonalData personalData;
 
     @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<WorkingSchedule> workingSchedules;
 
     private boolean employed;

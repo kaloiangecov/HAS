@@ -1,5 +1,6 @@
 package has.WorkingSchedule;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import has.Employee.Employee;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * Created by Chokleet on 20.12.2016 г..
@@ -15,7 +17,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @Entity(name = "WORKING_SCHEDULE")
-public class WorkingSchedule {
+public class WorkingSchedule implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -33,6 +35,7 @@ public class WorkingSchedule {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "EMPLOYEE_ID")
+    @JsonBackReference
     private Employee employee;
 
 }

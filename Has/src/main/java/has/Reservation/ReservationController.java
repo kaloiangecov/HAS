@@ -114,4 +114,12 @@ public class ReservationController {
     public Reservation closeReservation(@PathVariable Long id, @AuthenticationPrincipal User user) throws Exception {
         return reservationService.close(id, user);
     }
+
+    @RequestMapping(value = "/reservations/guest/{id}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_VIEW_RESERVATION')")
+    public List<Reservation> getGuestHistory(@PathVariable Long id) {
+        return reservationService.getClientHistory(id);
+    }
 }
