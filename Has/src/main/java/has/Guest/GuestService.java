@@ -35,6 +35,13 @@ public class GuestService {
         return repo.findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContaining(fullName, phone, request);
     }
 
+    public List<Guest> findReservationFreeGuests(Long reservationId) {
+        if (reservationId == -1)
+            return repo.findAll();
+        else
+            return repo.findReservationFreeGuests(reservationId);
+    }
+
     public Guest findById(Long id) throws Exception {
         Guest guest = repo.findOne(id);
         validateIdNotNull(guest);

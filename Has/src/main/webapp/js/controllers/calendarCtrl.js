@@ -70,10 +70,10 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             .then(callback);
     };
 
-    $scope.getAllGuests = function (updateCallback) {
+    $scope.getFreeGuests = function (reservationId, updateCallback) {
         $http({
             method: "GET",
-            url: "guests",
+            url: ("guests/free/" + reservationId),
             responseType: "json",
             headers: {
                 "Authorization": $scope.authentication
@@ -111,9 +111,6 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             console.log("New reservation: ", data);
 
             $scope.resetReservation();
-            $scope.getAllGuests(function (data) {
-                $scope.guests.list = data;
-            });
         };
 
         if ($scope.isNewGuest) { // create new guest
@@ -278,6 +275,11 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                         delete $scope.reservationGuest.reservation.reservationGuests;
 
                         $scope.isAdditionalGuest = true;
+
+                        $scope.getFreeGuests($scope.reservationGuest.reservation.id, function (data) {
+                            $scope.guests.list = data;
+                        });
+
                         $scope.$apply();
 
                         $('#reservationModal').modal('show');
@@ -519,6 +521,10 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 });
 
                 $scope.getGroupReservations();
+
+                $scope.getFreeGuests(-1, function (data) {
+                    $scope.guests.list = data;
+                });
 
                 $('#reservationModal').modal('show');
             }
@@ -779,9 +785,6 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
                     $scope.resetGuest();
                     loadEvents();
-                    $scope.getAllGuests(function (data) {
-                        $scope.guests.list = data;
-                    });
                 }, $scope.resetGuest);
             }, $scope.resetGuest);
         } else {
@@ -794,10 +797,6 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
                 $scope.resetGuest();
                 loadEvents();
-
-                $scope.getAllGuests(function (data) {
-                    $scope.guests.list = data;
-                });
             }, $scope.resetGuest);
         }
 
@@ -847,10 +846,6 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         loadEvents();
 
         //$scope.timer = setInterval(loadEvents, 10000);
-
-        $scope.getAllGuests(function (data) {
-            $scope.guests.list = data;
-        });
 
         $('#dateRange').daterangepicker({
             parentEl: "#scheduleContainer",
