@@ -1,5 +1,6 @@
 package has.Request;
 
+import has.Employee.Employee;
 import has.ReservationGuest.ReservationGuest;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,9 +30,13 @@ public class Request implements Serializable {
 //    private List<Meal> meals;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "RESERVATION_GUEST_ID")
     private ReservationGuest reservationGuest;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "EMPLOYEE_ID")
+    private Employee employee;
 
     @NotNull
     @Min(0)
@@ -45,8 +50,12 @@ public class Request implements Serializable {
 
     @NotNull
     @Min(0)
-    @Max(2)
+    @Max(10)
+    @Column(name = "REQUEST_TYPE")
     private int type;
+
+    //@OneToMany(mappedBy = "request", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    //private List<RequestMeal> requestMeals;
 
     public Request() {
 

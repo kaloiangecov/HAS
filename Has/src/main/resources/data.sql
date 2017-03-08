@@ -266,16 +266,16 @@ INSERT INTO ROOM (NUMBER, BEDS_DOUBLE, BEDS_SINGLE, ROOM_CLASS, STATUS, CHILDREN
 
 INSERT INTO RESERVATION
 (reservation_id, all_inclusive, breakfast, dinner, discount, end_date, C_GROUP, last_modified_by_user_id, last_modified_time, number_adults, number_children, price, employee_id, start_date, status)
-VALUES('1', false, true, false, 0, '2017-02-14', false, null, null, 2, 1, 40.0, '5', '2017-02-10', 0),
-('2', true, true, true, 10, '2017-02-18', true, null, null, 1, 1, 50.0, '4', '2017-02-15', 1),
-('3', false, false, true, 10, '2017-02-22', false, null, null, 2, 0, 45.0, '4', '2017-02-19', 1);
+VALUES('1', false, true, false, 0, '2017-03-10', false, null, null, 2, 1, 40.0, '5', '2017-03-05', 0),
+('2', true, true, true, 10, '2017-03-08', true, null, null, 1, 1, 50.0, '4', '2017-03-05', 1),
+('3', false, false, true, 10, '2017-03-22', false, null, null, 2, 0, 45.0, '4', '2017-03-19', 1);
 
-INSERT INTO RESERVATION_GUEST (reservation_id, guest_id, room_id, owner) VALUES
-(1, 1, 5, true),
-(2, 2, 8, true),
-(2, 3, 10, false),
-(3, 1, 2, true),
-(3, 2, 2, false);
+INSERT INTO RESERVATION_GUEST (RESERVATION_GUEST_ID, reservation_id, guest_id, room_id, owner) VALUES
+(1, 1, 1, 5, true),
+(2, 2, 2, 8, true),
+(3, 2, 3, 10, false),
+(4, 3, 1, 2, true),
+(5, 3, 2, 2, false);
 
 INSERT INTO MEAL_CATEGORY (MEAL_CATEGORY_ID, TITLE, IMG, DESCRIPTION) VALUES
 (1, 'Dessert', 'img/cake.jpg', 'Find the best desserts here.'),
@@ -284,24 +284,28 @@ INSERT INTO MEAL_CATEGORY (MEAL_CATEGORY_ID, TITLE, IMG, DESCRIPTION) VALUES
 (4, 'Pizza', 'img/pizza.jpg','Find the best Italian pizzas here.'),
 (5, 'Pasta', 'img/pasta.jpg','Find the best Italian pastas here.'),
 (6, 'Drinks', 'img/whiskey.jpg','Find the best beverages here.');
-
+--
 INSERT INTO MEAL(MEAL_ID, MEAL_NAME, IMG, DESCRIPTION, PRICE, MEAL_CATEGORY_ID, DATE_POSTED) VALUES
- (1, 'Chocolate cake', 'img/chocolate-cake.jpg', 'This is chocolate cake', 5.50, 1 , '2017-02-10'),
- (2, 'Vanilla cake', 'img/vanilla.jpg', 'This is chocolate cake', 4.30, 1 , '2017-02-10'),
- (3, 'Fruit cake', 'img/fruit.jpg', 'This is chocolate cake', 5.60, 1, '2017-02-10' ),
- (4, 'Chocolate muffin', 'img/muffin.jpg', 'This is chocolate cake', 2.50, 1, '2017-02-10' ),
- (5, 'Italian salad', 'img/salad.jpg', 'Delicious italian salad.', 4.50, 2 , '2017-02-10'),
- (6, 'Ceasar salad', 'img/selska.jpg', 'Delicious ceasar salad.', 5.90, 2 , '2017-02-10'),
- (7, 'Greece salad ', 'img/greece.jpg', 'Delicious greece salad.', 4.70, 2 , '2017-02-10'),
- (8, 'Shopska salad', 'img/shopska.jpg', 'Delicious shopska salad.', 3.50, 2 , '2017-02-10'),
- (9, 'Veal bbq', 'img/telesko.jpg', 'This is veal bbq.', 12.50, 3 , '2017-02-10'),
- (10, 'Chicken bbq', 'img/chicken.jpg', 'This is chicken bbq', 9.90, 3 , '2017-02-10'),
- (11, 'Fork bbq', 'img/fork.jpg', 'This is fork bbq.', 7.90, 3, '2017-02-10' ),
- (12, 'Shol bbq', 'img/shol.jpg', 'This is most delicious meat from veal', 15.50, 3 , '2017-02-10');
+ (1, 'Chocolate cake', 'img/meal.png', 'This is chocolate cake', 5.50, 1 , '2017-02-10'),
+ (2, 'Vanilla cake', 'img/meal.png', 'This is chocolate cake', 4.30, 1 , '2017-02-10'),
+ (3, 'Fruit cake', 'img/meal.png', 'This is chocolate cake', 5.60, 1, '2017-02-10' ),
+ (4, 'Chocolate muffin', 'img/meal.png', 'This is chocolate cake', 2.50, 1, '2017-02-10' ),
+ (5, 'Italian salad', 'img/meal.png', 'Delicious italian salad.', 4.50, 2 , '2017-02-10'),
+ (6, 'Ceasar salad', 'img/meal.png', 'Delicious ceasar salad.', 5.99, 2 , '2017-02-10'),
+ (7, 'Greece salad ', 'img/meal.png', 'Delicious greece salad.', 4.70, 2 , '2017-02-10'),
+ (8, 'Shopska salad', 'img/meal.png', 'Delicious shopska salad.', 3.50, 2 , '2017-02-10'),
+ (9, 'Veal bbq', 'img/meal.png', 'This is veal bbq.', 12.50, 3 , '2017-02-10'),
+ (10, 'Chicken bbq', 'img/meal.png', 'This is chicken bbq', 9.90, 3 , '2017-02-10'),
+ (11, 'Fork bbq', 'img/meal.png', 'This is fork bbq.', 7.90, 3, '2017-02-10' ),
+ (12, 'Shol bbq', 'img/meal.png', 'This is most delicious meat from veal', 15.50, 3 , '2017-02-10');
 
-INSERT INTO MEAL (MEAL_ID, MEAl_CATEGORY_ID, IMG, DATE_POSTED, DESCRIPTION, MEAL_NAME, PRICE) VALUES
-(13, 1, 2017-02-14, 'img/meal.png', 'Home made beans with vegetables and sausage', 'Beans and sausage', '10'),
-(14, 1, 2017-02-14, 'img/meal.png', 'Fried eggs with red pepper', 'Fried eggs', '5'),
-(15, 2, 2017-02-14, 'img/meal.png', 'Steamed vegetables include: carrots, peas, corn and a gram of pure coke', 'Steamed vegetables', '15'),
-(16, 2, 2017-02-14, 'img/meal.png', 'Pasta Bolognese includes: chopped vegetables, minced beef and red wine', 'Pasta Bolognese', '10'),
-(17, 3, 2017-02-14, 'img/meal.png', 'Freshly baked tost bread', 'Toast', '2');
+INSERT INTO MEAL (MEAL_ID, MEAl_CATEGORY_ID, DATE_POSTED, IMG, DESCRIPTION, MEAL_NAME, PRICE) VALUES
+(13, 1, '2017-02-14', 'img/meal.png', 'Home made beans with vegetables and sausage', 'Beans and sausage', '10'),
+(14, 1, '2017-02-14', 'img/meal.png', 'Fried eggs with red pepper', 'Fried eggs', '5'),
+(15, 2, '2017-02-14', 'img/meal.png', 'Steamed vegetables include: carrots, peas, corn and a gram of pure coke', 'Steamed vegetables', '15'),
+(16, 2, '2017-02-14', 'img/meal.png', 'Pasta Bolognese includes: chopped vegetables, minced beef and red wine', 'Pasta Bolognese', '10'),
+(17, 3, '2017-02-14', 'img/meal.png', 'Freshly baked tost bread', 'Toast', '2');
+
+INSERT INTO REQUEST (REQUEST_ID, RESERVATION_GUEST_ID, EMPLOYEE_ID, STATUS, TIME_PLACED, TIME_FINISHED, REQUEST_TYPE) VALUES
+(1, 1, 7, 0, '2017-03-06T19:30:11','2017-03-06T19:41:20', 2),
+(2, 2, 8, 0, '2017-03-06T20:00:11','2017-03-06T20:08:44', 1);

@@ -83,6 +83,15 @@ var stateCalendar = {
     }
 };
 
+var stateDashboard = {
+    url: '/dashboard',
+    views: {
+        'content@loggedin': {
+            templateUrl: 'templates/tasks/dashboard.html'
+        }
+    }
+};
+
 
 //---------------------USERS----------------------//
 

@@ -19,6 +19,9 @@ app.config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider // Calendar module
         .state('loggedin.root.calendar', stateCalendar);
 
+    $stateProvider // Dashboard module
+        .state('loggedin.root.dashboard', stateDashboard);
+
     $stateProvider // Users module
         .state('loggedin.root.users', {abstract: true})
         .state('loggedin.root.users.list', stateUserList)

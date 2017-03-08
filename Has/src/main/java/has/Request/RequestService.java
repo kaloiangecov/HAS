@@ -1,5 +1,6 @@
 package has.Request;
 
+import has.Reservation.Reservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,12 @@ public class RequestService {
     }
 
     public List<Request> getAllRequests() {
-        return repo.findAll();
+        List<Request> requests = repo.findAll();
+        for (Request request : requests) {
+            request = removeRecursions(request);
+        }
+
+        return requests;
     }
 
     public Request findById(Long id) throws Exception {
@@ -45,6 +51,22 @@ public class RequestService {
         dbRequest.setType(request.getType());
 
         return repo.save(dbRequest);
+    }
+
+    private Request removeRecursions(Request request) {
+        Reservation reservation = request.getReservationGuest().getReservation();
+
+        reservation.setReservationGuests(null);
+        reservation.getReceptionist().setWorkingSchedules(null);
+
+        request.getReservationGuest().setReservation(reservation);
+        request.getEmployee().setWorkingSchedules(null);
+
+        //for (RequestMeal rm : request.getRequestMeals()) {
+        //    rm.setRequest(null);
+        //}
+
+        return request;
     }
 
     private void validateIdNotNull(Request request) throws Exception {

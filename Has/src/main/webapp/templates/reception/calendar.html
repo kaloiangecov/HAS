@@ -4,8 +4,22 @@
         <select class="form-control" ng-model="ctrl.selectedRoomType" ng-change="changeRoomType()"
                 ng-options="roomTypes.indexOf(item) as item for item in roomTypes">
         </select>
-    </div>
 
+        <div class="legend">
+            <div>
+                <div class="available"></div>
+                <span>Available</span>
+            </div>
+            <div>
+                <div class="in-use"></div>
+                <span>Taken</span>
+            </div>
+            <div>
+                <div class="for-cleaning"></div>
+                <span>For cleaning</span>
+            </div>
+        </div>
+    </div>
 
     <daypilot-scheduler id="scheduler"
                         config="config"
@@ -13,13 +27,6 @@
                         on-event-selected="onEventSelected(args)"
                         on-event-moved="onEventMoved(args)">
     </daypilot-scheduler>
-
-
-    <div>
-        <span class="bold">Scale:</span>
-        <a ng-click="setScale('Day')" href="javascript:void(0)">Days</a>
-        <a ng-click="setScale('Week')" href="javascript:void(0)">Weeks</a>
-    </div>
 
     <div class="modal fade" id="reservationModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
