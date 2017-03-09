@@ -1,5 +1,6 @@
 package has.ReservationGuest;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import has.Guest.Guest;
 import has.Reservation.Reservation;
 import has.Room.Room;

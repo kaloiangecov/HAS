@@ -174,6 +174,9 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
             };
             $scope.getFreeUsers(-1, function (data) {
                 $scope.usersList = data;
+
+                if (data.length > 0)
+                    $scope.employee.user = data[0];
             });
         }
 

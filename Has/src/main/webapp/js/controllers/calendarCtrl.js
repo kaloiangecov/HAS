@@ -549,6 +549,12 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
                 $scope.getFreeGuests(-1, function (data) {
                     $scope.guests.list = data;
+
+                    if (data.length > 0)
+                        $scope.guests.selectedGuest = data[0];
+                    else {
+                        $scope.isNewGuest = true;
+                    }
                 });
 
                 $('#reservationModal').modal('show');

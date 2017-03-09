@@ -134,12 +134,15 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
                         userID = $scope.guest.user.id;
 
                     $scope.getFreeUsers(userID, function (data) {
-                        $scope.usersList = data;
-                        $scope.usersList[data.length] = {
-                            id: 0,
-                            username: "-- None --",
-                            email: "none@none.com"
-                        };
+                        var emptyArray = [
+                            {
+                                id: 0,
+                                username: "-- None --",
+                                email: "-- None --"
+                            }
+                        ];
+
+                        $scope.usersList = emptyArray.concat(data);
                     });
                 });
         }
@@ -151,12 +154,17 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
                 personalData: {}
             };
             $scope.getFreeUsers(-1, function (data) {
-                $scope.usersList = data;
-                $scope.usersList[data.length] = {
-                    id: 0,
-                    username: "-- None --",
-                    email: "-- None --"
-                };
+                var emptyArray = [
+                    {
+                        id: 0,
+                        username: "-- None --",
+                        email: "-- None --"
+                    }
+                ];
+
+                $scope.usersList = emptyArray.concat(data);
+
+                $scope.guest.user = $scope.usersList[0];
             });
         }
 
