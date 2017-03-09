@@ -73,14 +73,19 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
                     var html =
                         '<div class="btn-group btn-group-sm">' +
                         '<a class="btn btn-default action-btn" href="#!/employees/edit/' +
-                        id + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
-                        '<button type="button" class="btn btn-default action-btn delete-btn" id="del_' +
-                        id + '">'
+                        id + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
 
-                    if (full.employed)
-                        html += '<i class="fa fa-trash-o" aria-hidden="true"></i></button></div>';
-                    else
-                        html += '<i class="fa fa-refresh" aria-hidden="true"></i></button></div>';
+                    if (full.user.id != $scope.loginData.id) {
+                        html += '<button type="button" class="btn btn-default action-btn delete-btn" id="del_' +
+                            id + '">';
+
+                        if (full.employed)
+                            html += '<i class="fa fa-ban" aria-hidden="true"></i></button>';
+                        else
+                            html += '<i class="fa fa-refresh" aria-hidden="true"></i></button>';
+                    }
+
+                    html += '</div>';
 
                     return html;
                 })
@@ -93,13 +98,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
                 $(btns).on('click', function () {
                     var id = this.id.split('_')[1];
                     $scope.changeEmployed(id, function () {
-                        $scope.page.message = {
-                            type: 'success',
-                            title: 'Deleted!',
-                            text: ('Employee with id ' + id + ' was successfully updated!')
-                        };
-                        $('#messageModal').modal('show');
-                        $scope.reloadTableData();
+                        $scope.reloadTableData(false);
                         $scope.addDeleteFunctions();
                     });
                 });
@@ -151,13 +150,21 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
                 }
             }).then(
                 function (response) { //success
-                    $scope.employee = response.data;
-                    $scope.getFreeUsers($scope.employee.user.id, function (data) {
-                        $scope.usersList = data;
-                    });
+                    return response.data;
                 },
                 function (response) { //error
                     $scope.displayMessage(response.data);
+                }).then(
+                function (data) {
+                    $scope.employee = data;
+
+                    var userID = -1;
+                    if ($scope.employee.user)
+                        userID = $scope.employee.user.id;
+
+                    $scope.getFreeUsers(userID, function (data) {
+                        $scope.usersList = data;
+                    });
                 });
         }
         else {
@@ -167,6 +174,9 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
             };
             $scope.getFreeUsers(-1, function (data) {
                 $scope.usersList = data;
+
+                if (data.length > 0)
+                    $scope.employee.user = data[0];
             });
         }
 

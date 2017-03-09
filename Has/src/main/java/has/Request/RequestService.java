@@ -1,6 +1,5 @@
 package has.Request;
 
-import has.Reservation.Reservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +20,9 @@ public class RequestService {
 
     public List<Request> getAllRequests() {
         List<Request> requests = repo.findAll();
-        for (Request request : requests) {
-            request = removeRecursions(request);
-        }
+        //for (Request request : requests) {
+        //    request = removeRecursions(request);
+        //}
 
         return requests;
     }
@@ -53,22 +52,23 @@ public class RequestService {
         return repo.save(dbRequest);
     }
 
-    private Request removeRecursions(Request request) {
-        Reservation reservation = request.getReservationGuest().getReservation();
+    /*
+        private Request removeRecursions(Request request) {
+            Reservation reservation = request.getReservationGuest().getReservation();
 
-        reservation.setReservationGuests(null);
-        reservation.getReceptionist().setWorkingSchedules(null);
+            reservation.setReservationGuests(null);
+            reservation.getReceptionist().setWorkingSchedules(null);
 
-        request.getReservationGuest().setReservation(reservation);
-        request.getEmployee().setWorkingSchedules(null);
+            request.getReservationGuest().setReservation(reservation);
+            request.getEmployee().setWorkingSchedules(null);
 
-        //for (RequestMeal rm : request.getRequestMeals()) {
-        //    rm.setRequest(null);
-        //}
+            //for (RequestMeal rm : request.getRequestMeals()) {
+            //    rm.setRequest(null);
+            //}
 
-        return request;
-    }
-
+            return request;
+        }
+    */
     private void validateIdNotNull(Request request) throws Exception {
         if (request == null) {
             throw new Exception("There is no request with such ID");

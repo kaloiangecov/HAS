@@ -99,6 +99,7 @@ public class EmployeeService {
         validateIdNotNull(employee);
 
         employee.setEmployed(!employee.isEmployed());
+
         return repo.save(employee);
     }
 

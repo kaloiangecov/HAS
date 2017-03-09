@@ -46,14 +46,14 @@ public class ReservationService {
         List<Reservation> reservations = new ArrayList<Reservation>();
 
         if (isGroup != null && isGroup == true) {
-            reservations = repo.findGroupReservationsForCalendar(true, 2, startDate, endDate);
+            reservations = repo.findGroupReservationsForCalendar(true, startDate, endDate);
         } else {
-            reservations = repo.findAllReservationsForCalendar(2, startDate, endDate);
+            reservations = repo.findAllReservationsForCalendar(startDate, endDate);
         }
 
-//        for (Reservation reservation : reservations) {
-//            reservation = removeRecursions(reservation);
-//        }
+        for (Reservation reservation : reservations) {
+            reservation = removeRecursions(reservation);
+        }
 
         return reservations;
     }

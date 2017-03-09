@@ -24,9 +24,14 @@
                     <div class="form-group">
                         <label class="control-label col-md-4 col-sm-4 col-xs-12" for="user">User</label>
                         <div class="col-md-8 col-sm-8 col-xs-12">
-                            <select class="form-control roles" id="user" name="user" ng-model="employee.user"
-                                    ng-options="item as item.username for item in usersList track by item.id">
-                            </select>
+                            <ui-select ng-model="employee.user" id="user" name="user">
+                                <ui-select-match>{{$select.selected.username}}</ui-select-match>
+                                <ui-select-choices
+                                        repeat="item in (usersList | filter: $select.search) track by item.id">
+                                    <div ng-bind-html="item.username | highlight: $select.search"></div>
+                                    <small ng-bind-html="item.email | highlight: $select.search"></small>
+                                </ui-select-choices>
+                            </ui-select>
                             <div ng-show="employeeForm.$submitted || employeeForm.user.$touched" class="validation-message">
                                 <span ng-show="employeeForm.user.$error.required">This field is required</span>
                             </div>
