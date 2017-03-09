@@ -143,6 +143,9 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
                         ];
 
                         $scope.usersList = emptyArray.concat(data);
+
+                        if (!$scope.guest.user)
+                            $scope.guest.user = $scope.usersList[0];
                     });
                 });
         }
