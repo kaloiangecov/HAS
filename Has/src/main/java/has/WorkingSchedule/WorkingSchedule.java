@@ -35,7 +35,6 @@ public class WorkingSchedule implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "EMPLOYEE_ID")
-    @JsonBackReference
     private Employee employee;
 
 }

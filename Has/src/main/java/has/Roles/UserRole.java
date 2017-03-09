@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ import java.util.List;
 @Entity(name = "ROLE")
 @Getter
 @Setter
-public class UserRole {
+public class UserRole implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,14 +29,6 @@ public class UserRole {
             inverseJoinColumns = {@JoinColumn(name = "PERMISSION_ID",
                     nullable = false, updatable = true)})
     private List<RolePermission> permissions;
-
-    public UserRole() {
-    }
-
-    public UserRole(String roleName, List<RolePermission> permissions) {
-        this.roleName = roleName;
-        this.permissions = permissions;
-    }
 
     @JsonIgnore
     public List<RolePermission> getPermissions() {

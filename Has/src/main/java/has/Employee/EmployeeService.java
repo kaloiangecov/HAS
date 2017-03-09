@@ -1,7 +1,6 @@
 package has.Employee;
 
 import has.Utils.Validator;
-import has.WorkingSchedule.WorkingSchedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,22 +29,12 @@ public class EmployeeService {
     public List<Employee> getAllEmployedEmployees() {
         List<Employee> employees = repo.findByEmployedTrue();
 
-        for (Employee emp : employees) {
-            for (WorkingSchedule schedule : emp.getWorkingSchedules()) {
-                schedule.setEmployee(null);
-            }
-        }
         return employees;
     }
 
     public List<Employee> getAllEmployees() {
         List<Employee> employees = repo.findAll();
 
-        for (Employee emp : employees) {
-            for (WorkingSchedule schedule : emp.getWorkingSchedules()) {
-                schedule.setEmployee(null);
-            }
-        }
         return employees;
     }
 
@@ -67,10 +56,6 @@ public class EmployeeService {
                 employeesPage = repo.findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContainingAndDateHired(fullName, phone, dateHired, request);
         }
 
-        for (Employee emp : employeesPage)
-            for (WorkingSchedule schedule : emp.getWorkingSchedules())
-                schedule.setEmployee(null);
-
         return employeesPage;
     }
 
@@ -78,18 +63,12 @@ public class EmployeeService {
         Employee employee = repo.findOne(id);
         validateIdNotNull(employee);
 
-        for (WorkingSchedule schedule : employee.getWorkingSchedules()) {
-            schedule.setEmployee(null);
-        }
         return employee;
     }
 
     public Employee findByUserId(Long userId) throws Exception {
         Employee employee = repo.findByUserId(userId);
 
-        for (WorkingSchedule schedule : employee.getWorkingSchedules()) {
-            schedule.setEmployee(null);
-        }
         return employee;
     }
 
@@ -120,7 +99,6 @@ public class EmployeeService {
         validateIdNotNull(employee);
 
         employee.setEmployed(!employee.isEmployed());
-
         return repo.save(employee);
     }
 

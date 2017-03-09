@@ -22,10 +22,6 @@ public class MealCategoryService {
     public List<MealCategory> getAllMealCategories() {
         List<MealCategory> categories = repo.findAll();
 
-        for (MealCategory cat : categories) {
-            cat.setMeals(null);
-        }
-
         return categories;
     }
 

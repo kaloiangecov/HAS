@@ -12,35 +12,44 @@ import javax.persistence.Id;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Entity(name = "ROOM")
 @Scope("session")
-public class Room {
+public class Room implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @NotNull
     @Min(0)
     private int bedsDouble;
+
     @NotNull
     @Min(0)
     private int bedsSingle;
+
     @NotNull
     @Min(0)
     private int number;
+
     @NotNull
     @Min(0)
     @Max(5)
     private int roomClass;
+
     @NotNull
     @Min(0)
     @Max(3)
     private int status;
+
     private boolean children;
+
     private boolean minibar;
+
     private boolean pets;
 
     public Room() {

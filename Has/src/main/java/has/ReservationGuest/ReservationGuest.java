@@ -43,6 +43,4 @@ public class ReservationGuest implements Serializable {
 
     @NotNull
     private boolean owner;
-
-
 }

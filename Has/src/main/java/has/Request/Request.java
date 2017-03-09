@@ -25,9 +25,6 @@ public class Request implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "REQUEST_ID")
     private Long id;
-//    @NotNull
-//    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "requests", cascade = CascadeType.ALL)
-//    private List<Meal> meals;
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)

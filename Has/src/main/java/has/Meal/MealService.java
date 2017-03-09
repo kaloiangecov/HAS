@@ -24,25 +24,20 @@ public class MealService {
     public List<Meal> getAllMeals() {
         List<Meal> meals = repo.findAll();
 
-        for (Meal meal : meals) {
-            meal = removeRecursions(meal);
-        }
-
         return meals;
     }
 
     public Meal findById(Long id) throws Exception {
         Meal meal = repo.findOne(id);
         validateIdNotNull(meal);
-
-        return (removeRecursions(meal));
+        return meal;
     }
 
     public Meal remove(Long id) throws Exception {
         Meal meal = repo.findOne(id);
         validateIdNotNull(meal);
         repo.delete(meal);
-        return (removeRecursions(meal));
+        return meal;
     }
 
     public Meal update(Long id, Meal meal) throws Exception {
@@ -55,7 +50,7 @@ public class MealService {
         dbMeal.setPrice(meal.getPrice());
         dbMeal.setImg(meal.getImg());
 
-        return removeRecursions(repo.save(dbMeal));
+        return repo.save(dbMeal);
     }
 
     public Page<Meal> search(int start, int length, String sortColumn, String sortDirection, String name) {
@@ -63,19 +58,8 @@ public class MealService {
 
         Page<Meal> page = repo.findByNameContaining(name, request);
 
-        for (Meal meal : page) {
-            meal = removeRecursions(meal);
-        }
-
         return page;
     }
-
-    private Meal removeRecursions(Meal meal) {
-        meal.getMealCategory().setMeals(null);
-        return meal;
-    }
-
-    ;
 
     private void validateIdNotNull(Meal meal) throws Exception {
         if (meal == null) {

@@ -44,15 +44,6 @@ public class Meal implements Serializable {
     @NotNull
     private Double price;
 
-//    @NotNull
-//    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//    @JoinTable(name = "MEAL_REQUEST", joinColumns = {
-//            @JoinColumn(name = "MEAL_ID", nullable = false, updatable = false)},
-//            inverseJoinColumns = {@JoinColumn(name = "REQUEST_ID",
-//                    nullable = false, updatable = false)})
-//    public List<Request> requests;
-
-    //@JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "meal_category_id")
     private MealCategory mealCategory;

@@ -1,6 +1,5 @@
 package has.ReservationGuest;
 
-import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import has.Utils.TemplateHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +21,6 @@ public class ReservationGuestService {
 
     @Autowired
     private TemplateHandler templateHandler;
-
-    @Autowired
-    private Configuration configuration;
 
     public ReservationGuest save(ReservationGuest reservationGuest) throws IOException, TemplateException {
         ReservationGuest savedGuest = null;

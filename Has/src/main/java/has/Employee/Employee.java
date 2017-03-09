@@ -1,9 +1,7 @@
 package has.Employee;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import has.PersonalData.PersonalData;
 import has.User.User;
-import has.WorkingSchedule.WorkingSchedule;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.annotation.Scope;
@@ -11,7 +9,6 @@ import org.springframework.context.annotation.Scope;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created by kaloi on 12/19/2016.
@@ -38,10 +35,6 @@ public class Employee implements Serializable {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "PERSONAL_DATA_ID")
     private PersonalData personalData;
-
-    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<WorkingSchedule> workingSchedules;
 
     private boolean employed;
 

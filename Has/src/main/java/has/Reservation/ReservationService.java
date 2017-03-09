@@ -5,7 +5,6 @@ import has.ReservationGuest.ReservationGuest;
 import has.Room.Room;
 import has.User.User;
 import has.Utils.TemplateHandler;
-import has.WorkingSchedule.WorkingSchedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,9 +59,7 @@ public class ReservationService {
     }
 
     public List<Room> searchReservationsWeb(String startDate, String endDate, int numberAdults) {
-
         List<Room> freeRooms;
-
         freeRooms = repo.findInSite(startDate, endDate, numberAdults);
 
         return freeRooms;
@@ -173,11 +170,11 @@ public class ReservationService {
             reservationGuest.setReservation(null);
         }
 
-        List<WorkingSchedule> schedules = reservation.getReceptionist().getWorkingSchedules();
-        for (WorkingSchedule schedule : schedules) {
-            schedule.setEmployee(null);
-        }
-        reservation.getReceptionist().setWorkingSchedules(schedules);
+//        List<WorkingSchedule> schedules = reservation.getReceptionist().getWorkingSchedules();
+//        for (WorkingSchedule schedule : schedules) {
+//            schedule.setEmployee(null);
+//        }
+//        reservation.getReceptionist().setWorkingSchedules(schedules);
 
         return reservation;
     }

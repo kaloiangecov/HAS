@@ -18,13 +18,21 @@ public class Task implements Serializable{
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "TASK_ID")
     private Long id;
+
     private String title;
+
     private String description;
+
     private Integer status;
+
     private String timePlaced;
+
     private String startTime;
+
     private String finishTime;
+
     private Integer priority;
+
     private String assigner;
 
     @NotNull
