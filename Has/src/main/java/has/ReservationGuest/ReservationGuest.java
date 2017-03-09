@@ -1,5 +1,6 @@
 package has.ReservationGuest;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import has.Guest.Guest;
 import has.Reservation.Reservation;
 import has.Room.Room;
@@ -28,6 +29,7 @@ public class ReservationGuest implements Serializable {
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "RESERVATION_ID")
+    @JsonBackReference
     private Reservation reservation;
 
     @NotNull
@@ -41,6 +43,4 @@ public class ReservationGuest implements Serializable {
 
     @NotNull
     private boolean owner;
-
-
 }

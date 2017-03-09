@@ -17,6 +17,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     List<Reservation> findByGroupAndStatusNotAndStartDateGreaterThanAndEndDateLessThan(Boolean group, int status, String startDate, String endDate);
 
+    List<Reservation> findByReservationGuestsGuestId(Long id);
+
     @Query("SELECT r FROM has.Reservation.Reservation r WHERE r.status <> :status AND ((r.startDate >= :startDate AND r.startDate < :endDate) OR (r.startDate < :startDate AND r.endDate > :startDate AND r.endDate < :endDate))")
     List<Reservation> findAllReservationsForCalendar(@Param("status") int status, @Param("startDate") String startDate, @Param("endDate") String endDate);
 

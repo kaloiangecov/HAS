@@ -1,5 +1,6 @@
 package has.Reservation;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import has.Employee.Employee;
 import has.ReservationGuest.ReservationGuest;
 import has.User.User;
@@ -76,6 +77,7 @@ public class Reservation implements Serializable {
     private int status;
 
     @OneToMany(mappedBy = "reservation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<ReservationGuest> reservationGuests;
 
     public Reservation() {

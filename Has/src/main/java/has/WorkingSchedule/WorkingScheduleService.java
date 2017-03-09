@@ -1,6 +1,5 @@
 package has.WorkingSchedule;
 
-import has.Employee.Employee;
 import has.Utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,29 +19,21 @@ public class WorkingScheduleService {
     private WorkingScheduleRepository repo;
 
     public WorkingSchedule save(WorkingSchedule schedule) throws Exception {
-
         if (!Validator.isValidStartEndDate(schedule.getStartDate(), schedule.getEndDate())) {
             throw new Exception("Invalid date");
         }
+
         validateOneShiftPerDay(schedule);
         return repo.save(schedule);
     }
 
     public List<WorkingSchedule> getAllSchedules() {
-        List<WorkingSchedule> schedules = repo.findAll();
-
-        for (WorkingSchedule schedule : schedules)
-            schedule = removeRecursions(schedule);
-
-        return schedules;
+        return repo.findAll();
     }
 
     public Page<WorkingSchedule> searchSchedule(int start, int length, String sortColumn, String sortDirection, String startDate, String endDate, Long roleID) {
         PageRequest request = new PageRequest((start / length), length, Sort.Direction.fromString(sortDirection), sortColumn);
         Page<WorkingSchedule> schedulePage = repo.findByRangeAndRole(startDate, endDate, roleID, request);
-
-        for (WorkingSchedule schedule : schedulePage)
-            schedule = removeRecursions(schedule);
 
         return schedulePage;
     }
@@ -51,7 +42,7 @@ public class WorkingScheduleService {
         WorkingSchedule workingSchedule = repo.findOne(id);
         validateIdNotNull(workingSchedule);
 
-        return removeRecursions(workingSchedule);
+        return workingSchedule;
     }
 
     public WorkingSchedule remove(Long id) throws Exception {
@@ -59,8 +50,7 @@ public class WorkingScheduleService {
         validateIdNotNull(workingSchedule);
 
         repo.delete(workingSchedule);
-
-        return removeRecursions(workingSchedule);
+        return workingSchedule;
     }
 
     public WorkingSchedule update(Long id, WorkingSchedule schedule) throws Exception {
@@ -73,15 +63,7 @@ public class WorkingScheduleService {
         dbSchedule.setShift(schedule.getShift());
         dbSchedule.setEmployee(schedule.getEmployee());
 
-        return removeRecursions(repo.save(dbSchedule));
-    }
-
-    private WorkingSchedule removeRecursions(WorkingSchedule schedule) {
-        Employee employee = schedule.getEmployee();
-        employee.setWorkingSchedules(null);
-        schedule.setEmployee(employee);
-
-        return schedule;
+        return repo.save(dbSchedule);
     }
 
     private void validateIdNotNull(WorkingSchedule workingSchedule) throws Exception {

@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by kaloi on 12/28/2016.
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @Entity(name = "PERMISSION")
 @Getter
 @Setter
-public class RolePermission implements GrantedAuthority {
+public class RolePermission implements GrantedAuthority, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,13 +22,6 @@ public class RolePermission implements GrantedAuthority {
     private Long id;
 
     private String permission;
-
-    public RolePermission(String permission) {
-        this.permission = permission;
-    }
-
-    public RolePermission() {
-    }
 
     @Override
     @JsonIgnore
