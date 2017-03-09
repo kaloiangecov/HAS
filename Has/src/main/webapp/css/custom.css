@@ -18,7 +18,8 @@ button > i.fa-refresh:hover {
 }
 
 a > i.fa-trash-o,
-button > i.fa-trash-o {
+button > i.fa-trash-o,
+button > i.fa-ban {
     color: #e55;
 }
 

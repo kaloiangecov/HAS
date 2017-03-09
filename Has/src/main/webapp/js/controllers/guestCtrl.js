@@ -137,7 +137,8 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
                         $scope.usersList = data;
                         $scope.usersList[data.length] = {
                             id: 0,
-                            username: "-- None --"
+                            username: "-- None --",
+                            email: "none@none.com"
                         };
                     });
                 });
@@ -153,7 +154,8 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
                 $scope.usersList = data;
                 $scope.usersList[data.length] = {
                     id: 0,
-                    username: "-- None --"
+                    username: "-- None --",
+                    email: "-- None --"
                 };
             });
         }

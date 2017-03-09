@@ -1,4 +1,4 @@
-var app = angular.module("mse", ['ui.router', 'daypilot', 'datatables', 'ngResource']);
+var app = angular.module("mse", ['ui.router', 'ui.select', 'daypilot', 'datatables', 'ngResource', 'ngSanitize']);
 
 app.run(function () {
 
