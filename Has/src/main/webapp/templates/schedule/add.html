@@ -8,15 +8,15 @@
             <form method="POST" name="scheduleForm" novalidate>
 
                 <div class="form-group">
-                    <label class="control-label col-md-4 col-sm-4 col-xs-12" for="startDate"> Date *</label>
+                    <label class="control-label col-md-4 col-sm-4 col-xs-12" for="date"> Date *</label>
                     <div class="col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" id="startDate" name="startDate"
-                               ng-model="schedule.startDate" minlength="7" maxlength="10" required="required"/>
-                        <div ng-show="scheduleForm.$submitted || scheduleForm.startDate.$touched"
+                        <input type="text" class="form-control" id="date" name="date"
+                               ng-model="schedule.date" minlength="7" maxlength="10" required="required"/>
+                        <div ng-show="scheduleForm.$submitted || scheduleForm.date.$touched"
                              class="validation-message">
-                            <span ng-show="scheduleForm.startDate.$error.required">This field is required</span>
-                            <span ng-show="scheduleForm.startDate.$error.minlength">Input too short</span>
-                            <span ng-show="scheduleForm.startDate.$error.maxlength">Input too long</span>
+                            <span ng-show="scheduleForm.date.$error.required">This field is required</span>
+                            <span ng-show="scheduleForm.date.$error.minlength">Input too short</span>
+                            <span ng-show="scheduleForm.date.$error.maxlength">Input too long</span>
                         </div>
                     </div>
                 </div>

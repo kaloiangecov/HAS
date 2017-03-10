@@ -46,13 +46,9 @@ app.controller("workingScheduleCtrl", function ($scope, $http, $stateParams, DTO
         $scope.dtColumns = [
             DTColumnBuilder.newColumn('employee.personalData.fullName', 'Employee'),
             DTColumnBuilder.newColumn('employee.user.userRole.roleName', 'Post'),
-            DTColumnBuilder.newColumn('startDate', 'Start Date')
+            DTColumnBuilder.newColumn('date', 'Date')
                 .renderWith(function (date) {
-                    return new Date(date).toLocaleString();
-                }),
-            DTColumnBuilder.newColumn('endDate', 'End Date')
-                .renderWith(function (date) {
-                    return new Date(date).toLocaleString();
+                    return new Date(date).toLocaleDateString();
                 }),
             DTColumnBuilder.newColumn('shift', 'Shift')
                 .renderWith(function (data) {
@@ -140,8 +136,7 @@ app.controller("workingScheduleCtrl", function ($scope, $http, $stateParams, DTO
             else {
                 $scope.isEdit = false;
                 $scope.schedule = {
-                    startDate: new Date().toISOString().substr(0, 10),
-                    endDate: new Date().toISOString().substr(0, 10),
+                    date: new Date().toISOString().substr(0, 10),
                     employee: ctrl.employees[0],
                     shift: 0
                 };
@@ -184,15 +179,17 @@ app.controller("workingScheduleCtrl", function ($scope, $http, $stateParams, DTO
 
             $scope.reloadTableData();
         } else {
-            $scope.$watch("schedule.startDate", function (newVal, oldVal) {
+            /*
+             $scope.$watch("schedule.date", function (newVal, oldVal) {
                 if ($scope.schedule.shift == 3) {
-                    $scope.schedule.endDate = moment(newVal).add(1, 'days').format('YYYY-MM-DD');
+             $scope.schedule.date = moment(newVal).add(1, 'days').format('YYYY-MM-DD');
                 } else {
                     $scope.schedule.endDate = newVal;
                 }
             })
+             */
 
-            $('#startDate,#endDate').daterangepicker({
+            $('#date').daterangepicker({
                 singleDatePicker: true,
                 showDropdowns: true,
                 locale: {
