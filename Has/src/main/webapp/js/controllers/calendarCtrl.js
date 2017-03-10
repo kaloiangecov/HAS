@@ -123,7 +123,6 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         }
         else { // use existing guest
             $scope.reservationGuest.guest = $scope.guests.selectedGuest;
-            $scope.reservationGuest.guest.numberReservations += 1;
 
             $scope.saveData("reservation-guest", $scope.reservationGuest, afterEventCreated, $scope.resetReservation);
         }
@@ -536,7 +535,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             //clearInterval($scope.timer);
             //loadEvents();
 
-            if (!$scope.events.new.start) {
+            if (!$scope.events.new.start && (args.start.value.substr(0, 10) >= moment().format('YYYY-MM-DD'))) {
                 $scope.$apply(function () {
                     $scope.events.new = {
                         start: args.start,

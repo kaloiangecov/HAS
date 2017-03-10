@@ -84,12 +84,15 @@ app.controller("mainCtrl", function ($scope, $http) {
             function (response) { //success
                 return response.data;
             }, function (response) { //error
-                $scope.displayMessage(response.data);
+                return response;
             }).then(
             function (data) {
                 //alert("Logged out!");
                 sessionStorage.removeItem("authentication");
                 window.location.hash = "#!/login";
+            },
+            function (response) {
+                $scope.displayMessage(response.data);
             });
     };
 

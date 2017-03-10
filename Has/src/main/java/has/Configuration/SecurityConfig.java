@@ -37,12 +37,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .userDetailsService(userDetailsService())
                 .formLogin()
-                .loginPage("/#/login").permitAll()
+                .loginPage("/!#/login").permitAll()
                 .and().httpBasic()
                 .and().csrf().csrfTokenRepository(csrfTokenRepository())
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .and().authorizeRequests().antMatchers("/**", "/#/*").permitAll().anyRequest().authenticated()
                 .and().addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);
+
+        http.logout().logoutUrl("/logout").logoutSuccessHandler(new LogoutSuccessHandler("/"));
 
         http.csrf()
                 .disable();
