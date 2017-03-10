@@ -184,7 +184,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             $scope.page.message = {
                 type: 'danger',
                 title: "Check in date error",
-                text: ("Check in date " + newRange.start + " is not allowed for this reservation!")
+                text: ("Check in date " + new Date(newRange.start).toLocaleDateString() + " is not allowed for this reservation!")
             };
 
             return false;

@@ -60,6 +60,8 @@ app.controller("mainCtrl", function ($scope, $http) {
             $scope.loginData = data.principal;
             //delete $scope.loginData.password;
 
+            sessionStorage.setItem("authentication", $scope.authentication);
+
             $scope.isLoginError = false;
             window.location.hash = "#!/home";
         }, function (response) { //error
@@ -86,6 +88,7 @@ app.controller("mainCtrl", function ($scope, $http) {
             }).then(
             function (data) {
                 //alert("Logged out!");
+                sessionStorage.removeItem("authentication");
                 window.location.hash = "#!/login";
             });
     };
@@ -107,10 +110,10 @@ app.controller("mainCtrl", function ($scope, $http) {
             }).then(updateCallback);
     };
 
-    $scope.getFreeUsers = function (id, updateCallback) {
+    $scope.getFreeUsers = function (id, type, updateCallback) {
         $http({
             method: "GET",
-            url: ("users/free/" + id),
+            url: ("users/free-" + type + "/" + id),
             responseType: "json",
             headers: {
                 "Authorization": $scope.authentication
@@ -217,6 +220,16 @@ app.controller("mainCtrl", function ($scope, $http) {
     };
 
     angular.element(document).ready(function () {
+        if (!$scope.authentication) {
+            $scope.authentication = sessionStorage.authentication;
 
+            if ($scope.authentication) {
+                $scope.getPrincipal(function (data) {
+                    $scope.loginData = data.principal;
+                }, function (response) { //error
+                    $scope.displayMessage(response.data);
+                });
+            }
+        }
     });
 });

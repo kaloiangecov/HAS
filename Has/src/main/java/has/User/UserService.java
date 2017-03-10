@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -61,8 +62,17 @@ public class UserService {
             return repo.findByUsernameContainingIgnoreCaseAndEmailContainingIgnoreCase(username, email, request);
     }
 
-    public List<User> findFreeUsers(Long id) {
-        List<User> users = repo.findFreeUsers();
+    public List<User> findFreeUsers(Long id, int type) {
+        List<User> users = new ArrayList<User>();
+
+        switch (type) {
+            case 1: //employees
+                users = repo.findFreeEmployeeUsers();
+                break;
+            case 2: //guests
+                users = repo.findFreeGuestUsers();
+                break;
+        }
 
         if (id > 0) {
             User dbUser = repo.findOne(id);

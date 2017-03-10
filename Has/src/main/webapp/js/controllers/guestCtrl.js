@@ -133,7 +133,7 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
                     if ($scope.guest.user)
                         userID = $scope.guest.user.id;
 
-                    $scope.getFreeUsers(userID, function (data) {
+                    $scope.getFreeUsers(userID, "guests", function (data) {
                         var emptyArray = [
                             {
                                 id: 0,
@@ -156,7 +156,7 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
                 status: 0,
                 personalData: {}
             };
-            $scope.getFreeUsers(-1, function (data) {
+            $scope.getFreeUsers(-1, "guests", function (data) {
                 var emptyArray = [
                     {
                         id: 0,

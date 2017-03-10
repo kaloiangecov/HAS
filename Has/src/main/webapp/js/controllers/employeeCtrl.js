@@ -162,7 +162,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
                     if ($scope.employee.user)
                         userID = $scope.employee.user.id;
 
-                    $scope.getFreeUsers(userID, function (data) {
+                    $scope.getFreeUsers(userID, "employees", function (data) {
                         $scope.usersList = data;
                     });
                 });
@@ -172,7 +172,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
             $scope.employee = {
                 personalData: {}
             };
-            $scope.getFreeUsers(-1, function (data) {
+            $scope.getFreeUsers(-1, "employees", function (data) {
                 $scope.usersList = data;
 
                 if (data.length > 0)

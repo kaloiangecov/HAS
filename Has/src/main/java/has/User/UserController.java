@@ -48,12 +48,20 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @RequestMapping(value = "/users/free/{id}", method = RequestMethod.GET,
+    @RequestMapping(value = "/users/free-employees/{id}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('PERM_VIEW_USER')")
-    public List<User> getFreeUsers(@PathVariable Long id) throws Exception {
-        return userService.findFreeUsers(id);
+    public List<User> getFreeEmployeeUsers(@PathVariable Long id) throws Exception {
+        return userService.findFreeUsers(id, 1);
+    }
+
+    @RequestMapping(value = "/users/free-guests/{id}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_VIEW_USER')")
+    public List<User> getFreeGuestUsers(@PathVariable Long id) throws Exception {
+        return userService.findFreeUsers(id, 2);
     }
 
     @RequestMapping(value = "/users/search", method = RequestMethod.GET,

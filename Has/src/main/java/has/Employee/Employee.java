@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.context.annotation.Scope;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
@@ -25,6 +26,10 @@ public class Employee implements Serializable {
     private Long id;
 
     private String dateHired;
+
+    @NotNull
+    @Min(0)
+    private Double salary;
 
     @NotNull
     @OneToOne
