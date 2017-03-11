@@ -88,66 +88,31 @@ app.controller("guestCtrl", function ($scope, $state, $location, $stateParams, $
         };
     }
     else {
-        function saveGuest(callback) {
-            var url = $scope.isEdit ? ("guest/" + $stateParams.id) : "guest";
-            var method = $scope.isEdit ? "PUT" : "POST";
-
-            $http({
-                method: method,
-                url: url,
-                data: $scope.master,
-                responseType: "json",
-                headers: {
-                    "Authorization": $scope.authentication
-                }
-            }).then(
-                callback,
-                function (response) { //error
-                    $scope.displayMessage(response.data);
-                });
-        }
-
         if ($stateParams && $stateParams.id) {
             $scope.isEdit = true;
 
-            var url = "guest/" + $stateParams.id;
+            $scope.getSingleData("guest", $stateParams.id, function (data) {
+                $scope.guest = data;
 
-            $http({
-                method: "GET",
-                url: url,
-                responseType: "json",
-                headers: {
-                    "Authorization": $scope.authentication
-                }
-            }).then(
-                function (response) { //success
-                    return response.data;
-                },
-                function (response) { //error
-                    $scope.displayMessage(response.data);
-                }).then(
-                function (data) {
-                    $scope.guest = data;
+                var userID = -1;
+                if ($scope.guest.user)
+                    userID = $scope.guest.user.id;
 
-                    var userID = -1;
-                    if ($scope.guest.user)
-                        userID = $scope.guest.user.id;
+                $scope.getFreeUsers(userID, "guests", function (data) {
+                    var emptyArray = [
+                        {
+                            id: 0,
+                            username: "-- None --",
+                            email: "-- None --"
+                        }
+                    ];
 
-                    $scope.getFreeUsers(userID, "guests", function (data) {
-                        var emptyArray = [
-                            {
-                                id: 0,
-                                username: "-- None --",
-                                email: "-- None --"
-                            }
-                        ];
+                    $scope.usersList = emptyArray.concat(data);
 
-                        $scope.usersList = emptyArray.concat(data);
-
-                        if (!$scope.guest.user)
-                            $scope.guest.user = $scope.usersList[0];
-                    });
+                    if (!$scope.guest.user)
+                        $scope.guest.user = $scope.usersList[0];
                 });
+            });
         }
         else {
             $scope.isEdit = false;
@@ -179,21 +144,20 @@ app.controller("guestCtrl", function ($scope, $state, $location, $stateParams, $
                 if ($scope.master.user.id === 0)
                     delete $scope.master.user;
 
-                saveGuest(function () {
+                $scope.saveData("guest", $scope.master, function () {
                     $scope.page.message = {
                         type: 'success',
                         title: 'Success!'
                     };
 
-                    if ($scope.isEdit) {
+                    if ($scope.isEdit)
                         $scope.page.message.text = ('Edited: ' + $scope.master.personalData.fullName);
-                    } else {
+                    else
                         $scope.page.message.text = ('Created: ' + $scope.master.personalData.fullName);
-                    }
 
                     $('#messageModal').modal('show');
                     $location.path("/guests/list");
-                });
+                }, undefined, $scope.isEdit);
             }
         };
     }

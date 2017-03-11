@@ -114,7 +114,7 @@ app.controller("userCtrl", function ($scope, $http, $location, $state, $statePar
 
             if ($stateParams && $stateParams.id) {
                 $scope.isEdit = true;
-                $scope.getUser($stateParams.id, function (data) {
+                $scope.getSingleData("user", $stateParams.id, function (data) {
                     $scope.user = data;
                 });
             }
@@ -132,36 +132,21 @@ app.controller("userCtrl", function ($scope, $http, $location, $state, $statePar
                 $scope.master.regDate = (new Date()).toISOString();
                 //$scope.master.lastLogin = (new Date()).toISOString();
 
-                var url = $scope.isEdit ? ("user/" + $stateParams.id) : "user";
-                var method = $scope.isEdit ? "PUT" : "POST";
+                $scope.saveData("user", $scope.master, function () {
+                    $scope.page.message = {
+                        type: 'success',
+                        title: 'Success!'
+                    };
 
-                $http({
-                    method: method,
-                    url: url,
-                    data: $scope.master,
-                    responseType: "json",
-                    headers: {
-                        "Authorization": $scope.authentication
+                    if ($scope.isEdit) {
+                        $scope.page.message.text = ('Edited: ' + $scope.master.username);
+                    } else {
+                        $scope.page.message.text = ('Created: ' + $scope.master.username);
                     }
-                }).then(
-                    function (response) { //success
-                        $scope.page.message = {
-                            type: 'success',
-                            title: 'Success!'
-                        };
 
-                        if ($scope.isEdit) {
-                            $scope.page.message.text = ('Edited: ' + $scope.master.username);
-                        } else {
-                            $scope.page.message.text = ('Created: ' + $scope.master.username);
-                        }
-
-                        $('#messageModal').modal('show');
-                        $location.path("/users/list");
-                    },
-                    function (response) { //error
-                        $scope.displayMessage(response.data);
-                    });
+                    $('#messageModal').modal('show');
+                    $location.path("/users/list");
+                }, undefined, $scope.isEdit);
             }
         };
     }

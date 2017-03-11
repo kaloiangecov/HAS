@@ -117,55 +117,20 @@ app.controller("employeeCtrl", function ($scope, $location, $state, $stateParams
         };
     }
     else {
-        function saveEmployee(callback) {
-            var url = $scope.isEdit ? ("employee/" + $stateParams.id) : "employee";
-            var method = $scope.isEdit ? "PUT" : "POST";
-
-            $http({
-                method: method,
-                url: url,
-                data: $scope.master,
-                responseType: "json",
-                headers: {
-                    "Authorization": $scope.authentication
-                }
-            }).then(
-                callback,
-                function (response) { //error
-                    $scope.displayMessage(response.data);
-                });
-        }
-
         if ($stateParams && $stateParams.id) {
             $scope.isEdit = true;
 
-            var url = "employee/" + $stateParams.id;
+            $scope.getSingleData("employee", $stateParams.id, function (data) {
+                $scope.employee = data;
 
-            $http({
-                method: "GET",
-                url: url,
-                responseType: "json",
-                headers: {
-                    "Authorization": $scope.authentication
-                }
-            }).then(
-                function (response) { //success
-                    return response.data;
-                },
-                function (response) { //error
-                    $scope.displayMessage(response.data);
-                }).then(
-                function (data) {
-                    $scope.employee = data;
+                var userID = -1;
+                if ($scope.employee.user)
+                    userID = $scope.employee.user.id;
 
-                    var userID = -1;
-                    if ($scope.employee.user)
-                        userID = $scope.employee.user.id;
-
-                    $scope.getFreeUsers(userID, "employees", function (data) {
-                        $scope.usersList = data;
-                    });
+                $scope.getFreeUsers(userID, "employees", function (data) {
+                    $scope.usersList = data;
                 });
+            });
         }
         else {
             $scope.isEdit = false;
@@ -184,21 +149,20 @@ app.controller("employeeCtrl", function ($scope, $location, $state, $stateParams
             if ($scope.employeeForm.$valid) {
                 $scope.master = angular.copy(employee);
 
-                saveEmployee(function () {
+                $scope.saveData("employee", $scope.master, function () {
                     $scope.page.message = {
                         type: 'success',
                         title: 'Success!'
                     };
 
-                    if ($scope.isEdit) {
+                    if ($scope.isEdit)
                         $scope.page.message.text = ('Edited: ' + $scope.master.personalData.fullName);
-                    } else {
+                    else
                         $scope.page.message.text = ('Created: ' + $scope.master.personalData.fullName);
-                    }
 
                     $('#messageModal').modal('show');
                     $location.path('/employees/list');
-                });
+                }, undefined, $scope.isEdit);
             }
         };
     }
