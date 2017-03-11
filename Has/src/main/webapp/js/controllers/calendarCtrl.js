@@ -33,24 +33,6 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
     $scope.reservationInfo = {};
     $scope.timer;
 
-    $scope.getRoom = function (roomId, callback) {
-        $http({
-            method: "GET",
-            url: ("room/" + roomId),
-            responseType: "json",
-            headers: {
-                "Authorization": $scope.authentication
-            }
-        }).then(
-            function (response) { //success
-                return response.data;
-            },
-            function (response) { //error
-                $scope.displayMessage(response.data);
-                loadEvents();
-            }).then(callback);
-    };
-
     $scope.getRooms = function (callback) {
         $http({
             method: "GET",
@@ -434,7 +416,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             tmpReservation.startDate = newRange.start;
             tmpReservation.endDate = newRange.end;
 
-            $scope.getRoom(args.newResource, function (room) {
+            $scope.getSingleData("room", args.newResource, function (room) {
                 if (!tmpReservation.group) {
                     angular.forEach(tmpReservation.reservationGuests, function (value, key) {
                         value.room = room;
@@ -456,7 +438,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                     $scope.resetReservation();
                 }, $scope.resetReservation, true);
 
-            });
+            }, loadEvents);
         },
         onEventResized: function (args) {
             $scope.scheduler.clearSelection();
