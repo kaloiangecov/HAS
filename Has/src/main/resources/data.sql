@@ -306,7 +306,7 @@ INSERT INTO MEAL_CATEGORY (MEAL_CATEGORY_ID, TITLE, IMG, DESCRIPTION) VALUES
 (4, 'Pizza', 'img/pizza.jpg','Find the best Italian pizzas here.'),
 (5, 'Pasta', 'img/pasta.jpg','Find the best Italian pastas here.'),
 (6, 'Drinks', 'img/whiskey.jpg','Find the best beverages here.');
---
+
 INSERT INTO MEAL(MEAL_ID, MEAL_NAME, IMG, DESCRIPTION, PRICE, MEAL_CATEGORY_ID, DATE_POSTED) VALUES
  (1, 'Chocolate cake', 'img/meal.png', 'This is chocolate cake', 5.50, 1 , '2017-02-10'),
  (2, 'Vanilla cake', 'img/meal.png', 'This is chocolate cake', 4.30, 1 , '2017-02-10'),
