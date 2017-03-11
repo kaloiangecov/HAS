@@ -1,5 +1,7 @@
 package has.Task;
 
+import has.Employee.Employee;
+import has.Employee.EmployeeService;
 import has.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,9 @@ public class TaskController {
 
     @Autowired
     private TaskService service;
+
+    @Autowired
+    private EmployeeService employeeService;
 
     @RequestMapping(value = "/tasks", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE,
@@ -61,4 +66,18 @@ public class TaskController {
     public Task updateRequest(@PathVariable Long id, @RequestBody @Valid Task task) throws Exception {
         return service.update(id, task);
     }
+
+    @RequestMapping(value = "/tasks/own", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Task> getOwnTasks(@AuthenticationPrincipal User user) throws Exception {
+        Employee employee = employeeService.findByUserId(user.getId());
+        return service.getEmployeesTasks(employee);
+    }
+
+    @RequestMapping(value = "/tasks/{taskId}/{status}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('PERM_EDIT_TASK')")
+    public Task changeTaskStatus(@PathVariable Long taskId, @PathVariable Integer status) throws Exception {
+        return service.changeStatus(taskId,status);
+    }
+
 }
