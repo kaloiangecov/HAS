@@ -333,7 +333,7 @@ INSERT INTO REQUEST (REQUEST_ID, RESERVATION_GUEST_ID, EMPLOYEE_ID, STATUS, TIME
 (2, 2, 8, 0, '2017-03-06T20:00:11','2017-03-06T20:08:44', 1);
 
 INSERT INTO TASK(TASK_ID, TITLE, EMPLOYEE_ID,STATUS) VALUES
- (1,'Suck a dick', 1,1),
+ (1,'Suck a dick', 1,3),
  (2,'Dismantle the patriarchy',1,1),
  (3,'Kill yourself',2,1),
  (4,'Suck two dicks',1,1);
