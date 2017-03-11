@@ -125,23 +125,6 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
             });
     };
 
-    $scope.getUser = function (userID, updateCallback) {
-        var response = $http({
-            method: "GET",
-            url: ("user/" + userID),
-            responseType: "json",
-            headers: {
-                "Authorization": $scope.authentication
-            }
-        }).then(
-            function (response) { //success
-                return response.data;
-            },
-            function (response) { //error
-                $scope.displayMessage(response.data);
-            }).then(updateCallback);
-    };
-
     $scope.getFreeUsers = function (id, type, updateCallback) {
         $http({
             method: "GET",
@@ -163,23 +146,6 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
         $http({
             method: "GET",
             url: "roles",
-            responseType: "json",
-            headers: {
-                "Authorization": $scope.authentication
-            }
-        }).then(
-            function (response) { //success
-                return response.data;
-            },
-            function (response) { //error
-                $scope.displayMessage(response.data);
-            }).then(updateCallback);
-    };
-
-    $scope.getRole = function (roleID, updateCallback) {
-        $http({
-            method: "GET",
-            url: ("role/" + roleID),
             responseType: "json",
             headers: {
                 "Authorization": $scope.authentication
@@ -219,6 +185,27 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
             method: method,
             url: url,
             data: data,
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
+        }).then(
+            function (response) { //success
+                return response.data;
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+                if (errorCallback)
+                    errorCallback;
+            })
+            .then(successCallback);
+    };
+
+    $scope.getSingleData = function (dataType, id, successCallback, errorCallback) {
+        var url = dataType + "/" + id;
+        $http({
+            method: "GET",
+            url: url,
             responseType: "json",
             headers: {
                 "Authorization": $scope.authentication

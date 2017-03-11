@@ -91,47 +91,14 @@ app.controller("workingScheduleCtrl", function ($scope, $http, $location, $state
                 }).then(updateCallback);
         };
 
-        function saveSchedule(callback) {
-            var url = $scope.isEdit ? ("schedule/" + $stateParams.id) : "schedule";
-            var method = $scope.isEdit ? "PUT" : "POST";
-
-            $http({
-                method: method,
-                url: url,
-                data: $scope.master,
-                responseType: "json",
-                headers: {
-                    "Authorization": $scope.authentication
-                }
-            }).then(
-                callback,
-                function (response) { //error
-                    $scope.displayMessage(response.data);
-                });
-        }
-
         $scope.getAllEmployees(function (data) {
             ctrl.employees = data;
 
             if ($stateParams && $stateParams.id) {
                 $scope.isEdit = true;
-
-                var url = "schedule/" + $stateParams.id;
-
-                $http({
-                    method: "GET",
-                    url: url,
-                    responseType: "json",
-                    headers: {
-                        "Authorization": $scope.authentication
-                    }
-                }).then(
-                    function (response) { //success
-                        $scope.schedule = response.data;
-                    },
-                    function (response) { //error
-                        $scope.displayMessage(response.data);
-                    });
+                $scope.getSingleData("schedule", $stateParams.id, function (data) {
+                    $scope.schedule = data;
+                });
             }
             else {
                 $scope.isEdit = false;
@@ -147,21 +114,20 @@ app.controller("workingScheduleCtrl", function ($scope, $http, $location, $state
             if ($scope.scheduleForm.$valid) {
                 $scope.master = angular.copy(schedule);
 
-                saveSchedule(function () {
+                $scope.saveData("schedule", $scope.master, function () {
                     $scope.page.message = {
                         type: 'success',
                         title: 'Success!'
                     };
 
-                    if ($scope.isEdit) {
+                    if ($scope.isEdit)
                         $scope.page.message.text = ('Edited.');
-                    } else {
+                    else
                         $scope.page.message.text = ('Created.');
-                    }
 
                     $('#messageModal').modal('show');
                     $location.path("/schedule/list");
-                });
+                }, undefined, $scope.isEdit);
             }
         };
 

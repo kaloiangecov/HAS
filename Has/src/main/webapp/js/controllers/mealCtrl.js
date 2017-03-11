@@ -116,62 +116,17 @@ app.controller("mealCtrl", function ($scope, $http, $location, $state, $statePar
         };
     }
     else {
-        function saveMeal() {
-            var url = $scope.isEdit ? ("meal/" + $stateParams.id) : "meal";
-            var method = $scope.isEdit ? "PUT" : "POST";
-
-            $http({
-                method: method,
-                url: url,
-                data: $scope.master,
-                responseType: "json",
-                headers: {
-                    "Authorization": $scope.authentication
-                }
-            }).then(
-                function (response) { //success
-                    $scope.page.message = {
-                        type: 'success',
-                        title: 'Success!'
-                    };
-
-                    if ($scope.isEdit) {
-                        $scope.page.message.text = ('Edited: ' + $scope.master.number);
-                    } else {
-                        $scope.page.message.text = ('Created: ' + $scope.master.number);
-                    }
-
-                    $('#messageModal').modal('show');
-                    $location.path("/meals/list");
-                },
-                function (response) { //error
-                    $scope.displayMessage(response.data);
-                });
-        }
-
         $scope.getMealCategories(function (categoriesList) {
             $scope.mealCategories = categoriesList;
 
             if ($stateParams && $stateParams.id) {
                 $scope.isEdit = true;
-                var url = "meal/" + $stateParams.id;
 
-                $http({
-                    method: "GET",
-                    url: url,
-                    responseType: "json",
-                    headers: {
-                        "Authorization": $scope.authentication
-                    }
-                }).then(
-                    function (response) { //success
-                        $scope.meal = response.data;
-                        if (!$scope.meal.img)
-                            $scope.meal.img = 'img/meal.png';
-                    },
-                    function (response) { //error
-                        $scope.displayMessage(response.data);
-                    });
+                $scope.getSingleData("meal", $stateParams.id, function (data) {
+                    $scope.meal = data;
+                    if (!$scope.meal.img)
+                        $scope.meal.img = 'img/meal.png';
+                });
             }
             else {
                 $scope.isEdit = false;
@@ -189,7 +144,21 @@ app.controller("mealCtrl", function ($scope, $http, $location, $state, $statePar
         $scope.submit = function (meal) {
             if ($scope.mealForm.$valid) {
                 $scope.master = angular.copy(meal);
-                saveMeal();
+
+                $scope.saveData("meal", $scope.master, function () {
+                    $scope.page.message = {
+                        type: 'success',
+                        title: 'Success!'
+                    };
+
+                    if ($scope.isEdit)
+                        $scope.page.message.text = ('Edited: ' + $scope.master.number);
+                    else
+                        $scope.page.message.text = ('Created: ' + $scope.master.number);
+
+                    $('#messageModal').modal('show');
+                    $location.path("/meals/list");
+                }, undefined, $scope.isEdit);
             }
         };
 

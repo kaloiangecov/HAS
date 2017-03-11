@@ -90,57 +90,11 @@ app.controller("roomCtrl", function ($scope, $http, $location, $state, $statePar
         };
     }
     else {
-        function saveRoom() {
-            var url = $scope.isEdit ? ("room/" + $stateParams.id) : "room";
-            var method = $scope.isEdit ? "PUT" : "POST";
-
-            $http({
-                method: method,
-                url: url,
-                data: $scope.master,
-                responseType: "json",
-                headers: {
-                    "Authorization": $scope.authentication
-                }
-            }).then(
-                function (response) { //success
-                    $scope.page.message = {
-                        type: 'success',
-                        title: 'Success!'
-                    };
-
-                    if ($scope.isEdit) {
-                        $scope.page.message.text = ('Edited: ' + $scope.master.number);
-                    } else {
-                        $scope.page.message.text = ('Created: ' + $scope.master.number);
-                    }
-
-                    $('#messageModal').modal('show');
-                    $location.path("/rooms/list");
-                },
-                function (response) { //error
-                    $scope.displayMessage(response.data);
-                });
-        }
-
         if ($stateParams && $stateParams.id) {
             $scope.isEdit = true;
-            var url = "room/" + $stateParams.id;
-
-            $http({
-                method: "GET",
-                url: url,
-                responseType: "json",
-                headers: {
-                    "Authorization": $scope.authentication
-                }
-            }).then(
-                function (response) { //success
-                    $scope.room = response.data;
-                },
-                function (response) { //error
-                    $scope.displayMessage(response.data);
-                });
+            $scope.getSingleData("room", $stateParams.id, function (data) {
+                $scope.room = data;
+            });
         }
         else {
             $scope.isEdit = false;
@@ -159,7 +113,21 @@ app.controller("roomCtrl", function ($scope, $http, $location, $state, $statePar
         $scope.submit = function (room) {
             if ($scope.roomForm.$valid) {
                 $scope.master = angular.copy(room);
-                saveRoom();
+
+                $scope.saveData("room", $scope.master, function () {
+                    $scope.page.message = {
+                        type: 'success',
+                        title: 'Success!'
+                    };
+
+                    if ($scope.isEdit)
+                        $scope.page.message.text = ('Edited: ' + $scope.master.number);
+                    else
+                        $scope.page.message.text = ('Created: ' + $scope.master.number);
+
+                    $('#messageModal').modal('show');
+                    $location.path("/rooms/list");
+                }, undefined, $scope.isEdit);
             }
         };
 
