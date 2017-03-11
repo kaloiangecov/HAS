@@ -14,6 +14,8 @@ import java.util.List;
 @Service
 public class TaskService  {
 
+    private static final int UNRESOLVED = 3;
+
     @Autowired
     private TaskRepository repo;
 
@@ -56,6 +58,9 @@ public class TaskService  {
 
     public List<Task> getEmployeesTasks(Employee employee) {
         return repo.findByAssigneeId(employee.getId());
+    }
+    public List<Task> getEmployeesUnresolvedTasks(Employee employee) {
+        return repo.findByAssigneeIdAndStatusNot(employee.getId(),UNRESOLVED);
     }
 
     public Task changeStatus(Long id, Integer status){

@@ -12,4 +12,6 @@ import java.util.List;
 public interface TaskRepository extends JpaRepository<Task ,Long>{
 
     public List<Task> findByAssigneeId(Long id);
+
+    public List<Task> findByAssigneeIdAndStatusNot(Long id, Integer status);
 }

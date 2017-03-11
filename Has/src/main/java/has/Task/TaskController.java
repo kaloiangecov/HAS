@@ -80,4 +80,9 @@ public class TaskController {
         return service.changeStatus(taskId,status);
     }
 
+    @RequestMapping(value = "/tasks/unresolved", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Task> getOwnUncompletedTasks(@AuthenticationPrincipal User user) throws Exception {
+        Employee employee = employeeService.findByUserId(user.getId());
+        return service.getEmployeesUnresolvedTasks(employee);
+    }
 }
