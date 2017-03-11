@@ -70,14 +70,19 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
 
     $scope.login = function () {
         $scope.authentication = "Basic " + btoa($scope.credentials.username + ":" + $scope.credentials.password);
+        $timeout(function () {
+            $scope.credentials = {};
+        }, 1000);
+
         $scope.getPrincipal(function (data) {
             $scope.loginData = data.principal;
             //delete $scope.loginData.password;
 
             sessionStorage.setItem("authentication", $scope.authentication);
+            sessionStorage.setItem("loginData", JSON.stringify($scope.loginData));
 
             $scope.isLoginError = false;
-            window.location.hash = "#!/home";
+            $location.path("/home");
         }, function (response) { //error
             if (response.status === 401) {
                 $scope.isLoginError = true;
@@ -111,6 +116,8 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
                 $scope.loginData = {};
 
                 sessionStorage.removeItem("authentication");
+                sessionStorage.removeItem("loginData");
+
                 window.location.hash = "#!/login";
             },
             function (response) {
@@ -247,14 +254,7 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
     angular.element(document).ready(function () {
         if (!$scope.authentication) {
             $scope.authentication = sessionStorage.authentication;
-
-            if ($scope.authentication) {
-                $scope.getPrincipal(function (data) {
-                    $scope.loginData = data.principal;
-                }, function (response) { //error
-                    $scope.displayMessage(response.data);
-                });
-            }
+            $scope.loginData = JSON.parse(sessionStorage.loginData);
         }
     });
 });
