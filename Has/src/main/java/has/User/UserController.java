@@ -12,7 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
@@ -48,12 +47,20 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @RequestMapping(value = "/users/free/{id}", method = RequestMethod.GET,
+    @RequestMapping(value = "/users/free-employees/{id}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('PERM_VIEW_USER')")
-    public List<User> getFreeUsers(@PathVariable Long id) throws Exception {
-        return userService.findFreeUsers(id);
+    public List<User> getFreeEmployeeUsers(@PathVariable Long id) throws Exception {
+        return userService.findFreeUsers(id, 1);
+    }
+
+    @RequestMapping(value = "/users/free-guests/{id}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_VIEW_USER')")
+    public List<User> getFreeGuestUsers(@PathVariable Long id) throws Exception {
+        return userService.findFreeUsers(id, 2);
     }
 
     @RequestMapping(value = "/users/search", method = RequestMethod.GET,
@@ -98,10 +105,7 @@ public class UserController {
 
     @RequestMapping(value = "/user/login", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public Principal login(Principal user, HttpServletRequest request, HttpSession session) throws Exception {
-        session.invalidate();
-        HttpSession newSession = request.getSession();
-
+    public Principal login(Principal user, HttpServletRequest request) throws Exception {
         User dbUser = userService.findByUsername(user.getName());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         userService.updateLastLogin(dbUser.getId(), sdf.format(new Date()));

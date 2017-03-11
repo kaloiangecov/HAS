@@ -22,15 +22,13 @@ public class WorkingSchedule implements Serializable {
     private Long id;
 
     @NotNull
-    private String endDate;
+    @Column(name = "SCHEDULE_DATE")
+    private String date;
 
     @NotNull
     @Min(0)
     @Max(3)
     private Integer shift;
-
-    @NotNull
-    private String startDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "EMPLOYEE_ID")

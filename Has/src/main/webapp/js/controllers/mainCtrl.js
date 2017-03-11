@@ -1,4 +1,4 @@
-app.controller("mainCtrl", function ($scope, $http) {
+app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
     $scope.page = {
         title: "Home"
     };
@@ -28,15 +28,29 @@ app.controller("mainCtrl", function ($scope, $http) {
             title: response.error,
             text: response.message
         };
-        $('#messageModal').modal('show');
 
         if (response.status === 401) {
             $scope.authentication = "";
             $scope.loginData = {};
-            window.location.hash = "#!/login";
+
+            if (!$scope.page.message.text)
+                $scope.page.message.text = "You are not logged in!"
+
+            $timeout(function () {
+                $location.path('/login');
+                $('#messageModal').modal('hide');
+            }, 2000);
         } else if (response.status === 403) {
-            window.location.hash = "#!/home";
+            if (!$scope.page.message.text)
+                $scope.page.message.text = "You are not authorized to view this page!"
+
+            $timeout(function () {
+                $location.path('/home');
+                $('#messageModal').modal('hide');
+            }, 2000);
         }
+
+        $('#messageModal').modal('show');
     };
 
     $scope.getPrincipal = function (callbackSuccess, callbackError) {
@@ -60,6 +74,8 @@ app.controller("mainCtrl", function ($scope, $http) {
             $scope.loginData = data.principal;
             //delete $scope.loginData.password;
 
+            sessionStorage.setItem("authentication", $scope.authentication);
+
             $scope.isLoginError = false;
             window.location.hash = "#!/home";
         }, function (response) { //error
@@ -75,18 +91,30 @@ app.controller("mainCtrl", function ($scope, $http) {
         var response = $http({
             method: "POST",
             url: "logout",
-            headers: {
-                "Authorization": $scope.authentication
-            }
+            //headers: {
+            //    "Authorization": $scope.authentication
+            //}
         }).then(
             function (response) { //success
                 return response.data;
             }, function (response) { //error
-                $scope.displayMessage(response.data);
+                return response;
             }).then(
             function (data) {
                 //alert("Logged out!");
+                $scope.authentication = "";
+
+                $scope.credentials = {
+                    username: "",
+                    password: ""
+                };
+                $scope.loginData = {};
+
+                sessionStorage.removeItem("authentication");
                 window.location.hash = "#!/login";
+            },
+            function (response) {
+                $scope.displayMessage(response.data);
             });
     };
 
@@ -107,10 +135,10 @@ app.controller("mainCtrl", function ($scope, $http) {
             }).then(updateCallback);
     };
 
-    $scope.getFreeUsers = function (id, updateCallback) {
+    $scope.getFreeUsers = function (id, type, updateCallback) {
         $http({
             method: "GET",
-            url: ("users/free/" + id),
+            url: ("users/free-" + type + "/" + id),
             responseType: "json",
             headers: {
                 "Authorization": $scope.authentication
@@ -217,6 +245,16 @@ app.controller("mainCtrl", function ($scope, $http) {
     };
 
     angular.element(document).ready(function () {
+        if (!$scope.authentication) {
+            $scope.authentication = sessionStorage.authentication;
 
+            if ($scope.authentication) {
+                $scope.getPrincipal(function (data) {
+                    $scope.loginData = data.principal;
+                }, function (response) { //error
+                    $scope.displayMessage(response.data);
+                });
+            }
+        }
     });
 });

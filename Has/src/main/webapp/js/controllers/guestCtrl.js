@@ -1,4 +1,4 @@
-app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $interval, $resource, $http, DTOptionsBuilder, DTColumnBuilder) {
+app.controller("guestCtrl", function ($scope, $state, $location, $stateParams, $timeout, $interval, $resource, $http, DTOptionsBuilder, DTColumnBuilder) {
     var ctrl = this;
     $scope.page.title = "Guests";
     $scope.master = {};
@@ -9,7 +9,7 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
     $scope.usersList = [];
     $scope.isEdit = false;
 
-    if (window.location.hash.includes("list")) {
+    if ($location.path().includes("list")) {
         // guests table
         $scope.dtInstance = {};
 
@@ -133,7 +133,7 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
                     if ($scope.guest.user)
                         userID = $scope.guest.user.id;
 
-                    $scope.getFreeUsers(userID, function (data) {
+                    $scope.getFreeUsers(userID, "guests", function (data) {
                         var emptyArray = [
                             {
                                 id: 0,
@@ -143,6 +143,9 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
                         ];
 
                         $scope.usersList = emptyArray.concat(data);
+
+                        if (!$scope.guest.user)
+                            $scope.guest.user = $scope.usersList[0];
                     });
                 });
         }
@@ -153,7 +156,7 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
                 status: 0,
                 personalData: {}
             };
-            $scope.getFreeUsers(-1, function (data) {
+            $scope.getFreeUsers(-1, "guests", function (data) {
                 var emptyArray = [
                     {
                         id: 0,
@@ -189,7 +192,7 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
                     }
 
                     $('#messageModal').modal('show');
-                    window.location.hash = "#!/guests/list";
+                    $location.path("/guests/list");
                 });
             }
         };
@@ -197,7 +200,7 @@ app.controller("guestCtrl", function ($scope, $state, $stateParams, $timeout, $i
 
     angular.element(document).ready(function () {
 
-        if (window.location.hash.includes("list")) {
+        if ($location.path().includes("list")) {
             $scope.reloadTableData();
             //$interval($scope.reloadTableData, 30000);
         }

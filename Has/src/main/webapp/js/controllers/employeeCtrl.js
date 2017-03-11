@@ -1,4 +1,4 @@
-app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout, $interval, $resource, $http, DTOptionsBuilder, DTColumnBuilder) {
+app.controller("employeeCtrl", function ($scope, $location, $state, $stateParams, $timeout, $interval, $resource, $http, DTOptionsBuilder, DTColumnBuilder) {
     var ctrl = this;
     $scope.page.title = "Employees";
     $scope.master = {};
@@ -29,7 +29,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
             .then(callback);
     };
 
-    if (window.location.hash.includes("list")) {
+    if ($location.path().includes("list")) {
         // employees table
         $scope.dtInstance = {};
 
@@ -162,7 +162,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
                     if ($scope.employee.user)
                         userID = $scope.employee.user.id;
 
-                    $scope.getFreeUsers(userID, function (data) {
+                    $scope.getFreeUsers(userID, "employees", function (data) {
                         $scope.usersList = data;
                     });
                 });
@@ -172,7 +172,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
             $scope.employee = {
                 personalData: {}
             };
-            $scope.getFreeUsers(-1, function (data) {
+            $scope.getFreeUsers(-1, "employees", function (data) {
                 $scope.usersList = data;
 
                 if (data.length > 0)
@@ -197,7 +197,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
                     }
 
                     $('#messageModal').modal('show');
-                    window.location.hash = "#!/employees/list";
+                    $location.path('/employees/list');
                 });
             }
         };
@@ -205,7 +205,7 @@ app.controller("employeeCtrl", function ($scope, $state, $stateParams, $timeout,
 
     angular.element(document).ready(function () {
 
-        if (window.location.hash.includes("list")) {
+        if ($location.path().includes("list")) {
             var showDisabledSwitch = new Switchery(document.getElementById('showDisabled'), {color: "#26B99A"});
 
             $scope.addDeleteFunctions();

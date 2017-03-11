@@ -195,7 +195,8 @@ INSERT INTO T_USER (USER_ID, LAST_LOGIN, password, email, REG_DATE, username, en
 ('14', '2017-01-29T15:15:10', 'password', 'bobi@yahoo.com', '2016-01-28', 'boqn', 'true'),
 ('15', '2017-01-30T13:12:10', 'password', 'smurai_jack@abv.com', '2017-01-29', 'jack', 'true'),
 ('16', '2017-02-02T13:12:10', 'password', 'R2D2@gmail.com', '2016-06-12', 'mr_robot', 'true'),
-('17', '2017-01-10T12:30:00', 'password', 'Mordor@gmail.com', '2016-11-12', 'sauron', 'true');
+('17', '2017-01-10T12:30:00', 'password', 'Mordor@gmail.com', '2016-11-12', 'sauron', 'true'),
+('18', '2017-03-10T11:31:25', '123123123a', 'ginkata@abv.com', '2017-02-12', 'ginka90', 'true');
 
 
 INSERT INTO USER_ROLE (USER_ID, USER_ROLE_ID) VALUES ('1', '1');
@@ -215,6 +216,7 @@ INSERT INTO USER_ROLE (USER_ID, USER_ROLE_ID) VALUES ('14', '1');
 INSERT INTO USER_ROLE (USER_ID, USER_ROLE_ID) VALUES ('15', '1');
 INSERT INTO USER_ROLE (USER_ID, USER_ROLE_ID) VALUES ('16', '1');
 INSERT INTO USER_ROLE (USER_ID, USER_ROLE_ID) VALUES ('17', '1');
+INSERT INTO USER_ROLE (USER_ID, USER_ROLE_ID) VALUES ('18', '5');
 
 
 
@@ -228,37 +230,38 @@ INSERT INTO PERSONAL_DATA (PERSONAL_DATA_ID, address, egn, FULL_NAME, IDENTITY_E
 ('7', 'street 16', '9109231762', 'Nikolai Nikolov', '2023-04-13', '2013-04-13', 'MVR Ruse', '672661246', '0898555123'),
 ('8', 'street 17', '9109309304', 'David Beckham', '2023-04-15', '2013-04-15', 'MVR Sofiq', '701115038', '0897443556'),
 ('9', 'street 18', '9201063964', 'Stefan Nedelchev', '2023-05-17', '2013-05-17', 'MVR Ruse', '394875313', '0883562412'),
-('10', 'street 19', '9202053964', 'Petar Nedelchev', '2023-05-17', '2013-05-17', 'MVR Ruse', '394875313', '0883562343'),
+('10', 'street 19', '9202053964', 'Petar Nedelchev', '2023-05-17', '2013-05-17', 'MVR Ruse', '394875377', '0883562343'),
 ('11', 'street 20', '9112053964', 'Bai Tanas Debelia', '2023-05-17', '2013-05-17', 'MVR Silistra', '114875313', '0883112341'),
 ('12', 'street 21', '9012053911', 'Toni Naika', '2024-05-12', '2014-05-12', 'MVR Sofia', '004875311', '0884135341'),
 ('13', 'street 22', '8801054212', 'Atanas Kolev', '2025-05-12', '2015-05-12', 'MVR Sofia', '112875303', '0871115341'),
 ('14', 'Jackson st.', '8822054212', 'Timothy Smith', '2025-05-12', '2015-05-12', 'MVR Sofia', '112875353', '0871625341'),
-('15', 'Picadili circus', '9202053964', 'Pesho pesho', '2023-05-17', '2013-05-17', 'MVR Ruse', '394875313', '0883562343'),
-('16', 'wolfsburg 26', '9112053964', 'Axl Law', '2023-05-17', '2013-05-17', 'MVR Silistra', '114875313', '0883112341'),
-('17', 'johannesburg', '9012053911', 'Tom Soyer', '2024-05-12', '2014-05-12', 'MVR Sofia', '004875311', '0884135341'),
-('18', 'kings street 1' , '8801054212', 'Luke Skywalker', '2025-05-12', '2015-05-12', 'MVR Sofia', '112875303', '0871115341'),
-('19', 'a barrel of snakes', '8822054212', 'Boba fett', '2025-05-12', '2015-05-12', 'MVR Sofia', '112875353', '0871625341');
+('15', 'Picadili circus', '9202053914', 'Pesho pesho', '2023-05-17', '2013-05-17', 'MVR Ruse', '394875373', '0883562343'),
+('16', 'wolfsburg 26', '9112053994', 'Axl Law', '2023-05-17', '2013-05-17', 'MVR Silistra', '114875303', '0883112341'),
+('17', 'johannesburg', '9012053931', 'Tom Soyer', '2024-05-12', '2014-05-12', 'MVR Sofia', '001875311', '0884135341'),
+('18', 'kings street 1' , '8801054222', 'Luke Skywalker', '2025-05-12', '2015-05-12', 'MVR Sofia', '002875303', '0871115341'),
+('19', 'a barrel of snakes', '4822054212', 'Boba fett', '2025-05-12', '2015-05-12', 'MVR Sofia', '212875353', '0871625341');
 
-INSERT INTO EMPLOYEE (EMPLOYEE_ID, DATE_HIRED, PERSONAL_DATA_ID, USER_ID, EMPLOYED) VALUES ('1', '2016-11-12', '1', '1', 'true');
-INSERT INTO EMPLOYEE (EMPLOYEE_ID, DATE_HIRED, PERSONAL_DATA_ID, USER_ID, EMPLOYED) VALUES ('2', '2016-12-29', '2', '2', 'true');
-INSERT INTO EMPLOYEE (EMPLOYEE_ID, DATE_HIRED, PERSONAL_DATA_ID, USER_ID, EMPLOYED) VALUES ('3', '2014-01-27', '3', '3', 'false');
-INSERT INTO EMPLOYEE (EMPLOYEE_ID, DATE_HIRED, PERSONAL_DATA_ID, USER_ID, EMPLOYED) VALUES ('4', '2017-01-27', '4', '4', 'true');
-INSERT INTO EMPLOYEE (EMPLOYEE_ID, DATE_HIRED, PERSONAL_DATA_ID, USER_ID, EMPLOYED) VALUES ('5', '2017-01-27', '5', '5', 'false');
-INSERT INTO EMPLOYEE (EMPLOYEE_ID, DATE_HIRED, PERSONAL_DATA_ID, USER_ID, EMPLOYED) VALUES ('6', '2017-01-27', '6', '6', 'false');
-INSERT INTO EMPLOYEE (EMPLOYEE_ID, DATE_HIRED, PERSONAL_DATA_ID, USER_ID, EMPLOYED) VALUES ('7', '2017-01-17', '7', '7', 'true');
-INSERT INTO EMPLOYEE (EMPLOYEE_ID, DATE_HIRED, PERSONAL_DATA_ID, USER_ID, EMPLOYED) VALUES ('8', '2017-01-04', '8', '8', 'false');
-INSERT INTO EMPLOYEE (EMPLOYEE_ID, DATE_HIRED, PERSONAL_DATA_ID, USER_ID, EMPLOYED) VALUES ('9', '2017-02-01', '9', '9', 'true');
-INSERT INTO EMPLOYEE (EMPLOYEE_ID, DATE_HIRED, PERSONAL_DATA_ID, USER_ID, EMPLOYED) VALUES ('10', '2017-02-03', '10', '10', 'true');
-INSERT INTO EMPLOYEE (EMPLOYEE_ID, DATE_HIRED, PERSONAL_DATA_ID, USER_ID, EMPLOYED) VALUES ('11', '2017-02-03', '14', '12', 'true');
+INSERT INTO EMPLOYEE (EMPLOYEE_ID, DATE_HIRED, PERSONAL_DATA_ID, USER_ID, EMPLOYED, SALARY) VALUES
+('1', '2016-11-12', '1', '1', 'true', 750.50),
+('2', '2016-12-29', '2', '2', 'true', 750.50),
+('3', '2014-01-27', '3', '3', 'false', 649.99),
+('4', '2017-01-27', '4', '4', 'true', 649.50),
+('5', '2017-01-27', '5', '5', 'false', 649.50),
+('6', '2017-01-27', '6', '6', 'false', 590.9),
+('7', '2017-01-17', '7', '7', 'true', 590.9),
+('8', '2017-01-04', '8', '8', 'false', 650.50),
+('9', '2017-02-01', '9', '9', 'true', 650.50),
+('10', '2017-02-03', '10', '10', 'true', 650.50),
+('11', '2017-02-03', '14', '12', 'true', 800.00);
 
-INSERT INTO WORKING_SCHEDULE(EMPLOYEE_ID, SHIFT, START_DATE, END_DATE) VALUES
-(2, 0, '2017-02-08', '2017-02-10'),
-(5, 1, '2017-02-08', '2017-02-10'),
-(8, 2, '2017-02-08', '2017-02-10'),
-(3, 0, '2017-02-09', '2017-02-12'),
-(3, 1, '2017-02-18', '2017-02-20'),
-(2, 0, '2017-02-18', '2017-02-20'),
-(9, 1, '2017-02-10', '2017-02-12');
+INSERT INTO WORKING_SCHEDULE(ID, EMPLOYEE_ID, SHIFT, SCHEDULE_DATE) VALUES
+(1, 2, 0, '2017-02-08'),
+(2, 5, 1, '2017-02-08'),
+(3, 8, 2, '2017-02-08'),
+(4, 3, 0, '2017-02-09'),
+(5, 3, 1, '2017-02-18'),
+(6, 2, 0, '2017-02-18'),
+(7, 9, 1, '2017-02-10');
 
 INSERT INTO GUEST (GUEST_ID, NUMBER_RESERVATIONS, STATUS, PERSONAL_DATA_ID) VALUES (1, 2, 0, '11');
 INSERT INTO GUEST (GUEST_ID, NUMBER_RESERVATIONS, STATUS, PERSONAL_DATA_ID, USER_ID) VALUES (2, 1, 0, '12', '11');
@@ -285,8 +288,8 @@ INSERT INTO ROOM (NUMBER, BEDS_DOUBLE, BEDS_SINGLE, ROOM_CLASS, STATUS, CHILDREN
 
 INSERT INTO RESERVATION
 (reservation_id, all_inclusive, breakfast, dinner, discount, end_date, C_GROUP, last_modified_by_user_id, last_modified_time, number_adults, number_children, price, employee_id, start_date, status)
-VALUES('1', false, true, false, 0, '2017-03-10', false, null, null, 2, 1, 40.0, '5', '2017-03-05', 0),
-('2', true, true, true, 10, '2017-03-08', true, null, null, 1, 1, 50.0, '4', '2017-03-05', 1),
+VALUES('1', false, true, false, 0, '2017-03-14', false, null, null, 2, 1, 40.0, '5', '2017-03-10', 0),
+('2', true, true, true, 10, '2017-03-17', true, null, null, 1, 1, 50.0, '4', '2017-03-12', 1),
 ('3', false, false, true, 10, '2017-03-22', false, null, null, 2, 0, 45.0, '4', '2017-03-19', 1);
 
 INSERT INTO RESERVATION_GUEST (RESERVATION_GUEST_ID, reservation_id, guest_id, room_id, owner) VALUES

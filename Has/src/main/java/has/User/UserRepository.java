@@ -20,10 +20,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByUsernameAndPassword(String username, String Password);
 
-    @Query("select u from has.User.User u where u not in (select e.user from has.Employee.Employee e) and u not in (select g.user from has.Guest.Guest g)")
-    List<User> findFreeUsers();
+    @Query("select u from has.User.User u where u.enabled = true and u not in (select e.user from has.Employee.Employee e) and u not in (select g.user from has.Guest.Guest g) and u.userRole.id < 5")
+    List<User> findFreeEmployeeUsers();
 
-    List<User> findByUsernameContainingAndEmailContaining(String username, String email);
+    @Query("select u from has.User.User u where u.enabled = true and u not in (select e.user from has.Employee.Employee e) and u not in (select g.user from has.Guest.Guest g) and u.userRole.id = 5")
+    List<User> findFreeGuestUsers();
 
     Page<User> findByUsernameContainingIgnoreCaseAndEmailContainingIgnoreCaseAndUserRoleId(String username, String email, Long roleID, Pageable pageRequest);
 
