@@ -6,7 +6,7 @@ import has.Roles.UserRole;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -93,7 +93,7 @@ public class User implements Serializable, UserDetails {
     }
 
     @Override
-    @JsonIgnore
+    //@JsonIgnore
     public boolean isEnabled() {
         return enabled;
     }

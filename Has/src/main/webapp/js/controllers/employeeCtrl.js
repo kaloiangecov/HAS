@@ -21,7 +21,7 @@ app.controller("employeeCtrl", function ($scope, $location, $state, $stateParams
             }
         }).then(
             function (response) { //success
-                response.data;
+                return response.data;
             },
             function (response) { //error
                 $scope.displayMessage(response.data);
@@ -44,6 +44,7 @@ app.controller("employeeCtrl", function ($scope, $location, $state, $stateParams
                     'Authorization': $scope.authentication
                 },
                 data: ctrl.filters,
+                success: $scope.addDeleteFunctions,
                 error: function (jqXHR, textStatus, errorThrown) {
                     $scope.displayMessage({
                         status: jqXHR.status,

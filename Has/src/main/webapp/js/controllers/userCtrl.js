@@ -10,6 +10,24 @@ app.controller("userCtrl", function ($scope, $http, $location, $state, $statePar
     };
     $scope.isEdit = false;
 
+    $scope.changeUserStatus = function (userId, callback) {
+        $http({
+            method: "PUT",
+            url: ('user/enabled/' + userId),
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
+        }).then(
+            function (response) { //success
+                return response.data;
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+            })
+            .then(callback);
+    };
+
     if ($location.path().includes("list")) {
         $scope.getAllRoles(function (data) {
             var emptyArray = [
@@ -66,14 +84,24 @@ app.controller("userCtrl", function ($scope, $http, $location, $state, $statePar
                     return new Date(date).toLocaleString();
                 }),
             DTColumnBuilder.newColumn('id').notSortable().withClass('actions-column')
-                .renderWith(function (id) {
+                .renderWith(function (id, type, full) {
                     var html =
                         '<div class="btn-group btn-group-sm">' +
                         '<a class="btn btn-default action-btn" href="#!/users/edit/' +
-                        id + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
-                        '<button class="btn btn-default action-btn delete-btn" id="del_' +
-                        id + '"><i class="fa fa-trash-o" aria-hidden="true"></i></button>' +
-                        '</div>';
+                        id + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+
+                    if (full.id != $scope.loginData.id) {
+                        html += '<button type="button" class="btn btn-default action-btn delete-btn" id="del_' +
+                            id + '">';
+
+                        if (full.enabled)
+                            html += '<i class="fa fa-ban" aria-hidden="true"></i></button>';
+                        else
+                            html += '<i class="fa fa-refresh" aria-hidden="true"></i></button>';
+                    }
+
+                    html += '</div>';
+
                     return html;
                 })
         ];
@@ -84,13 +112,9 @@ app.controller("userCtrl", function ($scope, $http, $location, $state, $statePar
                 $(btns).off('click');
                 $(btns).on('click', function () {
                     var userId = this.id.split('_')[1];
-                    $scope.deleteData('user', userId, function () {
-                        $scope.page.message = {
-                            type: 'success',
-                            title: 'Deleted!',
-                            text: ('User with id ' + userId + ' was successfully deleted!')
-                        };
-                        $('#messageModal').modal('show');
+                    $scope.changeUserStatus(userId, function () {
+                        $scope.reloadTableData(false);
+                        $scope.addDeleteFunctions();
                     });
                 });
             }, 300);
@@ -100,11 +124,9 @@ app.controller("userCtrl", function ($scope, $http, $location, $state, $statePar
         $scope.$watch("ctrl.filters.email", $scope.addDeleteFunctions);
         $scope.$watch("ctrl.filters.roleID", $scope.addDeleteFunctions);
 
-        $scope.reloadTableData = function () {
-            var resetPaging = false;
+        $scope.reloadTableData = function (resetPaging) {
             $scope.dtInstance.reloadData(function (list) {
                 //console.log(list);
-                $scope.addDeleteFunctions();
             }, resetPaging);
         };
     }
@@ -153,12 +175,8 @@ app.controller("userCtrl", function ($scope, $http, $location, $state, $statePar
 
     angular.element(document).ready(function () {
         if ($location.path().includes("list")) {
-            $scope.reloadTableData();
-
-            $('.delete-btn').click(function () {
-                var id = this.id.split('_');
-                banUser(id[1]);
-            });
+            $scope.addDeleteFunctions();
+            $scope.reloadTableData(false);
             //$interval($scope.reloadTableData, 30000);
         }
         else {

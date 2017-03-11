@@ -196,7 +196,8 @@ INSERT INTO T_USER (USER_ID, LAST_LOGIN, password, email, REG_DATE, username, en
 ('15', '2017-01-30T13:12:10', 'password', 'smurai_jack@abv.com', '2017-01-29', 'jack', 'true'),
 ('16', '2017-02-02T13:12:10', 'password', 'R2D2@gmail.com', '2016-06-12', 'mr_robot', 'true'),
 ('17', '2017-01-10T12:30:00', 'password', 'Mordor@gmail.com', '2016-11-12', 'sauron', 'true'),
-('18', '2017-03-10T11:31:25', '123123123a', 'ginkata@abv.com', '2017-02-12', 'ginka90', 'true');
+('18', '2017-03-10T11:31:25', '123123123a', 'ginkata@abv.com', '2017-02-12', 'ginka90', 'true'),
+('19', '2017-03-11T23:00:25', '123password', 'dani89@hotmail.com', '2017-03-06', 'dani89', 'true');
 
 
 INSERT INTO USER_ROLE (USER_ID, USER_ROLE_ID) VALUES ('1', '1');
@@ -217,6 +218,7 @@ INSERT INTO USER_ROLE (USER_ID, USER_ROLE_ID) VALUES ('15', '1');
 INSERT INTO USER_ROLE (USER_ID, USER_ROLE_ID) VALUES ('16', '1');
 INSERT INTO USER_ROLE (USER_ID, USER_ROLE_ID) VALUES ('17', '1');
 INSERT INTO USER_ROLE (USER_ID, USER_ROLE_ID) VALUES ('18', '5');
+INSERT INTO USER_ROLE (USER_ID, USER_ROLE_ID) VALUES ('19', '5');
 
 
 

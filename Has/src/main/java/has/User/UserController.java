@@ -129,4 +129,12 @@ public class UserController {
     public User updateUser(@PathVariable Long id, @RequestBody @Valid User user) throws Exception {
         return userService.update(id, user);
     }
+
+    @RequestMapping(value = "/user/enabled/{id}", method = RequestMethod.PUT,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_REMOVE_EMPLOYEE')")
+    public User changeStatus(@PathVariable Long id) throws Exception {
+        return userService.changeEnabled(id);
+    }
 }
