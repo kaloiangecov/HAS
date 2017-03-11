@@ -1,5 +1,6 @@
 package has.Task;
 
+import has.Employee.Employee;
 import has.Task.Task;
 import has.Task.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,16 @@ public class TaskService  {
         dbTask.setAssigner(task.getAssigner());
         dbTask.setAssignee(task.getAssignee());
         return repo.save(dbTask);
+    }
+
+    public List<Task> getEmployeesTasks(Employee employee) {
+        return repo.findByAssigneeId(employee.getId());
+    }
+
+    public Task changeStatus(Long id, Integer status){
+        Task task = repo.findOne(id);
+        task.setStatus(status);
+        return repo.save(task);
     }
 
     private void validateIdNotNull(Task task) throws Exception {
