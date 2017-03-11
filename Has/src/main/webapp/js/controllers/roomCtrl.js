@@ -1,4 +1,4 @@
-app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resource, $timeout, $interval, DTOptionsBuilder, DTColumnBuilder) {
+app.controller("roomCtrl", function ($scope, $http, $location, $state, $stateParams, $resource, $timeout, $interval, DTOptionsBuilder, DTColumnBuilder) {
     var ctrl = this;
     $scope.page.title = "Rooms";
     $scope.roomsTable;
@@ -9,7 +9,7 @@ app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resou
     };
     $scope.isEdit = false;
 
-    if (window.location.hash.includes("list")) {
+    if ($location.path().includes("list")) {
         // rooms table
         ctrl.dtInstance = {};
 
@@ -116,7 +116,7 @@ app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resou
                     }
 
                     $('#messageModal').modal('show');
-                    window.location.hash = "#!/rooms/list";
+                    $location.path("/rooms/list");
                 },
                 function (response) { //error
                     $scope.displayMessage(response.data);
@@ -169,7 +169,7 @@ app.controller("roomCtrl", function ($scope, $http, $state, $stateParams, $resou
     }
 
     angular.element(document).ready(function () {
-        if (window.location.hash.includes("list")) {
+        if ($location.path().includes("list")) {
             $scope.reloadTableData();
             //$interval($scope.reloadTableData, 30000);
         }

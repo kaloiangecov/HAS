@@ -1,4 +1,4 @@
-app.controller("mealCtrl", function ($scope, $http, $state, $stateParams, $resource, $timeout, $interval, DTOptionsBuilder, DTColumnBuilder) {
+app.controller("mealCtrl", function ($scope, $http, $location, $state, $stateParams, $resource, $timeout, $interval, DTOptionsBuilder, DTColumnBuilder) {
     var ctrl = this;
     $scope.page.title = "Meals";
     $scope.mealCategories = [];
@@ -25,7 +25,7 @@ app.controller("mealCtrl", function ($scope, $http, $state, $stateParams, $resou
             }).then(callback);
     };
 
-    if (window.location.hash.includes("list")) {
+    if ($location.path().includes("list")) {
         // meals table
         ctrl.dtInstance = {};
 
@@ -142,7 +142,7 @@ app.controller("mealCtrl", function ($scope, $http, $state, $stateParams, $resou
                     }
 
                     $('#messageModal').modal('show');
-                    window.location.hash = "#!/meals/list";
+                    $location.path("/meals/list");
                 },
                 function (response) { //error
                     $scope.displayMessage(response.data);
@@ -199,7 +199,7 @@ app.controller("mealCtrl", function ($scope, $http, $state, $stateParams, $resou
     }
 
     angular.element(document).ready(function () {
-        if (window.location.hash.includes("list")) {
+        if ($location.path().includes("list")) {
             $scope.reloadTableData();
             //$interval($scope.reloadTableData, 30000);
         }

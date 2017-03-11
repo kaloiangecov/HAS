@@ -1,4 +1,4 @@
-app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $interval, $resource, $http, DTOptionsBuilder, DTColumnBuilder) {
+app.controller("userCtrl", function ($scope, $http, $location, $state, $stateParams, $timeout, $interval, $resource, DTOptionsBuilder, DTColumnBuilder) {
     var ctrl = this;
     $scope.page.title = "Users";
     $scope.master = {};
@@ -10,7 +10,7 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
     };
     $scope.isEdit = false;
 
-    if (window.location.hash.includes("list")) {
+    if ($location.path().includes("list")) {
         $scope.getAllRoles(function (data) {
             var emptyArray = [
                 {
@@ -157,7 +157,7 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
                         }
 
                         $('#messageModal').modal('show');
-                        window.location.hash = "#!/users/list";
+                        $location.path("/users/list");
                     },
                     function (response) { //error
                         $scope.displayMessage(response.data);
@@ -167,7 +167,7 @@ app.controller("userCtrl", function ($scope, $state, $stateParams, $timeout, $in
     }
 
     angular.element(document).ready(function () {
-        if (window.location.hash.includes("list")) {
+        if ($location.path().includes("list")) {
             $scope.reloadTableData();
 
             $('.delete-btn').click(function () {

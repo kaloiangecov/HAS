@@ -1,4 +1,4 @@
-app.controller("workingScheduleCtrl", function ($scope, $http, $stateParams, DTOptionsBuilder, DTColumnBuilder) {
+app.controller("workingScheduleCtrl", function ($scope, $http, $location, $stateParams, DTOptionsBuilder, DTColumnBuilder) {
     var ctrl = this;
     $scope.page.title = "Working Schedule";
     $scope.rolesList = [];
@@ -12,7 +12,7 @@ app.controller("workingScheduleCtrl", function ($scope, $http, $stateParams, DTO
     $scope.isEdit = false;
 
 
-    if (window.location.hash.includes("list")) {
+    if ($location.path().includes("list")) {
         $scope.isEdit = false;
 
         // schedule table
@@ -160,7 +160,7 @@ app.controller("workingScheduleCtrl", function ($scope, $http, $stateParams, DTO
                     }
 
                     $('#messageModal').modal('show');
-                    window.location.hash = "#!/schedule/list";
+                    $location.path("/schedule/list");
                 });
             }
         };
@@ -168,7 +168,7 @@ app.controller("workingScheduleCtrl", function ($scope, $http, $stateParams, DTO
     }
 
     angular.element(document).ready(function () {
-        if (window.location.hash.includes("list")) {
+        if ($location.path().includes("list")) {
             $('#filterStartDate,#filterEndDate').daterangepicker({
                 singleDatePicker: true,
                 showDropdowns: true,

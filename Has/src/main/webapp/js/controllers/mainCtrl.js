@@ -1,4 +1,4 @@
-app.controller("mainCtrl", function ($scope, $http) {
+app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
     $scope.page = {
         title: "Home"
     };
@@ -28,15 +28,29 @@ app.controller("mainCtrl", function ($scope, $http) {
             title: response.error,
             text: response.message
         };
-        $('#messageModal').modal('show');
 
         if (response.status === 401) {
             $scope.authentication = "";
             $scope.loginData = {};
-            window.location.hash = "#!/login";
+
+            if (!$scope.page.message.text)
+                $scope.page.message.text = "You are not logged in!"
+
+            $timeout(function () {
+                $location.path('/login');
+                $('#messageModal').modal('hide');
+            }, 2000);
         } else if (response.status === 403) {
-            window.location.hash = "#!/home";
+            if (!$scope.page.message.text)
+                $scope.page.message.text = "You are not authorized to view this page!"
+
+            $timeout(function () {
+                $location.path('/home');
+                $('#messageModal').modal('hide');
+            }, 2000);
         }
+
+        $('#messageModal').modal('show');
     };
 
     $scope.getPrincipal = function (callbackSuccess, callbackError) {
@@ -77,9 +91,9 @@ app.controller("mainCtrl", function ($scope, $http) {
         var response = $http({
             method: "POST",
             url: "logout",
-            headers: {
-                "Authorization": $scope.authentication
-            }
+            //headers: {
+            //    "Authorization": $scope.authentication
+            //}
         }).then(
             function (response) { //success
                 return response.data;
@@ -88,6 +102,14 @@ app.controller("mainCtrl", function ($scope, $http) {
             }).then(
             function (data) {
                 //alert("Logged out!");
+                $scope.authentication = "";
+
+                $scope.credentials = {
+                    username: "",
+                    password: ""
+                };
+                $scope.loginData = {};
+
                 sessionStorage.removeItem("authentication");
                 window.location.hash = "#!/login";
             },

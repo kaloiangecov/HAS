@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  * Created by kaloi on 12/17/2016.
@@ -41,10 +42,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().httpBasic()
                 .and().csrf().csrfTokenRepository(csrfTokenRepository())
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                .and().authorizeRequests().antMatchers("/**", "/#/*").permitAll().anyRequest().authenticated()
+                .and().authorizeRequests().antMatchers("/**", "/#/*", "/!#/*").permitAll().anyRequest().authenticated()
                 .and().addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);
 
-        http.logout().logoutUrl("/logout").logoutSuccessHandler(new LogoutSuccessHandler("/"));
+        http.logout()
+                .logoutUrl("/logout")
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessHandler(new LogoutSuccessHandler("/"))
+                .deleteCookies("JSESSIONID");
 
         http.csrf()
                 .disable();
