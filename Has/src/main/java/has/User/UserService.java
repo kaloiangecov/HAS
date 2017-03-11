@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,8 +21,12 @@ public class UserService {
     @Autowired
     private UserRepository repo;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public User save(User user) throws UserAlreadyExists, EmailAlreadyExists {
         validateAlreadyExists(user);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return repo.save(user);
     }
 
@@ -31,7 +36,7 @@ public class UserService {
         validateAlreadyExists(user);
 
         dbUser.setLastLogin(user.getLastLogin());
-        dbUser.setPassword(user.getPassword());
+        dbUser.setPassword(passwordEncoder.encode(user.getPassword()));
         dbUser.setRegDate(user.getRegDate());
         dbUser.setUsername(user.getUsername());
         dbUser.setEmail(user.getEmail());
@@ -121,6 +126,8 @@ public class UserService {
     }
 
     private void validateIdNotNull(User user) throws Exception {
-
+        if (user == null) {
+            throw new Exception("There is no user with such ID");
+        }
     }
 }
