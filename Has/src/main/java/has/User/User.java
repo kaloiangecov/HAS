@@ -37,7 +37,7 @@ public class User implements Serializable, UserDetails {
     private String lastLogin;
 
     @NotNull
-    @Size(min = 6, max = 16)
+//    @Size(min = 6, max = 16)
 //    @Pattern(regexp = "(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}")
     private String password;
 
