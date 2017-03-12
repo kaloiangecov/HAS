@@ -1,5 +1,6 @@
 package has.Request;
 
+import has.RequestMeal.RequestMeal;
 import has.ReservationGuest.ReservationGuest;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by kaloi on 12/20/2016.
@@ -29,7 +31,7 @@ public class Request implements Serializable {
 //    private List<Meal> meals;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "RESERVATION_GUEST_ID")
     private ReservationGuest reservationGuest;
 
@@ -45,8 +47,12 @@ public class Request implements Serializable {
 
     @NotNull
     @Min(0)
-    @Max(2)
+    @Max(10)
+    @Column(name = "REQUEST_TYPE")
     private int type;
+
+    @OneToMany(mappedBy = "request", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<RequestMeal> requestMeals;
 
     public Request() {
 

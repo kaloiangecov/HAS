@@ -1,0 +1,27 @@
+<div ng-controller="dashboardCtrl as ctrl">
+    <daypilot-scheduler id="dashboard"
+                        config="config"
+                        events="events.list"
+                        on-event-selected="onEventSelected(args)"
+                        on-event-moved="onEventMoved(args)">
+    </daypilot-scheduler>
+</div>
+
+
+<div id="infoModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        ariadden="true">&times;</span></button>
+                <h4 class="modal-title"><i class="fa fa-info"></i> Request Info</h4>
+            </div>
+            <div class="modal-body">
+                <p><strong>Start time:</strong> {{requestInfo.timePlaced}}</p>
+                <p><strong>End time:</strong> {{requestInfo.timeFinished}}</p>
+                <p><strong>Room:</strong> {{requestInfo.reservationGuest.room.number}}</p>
+                <p><strong>Guest:</strong> {{requestInfo.reservationGuest.guest.personalData.fullName}}</p>
+            </div>
+        </div>
+    </div>
+</div>
