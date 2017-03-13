@@ -11,8 +11,8 @@ import java.io.Serializable;
  * Created by Chokleet on 25.2.2017 г..
  */
 @Data
-@Entity(name="TASK")
-public class Task implements Serializable{
+@Entity(name = "TASK")
+public class Task implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,4 +40,7 @@ public class Task implements Serializable{
     @JoinColumn(name = "EMPLOYEE_ID")
     private Employee assignee;
 
+    public Task() {
+
+    }
 }
