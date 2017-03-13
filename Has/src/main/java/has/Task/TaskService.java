@@ -1,8 +1,6 @@
 package has.Task;
 
 import has.Employee.Employee;
-import has.Task.Task;
-import has.Task.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,6 +57,7 @@ public class TaskService  {
     public List<Task> getEmployeesTasks(Employee employee) {
         return repo.findByAssigneeId(employee.getId());
     }
+
     public List<Task> getEmployeesUnresolvedTasks(Employee employee) {
         return repo.findByAssigneeIdAndStatusNot(employee.getId(),UNRESOLVED);
     }
