@@ -13,6 +13,8 @@ import java.util.List;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
+    List<Employee> findByBusyFalse();
+
     List<Employee> findByEmployedTrue();
 
     Employee findByPersonalDataEgn(String egn);

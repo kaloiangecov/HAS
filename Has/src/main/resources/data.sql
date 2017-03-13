@@ -241,18 +241,18 @@ INSERT INTO PERSONAL_DATA (PERSONAL_DATA_ID, address, egn, FULL_NAME, IDENTITY_E
 ('18', 'kings street 1' , '8801054222', 'Luke Skywalker', '2025-05-12', '2015-05-12', 'MVR Sofia', '002875303', '0871115341'),
 ('19', 'a barrel of snakes', '4822054212', 'Boba fett', '2025-05-12', '2015-05-12', 'MVR Sofia', '212875353', '0871625341');
 
-INSERT INTO EMPLOYEE (EMPLOYEE_ID, DATE_HIRED, PERSONAL_DATA_ID, USER_ID, EMPLOYED, SALARY) VALUES
-('1', '2016-11-12', '1', '1', 'true', 750.50),
-('2', '2016-12-29', '2', '2', 'true', 750.50),
-('3', '2014-01-27', '3', '3', 'false', 649.99),
-('4', '2017-01-27', '4', '4', 'true', 649.50),
-('5', '2017-01-27', '5', '5', 'false', 649.50),
-('6', '2017-01-27', '6', '6', 'false', 590.9),
-('7', '2017-01-17', '7', '7', 'true', 590.9),
-('8', '2017-01-04', '8', '8', 'false', 650.50),
-('9', '2017-02-01', '9', '9', 'true', 650.50),
-('10', '2017-02-03', '10', '10', 'true', 650.50),
-('11', '2017-02-03', '14', '12', 'true', 800.00);
+INSERT INTO EMPLOYEE (EMPLOYEE_ID, DATE_HIRED, PERSONAL_DATA_ID, USER_ID, EMPLOYED, SALARY, BUSY) VALUES
+('1', '2016-11-12', '1', '1', 'true', 750.50, FALSE),
+('2', '2016-12-29', '2', '2', 'true', 750.50, FALSE),
+('3', '2014-01-27', '3', '3', 'false', 649.99, FALSE),
+('4', '2017-01-27', '4', '4', 'true', 649.50, TRUE),
+('5', '2017-01-27', '5', '5', 'false', 649.50, FALSE),
+('6', '2017-01-27', '6', '6', 'false', 590.9, TRUE),
+('7', '2017-01-17', '7', '7', 'true', 590.9, FALSE),
+('8', '2017-01-04', '8', '8', 'false', 650.50, TRUE),
+('9', '2017-02-01', '9', '9', 'true', 650.50, TRUE),
+('10', '2017-02-03', '10', '10', 'true', 650.50, FALSE),
+('11', '2017-02-03', '14', '12', 'true', 800.00, FALSE);
 
 INSERT INTO WORKING_SCHEDULE(ID, EMPLOYEE_ID, SHIFT, SCHEDULE_DATE) VALUES
 (1, 2, 0, '2017-02-08'),
@@ -332,8 +332,8 @@ INSERT INTO REQUEST (REQUEST_ID, RESERVATION_GUEST_ID, EMPLOYEE_ID, STATUS, TIME
 (1, 1, 7, 0, '2017-03-06T19:30:11','2017-03-06T19:41:20', 2),
 (2, 2, 8, 0, '2017-03-06T20:00:11','2017-03-06T20:08:44', 1);
 
-INSERT INTO TASK(TASK_ID, TITLE, EMPLOYEE_ID,STATUS) VALUES
- (1,'Suck a dick', 1,3),
- (2,'Dismantle the patriarchy',1,1),
- (3,'Kill yourself',2,1),
- (4,'Suck two dicks',1,1);
+INSERT INTO TASK(TASK_ID, TITLE, DESCRIPTION, TIME_PLACED, START_TIME, FINISH_TIME, ASSIGNER, PRIORITY, EMPLOYEE_ID, STATUS) VALUES
+ (1, 'Clean Room', 'Clean Room 201', '2017-03-06T11:45:00', '2017-03-06T11:50:00', '2017-03-06T12:20:00', 'SYSTEM', 3, 3, 3),
+ (2, 'Deliver Meal', 'Deliver Meal 203', '2017-03-06T15:00:00', '2017-03-06T15:25:00', '2017-03-06T15:35:00', 'SYSTEM', 1, 7, 1),
+ (3, 'Restock', 'Restock Restroom 201b', '2017-03-06T13:24:00', '2017-03-06T13:30:00', '2017-03-06T14:00:00', 'Grigor Dimitrov', 3, 8, 1),
+ (4, 'Clean Room', 'Clean Room 101', '2017-03-06T09:00:00', '2017-03-06T09:05:00', '2017-03-06T09:35:00', 'SYSTEM', 1, 9, 1);

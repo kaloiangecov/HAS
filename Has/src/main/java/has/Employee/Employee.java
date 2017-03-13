@@ -36,6 +36,8 @@ public class Employee implements Serializable {
     @JoinColumn(name = "USER_ID")
     private User user;
 
+    private boolean busy;
+
     @NotNull
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "PERSONAL_DATA_ID")
