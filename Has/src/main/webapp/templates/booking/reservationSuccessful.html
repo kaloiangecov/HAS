@@ -1,0 +1,31 @@
+<div class="row">
+    <p><strong>Start date:</strong> {{reservationInfo.startDate}}</p>
+    <p><strong>End date:</strong> {{reservationInfo.endDate}}</p>
+    <span class="label label-primary" ng-hide="reservationInfo.group">Single reservation</span>
+    <span class="label label-primary" ng-show="reservationInfo.group">Group reservation</span>
+    <span class="label label-default"
+          ng-show="!reservationInfo.allInclusive && reservationInfo.breakfast">Breakfast</span>
+    <span class="label label-default" ng-show="!reservationInfo.allInclusive && reservationInfo.dinner">Dinner</span>
+    <span class="label label-default" ng-show="reservationInfo.allInclusive">All inclusive</span>
+
+    <h3>Guests</h3>
+    <table class="table table-condensed table-striped">
+        <thead>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Room</th>
+        </thead>
+        <tbody>
+        <tr ng-repeat="reservationGuest in reservationInfo.reservationGuests">
+            <td>
+                {{reservationGuest.guest.personalData.fullName}}
+                <span class="label label-warning" ng-show="reservationGuest.owner">
+                                        Owner
+                                    </span>
+            </td>
+            <td>{{reservationGuest.guest.personalData.phone}}</td>
+            <td>{{reservationGuest.room.number}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>

@@ -46,6 +46,14 @@ app2.config(function ($stateProvider, $urlRouterProvider) {
                 }
             }
         })
+        .state('app.root.reservationSuccessful', {
+            url: '/step3',
+            views: {
+                'content@app': {
+                    templateUrl: 'templates/booking/reservationSuccessful.html'
+                }
+            }
+        });
 
     $urlRouterProvider.otherwise('/home');
 });

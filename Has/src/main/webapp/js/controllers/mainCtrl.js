@@ -240,8 +240,12 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
 
     angular.element(document).ready(function () {
         if (!$scope.authentication) {
-            $scope.authentication = sessionStorage.authentication;
-            $scope.loginData = JSON.parse(sessionStorage.loginData);
+            if (sessionStorage.authentication) {
+                $scope.authentication = sessionStorage.authentication;
+                $scope.loginData = JSON.parse(sessionStorage.loginData);
+            } else {
+                $location.path('/login');
+            }
         }
     });
 });

@@ -4,6 +4,8 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
         title: "Booking"
     };
 
+    $scope.authentication = "Basic " + btoa("booking:B00king");
+
     $scope.roomTypes = sampleRoomTypes;
     $scope.roomStatuses = sampleRoomStatuses;
 
@@ -107,6 +109,30 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
             });
     };
 
+    $scope.saveData = function (dataType, data, successCallback, errorCallback, isEdit) {
+        var url = isEdit ? (dataType + "/" + data.id) : dataType;
+        var method = isEdit ? "PUT" : "POST";
+
+        $http({
+            method: method,
+            url: url,
+            data: data,
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
+        }).then(
+            function (response) { //success
+                return response.data;
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+                if (errorCallback)
+                    errorCallback;
+            })
+            .then(successCallback);
+    };
+
     $scope.clearGuestData = function () {
         $scope.guest = {};
         $scope.guestFound = false;
@@ -155,28 +181,51 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
             numberChildren: ctrl.filters.numberChildren,
             dinner: false,
             breakfast: true,
-            allInclusive: false
+            allInclusive: false,
+            price: 30.0
         };
         $state.go('app.root.personalData');
     };
 
     $scope.submitReservation = function () {
-        if (!$scope.guest.user) {
-            $scope.getRole(5, function (role) {
-                $scope.guest.user.username = $scope.guest.user.email;
-                $scope.guest.user.userRole = role;
-            });
-        }
         $scope.reservationGuest = {
-            reservation: $scope.reservation,
-            guest: $scope.guest,
             room: $scope.selectedRooms[0],
             isOwner: true
         };
 
-        console.log($scope.reservationGuest);
+        $scope.saveData("reservation", $scope.reservation, function (newReservation) {
+            $scope.reservationGuest.reservation = newReservation;
 
-        //$state.go('app.root.personalData');
+            if (!$scope.guest.user) { // create new guest
+                $scope.getRole(5, function (role) {
+                    $scope.guest.user.email = $scope.email;
+                    $scope.guest.user.username = $scope.email;
+                    $scope.guest.user.userRole = role;
+                    $scope.guest.numberReservations = 0;
+                    $scope.guest.status = 0;
+
+                    $scope.saveData("guest", $scope.guest, function (newGuest) {
+                        $scope.reservationGuest.guest = newGuest;
+                        $scope.saveData("reservation-guest", $scope.reservationGuest, function (newReservationGuest) {
+                            console.log(newReservationGuest);
+                            $scope.reservationInfo = newReservation
+                            $scope.reservationInfo.reservationGuests = [newReservationGuest];
+                            $state.go('app.root.reservationSuccessful');
+                        });
+                    }, $scope.resetReservation);
+                });
+            }
+            else { // use existing guest
+                $scope.reservationGuest.guest = $scope.guest;
+
+                $scope.saveData("reservation-guest", $scope.reservationGuest, function (newReservationGuest) {
+                    console.log(newReservationGuest);
+                    $scope.reservationInfo = newReservation
+                    $scope.reservationInfo.reservationGuests = [newReservationGuest];
+                    $state.go('app.root.reservationSuccessful');
+                });
+            }
+        });
     };
 
     angular.element(document).ready(function () {
