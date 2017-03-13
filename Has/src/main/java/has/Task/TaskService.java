@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Chokleet on 25.2.2017 г..
  */
 @Service
-public class TaskService  {
+public class TaskService {
 
     private static final int UNRESOLVED = 3;
 
@@ -25,7 +25,7 @@ public class TaskService  {
     public List<Task> getAllTasks() {
         return repo.findAll();
     }
-    
+
     public Task findById(Long id) throws Exception {
         Task Task = repo.findOne(id);
         validateIdNotNull(Task);
@@ -51,6 +51,7 @@ public class TaskService  {
         dbTask.setStatus(task.getStatus());
         dbTask.setAssigner(task.getAssigner());
         dbTask.setAssignee(task.getAssignee());
+        dbTask.setDuration(task.getDuration());
         return repo.save(dbTask);
     }
 
@@ -59,10 +60,10 @@ public class TaskService  {
     }
 
     public List<Task> getEmployeesUnresolvedTasks(Employee employee) {
-        return repo.findByAssigneeIdAndStatusNot(employee.getId(),UNRESOLVED);
+        return repo.findByAssigneeIdAndStatusNot(employee.getId(), UNRESOLVED);
     }
 
-    public Task changeStatus(Long id, Integer status){
+    public Task changeStatus(Long id, Integer status) {
         Task task = repo.findOne(id);
         task.setStatus(status);
         return repo.save(task);

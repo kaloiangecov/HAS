@@ -39,6 +39,8 @@ public class Task implements Serializable {
 
     private String assigner;
 
+    private String duration;
+
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "EMPLOYEE_ID")
