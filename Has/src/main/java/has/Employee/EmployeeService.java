@@ -89,6 +89,7 @@ public class EmployeeService {
         dbEmployee.setDateHired(employee.getDateHired());
         dbEmployee.setPersonalData(employee.getPersonalData());
         dbEmployee.setSalary(employee.getSalary());
+        dbEmployee.setBusy(employee.isBusy());
         if (dbEmployee.getUser().getId() != employee.getUser().getId()) {
             dbEmployee.setUser(employee.getUser());
         }
