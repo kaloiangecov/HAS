@@ -53,6 +53,15 @@ app2.config(function ($stateProvider, $urlRouterProvider) {
                     templateUrl: 'templates/booking/reservationSuccessful.html'
                 }
             }
+        })
+        .state('app.root.changeReservation', {
+            url: '/change-reservation',
+            views: {
+                'content@app': {
+                    templateUrl: 'templates/booking/edit.html',
+                    //controller: 'changeReservationCtrl'
+                }
+            }
         });
 
     $urlRouterProvider.otherwise('/home');

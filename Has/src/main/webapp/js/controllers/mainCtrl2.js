@@ -196,6 +196,8 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
 
 
         $scope.saveData("reservation", $scope.reservation, function (newReservation) {
+            console.log("reservation", newReservation);
+
             $scope.reservationGuest.reservation = newReservation;
 
             if (!$scope.guest.user.username && $scope.guest.user.email) { // create new guest
@@ -223,7 +225,7 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
                 $scope.reservationGuest.guest = $scope.guest;
 
                 $scope.saveData("reservation-guest", $scope.reservationGuest, function (newReservationGuest) {
-                    console.log(newReservationGuest);
+                    console.log("reservation owner", newReservationGuest);
                     $scope.reservationInfo = newReservation
                     $scope.reservationInfo.reservationGuests = [newReservationGuest];
                     $state.go('app.root.reservationSuccessful');
@@ -235,7 +237,7 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
     angular.element(document).ready(function () {
         $timeout(function () {
             $('#dateRange').daterangepicker({
-                parentEl: "#filters",
+                parentEl: "body",
                 startDate: new Date(ctrl.filters.startDate),
                 endDate: new Date(ctrl.filters.endDate),
                 locale: {
@@ -244,6 +246,7 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
             }, setDateRange);
 
             $('#identityIssueDate,#identityExpireDate').daterangepicker({
+                parentEl: "body",
                 singleDatePicker: true,
                 showDropdowns: true,
                 locale: {

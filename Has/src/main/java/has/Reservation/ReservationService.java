@@ -73,6 +73,15 @@ public class ReservationService {
 //        return removeRecursions(reservation);
     }
 
+    public Reservation findByCode(String code) throws Exception {
+        Reservation reservation = repo.findByReservationCodeAndStatus(code, 0);
+
+        if (reservation == null)
+            throw new Exception("There's no reservation with such code!");
+
+        return reservation;
+    }
+
     public Reservation remove(Long id) throws Exception {
         Reservation reservation = repo.findOne(id);
         validateIdNotNull(reservation);

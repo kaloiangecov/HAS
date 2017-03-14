@@ -81,6 +81,14 @@ public class ReservationController {
         return reservationService.findById(id);
     }
 
+    @RequestMapping(value = "/reservation/code/{code}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    //@PreAuthorize("hasAuthority('PERM_VIEW_RESERVATION')")
+    public Reservation findReservationById(@PathVariable String code) throws Exception {
+        return reservationService.findByCode(code);
+    }
+
     @RequestMapping(value = "/reservation/{id}", method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)

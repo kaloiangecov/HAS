@@ -12,10 +12,10 @@
                 <input type="email" class="form-control" id="email" name="email" placeholder="E-Mail"
                        ng-model="guest.user.email" required="required"/>
                 <span class="input-group-btn">
-                    <button type="button" class="btn btn-default" ng-click="getGuestUserByEmail(email)">
+                    <button type="button" class="btn btn-default" ng-click="getGuestUserByEmail(guest.user.email)">
                         <i class="fa fa-search"></i>
                     </button>
-                    <button type="button" class="btn btn-danger" ng-click="clearGuestData(); email = '';">
+                    <button type="button" class="btn btn-danger" ng-click="clearGuestData()">
                         <i class="fa fa-times"></i>
                     </button>
                 </span>
