@@ -35,6 +35,10 @@ app2.config(function ($stateProvider, $urlRouterProvider) {
                     templateUrl: 'templates/booking/home.html'
                     //controller: "mainCtrl2"
                 }
+            },
+            onEnter: function () {
+                $('.navbar-nav').find('li').removeClass('active');
+                $('#home').addClass('active');
             }
         })
         .state('app.root.personalData', {
@@ -61,6 +65,10 @@ app2.config(function ($stateProvider, $urlRouterProvider) {
                     templateUrl: 'templates/booking/edit.html',
                     //controller: 'changeReservationCtrl'
                 }
+            },
+            onEnter: function () {
+                $('.navbar-nav').find('li').removeClass('active');
+                $('#change').addClass('active');
             }
         });
 

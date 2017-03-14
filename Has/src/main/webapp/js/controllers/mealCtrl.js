@@ -3,7 +3,7 @@ app.controller("mealCtrl", function ($scope, $http, $location, $state, $statePar
     $scope.page.title = "Meals";
     $scope.mealCategories = [];
     $scope.master = {};
-    ctrl.filters = {
+    $scope.filters = {
         name: ''
     };
     $scope.isEdit = false;
@@ -27,9 +27,9 @@ app.controller("mealCtrl", function ($scope, $http, $location, $state, $statePar
 
     if ($location.path().includes("list")) {
         // meals table
-        ctrl.dtInstance = {};
+        $scope.dtInstance = {};
 
-        ctrl.dtOptions = DTOptionsBuilder.newOptions()
+        $scope.dtOptions = DTOptionsBuilder.newOptions()
             .withOption('ajax', {
                 url: 'meal/search',
                 type: 'GET',
@@ -39,7 +39,7 @@ app.controller("mealCtrl", function ($scope, $http, $location, $state, $statePar
                     'Content-Type': 'application/json',
                     'Authorization': $scope.authentication
                 },
-                data: ctrl.filters,
+                data: $scope.filters,
                 error: function (jqXHR, textStatus, errorThrown) {
                     $scope.displayMessage({
                         status: jqXHR.status,
@@ -54,7 +54,7 @@ app.controller("mealCtrl", function ($scope, $http, $location, $state, $statePar
             .withOption('pagingType', 'full_numbers')
             .withOption('dom', 'lrtip');
 
-        ctrl.dtColumns = [
+        $scope.dtColumns = [
             DTColumnBuilder.newColumn('id', 'ID').notVisible(),
             DTColumnBuilder.newColumn('name', 'Meal').withClass('meal-cell')
                 .renderWith(function (data, type, full) {
@@ -105,11 +105,11 @@ app.controller("mealCtrl", function ($scope, $http, $location, $state, $statePar
             }, 300);
         };
 
-        $scope.$watch("ctrl.filters.name", $scope.addDeleteFunctions);
+        $scope.$watch("filters.name", $scope.addDeleteFunctions);
 
         $scope.reloadTableData = function () {
             var resetPaging = false;
-            ctrl.dtInstance.reloadData(function (list) {
+            $scope.dtInstance.reloadData(function (list) {
                 //console.log(list);
                 $scope.addDeleteFunctions();
             }, resetPaging);

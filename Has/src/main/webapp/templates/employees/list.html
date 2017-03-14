@@ -1,4 +1,4 @@
-<div class="col-md-12 col-sm-12 col-xs-12" ng-controller="employeeCtrl as ctrl">
+<div class="col-md-12 col-sm-12 col-xs-12">
     <div class="x_panel">
         <div class="x_title">
             <h2><i class="fa fa-users"></i> Employees List</h2>
@@ -18,14 +18,14 @@
             <div class="clearfix"></div>
 
             <form class="form-inline text-center" ng-submit="reloadTableData()">
-                <input type="text" class="form-control" ng-model="ctrl.filters.fullName" placeholder="Full Name"/>
-                <input type="text" class="form-control" ng-model="ctrl.filters.phone" placeholder="Phone Number"/>
-                <input type="text" class="form-control" id="filterDateHired" ng-model="ctrl.filters.dateHired"
+                <input type="text" class="form-control" ng-model="filters.fullName" placeholder="Full Name"/>
+                <input type="text" class="form-control" ng-model="filters.phone" placeholder="Phone Number"/>
+                <input type="text" class="form-control" id="filterDateHired" ng-model="filters.dateHired"
                        placeholder="Date Hired"/>
                 <div class="form-control">
                     <label for="showDisabled">
                         <input type="checkbox" class="js-switch" id="showDisabled"
-                               ng-model="ctrl.filters.showDisabled"/>
+                               ng-model="filters.showDisabled"/>
                         Display Unemployed
                     </label>
                 </div>

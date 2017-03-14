@@ -2,7 +2,7 @@ app.controller("guestCtrl", function ($scope, $state, $location, $stateParams, $
     var ctrl = this;
     $scope.page.title = "Guests";
     $scope.master = {};
-    ctrl.filters = {
+    $scope.filters = {
         fullName: "",
         phone: ""
     };
@@ -23,7 +23,7 @@ app.controller("guestCtrl", function ($scope, $state, $location, $stateParams, $
                     'Content-Type': 'application/json',
                     'Authorization': $scope.authentication
                 },
-                data: ctrl.filters,
+                data: $scope.filters,
                 error: function (jqXHR, textStatus, errorThrown) {
                     $scope.displayMessage({
                         status: jqXHR.status,
@@ -76,8 +76,8 @@ app.controller("guestCtrl", function ($scope, $state, $location, $stateParams, $
             }, 300);
         };
 
-        $scope.$watch("ctrl.filters.fullName", $scope.addDeleteFunctions);
-        $scope.$watch("ctrl.filters.phone", $scope.addDeleteFunctions);
+        $scope.$watch("filters.fullName", $scope.addDeleteFunctions);
+        $scope.$watch("filters.phone", $scope.addDeleteFunctions);
 
         $scope.reloadTableData = function () {
             var resetPaging = false;

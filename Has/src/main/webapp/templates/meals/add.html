@@ -1,4 +1,4 @@
-<div class="col-xs-12" ng-controller="mealCtrl as ctrl">
+<div class="col-xs-12">
     <div class="x_panel">
         <div class="x_title">
             <h2><i class="fa fa-cutlery"></i><i class="fa fa-plus"></i> Add Meal</h2>
@@ -80,7 +80,7 @@
                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-4">
                         <button type="submit" ng-click="submit(meal)" class="btn btn-success">Submit</button>
                         <button type="reset" class="btn btn-default">Reset</button>
-                        <a type="button" class="btn btn-primary" href="#!/meals/list">Back</a>
+                        <a type="button" class="btn btn-primary" ui-sref="loggedin.root.mealsList">Back</a>
                     </div>
                 </div>
 

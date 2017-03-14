@@ -2,7 +2,7 @@ app.controller("employeeCtrl", function ($scope, $location, $state, $stateParams
     var ctrl = this;
     $scope.page.title = "Employees";
     $scope.master = {};
-    ctrl.filters = {
+    $scope.filters = {
         fullName: "",
         phone: "",
         dateHired: "",
@@ -43,7 +43,7 @@ app.controller("employeeCtrl", function ($scope, $location, $state, $stateParams
                     'Content-Type': 'application/json',
                     'Authorization': $scope.authentication
                 },
-                data: ctrl.filters,
+                data: $scope.filters,
                 success: $scope.addDeleteFunctions,
                 error: function (jqXHR, textStatus, errorThrown) {
                     $scope.displayMessage({
@@ -106,10 +106,10 @@ app.controller("employeeCtrl", function ($scope, $location, $state, $stateParams
             }, 300);
         };
 
-        $scope.$watch("ctrl.filters.fullName", $scope.addDeleteFunctions);
-        $scope.$watch("ctrl.filters.phone", $scope.addDeleteFunctions);
-        $scope.$watch("ctrl.filters.dateHired", $scope.addDeleteFunctions);
-        $scope.$watch("ctrl.filters.showDisabled", $scope.addDeleteFunctions);
+        $scope.$watch("filters.fullName", $scope.addDeleteFunctions);
+        $scope.$watch("filters.phone", $scope.addDeleteFunctions);
+        $scope.$watch("filters.dateHired", $scope.addDeleteFunctions);
+        $scope.$watch("filters.showDisabled", $scope.addDeleteFunctions);
 
         $scope.reloadTableData = function (resetPaging) {
             $scope.dtInstance.reloadData(function (list) {
@@ -181,8 +181,9 @@ app.controller("employeeCtrl", function ($scope, $location, $state, $stateParams
                     autoUpdateInput: false
                 },
                 function (start) {
-                    ctrl.filters.dateHired = start.format("YYYY-MM-DD");
-                    $('#filterDateHired').val(ctrl.filters.dateHired);
+                    $scope.filters.dateHired = start.format("YYYY-MM-DD");
+                    $scope.$apply();
+                    $('#filterDateHired').val($scope.filters.dateHired);
                 });
 
             $scope.reloadTableData(false);

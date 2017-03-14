@@ -1,19 +1,18 @@
 app.controller("roomCtrl", function ($scope, $http, $location, $state, $stateParams, $resource, $timeout, $interval, DTOptionsBuilder, DTColumnBuilder) {
     var ctrl = this;
     $scope.page.title = "Rooms";
-    $scope.roomsTable;
     $scope.master = {};
-    ctrl.filters = {
+    $scope.filters = {
         number: 0,
-        type: 0
+        roomClass: 0
     };
     $scope.isEdit = false;
 
     if ($location.path().includes("list")) {
         // rooms table
-        ctrl.dtInstance = {};
+        $scope.dtInstance = {};
 
-        ctrl.dtOptions = DTOptionsBuilder.newOptions()
+        $scope.dtOptions = DTOptionsBuilder.newOptions()
             .withOption('ajax', {
                 url: 'rooms/search',
                 type: 'GET',
@@ -23,7 +22,7 @@ app.controller("roomCtrl", function ($scope, $http, $location, $state, $statePar
                     'Content-Type': 'application/json',
                     'Authorization': $scope.authentication
                 },
-                data: ctrl.filters,
+                data: $scope.filters,
                 error: function (jqXHR, textStatus, errorThrown) {
                     $scope.displayMessage({
                         status: jqXHR.status,
@@ -38,7 +37,7 @@ app.controller("roomCtrl", function ($scope, $http, $location, $state, $statePar
             .withOption('pagingType', 'full_numbers')
             .withOption('dom', 'lrtip');
 
-        ctrl.dtColumns = [
+        $scope.dtColumns = [
             DTColumnBuilder.newColumn('number', 'Number'),
             DTColumnBuilder.newColumn('roomClass', 'Type')
                 .renderWith(function (typeIndex) {
@@ -78,12 +77,12 @@ app.controller("roomCtrl", function ($scope, $http, $location, $state, $statePar
             }, 300);
         };
 
-        $scope.$watch("ctrl.filters.number", $scope.addDeleteFunctions);
-        $scope.$watch("ctrl.filters.type", $scope.addDeleteFunctions);
+        $scope.$watch("filters.number", $scope.addDeleteFunctions);
+        $scope.$watch("filters.roomClass", $scope.addDeleteFunctions);
 
         $scope.reloadTableData = function () {
             var resetPaging = false;
-            ctrl.dtInstance.reloadData(function (list) {
+            $scope.dtInstance.reloadData(function (list) {
                 //console.log(list);
                 $scope.addDeleteFunctions();
             }, resetPaging);
@@ -100,7 +99,7 @@ app.controller("roomCtrl", function ($scope, $http, $location, $state, $statePar
             $scope.isEdit = false;
             $scope.room = {
                 number: 101,
-                type: 0,
+                roomClass: 0,
                 bedsSingle: 1,
                 bedsDouble: 1,
                 status: 0,

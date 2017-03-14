@@ -1,7 +1,8 @@
 app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
     var ctrl = this;
     $scope.page = {
-        title: "Booking"
+        title: "Booking",
+        activePage: "home"
     };
 
     $scope.authentication = "Basic " + btoa("booking:B00king");
@@ -188,6 +189,13 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
         $state.go('app.root.personalData');
     };
 
+    $scope.clearEverything = function () {
+        $scope.guest = {};
+        $scope.reservation = {};
+        $scope.reservationGuest = {};
+        $scope.selectedRooms = [];
+    };
+
     $scope.submitReservation = function () {
         $scope.reservationGuest = {
             room: $scope.selectedRooms[0],
@@ -216,6 +224,9 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
                             console.log(newReservationGuest);
                             $scope.reservationInfo = newReservation
                             $scope.reservationInfo.reservationGuests = [newReservationGuest];
+
+                            $scope.clearEverything();
+
                             $state.go('app.root.reservationSuccessful');
                         });
                     }, $scope.resetReservation);
@@ -228,6 +239,9 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
                     console.log("reservation owner", newReservationGuest);
                     $scope.reservationInfo = newReservation
                     $scope.reservationInfo.reservationGuests = [newReservationGuest];
+
+                    $scope.clearEverything();
+
                     $state.go('app.root.reservationSuccessful');
                 });
             }
@@ -256,6 +270,5 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
 
             $('.calendar').css({float: 'left'});
         }, 500);
-
     });
 });
