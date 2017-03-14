@@ -69,7 +69,8 @@ public class ReservationController {
         return reservationService.searchReservationsWeb(
                 request.getStartDate(),
                 request.getEndDate(),
-                request.getNumberAdults()
+                request.getNumberAdults(),
+                (request.getNumberChildren() > 0)
         );
     }
 

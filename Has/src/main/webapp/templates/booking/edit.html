@@ -21,7 +21,7 @@
     </div>
 
     <div class="row" id="reservationData">
-        <form id="editReservationForm" name="editReservationForm" class="col-md-6">
+        <form id="editReservationForm" name="editReservationForm" class="col-md-6" novalidate>
             <div class="form-group">
                 <label for="newDateRange">Check in / Check out</label>
                 <div class="input-group">
@@ -29,6 +29,39 @@
                     <input type="text" id="newDateRange" name="newDateRange" class="form-control"/>
                 </div>
             </div>
+            <div class="form-group">
+                <label for="numberAdults">Adults</label>
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <i class="fa fa-male" aria-hidden="true"></i>
+                        <i class="fa fa-female" aria-hidden="true"></i>
+                    </span>
+                    <input type="number" id="numberAdults" name="numberAdults" class="form-control"
+                           min="1" max="10" ng-model="ctrl.reservation.numberAdults"/>
+                </div>
+                <div ng-show="editReservationForm.$submitted || editReservationForm.numberAdults.$touched"
+                     class="validation-message">
+                    <span ng-show="editReservationForm.numberAdults.$error.required">This field is required</span>
+                    <span ng-show="editReservationForm.numberAdults.$error.min">Number too small</span>
+                    <span ng-show="editReservationForm.numberAdults.$error.max">Number too big</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="numberChildren">Children</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-child" aria-hidden="true"></i></span>
+                    <input type="number" id="numberChildren" name="numberChildren" class="form-control"
+                           min="0" max="10" ng-model="ctrl.reservation.numberChildren"/>
+                </div>
+                <div ng-show="editReservationForm.$submitted || editReservationForm.numberChildren.$touched"
+                     class="validation-message">
+                    <span ng-show="editReservationForm.numberChildren.$error.required">This field is required</span>
+                    <span ng-show="editReservationForm.numberChildren.$error.min">Number too small</span>
+                    <span ng-show="editReservationForm.numberChildren.$error.max">Number too big</span>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" ng-click="saveReservation()">Submit</button>
         </form>
     </div>
 

@@ -29,4 +29,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     @Query("SELECT r FROM has.Room.Room r WHERE (r.bedsSingle + r.bedsDouble*2) >= :numberAdults AND r NOT IN (SELECT rg.room FROM has.ReservationGuest.ReservationGuest rg WHERE (rg.reservation.startDate BETWEEN :startDate AND :endDate) OR (rg.reservation.endDate BETWEEN :startDate AND :endDate))")
     List<Room> findInSite(@Param("startDate") String startDate, @Param("endDate") String endDate, @Param("numberAdults") int numberAdults);
+
+    @Query("SELECT r FROM has.Room.Room r WHERE (r.bedsSingle + r.bedsDouble*2) >= :numberAdults AND r.children = :children AND r NOT IN (SELECT rg.room FROM has.ReservationGuest.ReservationGuest rg WHERE (rg.reservation.startDate BETWEEN :startDate AND :endDate) OR (rg.reservation.endDate BETWEEN :startDate AND :endDate))")
+    List<Room> findInSiteWithChildren(@Param("startDate") String startDate, @Param("endDate") String endDate, @Param("numberAdults") int numberAdults, @Param("children") boolean children);
 }

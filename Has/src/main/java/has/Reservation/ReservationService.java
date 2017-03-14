@@ -58,9 +58,13 @@ public class ReservationService {
         return reservations;
     }
 
-    public List<Room> searchReservationsWeb(String startDate, String endDate, int numberAdults) {
+    public List<Room> searchReservationsWeb(String startDate, String endDate, int numberAdults, boolean children) {
         List<Room> freeRooms;
-        freeRooms = repo.findInSite(startDate, endDate, numberAdults);
+
+        if (children)
+            freeRooms = repo.findInSiteWithChildren(startDate, endDate, numberAdults, children);
+        else
+            freeRooms = repo.findInSite(startDate, endDate, numberAdults);
 
         return freeRooms;
     }

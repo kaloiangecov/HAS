@@ -1,6 +1,8 @@
 app2.controller("changeReservationCtrl", function ($scope, $state, $http, $timeout) {
     var ctrl = this;
 
+    ctrl.reservation = {};
+
     $scope.getReservationByCode = function (code) {
         $http({
             method: "GET",
@@ -24,6 +26,23 @@ app2.controller("changeReservationCtrl", function ($scope, $state, $http, $timeo
 
     $scope.clearReservation = function () {
         ctrl.reservation = {};
+    };
+
+    $scope.saveReservation = function () {
+        $scope.saveData("reservation", ctrl.reservation,
+            function (data) { //success
+                $scope.page.message = {
+                    type: 'success',
+                    title: ctrl.reservation.reservationGuests[0].personalData.fullName,
+                    text: 'Reservation was successfully changed'
+                };
+                $('#messageModal').modal('show');
+                $scope.clearReservation();
+            },
+            function () { //error
+
+            }, true
+        );
     };
 
     function setNewDateRange(start, end, label) {
