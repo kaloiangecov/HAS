@@ -30,7 +30,7 @@ public class RoleController {
     @RequestMapping(value = "/roles", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_VIEW_ROLE')")
     public List<UserRole> getAllRoles() {
         return roleService.findAll();
     }
@@ -38,7 +38,7 @@ public class RoleController {
     @RequestMapping(value = "/role/{id}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('PERM_VIEW_ROLE')")
     public UserRole findRoleByNumber(@PathVariable Long id) throws Exception {
         return roleService.findById(id);
     }

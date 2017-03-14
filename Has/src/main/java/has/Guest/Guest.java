@@ -40,7 +40,7 @@ public class Guest implements Serializable {
     @JoinColumn(name = "PERSONAL_DATA_ID")
     private PersonalData personalData;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "USER_ID")
     private User user;
 
