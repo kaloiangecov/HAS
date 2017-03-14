@@ -38,6 +38,7 @@ app.controller("userCtrl", function ($scope, $http, $location, $state, $statePar
             ];
 
             $scope.rolesList = emptyArray.concat(data);
+            $scope.rolesList.pop();
 
             ctrl.filters.roleID = $scope.rolesList[0].id;
         });
