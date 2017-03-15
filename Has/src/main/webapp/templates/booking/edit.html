@@ -19,7 +19,7 @@
 </div>
 
 <div class="row" id="reservationData" style="margin-top:12px;border-top: 1px dashed #ccc;">
-    <form id="editReservationForm" name="editReservationForm" class="col-md-6" novalidate>
+    <form id="editReservationForm" name="editReservationForm" class="col-md-6" novalidate ng-show="reservation.id">
         <div class="form-group">
             <label for="newDateRange">Check in / Check out</label>
             <div class="input-group">
@@ -120,6 +120,9 @@
             </table>
 
 
-            <button type="submit" class="btn btn-primary" ng-click="search()">Search for a new room</button>
+            <button type="submit" class="btn btn-default" ng-click="search()">Search for a new room</button>
+            <button type="button" class="btn btn-primary" ng-click="editReservation()"
+                    ng-show="selectedRooms.length > 0">Submit
+            </button>
     </form>
 </div>

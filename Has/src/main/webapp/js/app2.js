@@ -36,12 +36,12 @@ app2.config(function ($stateProvider, $urlRouterProvider) {
                     //controller: "mainCtrl2"
                 }
             },
-            onEnter: function () {
+            onEnter: function ($rootScope) {
                 setTimeout(function () {
                     $('.navbar-nav').find('li').removeClass('active');
                     $('#home').addClass('active');
 
-                    $('#dateRange').daterangepicker({
+                    $rootScope.dr1 = $('#dateRange').daterangepicker({
                         parentEl: "body",
                         startDate: new Date(),
                         endDate: new Date(),
@@ -52,8 +52,8 @@ app2.config(function ($stateProvider, $urlRouterProvider) {
 
                     $('.calendar').css({float: 'left'});
 
-                    this.switchPets = new Switchery(document.getElementById('pets'), {color: "#266CEa"});
-                    this.switchMinibar = new Switchery(document.getElementById('minibar'), {color: "#266CEa"});
+                    $rootScope.switchPets = new Switchery(document.getElementById('pets'), {color: "#266CEa"});
+                    $rootScope.switchMinibar = new Switchery(document.getElementById('minibar'), {color: "#266CEa"});
                 }, 1);
             }
         })
@@ -65,7 +65,7 @@ app2.config(function ($stateProvider, $urlRouterProvider) {
                     //controller: "mainCtrl2"
                 }
             },
-            onEnter: function () {
+            onEnter: function ($rootScope) {
                 setTimeout(function () {
                     $('#identityIssueDate,#identityExpireDate').daterangepicker({
                         parentEl: "body",
@@ -76,9 +76,9 @@ app2.config(function ($stateProvider, $urlRouterProvider) {
                         }
                     });
 
-                    this.switchBreakfast = new Switchery(document.getElementById('breakfast'), {color: "#266CEa"});
-                    this.switchDinner = new Switchery(document.getElementById('dinner'), {color: "#266CEa"});
-                    this.switchAllInclusive = new Switchery(document.getElementById('allInclusive'), {color: "#EA6C26"});
+                    $rootScope.switchBreakfast = new Switchery(document.getElementById('breakfast'), {color: "#266CEa"});
+                    $rootScope.switchDinner = new Switchery(document.getElementById('dinner'), {color: "#266CEa"});
+                    $rootScope.switchAllInclusive = new Switchery(document.getElementById('allInclusive'), {color: "#EA6C26"});
                 }, 1);
             }
         })
@@ -98,12 +98,12 @@ app2.config(function ($stateProvider, $urlRouterProvider) {
                     //controller: 'changeReservationCtrl'
                 }
             },
-            onEnter: function () {
+            onEnter: function ($rootScope) {
                 setTimeout(function () {
                     $('.navbar-nav').find('li').removeClass('active');
                     $('#change').addClass('active');
-
-                    $('#newDateRange').daterangepicker({
+                    /*
+                     $rootScope.dr2 = $('#newDateRange').daterangepicker({
                         parentEl: "body",
                         startDate: new Date(),
                         endDate: new Date(),
@@ -113,12 +113,7 @@ app2.config(function ($stateProvider, $urlRouterProvider) {
                     });
 
                     $('.calendar').css({float: 'left'});
-
-                    new Switchery(document.getElementById('newPets'), {color: "#266CEa"});
-                    new Switchery(document.getElementById('newMinibar'), {color: "#266CEa"});
-                    new Switchery(document.getElementById('newBreakfast'), {color: "#266CEa"});
-                    new Switchery(document.getElementById('newDinner'), {color: "#266CEa"});
-                    new Switchery(document.getElementById('newAllInclusive'), {color: "#EA6C26"});
+                     */
                 }, 1);
             }
         });

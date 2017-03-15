@@ -1,4 +1,4 @@
-app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
+app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeout) {
     var ctrl = this;
     $scope.page = {
         title: "Booking",
@@ -125,7 +125,7 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
                 $scope.displayMessage(response.data);
             })
             .then(function (reservation) {
-                ctrl.reservation = reservation;
+                $scope.reservation = reservation;
 
                 $scope.filters = {
                     startDate: reservation.startDate,
@@ -136,10 +136,22 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
                     minibar: reservation.reservationGuests[0].room.minibar
                 };
 
-                $('#newDateRange').daterangepicker({
-                    startDate: new Date(ctrl.reservation.startDate),
-                    endDate: new Date(ctrl.reservation.endDate)
+                $scope.dr2 = $('#newDateRange').daterangepicker({
+                    startDate: new Date($scope.reservation.startDate),
+                    endDate: new Date($scope.reservation.endDate)
                 });
+                $scope.dr2.on('apply.daterangepicker', function (ev, picker) {
+                    setDateRange(picker.startDate.format('YYYY-MM-DD'), picker.endDate.format('YYYY-MM-DD'))
+                });
+                $('.calendar').css({float: 'left'});
+
+                $timeout(function () {
+                    $rootScope.switchNewPets = new Switchery(document.getElementById('newPets'), {color: "#266CEa"});
+                    $rootScope.switchNewMinibar = new Switchery(document.getElementById('newMinibar'), {color: "#266CEa"});
+                    $rootScope.switchNewBreakfast = new Switchery(document.getElementById('newBreakfast'), {color: "#266CEa"});
+                    $rootScope.switchNewDinner = new Switchery(document.getElementById('newDinner'), {color: "#266CEa"});
+                    $rootScope.switchNewAllInclusive = new Switchery(document.getElementById('newAllInclusive'), {color: "#EA6C26"});
+                }, 200);
             });
     };
 
@@ -188,16 +200,6 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
     $scope.clearGuestData = function () {
         $scope.guest = {};
         $scope.guestFound = false;
-    };
-
-    function setDateRange(start, end, label) {
-        $scope.$apply(function () {
-            //var tmp = end._d.getTime() - start._d.getTime();
-            //$scope.config.timeline = getTimeline(start._d, tmp / 86400000);
-            $scope.filters.startDate = start._d.toISOString().substr(0, 10);
-            $scope.filters.endDate = end._d.toISOString().substr(0, 10);
-        });
-
     };
 
     $scope.search = function () {
@@ -301,15 +303,15 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
     };
 
     $scope.editReservation = function () {
-        $scope.saveData("reservation", ctrl.reservation,
+        $scope.saveData("reservation", $scope.reservation,
             function (data) { //success
                 $scope.page.message = {
                     type: 'success',
-                    title: ctrl.reservation.reservationGuests[0].personalData.fullName,
+                    title: $scope.reservation.reservationGuests[0].personalData.fullName,
                     text: 'Reservation was successfully changed'
                 };
                 $('#messageModal').modal('show');
-                $scope.clearReservation();
+                $scope.clearEverything();
             },
             function () { //error
 
@@ -317,14 +319,44 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
         );
     };
 
-    angular.element(document).ready(function () {
-        $('#dateRange,#newDateRange').daterangepicker({
-            parentEl: "body",
-            startDate: new Date(),
-            endDate: new Date(),
-            locale: {
-                format: "DD/MM/YY"
+    function setDateRange(start, end) {
+        $scope.$apply(function () {
+            $scope.filters.startDate = start;
+            $scope.filters.endDate = end;
+        });
+    }
+
+    $scope.$watch('reservation.allInclusive', function (newVal, oldVal) {
+        if (newVal === true) {
+            if ($rootScope.switchDinner) {
+                $rootScope.switchDinner.disable();
+                $rootScope.switchBreakfast.disable();
             }
-        }, setDateRange);
+            if ($rootScope.switchNewDinner) {
+                $rootScope.switchNewDinner.disable();
+                $rootScope.switchNewBreakfast.disable();
+            }
+        } else {
+            if ($rootScope.switchDinner) {
+                $rootScope.switchDinner.enable();
+                $rootScope.switchBreakfast.enable();
+            }
+            if ($rootScope.switchNewDinner) {
+                $rootScope.switchNewDinner.enable();
+                $rootScope.switchNewBreakfast.enable();
+            }
+        }
+    });
+
+    angular.element(document).ready(function () {
+        $timeout(function () {
+            if ($rootScope.dr1) {
+                $rootScope.dr1.on('apply.daterangepicker', function (ev, picker) {
+                    setDateRange(picker.startDate.format('YYYY-MM-DD'), picker.endDate.format('YYYY-MM-DD'))
+                });
+            }
+        }, 500);
+
+
     });
 });

@@ -79,7 +79,7 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
             //delete $scope.loginData.password;
 
             sessionStorage.setItem("authentication", $scope.authentication);
-            sessionStorage.setItem("loginData", JSON.stringify($scope.loginData));
+            sessionStorage.setItem("loginData", angular.toJson($scope.loginData));
 
             $scope.isLoginError = false;
             $location.path("/home");
@@ -242,7 +242,7 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
         if (!$scope.authentication) {
             if (sessionStorage.authentication) {
                 $scope.authentication = sessionStorage.authentication;
-                $scope.loginData = JSON.parse(sessionStorage.loginData);
+                $scope.loginData = angular.fromJson(sessionStorage.loginData);
             } else {
                 $location.path('/login');
             }
