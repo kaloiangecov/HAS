@@ -1,4 +1,4 @@
-<div class="col-md-12 col-sm-12 col-xs-12" ng-controller="userCtrl as ctrl">
+<div class="col-md-12 col-sm-12 col-xs-12">
     <div class="x_panel">
         <div class="x_title">
             <h2><i class="fa fa-users"></i> Users List</h2>
@@ -16,9 +16,9 @@
             </ul>
             <div class="clearfix"></div>
             <form class="form-inline text-center" ng-submit="reloadTableData()">
-                <input type="text" class="form-control" ng-model="ctrl.filters.username" placeholder="Username"/>
-                <input type="text" class="form-control" ng-model="ctrl.filters.email" placeholder="Email"/>
-                <select class="form-control roles" id="role" name="role" ng-model="ctrl.filters.roleID"
+                <input type="text" class="form-control" ng-model="filters.username" placeholder="Username"/>
+                <input type="text" class="form-control" ng-model="filters.email" placeholder="Email"/>
+                <select class="form-control roles" id="role" name="role" ng-model="filters.roleID"
                         ng-options="item.id as item.roleName for item in rolesList" required="required">
                 </select>
                 <button type="submit" class="btn btn-primary" style="position:relative;top:+3px;"><i

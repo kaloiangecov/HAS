@@ -1,15 +1,20 @@
-app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
+app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeout) {
     var ctrl = this;
     $scope.page = {
-        title: "Booking"
+        title: "Booking",
+        activePage: "home"
     };
+
+    $scope.authentication = "Basic " + btoa("booking:B00king");
 
     $scope.roomTypes = sampleRoomTypes;
     $scope.roomStatuses = sampleRoomStatuses;
 
-    ctrl.filters = {
+    $scope.filters = {
         numberAdults: 1,
         numberChildren: 0,
+        pets: false,
+        minibar: false,
         startDate: moment().format('YYYY-MM-DD'),
         endDate: moment().format('YYYY-MM-DD')
     };
@@ -107,19 +112,94 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
             });
     };
 
+    $scope.getReservationByCode = function (code) {
+        $http({
+            method: "GET",
+            url: ("reservation/code/" + code),
+            responseType: "json"
+        }).then(
+            function (response) { //success
+                return response.data;
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+            })
+            .then(function (reservation) {
+                $scope.reservation = reservation;
+
+                $scope.filters = {
+                    startDate: reservation.startDate,
+                    endDate: reservation.endDate,
+                    numberAdults: reservation.numberAdults,
+                    numberChildren: reservation.numberChildren,
+                    pets: reservation.reservationGuests[0].room.pets,
+                    minibar: reservation.reservationGuests[0].room.minibar
+                };
+
+                $scope.dr2 = $('#newDateRange').daterangepicker({
+                    startDate: new Date($scope.reservation.startDate),
+                    endDate: new Date($scope.reservation.endDate)
+                });
+                $scope.dr2.on('apply.daterangepicker', function (ev, picker) {
+                    setDateRange(picker.startDate.format('YYYY-MM-DD'), picker.endDate.format('YYYY-MM-DD'))
+                });
+                $('.calendar').css({float: 'left'});
+
+                $timeout(function () {
+                    $rootScope.switchNewPets = new Switchery(document.getElementById('newPets'), {color: "#266CEa"});
+                    $rootScope.switchNewMinibar = new Switchery(document.getElementById('newMinibar'), {color: "#266CEa"});
+                    $rootScope.switchNewBreakfast = new Switchery(document.getElementById('newBreakfast'), {color: "#266CEa"});
+                    $rootScope.switchNewDinner = new Switchery(document.getElementById('newDinner'), {color: "#266CEa"});
+                    $rootScope.switchNewAllInclusive = new Switchery(document.getElementById('newAllInclusive'), {color: "#EA6C26"});
+                }, 200);
+            });
+    };
+
+    $scope.saveData = function (dataType, data, successCallback, errorCallback, isEdit) {
+        var url = isEdit ? (dataType + "/" + data.id) : dataType;
+        var method = isEdit ? "PUT" : "POST";
+
+        $http({
+            method: method,
+            url: url,
+            data: data,
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
+        }).then(
+            function (response) { //success
+                return response.data;
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+                if (errorCallback)
+                    errorCallback;
+            })
+            .then(successCallback);
+    };
+
+    $scope.deleteData = function (dataType, id, callback) {
+        $http({
+            method: "DELETE",
+            url: (dataType + "/" + id),
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
+        }).then(
+            function (response) { //success
+                response.data;
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+            })
+            .then(callback);
+    };
+
     $scope.clearGuestData = function () {
         $scope.guest = {};
         $scope.guestFound = false;
-    };
-
-    function setDateRange(start, end, label) {
-        $scope.$apply(function () {
-            //var tmp = end._d.getTime() - start._d.getTime();
-            //$scope.config.timeline = getTimeline(start._d, tmp / 86400000);
-            ctrl.filters.startDate = start._d.toISOString().substr(0, 10);
-            ctrl.filters.endDate = end._d.toISOString().substr(0, 10);
-        });
-
     };
 
     $scope.search = function () {
@@ -132,7 +212,7 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
                 'Content-Type': 'application/json',
                 "Authorization": $scope.authentication
             },
-            data: ctrl.filters
+            data: $scope.filters
         }).then(
             function (response) { //success
                 return response.data;
@@ -147,59 +227,136 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
 
     $scope.selectRooms = function () {
         $scope.reservation = {
-            startDate: ctrl.filters.startDate,
-            endDate: ctrl.filters.endDate,
+            startDate: $scope.filters.startDate,
+            endDate: $scope.filters.endDate,
             group: ($scope.selectedRooms.length > 0),
             status: 0,
-            numberAdults: ctrl.filters.numberAdults,
-            numberChildren: ctrl.filters.numberChildren,
+            numberAdults: $scope.filters.numberAdults,
+            numberChildren: $scope.filters.numberChildren,
             dinner: false,
             breakfast: true,
-            allInclusive: false
+            allInclusive: false,
+            price: 30.0,
+            discount: 0
         };
         $state.go('app.root.personalData');
     };
 
+    $scope.clearEverything = function () {
+        $scope.guest = {};
+        $scope.reservation = {};
+        $scope.reservationGuest = {};
+        $scope.selectedRooms = [];
+        $scope.results = [];
+    };
+
     $scope.submitReservation = function () {
-        if (!$scope.guest.user) {
-            $scope.getRole(5, function (role) {
-                $scope.guest.user.username = $scope.guest.user.email;
-                $scope.guest.user.userRole = role;
-            });
-        }
         $scope.reservationGuest = {
-            reservation: $scope.reservation,
-            guest: $scope.guest,
             room: $scope.selectedRooms[0],
-            isOwner: true
+            owner: true
         };
 
-        console.log($scope.reservationGuest);
 
-        //$state.go('app.root.personalData');
+        $scope.saveData("reservation", $scope.reservation, function (newReservation) {
+            console.log("reservation", newReservation);
+
+            $scope.reservationGuest.reservation = newReservation;
+
+            if (!$scope.guest.user.username && $scope.guest.user.email) { // create new guest
+                $scope.getRole(5, function (role) {
+                    $scope.guest.user.username = $scope.guest.user.email;
+                    $scope.guest.user.password = base64encode($scope.guest.user.email);
+                    $scope.guest.user.userRole = role;
+                    $scope.guest.user.regDate = (new Date()).toISOString().substr(0, 10);
+
+                    $scope.guest.numberReservations = 0;
+                    $scope.guest.status = 0;
+
+                    $scope.saveData("guest", $scope.guest, function (newGuest) {
+                        $scope.reservationGuest.guest = newGuest;
+                        $scope.saveData("reservation-guest", $scope.reservationGuest, function (newReservationGuest) {
+                            console.log(newReservationGuest);
+                            $scope.reservationInfo = newReservation
+                            $scope.reservationInfo.reservationGuests = [newReservationGuest];
+
+                            $scope.clearEverything();
+
+                            $state.go('app.root.reservationSuccessful');
+                        });
+                    }, $scope.resetReservation);
+                });
+            }
+            else { // use existing guest
+                $scope.reservationGuest.guest = $scope.guest;
+
+                $scope.saveData("reservation-guest", $scope.reservationGuest, function (newReservationGuest) {
+                    console.log("reservation owner", newReservationGuest);
+                    $scope.reservationInfo = newReservation
+                    $scope.reservationInfo.reservationGuests = [newReservationGuest];
+
+                    $scope.clearEverything();
+
+                    $state.go('app.root.reservationSuccessful');
+                });
+            }
+        });
     };
+
+    $scope.editReservation = function () {
+        $scope.saveData("reservation", $scope.reservation,
+            function (data) { //success
+                $scope.page.message = {
+                    type: 'success',
+                    title: $scope.reservation.reservationGuests[0].personalData.fullName,
+                    text: 'Reservation was successfully changed'
+                };
+                $('#messageModal').modal('show');
+                $scope.clearEverything();
+            },
+            function () { //error
+
+            }, true
+        );
+    };
+
+    function setDateRange(start, end) {
+        $scope.$apply(function () {
+            $scope.filters.startDate = start;
+            $scope.filters.endDate = end;
+        });
+    }
+
+    $scope.$watch('reservation.allInclusive', function (newVal, oldVal) {
+        if (newVal === true) {
+            if ($rootScope.switchDinner) {
+                $rootScope.switchDinner.disable();
+                $rootScope.switchBreakfast.disable();
+            }
+            if ($rootScope.switchNewDinner) {
+                $rootScope.switchNewDinner.disable();
+                $rootScope.switchNewBreakfast.disable();
+            }
+        } else {
+            if ($rootScope.switchDinner) {
+                $rootScope.switchDinner.enable();
+                $rootScope.switchBreakfast.enable();
+            }
+            if ($rootScope.switchNewDinner) {
+                $rootScope.switchNewDinner.enable();
+                $rootScope.switchNewBreakfast.enable();
+            }
+        }
+    });
 
     angular.element(document).ready(function () {
         $timeout(function () {
-            $('#dateRange').daterangepicker({
-                parentEl: "#filters",
-                startDate: new Date(ctrl.filters.startDate),
-                endDate: new Date(ctrl.filters.endDate),
-                locale: {
-                    format: "DD/MM/YY"
-                }
-            }, setDateRange);
-
-            $('#identityIssueDate,#identityExpireDate').daterangepicker({
-                singleDatePicker: true,
-                showDropdowns: true,
-                locale: {
-                    format: "YYYY-MM-DD"
-                }
-            });
-
-            $('.calendar').css({float: 'left'});
+            if ($rootScope.dr1) {
+                $rootScope.dr1.on('apply.daterangepicker', function (ev, picker) {
+                    setDateRange(picker.startDate.format('YYYY-MM-DD'), picker.endDate.format('YYYY-MM-DD'))
+                });
+            }
         }, 500);
+
 
     });
 });

@@ -58,9 +58,13 @@ public class ReservationService {
         return reservations;
     }
 
-    public List<Room> searchReservationsWeb(String startDate, String endDate, int numberAdults) {
+    public List<Room> searchReservationsWeb(String startDate, String endDate, int numberAdults, boolean children, boolean pets, boolean minibar) {
         List<Room> freeRooms;
-        freeRooms = repo.findInSite(startDate, endDate, numberAdults);
+
+        if (children)
+            freeRooms = repo.findInSiteWithChildren(startDate, endDate, numberAdults, children, pets, minibar);
+        else
+            freeRooms = repo.findInSite(startDate, endDate, numberAdults, pets, minibar);
 
         return freeRooms;
     }
@@ -71,6 +75,15 @@ public class ReservationService {
 
         return reservation;
 //        return removeRecursions(reservation);
+    }
+
+    public Reservation findByCode(String code) throws Exception {
+        Reservation reservation = repo.findByReservationCodeAndStatus(code, 0);
+
+        if (reservation == null)
+            throw new Exception("There's no reservation with such code!");
+
+        return reservation;
     }
 
     public Reservation remove(Long id) throws Exception {

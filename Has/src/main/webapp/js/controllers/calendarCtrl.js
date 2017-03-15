@@ -31,7 +31,6 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
     };
     $scope.groupReservationsList = [];
     $scope.reservationInfo = {};
-    $scope.timer;
 
     $scope.getRooms = function (callback) {
         $http({
@@ -92,7 +91,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             console.log("New reservation: ", data);
 
             $scope.resetReservation();
-        };
+        }
 
         if ($scope.isNewGuest) { // create new guest
             $scope.reservationGuest.guest.numberReservations = 0;
@@ -331,8 +330,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         eventHeight: 50,
         rowHeaderColumns: [
             {title: "Room", width: 46},
-            {title: "Capacity", width: 57},
-            //{title: "Status", width: 80}
+            {title: "Capacity", width: 57}
         ],
         onBeforeCellRender: function (args) {
             if (args.cell.start <= DayPilot.Date.today() && DayPilot.Date.today() < args.cell.end) {
@@ -480,7 +478,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                     data: tmpReservation
                 }).then(
                     function (response) { //success
-                        response.data;
+                        return response.data;
                     },
                     function (response) { //error
                         $scope.displayMessage(response.data);
@@ -577,7 +575,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             switch (args.e.status) {
                 case 0:
                     var checkinDeadline = today.addHours(21);
-                    if ((start < today) || (start === today && now > checkinDeadline)) { // must checkoin before 21:00
+                    if ((start < today) || (start === today && now > checkinDeadline)) { // must checkin before 21:00
                         args.data.barColor = "#e55";  // red
                         status = "Late Arrival";
                     } else {
@@ -679,7 +677,6 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                             }
                         });
                     }
-                    ;
                 });
             },
             function (response) { //error
@@ -824,13 +821,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         }
     };
 
-    function addDays(date, days) {
-        var result = new Date(date);
-        result.setDate(result.getDate() + days);
-        return result;
-    }
-
-    function setDateRange(start, end, label) {
+    function setDateRange(start, end) {
         $scope.$apply(function () {
             var tmp = end._d.getTime() - start._d.getTime();
             //$scope.config.timeline = getTimeline(start._d, tmp / 86400000);

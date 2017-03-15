@@ -1,0 +1,42 @@
+<div class="row booking-success">
+    <h2>Reservation was successful!</h2>
+    <p>You will recieve a unique reservation code to your email shortly. You can use it to edit your reservation
+        preferences.</p>
+</div>
+
+<div class="row">
+    <div class="col-sm-12 col-md-8 col-lg-6">
+        <p><strong>Start date:</strong> {{reservationInfo.startDate}}</p>
+        <p><strong>End date:</strong> {{reservationInfo.endDate}}</p>
+        <span class="label label-primary" ng-hide="reservationInfo.group">Single reservation</span>
+        <span class="label label-primary" ng-show="reservationInfo.group">Group reservation</span>
+        <span class="label label-default"
+              ng-show="!reservationInfo.allInclusive && reservationInfo.breakfast">Breakfast</span>
+        <span class="label label-default"
+              ng-show="!reservationInfo.allInclusive && reservationInfo.dinner">Dinner</span>
+        <span class="label label-default" ng-show="reservationInfo.allInclusive">All inclusive</span>
+
+        <h3>Guests</h3>
+        <table class="table table-condensed table-striped">
+            <thead>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Room</th>
+            </thead>
+            <tbody>
+            <tr ng-repeat="reservationGuest in reservationInfo.reservationGuests">
+                <td>
+                    {{reservationGuest.guest.personalData.fullName}}
+                    <span class="label label-warning" ng-show="reservationGuest.owner">
+                                        Owner
+                                    </span>
+                </td>
+                <td>{{reservationGuest.guest.personalData.phone}}</td>
+                <td>{{reservationGuest.room.number}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <button type="button" class="btn btn-success" ui-sref="app.root.home">Go back to the home page</button>
+        <button type="button" class="btn btn-warning" ui-sref="app.root.changeReservation">Change reservation</button>
+    </div>
+</div>

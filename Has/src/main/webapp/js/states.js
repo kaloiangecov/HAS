@@ -109,7 +109,8 @@ var stateUserList = {
     url: '/users/list',
     views: {
         'content@loggedin': {
-            templateUrl: 'templates/users/list.html'
+            templateUrl: 'templates/users/list.html',
+            controller: "userCtrl"
         }
     }
 };
@@ -142,7 +143,8 @@ var stateEmployeeList = {
     url: '/employees/list',
     views: {
         'content@loggedin': {
-            templateUrl: 'templates/employees/list.html'
+            templateUrl: 'templates/employees/list.html',
+            controller: 'employeeCtrl'
         }
     }
 };
@@ -151,7 +153,8 @@ var stateEmployeeAdd = {
     url: '/employees/add',
     views: {
         'content@loggedin': {
-            templateUrl: 'templates/employees/add.html'
+            templateUrl: 'templates/employees/add.html',
+            controller: 'employeeCtrl'
         }
     }
 };
@@ -160,7 +163,8 @@ var stateEmployeeEdit = {
     url: '/employees/edit/:id',
     views: {
         'content@loggedin': {
-            templateUrl: 'templates/employees/add.html'
+            templateUrl: 'templates/employees/add.html',
+            controller: 'employeeCtrl'
         }
     }
 };
@@ -205,7 +209,8 @@ var stateGuestList = {
     url: '/guests/list',
     views: {
         'content@loggedin': {
-            templateUrl: 'templates/guests/list.html'
+            templateUrl: 'templates/guests/list.html',
+            controller: 'guestCtrl'
         }
     }
 };
@@ -214,7 +219,8 @@ var stateGuestAdd = {
     url: '/guests/add',
     views: {
         'content@loggedin': {
-            templateUrl: 'templates/guests/add.html'
+            templateUrl: 'templates/guests/add.html',
+            controller: 'guestCtrl'
         }
     }
 };
@@ -223,7 +229,8 @@ var stateGuestEdit = {
     url: '/guests/edit/:id',
     views: {
         'content@loggedin': {
-            templateUrl: 'templates/guests/add.html'
+            templateUrl: 'templates/guests/add.html',
+            controller: 'guestCtrl'
         }
     }
 };
@@ -237,7 +244,8 @@ var stateRoomList = {
     url: '/rooms/list',
     views: {
         'content@loggedin': {
-            templateUrl: 'templates/rooms/list.html'
+            templateUrl: 'templates/rooms/list.html',
+            controller: 'roomCtrl'
         }
     }
 };
@@ -271,7 +279,8 @@ var stateMealList = {
     url: '/meals/list',
     views: {
         'content@loggedin': {
-            templateUrl: 'templates/meals/list.html'
+            templateUrl: 'templates/meals/list.html',
+            controller: "mealCtrl"
         }
     }
 };
@@ -280,7 +289,8 @@ var stateMealAdd = {
     url: '/meals/add',
     views: {
         'content@loggedin': {
-            templateUrl: 'templates/meals/add.html'
+            templateUrl: 'templates/meals/add.html',
+            controller: "mealCtrl"
         }
     }
 };
@@ -289,7 +299,8 @@ var stateMealEdit = {
     url: '/meals/edit/:id',
     views: {
         'content@loggedin': {
-            templateUrl: 'templates/meals/add.html'
+            templateUrl: 'templates/meals/add.html',
+            controller: "mealCtrl"
         }
     }
 };

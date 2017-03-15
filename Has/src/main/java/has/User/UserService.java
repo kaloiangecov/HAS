@@ -113,6 +113,15 @@ public class UserService {
         return user;
     }
 
+    public User changeEnabled(Long id) throws Exception {
+        User user = repo.findOne(id);
+        validateIdNotNull(user);
+
+        user.setEnabled(!user.isEnabled());
+
+        return repo.save(user);
+    }
+
     public void validateAlreadyExists(User user) throws UserAlreadyExists, EmailAlreadyExists {
         User dbUser1 = repo.findByUsername(user.getUsername());
         if (dbUser1 != null && dbUser1.getId() != user.getId()) {

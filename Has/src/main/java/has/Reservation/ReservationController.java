@@ -69,7 +69,10 @@ public class ReservationController {
         return reservationService.searchReservationsWeb(
                 request.getStartDate(),
                 request.getEndDate(),
-                request.getNumberAdults()
+                request.getNumberAdults(),
+                (request.getNumberChildren() > 0),
+                request.isPets(),
+                request.isMinibar()
         );
     }
 
@@ -79,6 +82,14 @@ public class ReservationController {
     @PreAuthorize("hasAuthority('PERM_VIEW_RESERVATION')")
     public Reservation findReservationById(@PathVariable Long id) throws Exception {
         return reservationService.findById(id);
+    }
+
+    @RequestMapping(value = "/reservation/code/{code}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    //@PreAuthorize("hasAuthority('PERM_VIEW_RESERVATION')")
+    public Reservation findReservationById(@PathVariable String code) throws Exception {
+        return reservationService.findByCode(code);
     }
 
     @RequestMapping(value = "/reservation/{id}", method = RequestMethod.DELETE,

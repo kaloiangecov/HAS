@@ -1,4 +1,4 @@
-<div class="col-md-12 col-sm-12 col-xs-12" ng-controller="mealCtrl as ctrl">
+<div class="col-md-12 col-sm-12 col-xs-12">
     <div class="x_panel">
         <div class="x_title">
             <h2><i class="fa fa-cutlery"></i> Meals List</h2>
@@ -16,7 +16,7 @@
             </ul>
             <div class="clearfix"></div>
             <form name="mealFiltersForm" class="form-inline text-center" ng-submit="reloadTableData()">
-                <input type="text" class="form-control" name="name" ng-model="ctrl.filters.name" placeholder="Name"/>
+                <input type="text" class="form-control" name="name" ng-model="filters.name" placeholder="Name"/>
 
                 <button type="submit" class="btn btn-primary" style="position:relative;top:+3px;"><i
                         class="fa fa-search"></i> Search
@@ -24,8 +24,8 @@
             </form>
         </div>
         <div class="x_content">
-            <table id="mealsTable" datatable="" dt-options="ctrl.dtOptions" dt-columns="ctrl.dtColumns"
-                   dt-instance="ctrl.dtInstance"
+            <table id="mealsTable" datatable="" dt-options="dtOptions" dt-columns="dtColumns"
+                   dt-instance="dtInstance"
                    class="table table-hover" style="width:100%"></table>
         </div>
     </div>

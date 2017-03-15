@@ -3,12 +3,30 @@ app.controller("userCtrl", function ($scope, $http, $location, $state, $statePar
     $scope.page.title = "Users";
     $scope.master = {};
     $scope.rolesList = [];
-    ctrl.filters = {
+    $scope.filters = {
         username: "",
         email: "",
         roleID: 1
     };
     $scope.isEdit = false;
+
+    $scope.changeUserStatus = function (userId, callback) {
+        $http({
+            method: "PUT",
+            url: ('user/enabled/' + userId),
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
+        }).then(
+            function (response) { //success
+                return response.data;
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+            })
+            .then(callback);
+    };
 
     if ($location.path().includes("list")) {
         $scope.getAllRoles(function (data) {
@@ -20,8 +38,9 @@ app.controller("userCtrl", function ($scope, $http, $location, $state, $statePar
             ];
 
             $scope.rolesList = emptyArray.concat(data);
+            $scope.rolesList.pop();
 
-            ctrl.filters.roleID = $scope.rolesList[0].id;
+            $scope.filters.roleID = $scope.rolesList[0].id;
         });
 
         // users table
@@ -36,7 +55,7 @@ app.controller("userCtrl", function ($scope, $http, $location, $state, $statePar
                     'Content-Type': 'application/json',
                     'Authorization': $scope.authentication
                 },
-                data: ctrl.filters,
+                data: $scope.filters,
                 error: function (jqXHR, textStatus, errorThrown) {
                     $scope.displayMessage({
                         status: jqXHR.status,
@@ -66,14 +85,24 @@ app.controller("userCtrl", function ($scope, $http, $location, $state, $statePar
                     return new Date(date).toLocaleString();
                 }),
             DTColumnBuilder.newColumn('id').notSortable().withClass('actions-column')
-                .renderWith(function (id) {
+                .renderWith(function (id, type, full) {
                     var html =
                         '<div class="btn-group btn-group-sm">' +
                         '<a class="btn btn-default action-btn" href="#!/users/edit/' +
-                        id + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
-                        '<button class="btn btn-default action-btn delete-btn" id="del_' +
-                        id + '"><i class="fa fa-trash-o" aria-hidden="true"></i></button>' +
-                        '</div>';
+                        id + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+
+                    if (full.id != $scope.loginData.id) {
+                        html += '<button type="button" class="btn btn-default action-btn delete-btn" id="del_' +
+                            id + '">';
+
+                        if (full.enabled)
+                            html += '<i class="fa fa-ban" aria-hidden="true"></i></button>';
+                        else
+                            html += '<i class="fa fa-refresh" aria-hidden="true"></i></button>';
+                    }
+
+                    html += '</div>';
+
                     return html;
                 })
         ];
@@ -84,27 +113,21 @@ app.controller("userCtrl", function ($scope, $http, $location, $state, $statePar
                 $(btns).off('click');
                 $(btns).on('click', function () {
                     var userId = this.id.split('_')[1];
-                    $scope.deleteData('user', userId, function () {
-                        $scope.page.message = {
-                            type: 'success',
-                            title: 'Deleted!',
-                            text: ('User with id ' + userId + ' was successfully deleted!')
-                        };
-                        $('#messageModal').modal('show');
+                    $scope.changeUserStatus(userId, function () {
+                        $scope.reloadTableData(false);
+                        $scope.addDeleteFunctions();
                     });
                 });
             }, 300);
         };
 
-        $scope.$watch("ctrl.filters.username", $scope.addDeleteFunctions);
-        $scope.$watch("ctrl.filters.email", $scope.addDeleteFunctions);
-        $scope.$watch("ctrl.filters.roleID", $scope.addDeleteFunctions);
+        $scope.$watch("filters.username", $scope.addDeleteFunctions);
+        $scope.$watch("filters.email", $scope.addDeleteFunctions);
+        $scope.$watch("filters.roleID", $scope.addDeleteFunctions);
 
-        $scope.reloadTableData = function () {
-            var resetPaging = false;
+        $scope.reloadTableData = function (resetPaging) {
             $scope.dtInstance.reloadData(function (list) {
                 //console.log(list);
-                $scope.addDeleteFunctions();
             }, resetPaging);
         };
     }
@@ -153,12 +176,8 @@ app.controller("userCtrl", function ($scope, $http, $location, $state, $statePar
 
     angular.element(document).ready(function () {
         if ($location.path().includes("list")) {
-            $scope.reloadTableData();
-
-            $('.delete-btn').click(function () {
-                var id = this.id.split('_');
-                banUser(id[1]);
-            });
+            $scope.addDeleteFunctions();
+            $scope.reloadTableData(false);
             //$interval($scope.reloadTableData, 30000);
         }
         else {

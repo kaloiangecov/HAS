@@ -1,43 +1,59 @@
 <div class="row booking-search">
-    <div id="filters">
-        <form id="bookingSearchForm" name="bookingSearchForm" ng-submit="search()">
+
+    <form id="bookingSearchForm" name="bookingSearchForm" ng-submit="search()">
             <div class="form-group col-xs-12 col-sm-4 xol-md-3 col-lg-3" id="checkDate">
-                <label>Check in / Check out</label>
+                <label for="dateRange">Check in / Check out</label>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
                     <input type="text" id="dateRange" name="dateRange" class="form-control"/>
                 </div>
             </div>
             <div class="form-group col-xs-6 col-sm-3 xol-md-2 col-lg-2">
-                <label>Adults</label>
+                <label for="numberAdults">Adults</label>
                 <div class="input-group">
                     <span class="input-group-addon">
                         <i class="fa fa-male" aria-hidden="true"></i>
                         <i class="fa fa-female" aria-hidden="true"></i>
                     </span>
-                    <select id="numberAdults" name="numberAdults" class="form-control"
-                            ng-model="ctrl.filters.numberAdults">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
+                    <input type="number" id="numberAdults" name="numberAdults" class="form-control"
+                           min="1" max="10" ng-model="filters.numberAdults"/>
+                </div>
+                <div ng-show="bookingSearchForm.$submitted || bookingSearchForm.numberAdults.$touched"
+                     class="validation-message">
+                    <span ng-show="bookingSearchForm.numberAdults.$error.required">This field is required</span>
+                    <span ng-show="bookingSearchForm.numberAdults.$error.min">Number too small</span>
+                    <span ng-show="bookingSearchForm.numberAdults.$error.max">Number too big</span>
                 </div>
             </div>
             <div class="form-group col-xs-6 col-sm-3 xol-md-2 col-lg-2">
-                <label>Children</label>
+                <label for="numberChildren">Children</label>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-child" aria-hidden="true"></i></span>
-                    <select id="numberChildren" name="numberChildren" class="form-control"
-                            ng-model="ctrl.filters.numberChildren">
-                        <option>0</option>
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
+                    <input type="number" id="numberChildren" name="numberChildren" class="form-control"
+                           min="0" max="10" ng-model="filters.numberChildren"/>
+                </div>
+                <div ng-show="bookingSearchForm.$submitted || bookingSearchForm.numberChildren.$touched"
+                     class="validation-message">
+                    <span ng-show="bookingSearchForm.numberChildren.$error.required">This field is required</span>
+                    <span ng-show="bookingSearchForm.numberChildren.$error.min">Number too small</span>
+                    <span ng-show="bookingSearchForm.numberChildren.$error.max">Number too big</span>
                 </div>
             </div>
+        <div class="form-group col-xs-6 col-sm-3 xol-md-2 col-lg-3">
+            <label></label>
+            <div>
+                <label for="pets">
+                    <input type="checkbox" class="js-switch" id="pets"
+                           ng-model="filters.pets"/>
+                    Pets
+                </label>
+                <label for="minibar">
+                    <input type="checkbox" class="js-switch" id="minibar"
+                           ng-model="filters.minibar"/>
+                    Minibar
+                </label>
+            </div>
+        </div>
             <div class="form-group col-xs-12 col-sm-3 xol-md-2 col-lg-2">
                 <label></label>
                 <button type="submit" class="btn btn-primary btn-block" style="position:relative;top:+4px;"><i
@@ -45,7 +61,6 @@
                 </button>
             </div>
         </form>
-    </div>
 </div>
 <div class="row booking-results">
     <form name="bookingSubmitForm" class="col-md-8 col-sm-12" ng-submit="selectRooms()">

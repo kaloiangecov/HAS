@@ -13,10 +13,10 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http) {
 
     ctrl.selectedRoomType == 3
 
-    $scope.getRooms = function (callback) {
+    $scope.getPersonal = function (callback) {
         $http({
             method: "GET",
-            url: "rooms",
+            url: "employees",
             responseType: "json",
             headers: {
                 "Authorization": $scope.authentication
@@ -36,6 +36,7 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http) {
     $scope.config = {
         scale: "Hour",
         startDate: $scope.startDate,
+        startTIme: 4,
         days: 1,
         resources: $scope.events.resources,
         timeHeaders: [{groupBy: "Day", format: "d MMM yyyy"}, {groupBy: "Hour", format: 'HH'}],
@@ -46,7 +47,7 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http) {
         cellWidthSpec: "Auto",
         eventHeight: 50,
         rowHeaderColumns: [
-            {title: "Room", width: 46}
+            {title: "Room", width: 52}
         ],
         contextMenu: new DayPilot.Menu({
             items: [
@@ -70,7 +71,7 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http) {
             }
         },
         onBeforeResHeaderRender: function (args) {
-            args.resource.name = args.resource.number;
+            args.resource.name = args.resource.id;
         },
         onEventSelected: function (args) {
             $scope.$apply(function () {
@@ -87,7 +88,9 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http) {
                 loadEvents();
             }
 
-
+        },
+        onTimeRangeSelected: function (args) {
+            $scope.scheduler.clearSelection();
         },
         onBeforeEventRender: function (args) {
             var status = "Placed";
@@ -115,19 +118,6 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http) {
 
             // reservation tooltip that appears on hover - displays the status text
             args.e.toolTip = status;
-        },
-        onEventFilter: function (args) {
-            var filteredRes = $filter('filter')($scope.events.resources, {type: args.filter});
-            var found = false;
-
-            angular.forEach(filteredRes, function (value, key) {
-                var tmp = args.e.resource();
-                if (value.id == tmp) {
-                    found = true;
-                    return;
-                }
-            });
-            args.visible = found;
         }
     };
 
@@ -148,21 +138,6 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http) {
         }).then(
             function (response) { //success
                 $scope.events.list = [];
-
-                angular.forEach(response.data, function (request, key) {
-                    var tmpEvent = {
-                        start: request.timePlaced,
-                        end: request.timeFinished,
-                        id: request.id,
-                        resource: request.reservationGuest.room.id,
-                        status: request.status,
-                        text: request.type,
-                        tooltip: request.reservationGuest.guest.personalData.fullName,
-                        objRequest: request
-                    };
-
-                    $scope.events.list.push(tmpEvent);
-                });
             },
             function (response) { //error
                 $scope.displayMessage(response.data);
@@ -170,15 +145,9 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http) {
     }
 
     $scope.changeRoomType = function () {
-        $scope.getRooms(function (data) {
+        $scope.getPersonal(function (data) {
             $scope.events.resources = data;
-
-            if (ctrl.selectedRoomType == 3) {
-                $scope.config.resources = $scope.events.resources;
-            } else {
-                var filtered = $filter('filter')($scope.events.resources, {roomClass: ctrl.selectedRoomType});
-                $scope.config.resources = filtered;
-            }
+            $scope.config.resourves = $scope.events.resources;
         });
     };
 
