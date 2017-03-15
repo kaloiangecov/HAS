@@ -111,4 +111,12 @@ public class EmployeeController {
     public Employee changeStatus(@PathVariable Long id) throws Exception {
         return employeeService.changeEmployment(id);
     }
+
+    @RequestMapping(value = "/employees/shift", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_VIEW_EMPLOYEE')")
+    public List<Employee> findEmployeesForShift(@RequestParam("date") String date, @Valid @RequestParam("shift") int shift) {
+        return employeeService.findEmployeesForShift(date, shift);
+    }
 }

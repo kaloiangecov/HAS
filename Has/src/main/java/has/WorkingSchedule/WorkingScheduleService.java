@@ -18,10 +18,6 @@ public class WorkingScheduleService {
     private WorkingScheduleRepository repo;
 
     public WorkingSchedule save(WorkingSchedule schedule) throws Exception {
-        //if (!Validator.isValidStartEndDate(schedule.getStartDate(), schedule.getEndDate())) {
-        //    throw new Exception("Invalid date");
-        //}
-
         validateOneShiftPerDay(schedule);
         return repo.save(schedule);
     }
@@ -78,6 +74,5 @@ public class WorkingScheduleService {
         if (dbWorkingSchedule != null && dbWorkingSchedule != workingSchedule) {
             throw new Exception("This employee has already got shift on this day: " + workingSchedule.getDate());
         }
-
     }
 }
