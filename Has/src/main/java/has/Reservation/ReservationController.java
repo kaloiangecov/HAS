@@ -70,7 +70,9 @@ public class ReservationController {
                 request.getStartDate(),
                 request.getEndDate(),
                 request.getNumberAdults(),
-                (request.getNumberChildren() > 0)
+                (request.getNumberChildren() > 0),
+                request.isPets(),
+                request.isMinibar()
         );
     }
 

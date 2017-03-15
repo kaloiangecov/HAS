@@ -49,7 +49,7 @@ public class User implements Serializable, UserDetails {
     private String regDate;
 
     @NotNull
-    @Size(min = 3, max = 16)
+    @Size(min = 3, max = 32)
     private String username;
 
     private boolean enabled = true;

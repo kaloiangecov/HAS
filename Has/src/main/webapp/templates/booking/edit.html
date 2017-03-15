@@ -1,35 +1,34 @@
-<div ng-controller="changeReservationCtrl as ctrl">
+<div class="row booking-search">
+    <h2>Change Reservation Details</h2>
+</div>
 
-    <div class="row booking-search">
-        <h2>Change Reservation Details</h2>
-    </div>
-
-    <div class="row-fluid">
-        <div class="input-group col-lg-4 col-md-6 col-sm-8">
-            <input type="text" class="form-control" id="code" name="code" placeholder="Enter reservation code..."
-                   ng-model="ctrl.reservation.reservationCode" required="required"/>
-            <span class="input-group-btn">
+<div class="row-fluid">
+    <div class="input-group col-lg-4 col-md-6 col-sm-8">
+        <input type="text" class="form-control" id="code" name="code" placeholder="Enter reservation code..."
+               ng-model="reservation.reservationCode" required="required"/>
+        <span class="input-group-btn">
             <button type="button" class="btn btn-default"
-                    ng-click="getReservationByCode(ctrl.reservation.reservationCode)">
+                    ng-click="getReservationByCode(reservation.reservationCode)">
                 <i class="fa fa-search"></i>
             </button>
-            <button type="button" class="btn btn-danger" ng-click="clearReservation();">
+            <button type="button" class="btn btn-danger" ng-click="reservation = {};">
                 <i class="fa fa-times"></i>
             </button>
         </span>
-        </div>
     </div>
+</div>
 
-    <div class="row" id="reservationData">
-        <form id="editReservationForm" name="editReservationForm" class="col-md-6" novalidate>
-            <div class="form-group">
-                <label for="newDateRange">Check in / Check out</label>
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
-                    <input type="text" id="newDateRange" name="newDateRange" class="form-control"/>
-                </div>
+<div class="row" id="reservationData" style="margin-top:12px;border-top: 1px dashed #ccc;">
+    <form id="editReservationForm" name="editReservationForm" class="col-md-6" novalidate>
+        <div class="form-group">
+            <label for="newDateRange">Check in / Check out</label>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                <input type="text" id="newDateRange" name="newDateRange" class="form-control"/>
             </div>
-            <div class="form-group">
+        </div>
+        <div class="row">
+            <div class="form-group col-xs-6">
                 <label for="numberAdults">Adults</label>
                 <div class="input-group">
                     <span class="input-group-addon">
@@ -37,7 +36,7 @@
                         <i class="fa fa-female" aria-hidden="true"></i>
                     </span>
                     <input type="number" id="numberAdults" name="numberAdults" class="form-control"
-                           min="1" max="10" ng-model="ctrl.reservation.numberAdults"/>
+                           min="1" max="10" ng-model="filters.numberAdults"/>
                 </div>
                 <div ng-show="editReservationForm.$submitted || editReservationForm.numberAdults.$touched"
                      class="validation-message">
@@ -46,12 +45,12 @@
                     <span ng-show="editReservationForm.numberAdults.$error.max">Number too big</span>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group col-xs-6">
                 <label for="numberChildren">Children</label>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-child" aria-hidden="true"></i></span>
                     <input type="number" id="numberChildren" name="numberChildren" class="form-control"
-                           min="0" max="10" ng-model="ctrl.reservation.numberChildren"/>
+                           min="0" max="10" ng-model="filters.numberChildren"/>
                 </div>
                 <div ng-show="editReservationForm.$submitted || editReservationForm.numberChildren.$touched"
                      class="validation-message">
@@ -60,9 +59,67 @@
                     <span ng-show="editReservationForm.numberChildren.$error.max">Number too big</span>
                 </div>
             </div>
+        </div>
+        <div class="form-group">
+            <label></label>
+            <div>
+                <label for="newPets">
+                    <input type="checkbox" class="js-switch" id="newPets"
+                           ng-model="filters.pets"/>
+                    Pets
+                </label>
+                <label for="newMinibar">
+                    <input type="checkbox" class="js-switch" id="newMinibar"
+                           ng-model="filters.minibar"/>
+                    Minibar
+                </label>
+                <label>
+                    <input type="checkbox" class="js-switch" id="newBreakfast"
+                           ng-model="reservation.breakfast" ng-disabled="reservation.allInclusive"/>
+                    Breakfast
+                </label>
+                <label for="newDinner">
+                    <input type="checkbox" class="js-switch" id="newDinner"
+                           ng-model="reservation.dinner" ng-disabled="reservation.allInclusive"/>
+                    Dinner
+                </label>
+                <label for="newAllInclusive">
+                    <input type="checkbox" class="js-switch" id="newAllInclusive"
+                           ng-model="reservation.allInclusive"/>
+                    All Inclusive
+                </label>
+            </div>
 
-            <button type="submit" class="btn btn-primary" ng-click="saveReservation()">Submit</button>
-        </form>
-    </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Room Class</th>
+                    <th>Small Beds</th>
+                    <th>Big Beds</th>
+                    <th>Extras</th>
+                    <th>Select</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="res in results">
+                    <td>{{roomTypes[res.roomClass]}}</td>
+                    <td>{{res.bedsSingle}}</td>
+                    <td>{{res.bedsDouble}}</td>
+                    <td>
+                        <span class="label label-primary" ng-show="res.children">Children</span>
+                        <span class="label label-primary" ng-show="res.pets">Pets</span>
+                        <span class="label label-primary" ng-show="res.minibar">Mininbar</span>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="selectedRooms[]" value="{{res}}"
+                               ng-checked="selectedRooms.indexOf(res) != -1"
+                               ng-click="toggleSelection(res)"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
 
+
+            <button type="submit" class="btn btn-primary" ng-click="search()">Search for a new room</button>
+    </form>
 </div>

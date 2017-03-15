@@ -37,8 +37,24 @@ app2.config(function ($stateProvider, $urlRouterProvider) {
                 }
             },
             onEnter: function () {
-                $('.navbar-nav').find('li').removeClass('active');
-                $('#home').addClass('active');
+                setTimeout(function () {
+                    $('.navbar-nav').find('li').removeClass('active');
+                    $('#home').addClass('active');
+
+                    $('#dateRange').daterangepicker({
+                        parentEl: "body",
+                        startDate: new Date(),
+                        endDate: new Date(),
+                        locale: {
+                            format: "DD/MM/YY"
+                        }
+                    });
+
+                    $('.calendar').css({float: 'left'});
+
+                    this.switchPets = new Switchery(document.getElementById('pets'), {color: "#266CEa"});
+                    this.switchMinibar = new Switchery(document.getElementById('minibar'), {color: "#266CEa"});
+                }, 1);
             }
         })
         .state('app.root.personalData', {
@@ -48,6 +64,22 @@ app2.config(function ($stateProvider, $urlRouterProvider) {
                     templateUrl: 'templates/booking/personalData.html'
                     //controller: "mainCtrl2"
                 }
+            },
+            onEnter: function () {
+                setTimeout(function () {
+                    $('#identityIssueDate,#identityExpireDate').daterangepicker({
+                        parentEl: "body",
+                        singleDatePicker: true,
+                        showDropdowns: true,
+                        locale: {
+                            format: "YYYY-MM-DD"
+                        }
+                    });
+
+                    this.switchBreakfast = new Switchery(document.getElementById('breakfast'), {color: "#266CEa"});
+                    this.switchDinner = new Switchery(document.getElementById('dinner'), {color: "#266CEa"});
+                    this.switchAllInclusive = new Switchery(document.getElementById('allInclusive'), {color: "#EA6C26"});
+                }, 1);
             }
         })
         .state('app.root.reservationSuccessful', {
@@ -67,8 +99,27 @@ app2.config(function ($stateProvider, $urlRouterProvider) {
                 }
             },
             onEnter: function () {
-                $('.navbar-nav').find('li').removeClass('active');
-                $('#change').addClass('active');
+                setTimeout(function () {
+                    $('.navbar-nav').find('li').removeClass('active');
+                    $('#change').addClass('active');
+
+                    $('#newDateRange').daterangepicker({
+                        parentEl: "body",
+                        startDate: new Date(),
+                        endDate: new Date(),
+                        locale: {
+                            format: "DD/MM/YY"
+                        }
+                    });
+
+                    $('.calendar').css({float: 'left'});
+
+                    new Switchery(document.getElementById('newPets'), {color: "#266CEa"});
+                    new Switchery(document.getElementById('newMinibar'), {color: "#266CEa"});
+                    new Switchery(document.getElementById('newBreakfast'), {color: "#266CEa"});
+                    new Switchery(document.getElementById('newDinner'), {color: "#266CEa"});
+                    new Switchery(document.getElementById('newAllInclusive'), {color: "#EA6C26"});
+                }, 1);
             }
         });
 

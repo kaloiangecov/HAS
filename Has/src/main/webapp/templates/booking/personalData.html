@@ -3,9 +3,28 @@
 </div>
 
 <form method="POST" id="bookingGuestForm" name="bookingGuestForm" novalidate class="booking-results">
+    <div class="row text-center">
+        <label for="breakfast">
+            <input type="checkbox" class="js-switch" id="breakfast"
+                   ng-model="reservation.breakfast" ng-disabled="reservation.allInclusive"/>
+            Breakfast
+        </label>
+        <label for="dinner">
+            <input type="checkbox" class="js-switch" id="dinner"
+                   ng-model="reservation.dinner" ng-disabled="reservation.allInclusive"/>
+            Dinner
+        </label>
+        <label for="allInclusive">
+            <input type="checkbox" class="js-switch" id="allInclusive"
+                   ng-model="reservation.allInclusive"/>
+            All Inclusive
+        </label>
+    </div>
+
     <div class="row">
         <h3 class="text-center">Room 1</h3>
     </div>
+
     <div class="row">
         <div class="col-md-8 col-md-offset-4 col-sm-8 col-sm-offset-4">
             <div class="input-group col-md-6 col-sm-6 col-xs-12">

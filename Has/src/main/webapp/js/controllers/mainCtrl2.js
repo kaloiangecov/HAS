@@ -10,9 +10,11 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
     $scope.roomTypes = sampleRoomTypes;
     $scope.roomStatuses = sampleRoomStatuses;
 
-    ctrl.filters = {
+    $scope.filters = {
         numberAdults: 1,
         numberChildren: 0,
+        pets: false,
+        minibar: false,
         startDate: moment().format('YYYY-MM-DD'),
         endDate: moment().format('YYYY-MM-DD')
     };
@@ -110,6 +112,37 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
             });
     };
 
+    $scope.getReservationByCode = function (code) {
+        $http({
+            method: "GET",
+            url: ("reservation/code/" + code),
+            responseType: "json"
+        }).then(
+            function (response) { //success
+                return response.data;
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+            })
+            .then(function (reservation) {
+                ctrl.reservation = reservation;
+
+                $scope.filters = {
+                    startDate: reservation.startDate,
+                    endDate: reservation.endDate,
+                    numberAdults: reservation.numberAdults,
+                    numberChildren: reservation.numberChildren,
+                    pets: reservation.reservationGuests[0].room.pets,
+                    minibar: reservation.reservationGuests[0].room.minibar
+                };
+
+                $('#newDateRange').daterangepicker({
+                    startDate: new Date(ctrl.reservation.startDate),
+                    endDate: new Date(ctrl.reservation.endDate)
+                });
+            });
+    };
+
     $scope.saveData = function (dataType, data, successCallback, errorCallback, isEdit) {
         var url = isEdit ? (dataType + "/" + data.id) : dataType;
         var method = isEdit ? "PUT" : "POST";
@@ -134,6 +167,24 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
             .then(successCallback);
     };
 
+    $scope.deleteData = function (dataType, id, callback) {
+        $http({
+            method: "DELETE",
+            url: (dataType + "/" + id),
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
+        }).then(
+            function (response) { //success
+                response.data;
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+            })
+            .then(callback);
+    };
+
     $scope.clearGuestData = function () {
         $scope.guest = {};
         $scope.guestFound = false;
@@ -143,8 +194,8 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
         $scope.$apply(function () {
             //var tmp = end._d.getTime() - start._d.getTime();
             //$scope.config.timeline = getTimeline(start._d, tmp / 86400000);
-            ctrl.filters.startDate = start._d.toISOString().substr(0, 10);
-            ctrl.filters.endDate = end._d.toISOString().substr(0, 10);
+            $scope.filters.startDate = start._d.toISOString().substr(0, 10);
+            $scope.filters.endDate = end._d.toISOString().substr(0, 10);
         });
 
     };
@@ -159,7 +210,7 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
                 'Content-Type': 'application/json',
                 "Authorization": $scope.authentication
             },
-            data: ctrl.filters
+            data: $scope.filters
         }).then(
             function (response) { //success
                 return response.data;
@@ -174,12 +225,12 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
 
     $scope.selectRooms = function () {
         $scope.reservation = {
-            startDate: ctrl.filters.startDate,
-            endDate: ctrl.filters.endDate,
+            startDate: $scope.filters.startDate,
+            endDate: $scope.filters.endDate,
             group: ($scope.selectedRooms.length > 0),
             status: 0,
-            numberAdults: ctrl.filters.numberAdults,
-            numberChildren: ctrl.filters.numberChildren,
+            numberAdults: $scope.filters.numberAdults,
+            numberChildren: $scope.filters.numberChildren,
             dinner: false,
             breakfast: true,
             allInclusive: false,
@@ -194,6 +245,7 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
         $scope.reservation = {};
         $scope.reservationGuest = {};
         $scope.selectedRooms = [];
+        $scope.results = [];
     };
 
     $scope.submitReservation = function () {
@@ -248,27 +300,31 @@ app2.controller("mainCtrl2", function ($scope, $state, $http, $timeout) {
         });
     };
 
+    $scope.editReservation = function () {
+        $scope.saveData("reservation", ctrl.reservation,
+            function (data) { //success
+                $scope.page.message = {
+                    type: 'success',
+                    title: ctrl.reservation.reservationGuests[0].personalData.fullName,
+                    text: 'Reservation was successfully changed'
+                };
+                $('#messageModal').modal('show');
+                $scope.clearReservation();
+            },
+            function () { //error
+
+            }, true
+        );
+    };
+
     angular.element(document).ready(function () {
-        $timeout(function () {
-            $('#dateRange').daterangepicker({
-                parentEl: "body",
-                startDate: new Date(ctrl.filters.startDate),
-                endDate: new Date(ctrl.filters.endDate),
-                locale: {
-                    format: "DD/MM/YY"
-                }
-            }, setDateRange);
-
-            $('#identityIssueDate,#identityExpireDate').daterangepicker({
-                parentEl: "body",
-                singleDatePicker: true,
-                showDropdowns: true,
-                locale: {
-                    format: "YYYY-MM-DD"
-                }
-            });
-
-            $('.calendar').css({float: 'left'});
-        }, 500);
+        $('#dateRange,#newDateRange').daterangepicker({
+            parentEl: "body",
+            startDate: new Date(),
+            endDate: new Date(),
+            locale: {
+                format: "DD/MM/YY"
+            }
+        }, setDateRange);
     });
 });

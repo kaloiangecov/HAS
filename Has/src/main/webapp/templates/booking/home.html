@@ -16,7 +16,7 @@
                         <i class="fa fa-female" aria-hidden="true"></i>
                     </span>
                     <input type="number" id="numberAdults" name="numberAdults" class="form-control"
-                           min="1" max="10" ng-model="ctrl.filters.numberAdults"/>
+                           min="1" max="10" ng-model="filters.numberAdults"/>
                 </div>
                 <div ng-show="bookingSearchForm.$submitted || bookingSearchForm.numberAdults.$touched"
                      class="validation-message">
@@ -30,7 +30,7 @@
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-child" aria-hidden="true"></i></span>
                     <input type="number" id="numberChildren" name="numberChildren" class="form-control"
-                           min="0" max="10" ng-model="ctrl.filters.numberChildren"/>
+                           min="0" max="10" ng-model="filters.numberChildren"/>
                 </div>
                 <div ng-show="bookingSearchForm.$submitted || bookingSearchForm.numberChildren.$touched"
                      class="validation-message">
@@ -39,6 +39,21 @@
                     <span ng-show="bookingSearchForm.numberChildren.$error.max">Number too big</span>
                 </div>
             </div>
+        <div class="form-group col-xs-6 col-sm-3 xol-md-2 col-lg-2">
+            <label></label>
+            <div>
+                <label for="pets">
+                    <input type="checkbox" class="js-switch" id="pets"
+                           ng-model="filters.pets"/>
+                    Pets
+                </label>
+                <label for="minibar">
+                    <input type="checkbox" class="js-switch" id="minibar"
+                           ng-model="filters.minibar"/>
+                    Minibar
+                </label>
+            </div>
+        </div>
             <div class="form-group col-xs-12 col-sm-3 xol-md-2 col-lg-2">
                 <label></label>
                 <button type="submit" class="btn btn-primary btn-block" style="position:relative;top:+4px;"><i
