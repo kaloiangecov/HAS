@@ -698,6 +698,12 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
     };
 
     $scope.submit = function () {
+        if ($scope.isNewGuest) {
+            $scope.reservationForm.$submitted = true;
+            if (!$scope.reservationForm.$valid)
+                return;
+        }
+
         if ($scope.isAdditionalGuest)
             $scope.addGuest();
         else
