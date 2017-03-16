@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +68,16 @@ public class ReservationGuestService {
         dbReservationGuest.setOwner(reservationGuest.isOwner());
 
         return repo.save(dbReservationGuest);
+    }
+
+    public List<ReservationGuest> closeGroupReservation(Long reservationId, Long roomId) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        List<ReservationGuest> guests = repo.findByReservationIdAndRoomId(reservationId, roomId);
+        for (ReservationGuest guest : guests) {
+            guest.setEndDate(sdf.format(new Date()));
+        }
+        //TODO: price calculation goes here
+        return repo.save(guests);
     }
 
     private void validateIdNotNull(ReservationGuest reservationGuest) throws Exception {
