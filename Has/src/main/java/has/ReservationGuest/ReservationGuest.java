@@ -41,6 +41,8 @@ public class ReservationGuest implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     private Room room;
 
+    private String endDate;
+
     @NotNull
     private boolean owner;
 

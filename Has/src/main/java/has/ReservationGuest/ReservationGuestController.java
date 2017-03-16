@@ -62,4 +62,13 @@ public class ReservationGuestController {
                                               @RequestBody @Valid ReservationGuest reservationGuest) throws Exception {
         return reservationGuestService.update(id, reservationGuest);
     }
+
+    @RequestMapping(value = "/reservation-guest/{reservationId}/{roomId}", method = RequestMethod.PUT,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_EDIT_RESERVATION_GUEST')")
+    public List<ReservationGuest> closeGroupReservation(@PathVariable Long reservationId,
+                                                        @PathVariable Long roomId) throws Exception {
+        return reservationGuestService.closeGroupReservation(reservationId, roomId);
+    }
 }
