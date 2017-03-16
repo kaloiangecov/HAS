@@ -27,7 +27,7 @@ public class WorkingSchedule implements Serializable {
 
     @NotNull
     @Min(0)
-    @Max(3)
+    @Max(2)
     private Integer shift;
 
     @ManyToOne(fetch = FetchType.EAGER)

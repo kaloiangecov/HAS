@@ -8,6 +8,8 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Chokleet on 25.2.2017 г..
@@ -21,10 +23,13 @@ public class Task implements Serializable {
     @Column(name = "TASK_ID")
     private Long id;
 
+    @NotNull
     private String title;
 
+    @NotNull
     private String description;
 
+    @NotNull
     @Min(0)
     @Max(3)
     private Integer status;
@@ -35,10 +40,13 @@ public class Task implements Serializable {
 
     private String finishTime;
 
+    @NotNull
     private Integer priority;
 
+    @NotNull
     private String assigner;
 
+    @NotNull
     private String duration;
 
     @NotNull
@@ -47,6 +55,7 @@ public class Task implements Serializable {
     private Employee assignee;
 
     public Task() {
-
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        timePlaced = sdf.format(new Date());
     }
 }

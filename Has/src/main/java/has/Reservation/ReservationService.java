@@ -5,6 +5,8 @@ import has.ReservationGuest.ReservationGuest;
 import has.Room.Room;
 import has.User.User;
 import has.Utils.TemplateHandler;
+import org.joda.time.Days;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -155,19 +157,21 @@ public class ReservationService {
     public Reservation close(Long id, User user) throws Exception {
         Reservation reservation = repo.findOne(id);
         validateIdNotNull(reservation);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        LocalDate startDate = LocalDate.parse(reservation.getStartDate());
+        LocalDate endDate = LocalDate.parse(reservation.getEndDate());
+        int rangIncrease = Days.daysBetween(startDate, endDate).getDays();
+
 
         if ((reservation.getStatus() == RESERVATION_STATUS_ARRIVED)) {
             for (ReservationGuest reservationGuest : reservation.getReservationGuests()) {
                 int reservationsMade = reservationGuest.getGuest().getNumberReservations();
-                reservationGuest.getGuest().setNumberReservations(reservationsMade + 1);
+                reservationGuest.getGuest().setNumberReservations(reservationsMade + rangIncrease);
             }
         }
 
         reservation.setStatus(RESERVATION_STATUS_CLOSED);
         reservation.setLastModifiedBy(user);
-
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         reservation.setLastModifiedTime(sdf.format(new Date()));
 
         return repo.save(reservation);
