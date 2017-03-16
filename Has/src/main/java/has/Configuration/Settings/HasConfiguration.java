@@ -37,10 +37,39 @@ public class HasConfiguration implements Serializable {
 
     private double guestDiscount;
 
+    private double lowClassPrice;
+
+    private double mediumClassPrice;
+
+    private double highClassPrice;
+
     public Double getReservationCost(int bedsSingle, int bedsDouble,
                                      boolean allInclusive, boolean dinner,
                                      boolean breakfast, int guestRang,
-                                     int reservationDuration) {
+                                     int reservationDuration, int roomClass) {
+
+        double totalPrice;
+        int lowClass = 0;
+        int mediumClass = 0;
+        int highClass = 0;
+
+        switch (roomClass) {
+            case 1:
+                highClass = 1;
+                mediumClass = 0;
+                lowClass = 0;
+                break;
+            case 2:
+                highClass = 0;
+                mediumClass = 1;
+                lowClass = 0;
+                break;
+            case 3:
+                highClass = 0;
+                mediumClass = 0;
+                lowClass = 1;
+                break;
+        }
 
         if (guestRang >= 10 && guestRang < 20) {
             guestDiscount = 0.05;
@@ -51,13 +80,20 @@ public class HasConfiguration implements Serializable {
         } else if (guestRang >= 40) {
             guestDiscount = 0.2;
         }
-
+        double totalDiscount = 0;
+        if (seasonalDiscount + guestDiscount <= 0.4) {
+            totalDiscount = seasonalDiscount + guestDiscount;
+        }
         int allInclusiveValue = allInclusive ? 1 : 0;
         int dinnerValue = dinner ? 1 : 0;
         int breakfastValue = breakfast ? 1 : 0;
 
-        return overnightPrice * (bedsSingle + bedsDouble * 1.5 +
+        totalPrice = overnightPrice * (bedsSingle * singleBedPrice + bedsDouble * doubleBedPrice +
                 allInclusiveValue * allInclusivePrice + dinnerValue * dinnerPrice
-                + breakfastValue * breakfastValue) * seasonalDiscount * guestDiscount * reservationDuration;
+                + breakfastValue * breakfastValue + highClass * highClassPrice
+                + mediumClass * mediumClassPrice + lowClass * lowClassPrice)
+                * reservationDuration;
+
+        return totalPrice - totalPrice * totalDiscount;
     }
 }
