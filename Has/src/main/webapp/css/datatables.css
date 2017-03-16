@@ -4,10 +4,10 @@
  *
  * To rebuild or modify this file with the latest versions of the included
  * software please visit:
- *   https://datatables.net/download/#bs/jszip-2.5.0/pdfmake-0.1.18/dt-1.10.12/b-1.2.2/b-html5-1.2.2/b-print-1.2.2/r-2.1.0
+ *   https://datatables.net/download/#bs/jszip-2.5.0/pdfmake-0.1.18/dt-1.10.13/b-1.2.4/b-html5-1.2.4/b-print-1.2.4/r-2.1.1
  *
  * Included libraries:
- *   JSZip 2.5.0, pdfmake 0.1.18, DataTables 1.10.12, Buttons 1.2.2, HTML5 export 1.2.2, Print view 1.2.2, Responsive 2.1.0
+ *   JSZip 2.5.0, pdfmake 0.1.18, DataTables 1.10.13, Buttons 1.2.4, HTML5 export 1.2.4, Print view 1.2.4, Responsive 2.1.1
  */
 
 table.dataTable {
@@ -20,7 +20,6 @@ table.dataTable {
 table.dataTable td,
 table.dataTable th {
   -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
   box-sizing: content-box;
 }
 table.dataTable td.dataTables_empty,
@@ -395,20 +394,24 @@ table.dataTable > tbody > tr.child {
 table.dataTable > tbody > tr.child:hover {
   background: transparent !important;
 }
-table.dataTable > tbody > tr.child ul {
+
+table.dataTable > tbody > tr.child ul.dtr-details {
   display: inline-block;
   list-style-type: none;
   margin: 0;
   padding: 0;
 }
-table.dataTable > tbody > tr.child ul li {
+
+table.dataTable > tbody > tr.child ul.dtr-details li {
   border-bottom: 1px solid #efefef;
   padding: 0.5em 0;
 }
-table.dataTable > tbody > tr.child ul li:first-child {
+
+table.dataTable > tbody > tr.child ul.dtr-details li:first-child {
   padding-top: 0;
 }
-table.dataTable > tbody > tr.child ul li:last-child {
+
+table.dataTable > tbody > tr.child ul.dtr-details li:last-child {
   border-bottom: none;
 }
 table.dataTable > tbody > tr.child span.dtr-title {

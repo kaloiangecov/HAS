@@ -375,7 +375,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         eventHeight: 50,
         rowHeaderColumns: [
             {title: "Room", width: 46},
-            {title: "Capacity", width: 57}
+            {title: "Capacity", width: 60}
         ],
         onBeforeCellRender: function (args) {
             if (args.cell.start <= DayPilot.Date.today() && DayPilot.Date.today() < args.cell.end) {
@@ -559,7 +559,6 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             $scope.scheduler.clearSelection();
             //clearInterval($scope.timer);
             //loadEvents();
-
             if (!$scope.events.new.start && (args.start.value.substr(0, 10) >= moment().format('YYYY-MM-DD'))) {
                 $scope.$apply(function () {
                     $scope.events.new = {
@@ -590,6 +589,8 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 $scope.conextMenuItems.showInfo
             ];
 
+            var selectedRoom = $filter('filter')($scope.config.resources, {id: args.e.data.roomId})[0];
+
             switch (reservationStatus) {
                 case 0:
                     menuItems.push($scope.conextMenuItems.addAnotherGuest);
@@ -599,7 +600,8 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 case 1:
                     menuItems.push($scope.conextMenuItems.addAnotherGuest);
                     menuItems.push($scope.conextMenuItems.checkOut);
-                    if (args.e.data.objReservation.group)
+                    if (args.e.data.objReservation.group
+                        && args.e.data.objReservation.reservationGuests[0].room.id != args.e.data.roomId)
                         menuItems.push($scope.conextMenuItems.earlyCheckout);
                     break;
             }
