@@ -71,7 +71,7 @@ public class ReservationGuestService {
     }
 
     public List<ReservationGuest> closeGroupReservation(Long reservationId, Long roomId) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         List<ReservationGuest> guests = repo.findByReservationIdAndRoomId(reservationId, roomId);
         for (ReservationGuest guest : guests) {
             guest.setEndDate(sdf.format(new Date()));

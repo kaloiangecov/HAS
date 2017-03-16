@@ -218,7 +218,7 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                 return response.data;
             },
             function (response) { //error
-                console.log(response);
+                $scope.displayMessage(response.data);
             })
             .then(function (results) {
                 $scope.results = results;
@@ -303,6 +303,10 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
     };
 
     $scope.editReservation = function () {
+        if ($scope.selectedRooms.length > 0) {
+            $scope.reservation.reservationGuests[0].room = $scope.selectedRooms[0];
+        }
+
         $scope.saveData("reservation", $scope.reservation,
             function (data) { //success
                 $scope.page.message = {

@@ -152,9 +152,9 @@ app.controller("mealCtrl", function ($scope, $http, $location, $state, $statePar
                     };
 
                     if ($scope.isEdit)
-                        $scope.page.message.text = ('Edited: ' + $scope.master.number);
+                        $scope.page.message.text = ('Edited: ' + $scope.master.name);
                     else
-                        $scope.page.message.text = ('Created: ' + $scope.master.number);
+                        $scope.page.message.text = ('Created: ' + $scope.master.name);
 
                     $('#messageModal').modal('show');
                     $location.path("/meals/list");

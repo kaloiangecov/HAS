@@ -128,6 +128,25 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             .then(callback);
     };
 
+    $scope.closeRoom = function (reservationId, roomId, callback) {
+        $http({
+            method: "PUT",
+            url: ("reservation-guest/" + reservationId + "/" + roomId),
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
+        }).then(
+            function (response) { //success
+                return response.data;
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+                $scope.resetReservation();
+            })
+            .then(callback);
+    };
+
     $scope.getGroupReservations = function () {
         var searchFilters = {
             startDate: $scope.config.startDate,
@@ -286,6 +305,32 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                         $scope.scheduler.message("Reservation closed: " + data.reservationGuests[0].guest.personalData.fullName);
 
                         selectedRoom.status = 2;
+                        $scope.saveData("room", selectedRoom, function () {
+                        }, function () {
+                            $scope.resetReservation();
+                        }, true);
+
+                        $scope.resetReservation();
+                    });
+                } else {
+                    loadEvents();
+                }
+            }
+        },
+        earlyCheckout: {
+            text: '<i class="fa fa-clock-o" aria-hidden="true"></i> <i class="fa fa-times"></i> Early check out',
+            onclick: function () {
+                if (this.source.data.objReservation.status != 1)
+                    return;
+
+                if (confirm("Checkout this room?")) {
+                    //$scope.scheduler.events.remove(this.source);
+                    var selectedRoom = $filter('filter')($scope.config.resources, {id: this.source.resource()})[0];
+
+                    $scope.closeRoom(this.source.data.objReservation.id, selectedRoom.id, function (data) {
+                        $scope.scheduler.message("Room closed!");
+                        selectedRoom.status = 2;
+
                         $scope.saveData("room", selectedRoom, function () {
                         }, function () {
                             $scope.resetReservation();
@@ -554,6 +599,8 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 case 1:
                     menuItems.push($scope.conextMenuItems.addAnotherGuest);
                     menuItems.push($scope.conextMenuItems.checkOut);
+                    if (args.e.data.objReservation.group)
+                        menuItems.push($scope.conextMenuItems.earlyCheckout);
                     break;
             }
 
@@ -636,7 +683,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 angular.forEach(response.data, function (reservation, key) {
                     var tmpEvent = {
                         start: reservation.startDate,
-                        end: reservation.endDate,
+                        //end: reservation.endDate,
                         //id: reservation.id,
                         //resource: reservation.reservationGuests[0].room.id,
                         status: reservation.status,
@@ -655,6 +702,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
                     if (!reservation.group) {
                         tmpEvent.id = reservation.id;
+                        tmpEvent.end = reservation.endDate;
                         tmpEvent.resource = reservation.reservationGuests[0].room.id;
                         $scope.events.list.push(tmpEvent);
                     } else {
@@ -669,7 +717,8 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                                     {
                                         id: (key + '_' + (index + 1)),
                                         resource: resGuest.room.id,
-                                        roomId: resGuest.room.id
+                                        roomId: resGuest.room.id,
+                                        end: (resGuest.endDate ? resGuest.endDate : reservation.endDate)
                                     }
                                 );
 
@@ -698,6 +747,12 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
     };
 
     $scope.submit = function () {
+        if ($scope.isNewGuest) {
+            $scope.reservationForm.$submitted = true;
+            if (!$scope.reservationForm.$valid)
+                return;
+        }
+
         if ($scope.isAdditionalGuest)
             $scope.addGuest();
         else
