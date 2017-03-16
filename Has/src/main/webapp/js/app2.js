@@ -102,18 +102,6 @@ app2.config(function ($stateProvider, $urlRouterProvider) {
                 setTimeout(function () {
                     $('.navbar-nav').find('li').removeClass('active');
                     $('#change').addClass('active');
-                    /*
-                     $rootScope.dr2 = $('#newDateRange').daterangepicker({
-                        parentEl: "body",
-                        startDate: new Date(),
-                        endDate: new Date(),
-                        locale: {
-                            format: "DD/MM/YY"
-                        }
-                    });
-
-                    $('.calendar').css({float: 'left'});
-                     */
                 }, 1);
             }
         });
