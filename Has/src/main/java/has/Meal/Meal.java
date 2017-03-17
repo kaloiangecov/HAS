@@ -45,7 +45,7 @@ public class Meal implements Serializable {
     private Double price;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "meal_category_id")
+    @JoinColumn(name = "MEAL_CATEGORY_ID")
     private MealCategory mealCategory;
 
     public Meal() {

@@ -1,6 +1,5 @@
 package has.PersonalData;
 
-import has.Exceptions.IdentityNumberAlreadyExists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

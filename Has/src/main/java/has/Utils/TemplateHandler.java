@@ -23,7 +23,7 @@ public class TemplateHandler {
 
     public void sendMail(Map model, String templatePath, ReservationGuest reservationGuest) throws IOException, TemplateException {
 
-        Template template = configuration.getTemplate("register.ftl");
+        Template template = configuration.getTemplate(templatePath);
 
         StringWriter writer = new StringWriter();
         template.process(model, writer);

@@ -27,7 +27,7 @@ public class UserRole implements Serializable {
     @JoinTable(name = "ROLE_PERMISSION", joinColumns = {
             @JoinColumn(name = "USER_ROLE_ID", nullable = false, updatable = false)},
             inverseJoinColumns = {@JoinColumn(name = "PERMISSION_ID",
-                    nullable = false, updatable = true)})
+                    nullable = false)})
     private List<RolePermission> permissions;
 
     @JsonIgnore

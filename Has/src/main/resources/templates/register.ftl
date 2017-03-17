@@ -93,13 +93,6 @@
     </tr>
 
     <tr>
-        <td colspan="2" width="25%"
-            style="padding: 10px; clear: both; background-color: #e9f3fb; font-weight: bold;">Here is the code for the stay</td>
-        <td colspan="2" width="25%"
-            style="padding: 10px; clear: both; background-color: #e9f3fb; font-weight: bold;">${code}</td>
-    </tr>
-
-    <tr>
         <td colspan="8" width="100%"><p
                 style="color: #4783A8; clear: both; margin: 0px; padding: 10px 2px;">Here you can find more information
         ${moreInformationUrl}</p></td>

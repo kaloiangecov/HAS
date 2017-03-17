@@ -51,9 +51,6 @@ public class Request implements Serializable {
     @Column(name = "REQUEST_TYPE")
     private int type;
 
-    //@OneToMany(mappedBy = "request", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    //private List<RequestMeal> requestMeals;
-
     public Request() {
 
     }

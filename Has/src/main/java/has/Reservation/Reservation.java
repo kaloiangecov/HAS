@@ -66,7 +66,6 @@ public class Reservation implements Serializable {
     @NotNull
     private Double price;
 
-    //@NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "EMPLOYEE_ID")
     private Employee receptionist;

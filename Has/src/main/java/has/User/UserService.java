@@ -24,13 +24,16 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    private static final int EMPLOYEE_TYPE = 1;
+    private static final int GUEST_TYPE = 2;
+
     public User save(User user) throws UserAlreadyExists, EmailAlreadyExists {
         validateAlreadyExists(user);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return repo.save(user);
     }
 
-    public User update(Long id, User user) throws UserAlreadyExists, EmailAlreadyExists, Exception {
+    public User update(Long id, User user) throws Exception {
         User dbUser = repo.findOne(id);
         validateIdNotNull(dbUser);
         validateAlreadyExists(user);
@@ -71,10 +74,10 @@ public class UserService {
         List<User> users = new ArrayList<User>();
 
         switch (type) {
-            case 1: //employees
+            case EMPLOYEE_TYPE:
                 users = repo.findFreeEmployeeUsers();
                 break;
-            case 2: //guests
+            case GUEST_TYPE:
                 users = repo.findFreeGuestUsers();
                 break;
         }

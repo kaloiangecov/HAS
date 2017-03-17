@@ -70,7 +70,7 @@ public class ReservationGuestService {
         return repo.save(dbReservationGuest);
     }
 
-    public List<ReservationGuest> closeGroupReservation(Long reservationId, Long roomId) {
+    public List<ReservationGuest> closeReservationRoom(Long reservationId, Long roomId) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         List<ReservationGuest> guests = repo.findByReservationIdAndRoomId(reservationId, roomId);
         for (ReservationGuest guest : guests) {

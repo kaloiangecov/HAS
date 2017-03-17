@@ -13,6 +13,7 @@ import java.util.List;
  */
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
+
     List<Reservation> findByStatusNotAndStartDateGreaterThanAndEndDateLessThan(int status, String startDate, String endDate);
 
     List<Reservation> findByGroupAndStatusNotAndStartDateGreaterThanAndEndDateLessThan(Boolean group, int status, String startDate, String endDate);
@@ -27,9 +28,4 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Query("SELECT r FROM has.Reservation.Reservation r WHERE r.group = :group AND ((r.startDate BETWEEN :startDate AND :endDate) OR (r.endDate BETWEEN :startDate AND :endDate))")
     List<Reservation> findGroupReservationsForCalendar(@Param("group") Boolean group, @Param("startDate") String startDate, @Param("endDate") String endDate);
 
-    @Query("SELECT r FROM has.Room.Room r WHERE (r.bedsSingle + r.bedsDouble*2) >= :numberAdults AND r.pets = :pets AND r.minibar = :minibar AND r NOT IN (SELECT rg.room FROM has.ReservationGuest.ReservationGuest rg WHERE (rg.reservation.startDate BETWEEN :startDate AND :endDate) OR (rg.reservation.endDate BETWEEN :startDate AND :endDate))")
-    List<Room> findInSite(@Param("startDate") String startDate, @Param("endDate") String endDate, @Param("numberAdults") int numberAdults, @Param("pets") boolean pets, @Param("minibar") boolean minibar);
-
-    @Query("SELECT r FROM has.Room.Room r WHERE (r.bedsSingle + r.bedsDouble*2) >= :numberAdults AND r.children = :children AND r.pets = :pets AND r.minibar = :minibar AND r NOT IN (SELECT rg.room FROM has.ReservationGuest.ReservationGuest rg WHERE (rg.reservation.startDate BETWEEN :startDate AND :endDate) OR (rg.reservation.endDate BETWEEN :startDate AND :endDate))")
-    List<Room> findInSiteWithChildren(@Param("startDate") String startDate, @Param("endDate") String endDate, @Param("numberAdults") int numberAdults, @Param("children") boolean children, @Param("pets") boolean pets, @Param("minibar") boolean minibar);
 }
