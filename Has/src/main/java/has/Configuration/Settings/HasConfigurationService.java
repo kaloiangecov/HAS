@@ -14,6 +14,8 @@ public class HasConfigurationService {
     @Autowired
     private HasConfigurationRepository repo;
 
+    private HasConfigurationInstance configurationInstance = HasConfigurationInstance.getInstance();
+
     public HasConfiguration findById(Long id) throws Exception {
         HasConfiguration hasConfiguration = repo.findOne(id);
         validateIdNotNull(hasConfiguration);
@@ -41,6 +43,9 @@ public class HasConfigurationService {
         dbHasConfiguration.setOvernightPrice(hasConfiguration.getOvernightPrice());
         dbHasConfiguration.setSeasonalDiscount(hasConfiguration.getSeasonalDiscount());
         dbHasConfiguration.setSingleBedPrice(hasConfiguration.getSingleBedPrice());
+        dbHasConfiguration.setLowClassPrice(hasConfiguration.getLowClassPrice());
+        dbHasConfiguration.setMediumClassPrice(hasConfiguration.getMediumClassPrice());
+        dbHasConfiguration.setHighClassPrice(hasConfiguration.getHighClassPrice());
 
         return repo.save(dbHasConfiguration);
     }
@@ -50,6 +55,13 @@ public class HasConfigurationService {
         validateIdNotNull(hasConfiguration);
         repo.delete(hasConfiguration);
         return hasConfiguration;
+    }
+
+    public HasConfiguration setActiveConfiguration(Long id) throws Exception {
+        HasConfiguration configuration = repo.findOne(id);
+        validateIdNotNull(configuration);
+        configurationInstance.initValues(configuration);
+        return configuration;
     }
 
     private void validateIdNotNull(HasConfiguration hasConfiguration) throws Exception {
