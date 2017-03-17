@@ -69,6 +69,6 @@ public class ReservationGuestController {
     @PreAuthorize("hasAuthority('PERM_EDIT_RESERVATION_GUEST')")
     public List<ReservationGuest> closeReservationRoom(@PathVariable Long reservationId,
                                                        @PathVariable Long roomId) throws Exception {
-        return reservationGuestService.closeReservationRoom(reservationId, roomId);
+        return reservationGuestService.closeGroupReservation(reservationId, roomId);
     }
 }

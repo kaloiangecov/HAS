@@ -170,10 +170,16 @@ public class ReservationService {
         LocalDate endDate = LocalDate.parse(reservation.getEndDate());
         int reservationDuration = Days.daysBetween(startDate, endDate).getDays();
 
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+        String today = sdf2.format(new Date());
         if ((reservation.getStatus() == RESERVATION_STATUS_ARRIVED)) {
             for (ReservationGuest reservationGuest : reservation.getReservationGuests()) {
                 int reservationsMade = reservationGuest.getGuest().getNumberReservations();
                 reservationGuest.getGuest().setNumberReservations(reservationsMade + reservationDuration);
+
+                if (reservationGuest.getEndDate() == null) {
+                    reservationGuest.setEndDate(today);
+                }
             }
         }
         //TODO: testing out pricing this is some bullshit here
@@ -193,6 +199,9 @@ public class ReservationService {
                         dinner, breakfast, guestRang, reservationDuration, roomClass));
             }
         }
+
+        if (reservation.getEndDate().compareTo(today) > 0)
+            reservation.setEndDate(today);
 
         reservation.setStatus(RESERVATION_STATUS_CLOSED);
         reservation.setLastModifiedBy(user);
