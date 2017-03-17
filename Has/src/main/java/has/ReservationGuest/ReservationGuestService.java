@@ -28,6 +28,7 @@ public class ReservationGuestService {
         ReservationGuest savedGuest = null;
         savedGuest = repo.save(reservationGuest);
         sendEmaiNotification(savedGuest);
+//        templateHandler.notifyCustomer(savedGuest.getReservation());
         return savedGuest;
     }
 

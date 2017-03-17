@@ -39,7 +39,6 @@ public class ReservationService {
 
     public Reservation save(Reservation reservation, User user) throws IOException, TemplateException {
         setLastModified(reservation, user);
-        notifyCustomer(reservation);
         return repo.save(reservation);
     }
 
@@ -111,7 +110,7 @@ public class ReservationService {
         dbReservation.setNumberChildren(reservation.getNumberChildren());
 
         setLastModified(dbReservation, user);
-        notifyCustomer(dbReservation);
+        templateHandler.notifyCustomer(dbReservation);
         dbReservation.setReceptionist(reservation.getReceptionist());
 
         int i = 0;
@@ -192,27 +191,6 @@ public class ReservationService {
         reservation.setLastModifiedBy(user);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         reservation.setLastModifiedTime(sdf.format(new Date()));
-    }
-
-    private void notifyCustomer(Reservation reservation) throws IOException, TemplateException {
-        ReservationGuest reservationGuest = null;
-        for (ReservationGuest singleReservationGuest : reservation.getReservationGuests()) {
-            if (singleReservationGuest.isOwner()) {
-                reservationGuest = singleReservationGuest;
-                break;
-            }
-        }
-        Map model = new HashMap();
-        model.put("reservation", reservation);
-        model.put("guest", reservationGuest.getGuest());
-
-        if (reservation.getStatus() == RESERVATION_STATUS_ARRIVED) {
-            String templatePath = "roomCode.ftl";
-            templateHandler.sendMail(model, templatePath, reservationGuest);
-        } else if (reservation.getStatus() == RESERVATION_STATUS_CREATED) {
-            String templatePath = "register.ftl";
-            templateHandler.sendMail(model, templatePath, reservationGuest);
-        }
     }
 
     private void validateIdNotNull(Reservation reservation) throws Exception {
