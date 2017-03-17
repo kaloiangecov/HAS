@@ -1,6 +1,8 @@
 package has.Reservation;
 
 import freemarker.template.TemplateException;
+import has.Configuration.Settings.HasConfigurationInstance;
+import has.Configuration.Settings.HasConfigurationRepository;
 import has.ReservationGuest.ReservationGuest;
 import has.Room.Room;
 import has.User.User;
@@ -28,6 +30,12 @@ public class ReservationService {
 
     public static final int RESERVATION_STATUS_ARRIVED = 1;
     public static final int RESERVATION_STATUS_CLOSED = 2;
+
+    @Autowired
+    private HasConfigurationRepository repoConfig;
+
+    private HasConfigurationInstance configurationInstance = HasConfigurationInstance.getInstance();
+
 
     public Reservation save(Reservation reservation, User user) throws IOException, TemplateException {
         setLastModified(reservation, user);
@@ -160,13 +168,29 @@ public class ReservationService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         LocalDate startDate = LocalDate.parse(reservation.getStartDate());
         LocalDate endDate = LocalDate.parse(reservation.getEndDate());
-        int rangIncrease = Days.daysBetween(startDate, endDate).getDays();
-
+        int reservationDuration = Days.daysBetween(startDate, endDate).getDays();
 
         if ((reservation.getStatus() == RESERVATION_STATUS_ARRIVED)) {
             for (ReservationGuest reservationGuest : reservation.getReservationGuests()) {
                 int reservationsMade = reservationGuest.getGuest().getNumberReservations();
-                reservationGuest.getGuest().setNumberReservations(reservationsMade + rangIncrease);
+                reservationGuest.getGuest().setNumberReservations(reservationsMade + reservationDuration);
+            }
+        }
+        //TODO: testing out pricing this is some bullshit here
+        {
+//            HasConfiguration hasConfiguration = repoConfig.findOne((long) 1);
+            if (reservation.isGroup() == false) {
+                ReservationGuest guest = reservation.getReservationGuests().get(0);
+                int bedsSingle = guest.getRoom().getBedsSingle();
+                int bedsDouble = guest.getRoom().getBedsDouble();
+                boolean allInclusive = reservation.isAllInclusive();
+                boolean dinner = reservation.isDinner();
+                boolean breakfast = reservation.isBreakfast();
+                int guestRang = guest.getGuest().getNumberReservations();
+                int roomClass = guest.getRoom().getRoomClass();
+
+                reservation.setPrice(configurationInstance.getReservationCost(bedsSingle, bedsDouble, allInclusive,
+                        dinner, breakfast, guestRang, reservationDuration, roomClass));
             }
         }
 

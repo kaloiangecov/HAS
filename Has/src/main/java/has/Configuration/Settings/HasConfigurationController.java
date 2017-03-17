@@ -60,4 +60,11 @@ public class HasConfigurationController {
         return hasConfigurationService.update(id, hasConfiguration);
     }
 
+    @RequestMapping(value = "/configurations/init/{id}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_VIEW_CONFIGURATION')")
+    public HasConfiguration setActiveConfiguration(@PathVariable Long id) throws Exception {
+        return hasConfigurationService.setActiveConfiguration(id);
+    }
 }
