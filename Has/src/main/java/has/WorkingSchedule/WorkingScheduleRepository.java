@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface WorkingScheduleRepository extends JpaRepository<WorkingSchedule, Long> {
+
     @Query("select ws from has.WorkingSchedule.WorkingSchedule ws where (ws.date between :startDate and :endDate) and ws.employee.user.userRole.id = :roleId")
     Page<WorkingSchedule> findByRangeAndRole(@Param("startDate") String startDate, @Param("endDate") String endDate, @Param("roleId") long roleId, Pageable request);
 

@@ -33,7 +33,4 @@ public class MealCategory {
     @Size(min = 3, max = 50)
     private String description;
 
-    public MealCategory() {
-
-    }
 }

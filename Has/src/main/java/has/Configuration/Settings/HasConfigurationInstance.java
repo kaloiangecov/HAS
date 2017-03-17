@@ -52,10 +52,7 @@ public class HasConfigurationInstance {
 
     private double highClassPrice;
 
-    //    @PostConstruct
     public void initValues(HasConfiguration configuration) {
-//        instance = new HasConfigurationInstance();
-//        HasConfiguration configuration = repo.findOne(1L);
 
         this.overnightPrice = configuration.getOvernightPrice();
         this.singleBedPrice = configuration.getSingleBedPrice();

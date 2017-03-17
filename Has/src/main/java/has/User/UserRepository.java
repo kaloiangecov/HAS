@@ -18,8 +18,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByEmail(String email);
 
-    User findByUsernameAndPassword(String username, String Password);
-
     @Query("select u from has.User.User u where u.enabled = true and u not in (select e.user from has.Employee.Employee e) and u not in (select g.user from has.Guest.Guest g) and u.userRole.id < 5")
     List<User> findFreeEmployeeUsers();
 

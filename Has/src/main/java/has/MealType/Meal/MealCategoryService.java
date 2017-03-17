@@ -1,6 +1,7 @@
 package has.MealType.Meal;
 
 import has.Meal.Meal;
+import has.Meal.MealRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,9 @@ public class MealCategoryService {
 
     @Autowired
     private MealCategoryRepository repo;
+
+    @Autowired
+    private MealRepository repoMeal;
 
     public MealCategory save(MealCategory meal) {
         return repo.save(meal);
@@ -34,7 +38,7 @@ public class MealCategoryService {
     }
 
     public List<Meal> findMealsByCategoryId(Long id) {
-        return repo.findMealByCategory(id);
+        return repoMeal.findByMealCategoryId(id);
     }
 
     public MealCategory remove(Long id) throws Exception {
@@ -53,7 +57,6 @@ public class MealCategoryService {
         }
         dbMeal.setTitle(meal.getTitle());
         //dbMeal.setImg(meal.getImg());
-
         return dbMeal;
     }
 }

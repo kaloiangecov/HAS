@@ -20,10 +20,6 @@ public class RequestService {
 
     public List<Request> getAllRequests() {
         List<Request> requests = repo.findAll();
-        //for (Request request : requests) {
-        //    request = removeRecursions(request);
-        //}
-
         return requests;
     }
 
@@ -48,27 +44,9 @@ public class RequestService {
         dbRequest.setTimeFinished(request.getTimeFinished());
         dbRequest.setTimePlaced(request.getTimePlaced());
         dbRequest.setType(request.getType());
-
         return repo.save(dbRequest);
     }
 
-    /*
-        private Request removeRecursions(Request request) {
-            Reservation reservation = request.getReservationGuest().getReservation();
-
-            reservation.setReservationGuests(null);
-            reservation.getReceptionist().setWorkingSchedules(null);
-
-            request.getReservationGuest().setReservation(reservation);
-            request.getEmployee().setWorkingSchedules(null);
-
-            //for (RequestMeal rm : request.getRequestMeals()) {
-            //    rm.setRequest(null);
-            //}
-
-            return request;
-        }
-    */
     private void validateIdNotNull(Request request) throws Exception {
         if (request == null) {
             throw new Exception("There is no request with such ID");

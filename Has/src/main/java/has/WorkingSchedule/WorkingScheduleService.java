@@ -29,14 +29,12 @@ public class WorkingScheduleService {
     public Page<WorkingSchedule> searchSchedule(int start, int length, String sortColumn, String sortDirection, String startDate, String endDate, Long roleID) {
         PageRequest request = new PageRequest((start / length), length, Sort.Direction.fromString(sortDirection), sortColumn);
         Page<WorkingSchedule> schedulePage = repo.findByRangeAndRole(startDate, endDate, roleID, request);
-
         return schedulePage;
     }
 
     public WorkingSchedule findById(Long id) throws Exception {
         WorkingSchedule workingSchedule = repo.findOne(id);
         validateIdNotNull(workingSchedule);
-
         return workingSchedule;
     }
 

@@ -9,9 +9,9 @@ import java.util.List;
  * Created by Chokleet on 25.2.2017 г..
  */
 @Repository
-public interface TaskRepository extends JpaRepository<Task ,Long>{
+public interface TaskRepository extends JpaRepository<Task, Long> {
 
-    public List<Task> findByAssigneeId(Long id);
+    List<Task> findByAssigneeId(Long id);
 
-    public List<Task> findByAssigneeIdAndStatusNot(Long id, Integer status);
+    List<Task> findByAssigneeIdAndStatusNot(Long id, Integer status);
 }

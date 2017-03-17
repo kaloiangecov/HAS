@@ -23,7 +23,6 @@ public class MealService {
 
     public List<Meal> getAllMeals() {
         List<Meal> meals = repo.findAll();
-
         return meals;
     }
 
@@ -49,15 +48,12 @@ public class MealService {
         dbMeal.setName(meal.getName());
         dbMeal.setPrice(meal.getPrice());
         dbMeal.setImg(meal.getImg());
-
         return repo.save(dbMeal);
     }
 
     public Page<Meal> search(int start, int length, String sortColumn, String sortDirection, String name) {
         PageRequest request = new PageRequest((start / length), length, Sort.Direction.fromString(sortDirection), sortColumn);
-
         Page<Meal> page = repo.findByNameContaining(name, request);
-
         return page;
     }
 

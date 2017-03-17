@@ -62,7 +62,6 @@ public class EmployeeService {
     public Employee findById(Long id) throws Exception {
         Employee employee = repo.findOne(id);
         validateIdNotNull(employee);
-
         return employee;
     }
 
@@ -72,7 +71,6 @@ public class EmployeeService {
 
     public Employee findByUserId(Long userId) throws Exception {
         Employee employee = repo.findByUserId(userId);
-
         return employee;
     }
 
@@ -103,9 +101,7 @@ public class EmployeeService {
     public Employee changeEmployment(Long id) throws Exception {
         Employee employee = repo.findOne(id);
         validateIdNotNull(employee);
-
         employee.setEmployed(!employee.isEmployed());
-
         return repo.save(employee);
     }
 

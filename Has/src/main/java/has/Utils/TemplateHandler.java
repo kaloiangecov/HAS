@@ -3,6 +3,7 @@ package has.Utils;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import has.Reservation.Reservation;
 import has.ReservationGuest.ReservationGuest;
 import has.mailsender.SendMailSSL;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -18,12 +20,17 @@ import java.util.Map;
 @Component
 public class TemplateHandler {
 
+    private static final int RESERVATION_STATUS_CREATED = 0;
+    private static final int RESERVATION_STATUS_ARRIVED = 1;
+    private static final int RESERVATION_STATUS_CLOSED = 2;
+    private static final int FIRST = 0;
+
     @Autowired
     private Configuration configuration;
 
     public void sendMail(Map model, String templatePath, ReservationGuest reservationGuest) throws IOException, TemplateException {
 
-        Template template = configuration.getTemplate("register.ftl");
+        Template template = configuration.getTemplate(templatePath);
 
         StringWriter writer = new StringWriter();
         template.process(model, writer);
@@ -40,6 +47,22 @@ public class TemplateHandler {
                     }
             ).start();
         }
+    }
+
+    public void notifyCustomer(Reservation reservation) throws IOException, TemplateException {
+
+        if (reservation.getStatus() == RESERVATION_STATUS_ARRIVED) {
+            ReservationGuest reservationGuest = reservation.getReservationGuests().get(FIRST);
+            Map model = new HashMap();
+            model.put("reservation", reservation);
+            model.put("guest", reservationGuest.getGuest());
+            String templatePath = "roomCode.ftl";
+            sendMail(model, templatePath, reservationGuest);
+        }
+//        else if (reservation.getStatus() == RESERVATION_STATUS_CREATED) {
+//            String templatePath = "register.ftl";
+//            sendMail(model, templatePath, reservationGuest);
+//        }
     }
 
     public TemplateHandler() {

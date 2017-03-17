@@ -52,6 +52,5 @@ public class Guest implements Serializable {
     }
 
     public Guest() {
-
     }
 }

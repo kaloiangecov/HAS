@@ -107,7 +107,7 @@ public class GuestController {
     @RequestMapping(value = "/guest/by-email", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    //@PreAuthorize("hasAuthority('PERM_VIEW_USER')")
+//    @PreAuthorize("hasAuthority('PERM_VIEW_USER')")
     public Guest findByUserEmail(@RequestBody User user) throws Exception {
         return guestService.findByUserEmail(user.getEmail());
     }

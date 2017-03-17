@@ -18,11 +18,12 @@ public class GuestService {
     @Autowired
     private GuestRepository repo;
 
+    private static final int NEW_RESEVATION = -1;
+
     public Guest save(Guest guest) throws Exception {
         validateEgn(guest);
         validateIssueDate(guest);
         validateIdentityNumber(guest);
-
         return repo.save(guest);
     }
 
@@ -36,7 +37,7 @@ public class GuestService {
     }
 
     public List<Guest> findReservationFreeGuests(Long reservationId) {
-        if (reservationId == -1)
+        if (reservationId == NEW_RESEVATION)
             return repo.findAll();
         else
             return repo.findReservationFreeGuests(reservationId);

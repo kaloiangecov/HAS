@@ -2,9 +2,9 @@ package has.Reservation;
 
 import freemarker.template.TemplateException;
 import has.Configuration.Settings.HasConfigurationInstance;
-import has.Configuration.Settings.HasConfigurationRepository;
 import has.ReservationGuest.ReservationGuest;
 import has.Room.Room;
+import has.Room.RoomRepository;
 import has.User.User;
 import has.Utils.TemplateHandler;
 import org.joda.time.Days;
@@ -28,26 +28,22 @@ public class ReservationService {
     @Autowired
     private ReservationRepository repo;
 
-    public static final int RESERVATION_STATUS_ARRIVED = 1;
-    public static final int RESERVATION_STATUS_CLOSED = 2;
-
     @Autowired
-    private HasConfigurationRepository repoConfig;
+    private RoomRepository repoRoom;
 
     private HasConfigurationInstance configurationInstance = HasConfigurationInstance.getInstance();
 
+    private static final int RESERVATION_STATUS_CREATED = 0;
+    private static final int RESERVATION_STATUS_ARRIVED = 1;
+    private static final int RESERVATION_STATUS_CLOSED = 2;
 
     public Reservation save(Reservation reservation, User user) throws IOException, TemplateException {
         setLastModified(reservation, user);
-        notifyCustomer(reservation, user);
         return repo.save(reservation);
     }
 
     public List<Reservation> getAllReservations() {
         List<Reservation> reservations = repo.findAll();
-//        for (Reservation reservation : reservations) {
-//            reservation = removeRecursions(reservation);
-//        }
         return reservations;
     }
 
@@ -60,39 +56,30 @@ public class ReservationService {
         } else {
             reservations = repo.findAllReservationsForCalendar(startDate, endDate);
         }
-
-        for (Reservation reservation : reservations) {
-            reservation = removeRecursions(reservation);
-        }
-
         return reservations;
     }
 
     public List<Room> searchReservationsWeb(String startDate, String endDate, int numberAdults, boolean children, boolean pets, boolean minibar) {
         List<Room> freeRooms;
 
-        if (children)
-            freeRooms = repo.findInSiteWithChildren(startDate, endDate, numberAdults, children, pets, minibar);
-        else
-            freeRooms = repo.findInSite(startDate, endDate, numberAdults, pets, minibar);
-
+        if (children) {
+            freeRooms = repoRoom.findInSiteWithChildren(startDate, endDate, numberAdults, children, pets, minibar);
+        } else {
+            freeRooms = repoRoom.findInSite(startDate, endDate, numberAdults, pets, minibar);
+        }
         return freeRooms;
     }
 
     public Reservation findById(Long id) throws Exception {
         Reservation reservation = repo.findOne(id);
         validateIdNotNull(reservation);
-
         return reservation;
-//        return removeRecursions(reservation);
     }
 
     public Reservation findByCode(String code) throws Exception {
         Reservation reservation = repo.findByReservationCodeAndStatus(code, 0);
-
         if (reservation == null)
             throw new Exception("There's no reservation with such code!");
-
         return reservation;
     }
 
@@ -102,20 +89,11 @@ public class ReservationService {
 
         repo.delete(reservation);
         return reservation;
-//        return removeRecursions(reservation);
     }
 
     public Reservation update(Long id, Reservation reservation, User user) throws Exception {
         Reservation dbReservation = repo.findOne(id);
         validateIdNotNull(dbReservation);
-
-        //TODO: closed does not work too well should remove it and use this one instead
-//        if (reservation.getStatus() == RESERVATION_STATUS_CLOSED) {
-//            for (ReservationGuest reservationGuest : dbReservation.getReservationGuests()) {
-//                int reservationsMade = reservationGuest.getGuest().getNumberReservations();
-//                reservationGuest.getGuest().setNumberReservations(reservationsMade + 1);
-//            }
-//        }
 
         dbReservation.setStatus(reservation.getStatus());
         dbReservation.setPrice(reservation.getPrice());
@@ -132,8 +110,7 @@ public class ReservationService {
         dbReservation.setNumberChildren(reservation.getNumberChildren());
 
         setLastModified(dbReservation, user);
-        notifyCustomer(dbReservation, user);
-
+        templateHandler.notifyCustomer(dbReservation);
         dbReservation.setReceptionist(reservation.getReceptionist());
 
         int i = 0;
@@ -141,9 +118,7 @@ public class ReservationService {
             dbReservationGuest.setRoom(reservation.getReservationGuests().get(i).getRoom());
             i++;
         }
-
         return repo.save(dbReservation);
-//        return removeRecursions(repo.save(dbReservation));
     }
 
     public Reservation move(Long id, Reservation reservation, User user) throws Exception {
@@ -158,8 +133,7 @@ public class ReservationService {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         dbReservation.setLastModifiedTime(sdf.format(new Date()));
-
-        return removeRecursions(repo.save(dbReservation));
+        return repo.save(dbReservation);
     }
 
     public Reservation close(Long id, User user) throws Exception {
@@ -184,7 +158,6 @@ public class ReservationService {
         }
         //TODO: testing out pricing this is some bullshit here
         {
-//            HasConfiguration hasConfiguration = repoConfig.findOne((long) 1);
             if (reservation.isGroup() == false) {
                 ReservationGuest guest = reservation.getReservationGuests().get(0);
                 int bedsSingle = guest.getRoom().getBedsSingle();
@@ -208,49 +181,16 @@ public class ReservationService {
         reservation.setLastModifiedTime(sdf.format(new Date()));
 
         return repo.save(reservation);
-//        return removeRecursions(repo.save(reservation));
     }
 
     public List<Reservation> getClientHistory(Long id) {
         return repo.findByReservationGuestsGuestId(id);
     }
 
-    private Reservation removeRecursions(Reservation reservation) {
-        for (ReservationGuest reservationGuest : reservation.getReservationGuests()) {
-            reservationGuest.setReservation(null);
-        }
-
-//        List<WorkingSchedule> schedules = reservation.getReceptionist().getWorkingSchedules();
-//        for (WorkingSchedule schedule : schedules) {
-//            schedule.setEmployee(null);
-//        }
-//        reservation.getReceptionist().setWorkingSchedules(schedules);
-
-        return reservation;
-    }
-
     private void setLastModified(Reservation reservation, User user) throws IOException, TemplateException {
         reservation.setLastModifiedBy(user);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         reservation.setLastModifiedTime(sdf.format(new Date()));
-    }
-
-    private void notifyCustomer(Reservation reservation, User user) throws IOException, TemplateException {
-        if (reservation.getStatus() == RESERVATION_STATUS_ARRIVED) {
-            ReservationGuest reservationGuest = null;
-            for (ReservationGuest singleReservationGuest : reservation.getReservationGuests()) {
-                if (singleReservationGuest.isOwner()) {
-                    reservationGuest = singleReservationGuest;
-                    break;
-                }
-            }
-            Map model = new HashMap();
-            model.put("reservation", reservation);
-            model.put("guest", reservationGuest.getGuest());
-            String templatePath = "roomCode.ftl";
-
-            templateHandler.sendMail(model, templatePath, reservationGuest);
-        }
     }
 
     private void validateIdNotNull(Reservation reservation) throws Exception {

@@ -38,7 +38,6 @@ public class RequestMealService {
     public RequestMeal update(Long id, RequestMeal requestMeal) throws Exception {
         RequestMeal dbRequestMeal = repo.findOne(id);
         validateIdNotNull(dbRequestMeal);
-
         dbRequestMeal.setQuantity(requestMeal.getQuantity());
         return repo.save(dbRequestMeal);
     }

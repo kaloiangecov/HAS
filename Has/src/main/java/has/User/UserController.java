@@ -43,7 +43,7 @@ public class UserController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('PERM_VIEW_USER')")
-    public List<User> getAllUsers(HttpServletRequest request) throws Exception {
+    public List<User> getAllUsers() throws Exception {
         return userService.getAllUsers();
     }
 
