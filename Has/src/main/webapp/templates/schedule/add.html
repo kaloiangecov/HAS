@@ -38,11 +38,15 @@
                 <div class="form-group">
                     <label class="control-label col-md-4 col-sm-4 col-xs-12" for="employee">Employee *</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <select class="form-control roles" id="employee" name="employee" ng-model="schedule.employee"
-                                ng-options="item as item.personalData.fullName for item in ctrl.employees track by item.id"
-                                required="required"
-                                style="width:100%">
-                        </select>
+                        <ui-select ng-model="schedule.employee" id="employee" name="employee">
+                            <ui-select-match>{{$select.selected.personalData.fullName}}</ui-select-match>
+                            <ui-select-choices
+                                    repeat="item in (ctrl.employees | filter: $select.search) track by item.id">
+                                <div ng-bind-html="item.personalData.fullName | highlight: $select.search"></div>
+                                <small ng-bind-html="item.personalData.egn | highlight: $select.search"></small>
+                            </ui-select-choices>
+                        </ui-select>
+
                         <div ng-show="userForm.$submitted || userForm.employee.$touched" class="validation-message">
                             <span ng-show="userForm.employee.$error.required">This field is required</span>
                         </div>
