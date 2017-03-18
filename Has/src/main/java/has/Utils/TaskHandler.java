@@ -3,7 +3,6 @@ package has.Utils;
 import has.Employee.Employee;
 import has.Employee.EmployeeRepository;
 import has.Request.Request;
-import has.Request.RequestRepository;
 import has.Task.Task;
 import has.Task.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +63,7 @@ public class TaskHandler {
         description
                     .append("Room request: "+ req.getId() + System.lineSeparator())
                     .append("Type of request: " + req.getType())
-                    .append("From room: "+req.getReservationGuest().getRoom());
+                .append("From room: " + req.getReservationGuest().getReservation().getRoom());
         if(req.getMealRequests() != null){
             description.append("Meals requested: " +req.getMealRequests());
         }
