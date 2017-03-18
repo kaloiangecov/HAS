@@ -183,8 +183,26 @@ public class ReservationService {
             reservation.setEndDate(today);
 
         reservation.setStatus(RESERVATION_STATUS_CLOSED);
+        reservation.getRoom().setStatus(2);
         reservation.setLastModifiedBy(user);
         reservation.setLastModifiedTime(sdf.format(new Date()));
+
+        if (reservation.getGroupId() != null && reservation.getReservationGuests().get(0).isOwner()) {
+            List<Reservation> groupReservations = repo.findByGroupId(reservation.getGroupId());
+            for (Reservation gr : groupReservations) {
+                if (gr.getId() != reservation.getId() && gr.getStatus() < 2) {
+                    if (gr.getEndDate().compareTo(today) > 0)
+                        gr.setEndDate(today);
+
+                    gr.setStatus(RESERVATION_STATUS_CLOSED);
+                    gr.getRoom().setStatus(2);
+                    gr.setLastModifiedBy(user);
+                    gr.setLastModifiedTime(sdf.format(new Date()));
+
+                    repo.save(gr);
+                }
+            }
+        }
 
         return repo.save(reservation);
     }

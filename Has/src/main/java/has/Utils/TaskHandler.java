@@ -58,14 +58,14 @@ public class TaskHandler {
         return task;
     }
 
-    public String createDescription(Request req){
+    public String createDescription(Request req) {
         StringBuilder description = new StringBuilder();
         description
-                    .append("Room request: "+ req.getId() + System.lineSeparator())
-                    .append("Type of request: " + req.getType())
-                    .append("From room: "+req.getReservationGuest().getReservation().getRoom());
-        if(req.getMealRequests() != null){
-            description.append("Meals requested: " +req.getMealRequests());
+                .append("Room request: " + req.getId() + System.lineSeparator())
+                .append("Type of request: " + req.getType())
+                .append("From room: " + req.getReservationGuest().getReservation().getRoom());
+        if (req.getMealRequests() != null) {
+            description.append("Meals requested: " + req.getMealRequests());
         }
         return description.toString();
     }
