@@ -1,5 +1,6 @@
 .actions-column {
-    width: 80px;
+    width: 120px;
+    max-width: 120px;
 }
 
 a.action-btn,
@@ -8,6 +9,7 @@ button.action-btn {
 }
 
 a > i.fa-refresh,
+a > i.fa-history,
 button > i.fa-refresh {
     color: #26B99A;
 }
