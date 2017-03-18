@@ -1,9 +1,9 @@
 package has.ReservationGuest;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * Created by kaloi on 1/31/2017.
@@ -11,5 +11,5 @@ import java.util.List;
 @Repository
 public interface ReservationGuestRepository extends JpaRepository<ReservationGuest, Long> {
 
-    List<ReservationGuest> findByReservationIdAndRoomId(Long reservationId, Long roomId);
+    Page<ReservationGuest> findByGuestId(Long id, Pageable request);
 }

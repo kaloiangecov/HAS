@@ -29,8 +29,11 @@ public class ReservationController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('PERM_CREATE_RESERVATION')")
-    public Reservation save(@RequestBody Reservation reservation, @AuthenticationPrincipal @Valid User user) throws IOException, TemplateException {
-        return reservationService.save(reservation, user);
+    public Reservation save(@RequestBody Reservation reservation,
+                            @AuthenticationPrincipal @Valid User user,
+                            @RequestParam("group") boolean isGroup,
+                            @RequestParam(value = "groupId", required = false) String groupId) throws IOException, TemplateException {
+        return reservationService.save(reservation, isGroup, groupId, user);
     }
 
     @RequestMapping(value = "/reservations", method = RequestMethod.POST,
@@ -41,20 +44,17 @@ public class ReservationController {
         return reservationService.getAllReservations();
     }
 
-    @RequestMapping(value = "/reservations/search", method = RequestMethod.POST,
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/reservations/search", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('PERM_VIEW_RESERVATION')")
     public
     @ResponseBody
-    List<Reservation> search(@RequestBody Reservation jsonParams) {
-
-        return reservationService.searchReservations(
-                jsonParams.getStartDate(),
-                jsonParams.getEndDate(),
-                jsonParams.isGroup()
-        );
+    List<Reservation> search(
+            @RequestParam("startDate") String startDate,
+            @RequestParam("endDate") String endDate,
+            @RequestParam(value = "group", required = false) Boolean isGroup) {
+        return reservationService.searchReservations(startDate, endDate, isGroup);
     }
 
     @RequestMapping(value = "/reservations/booking", method = RequestMethod.POST,
@@ -124,13 +124,5 @@ public class ReservationController {
     @PreAuthorize("hasAuthority('PERM_EDIT_RESERVATION')")
     public Reservation closeReservation(@PathVariable Long id, @AuthenticationPrincipal User user) throws Exception {
         return reservationService.close(id, user);
-    }
-
-    @RequestMapping(value = "/reservations/guest/{id}", method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('PERM_VIEW_RESERVATION')")
-    public List<Reservation> getGuestHistory(@PathVariable Long id) {
-        return reservationService.getClientHistory(id);
     }
 }

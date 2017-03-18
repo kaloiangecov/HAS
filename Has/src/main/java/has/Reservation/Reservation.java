@@ -3,6 +3,7 @@ package has.Reservation;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import has.Employee.Employee;
 import has.ReservationGuest.ReservationGuest;
+import has.Room.Room;
 import has.User.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,8 +37,7 @@ public class Reservation implements Serializable {
 
     private String reservationCode;
 
-    @Column(name = "C_GROUP")
-    private boolean group;
+    private String groupId;
 
     @NotNull
     @Min(0)
@@ -74,6 +74,11 @@ public class Reservation implements Serializable {
     @Min(0)
     @Max(2)
     private int status;
+
+    @NotNull
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "ROOM_ID")
+    private Room room;
 
     @OneToMany(mappedBy = "reservation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference

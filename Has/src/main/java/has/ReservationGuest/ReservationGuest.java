@@ -3,7 +3,6 @@ package has.ReservationGuest;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import has.Guest.Guest;
 import has.Reservation.Reservation;
-import has.Room.Room;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.annotation.Scope;
@@ -36,12 +35,6 @@ public class ReservationGuest implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "GUEST_ID")
     private Guest guest;
-
-    @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Room room;
-
-    private String endDate;
 
     @NotNull
     private boolean owner;
