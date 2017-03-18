@@ -130,6 +130,14 @@ public class ReservationController {
         return reservationService.close(id, user);
     }
 
+    @RequestMapping(value = "/reservation/checkin/{id}", method = RequestMethod.PUT,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_EDIT_RESERVATION')")
+    public Reservation checkInReservation(@PathVariable Long id, @AuthenticationPrincipal User user) throws Exception {
+        return reservationService.checkIn(id, user);
+    }
+
     @RequestMapping(value = "/reservations/guest/{id}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)

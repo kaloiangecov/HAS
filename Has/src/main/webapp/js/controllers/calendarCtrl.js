@@ -103,10 +103,10 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         }
     };
 
-    $scope.closeReservation = function (id, callback) {
+    $scope.checkReservation = function (action, id, callback) {
         $http({
             method: "PUT",
-            url: ("reservation/close/" + id),
+            url: ("reservation/" + action + "/" + id),
             responseType: "json",
             headers: {
                 "Authorization": $scope.authentication
@@ -293,10 +293,8 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                     return;
 
                 if (confirm("Start reservation?\n" + "Start: " + this.source.start() + "\nEnd:" + this.source.end())) {
-                    var tmp = this.source.data.objReservation;
-                    tmp.status = 1;
-                    $scope.saveData('reservation', tmp, function () {
-                        $scope.scheduler.message("Reservation started: " + tmp.reservationGuests[0].guest.personalData.fullName);
+                    $scope.checkReservation('checkin', this.source.data.objReservation.id, function (data) {
+                        $scope.scheduler.message("Reservation started: " + data.reservationGuests[0].guest.personalData.fullName);
                         loadEvents();
                     }, $scope.resetReservation, true);
                 } else {
@@ -312,7 +310,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
                 if (confirm("Close reservation?\n" + "Start: " + this.source.start() + "\nEnd:" + this.source.end())) {
                     //$scope.scheduler.events.remove(this.source);
-                    $scope.closeReservation(this.source.data.objReservation.id, function (data) {
+                    $scope.checkReservation('close', this.source.data.objReservation.id, function (data) {
                         $scope.scheduler.message("Reservation closed: " + data.reservationGuests[0].guest.personalData.fullName);
                         $scope.resetReservation();
                     });
@@ -527,6 +525,8 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                     };
                 });
 
+                $scope.reservationGuest.reservation.breakfast = true;
+
                 $scope.getGroupReservations();
 
                 $scope.getFreeGuests(-1, function (data) {
@@ -543,17 +543,20 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             }
         },
         onEventMouseOver: function (args) {
-            var reservationStatus = args.e.data.objReservation.status;
+            var reservation = args.e.data.objReservation;
             var menuItems = [
                 $scope.conextMenuItems.showInfo
             ];
 
             //var selectedRoom = $filter('filter')($scope.config.resources, {id: args.e.data.resource})[0];
 
-            switch (reservationStatus) {
+            switch (reservation.status) {
                 case 0:
                     menuItems.push($scope.conextMenuItems.addAnotherGuest);
-                    menuItems.push($scope.conextMenuItems.checkIn);
+
+                    if (reservation.startDate == moment().format("YYYY-MM-DD"))
+                        menuItems.push($scope.conextMenuItems.checkIn);
+
                     menuItems.push($scope.conextMenuItems.cancel);
                     break;
                 case 1:
@@ -726,6 +729,13 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             var url = "reservation?group=" + $scope.isGroupReservation;
             if ($scope.isGroupReservation && $scope.isExistingGroup && $scope.selectedGroupReservation) {
                 objReservation.groupId = $scope.selectedGroupReservation.groupId;
+                objReservation.startDate = $scope.selectedGroupReservation.startDate;
+                objReservation.endDate = $scope.selectedGroupReservation.endDate;
+                objReservation.allInclusive = $scope.selectedGroupReservation.allInclusive;
+                objReservation.breakfast = $scope.selectedGroupReservation.breakfast;
+                objReservation.dinner = $scope.selectedGroupReservation.dinner;
+                objReservation.numberAdults = $scope.selectedGroupReservation.numberAdults + 1;
+
                 url += "&groupId=" + objReservation.groupId;
                 $scope.reservationGuest.owner = false;
             }
@@ -763,6 +773,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 $scope.reservationGuest.guest = data;
                 $scope.reservationGuest.reservation.lastModifiedBy = $scope.loginData;
                 $scope.reservationGuest.reservation.lastModifiedTime = new Date().toISOString();
+                $scope.reservationGuest.reservation.numberAdults += $scope.reservationGuest.reservation.numberAdults;
 
                 $scope.saveData("reservation-guest", $scope.reservationGuest, function (data) {
                     $scope.scheduler.message("Added new guest: " + $scope.reservationGuest.guest.personalData.fullName);
@@ -775,6 +786,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             $scope.reservationGuest.guest = $scope.guests.selectedGuest;
             $scope.reservationGuest.reservation.lastModifiedBy = $scope.loginData;
             $scope.reservationGuest.reservation.lastModifiedTime = new Date().toISOString();
+            $scope.reservationGuest.reservation.numberAdults += $scope.reservationGuest.reservation.numberAdults;
 
             $scope.saveData("reservation-guest", $scope.reservationGuest, function (data) {
                 $scope.scheduler.message("Added new guest to reservation!");
