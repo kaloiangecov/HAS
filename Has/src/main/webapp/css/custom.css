@@ -10,6 +10,7 @@ button.action-btn {
 
 a > i.fa-refresh,
 a > i.fa-history,
+a > i.fa-clock-o,
 button > i.fa-refresh {
     color: #26B99A;
 }

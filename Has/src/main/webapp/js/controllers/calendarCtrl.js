@@ -7,6 +7,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
     $scope.events = {
         list: [],
+        groups: {},
         selected: [],
         new: {}
     };
@@ -191,6 +192,15 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         }
         return true;
     };
+
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
 
     var beginning = moment().subtract(3, "days");
     var ending = moment().add(21, "days");
@@ -548,8 +558,6 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 $scope.conextMenuItems.showInfo
             ];
 
-            //var selectedRoom = $filter('filter')($scope.config.resources, {id: args.e.data.resource})[0];
-
             switch (reservation.status) {
                 case 0:
                     menuItems.push($scope.conextMenuItems.addAnotherGuest);
@@ -614,7 +622,27 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             }
 
             // customize the reservation HTML: text, start and end dates
-            args.data.html = args.data.text + " (" + start.toString("d/M/yyyy") + " - " + end.toString("d/M/yyyy") + ")" + "<br /><span style='color:gray'>" + status + "</span>";
+            args.data.html = args.data.text + " (" + start.toString("d/M/yyyy") + " - " + end.toString("d/M/yyyy") + ")"
+                + "<br /><span style='color:gray'>" + status + "</span>";
+
+            var groupId = args.data.objReservation.groupId;
+            if (groupId) {
+                var color;
+                if ($scope.events.groups[groupId]) {
+                    color = $scope.events.groups[groupId].color;
+                } else {
+                    $scope.events.groups[groupId] = {
+                        color: getRandomColor(),
+                        reservations: [args.data.objReservation]
+                    }
+                }
+
+                args.data.html += '<br/><span class="label label-default" style="background-color:'
+                    + $scope.events.groups[groupId].color + '">Group</span>';
+
+                if (args.data.objReservation.reservationGuests[0].owner)
+                    args.data.html += ' <span class="label label-warning">Owner</span>';
+            }
 
             // reservation tooltip that appears on hover - displays the status text
             args.e.toolTip = status;
