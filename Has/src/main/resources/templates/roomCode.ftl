@@ -8,7 +8,7 @@
 </head>
 <body style="background-color: #BAC2C5;">
 <p style="margin: 0px; padding: 2px;">
-    Greetings ${fullName} here is the code to your room: ${code}.
+    Greetings ${fullName} here is your personal access code for the hotel's system: ${code}.
     <br><br>
 </p>
 </body>
