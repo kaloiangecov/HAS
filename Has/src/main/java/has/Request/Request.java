@@ -34,10 +34,6 @@ public class Request implements Serializable {
     @JoinColumn(name = "RESERVATION_GUEST_ID")
     private ReservationGuest reservationGuest;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "EMPLOYEE_ID")
-    private Employee employee;
-
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL)
     private List<RequestMeal> mealRequests;

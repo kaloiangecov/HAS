@@ -1,6 +1,7 @@
 package has.Task;
 
 import has.Employee.Employee;
+import has.Request.Request;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -53,6 +54,9 @@ public class Task implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "EMPLOYEE_ID")
     private Employee assignee;
+
+    @OneToOne
+    private Request request;
 
     public Task() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
