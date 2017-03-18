@@ -44,7 +44,8 @@ app.config(function ($stateProvider, $urlRouterProvider) {
     //.state('loggedin.root.guests', {abstract: true})
         .state('loggedin.root.guestsList', stateGuestList)
         .state('loggedin.root.guestsAdd', stateGuestAdd)
-        .state('loggedin.root.guestsEdit', stateGuestEdit);
+        .state('loggedin.root.guestsEdit', stateGuestEdit)
+        .state('loggedin.root.guestsHistory', stateGuestHistory);
 
     $stateProvider // Rooms module
     //.state('loggedin.root.rooms', {abstract: true})

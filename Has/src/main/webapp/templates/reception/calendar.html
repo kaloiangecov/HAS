@@ -42,7 +42,7 @@
                     <div class="row" ng-hide="isAdditionalGuest">
                         <div class="col-sm-4">
                             <label for="group">
-                                <input type="checkbox" id="group" ng-model="reservationGuest.reservation.group"/> Group
+                                <input type="checkbox" id="group" ng-model="isGroupReservation"/> Group
                             </label>
                         </div>
                         <div class="col-sm-4">
@@ -50,7 +50,7 @@
                                 <input type="checkbox" id="groupExisting" ng-model="isExistingGroup"/>
                                 Part of
                             </label>
-                            <select ng-model="reservationGuest.reservation"
+                            <select ng-model="selectedGroupReservation"
                                     ng-options="item as (item.startDate + ' - ' + item.endDate + ' : ' + item.reservationGuests[0].guest.personalData.fullName) for item in groupReservationsList track by item.id"
                                     ng-disabled="!isExistingGroup">
                             </select>
@@ -253,7 +253,7 @@
                         <th>Room</th>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="reservationGuest in reservationInfo.reservationGuests">
+                        <tr ng-repeat="reservationGuest in reservationInfo.guestsList">
                             <td>
                                 {{reservationGuest.guest.personalData.fullName}}
                                 <span class="label label-warning" ng-show="reservationGuest.owner">

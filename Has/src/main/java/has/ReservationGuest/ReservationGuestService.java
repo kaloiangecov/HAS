@@ -3,11 +3,12 @@ package has.ReservationGuest;
 import freemarker.template.TemplateException;
 import has.Utils.TemplateHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,20 +66,14 @@ public class ReservationGuestService {
 
         dbReservationGuest.setReservation(reservationGuest.getReservation());
         dbReservationGuest.setGuest(reservationGuest.getGuest());
-        dbReservationGuest.setRoom(reservationGuest.getRoom());
         dbReservationGuest.setOwner(reservationGuest.isOwner());
 
         return repo.save(dbReservationGuest);
     }
 
-    public List<ReservationGuest> closeReservationRoom(Long reservationId, Long roomId) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        List<ReservationGuest> guests = repo.findByReservationIdAndRoomId(reservationId, roomId);
-        for (ReservationGuest guest : guests) {
-            guest.setEndDate(sdf.format(new Date()));
-        }
-        //TODO: price calculation goes here
-        return repo.save(guests);
+    public Page<ReservationGuest> getClientHistory(Long id, int start, int length, String sortColumn, String sortDirection) {
+        PageRequest request = new PageRequest((start / length), length, Sort.Direction.fromString(sortDirection), sortColumn);
+        return repo.findByGuestId(id, request);
     }
 
     private void validateIdNotNull(ReservationGuest reservationGuest) throws Exception {
