@@ -99,7 +99,8 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
             $scope.saveData("guest", $scope.reservationGuest.guest, function (data) {
                 $scope.reservationGuest.guest = data;
-                $scope.saveData("reservation-guest", $scope.reservationGuest, afterEventCreated, $scope.resetReservation);
+                $scope.saveData("reservation-guest", $scope.reservationGuest,
+                    afterEventCreated, $scope.resetReservation);
             }, $scope.resetReservation);
         }
         else { // use existing guest
@@ -369,7 +370,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         //resources: $scope.events.resources,
         timeHeaders: [{groupBy: "Month"}, {groupBy: "Day", format: "d"}],
         eventDeleteHandling: "Update",
-        eventClickHandling: "Select",
+        eventClickHandling: "Disabled",
         allowEventOverlap: false,
         cellWidthSpec: "Auto",
         eventHeight: 50,
@@ -557,8 +558,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         },
         onTimeRangeSelected: function (args) {
             $scope.scheduler.clearSelection();
-            //clearInterval($scope.timer);
-            //loadEvents();
+
             if (!$scope.events.new.start && (args.start.value.substr(0, 10) >= moment().format('YYYY-MM-DD'))) {
                 $scope.$apply(function () {
                     $scope.events.new = {
@@ -583,13 +583,13 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 $('#reservationModal').modal('show');
             }
         },
-        onEventClick: function (args) {
+        onEventMouseOver: function (args) {
             var reservationStatus = args.e.data.objReservation.status;
             var menuItems = [
                 $scope.conextMenuItems.showInfo
             ];
 
-            var selectedRoom = $filter('filter')($scope.config.resources, {id: args.e.data.roomId})[0];
+            //var selectedRoom = $filter('filter')($scope.config.resources, {id: args.e.data.resource})[0];
 
             switch (reservationStatus) {
                 case 0:
@@ -606,8 +606,9 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                     break;
             }
 
-            $scope.config.contextMenu = new DayPilot.Menu({items: menuItems});
-
+            $scope.$apply(function () {
+                $scope.config.contextMenu = new DayPilot.Menu({items: menuItems});
+            });
         },
         onBeforeEventRender: function (args) {
             var start = new DayPilot.Date(args.data.start);
