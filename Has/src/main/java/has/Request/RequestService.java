@@ -1,5 +1,6 @@
 package has.Request;
 
+import has.Utils.TaskHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,11 @@ public class RequestService {
     @Autowired
     private RequestRepository repo;
 
+    @Autowired
+    private TaskHandler taskHandler;
+
     public Request save(Request request) {
+        taskHandler.createTaskFromRequest(request);
         return repo.save(request);
     }
 

@@ -1,9 +1,12 @@
 package has.Task;
 
 import has.Employee.Employee;
+import has.Request.Request;
+import has.Request.RequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,6 +19,9 @@ public class TaskService {
 
     @Autowired
     private TaskRepository repo;
+
+    @Autowired
+    private RequestRepository requestRepository;
 
     public Task save(Task task, String assigner) {
         task.setAssigner(assigner);
@@ -62,7 +68,6 @@ public class TaskService {
     public List<Task> getEmployeesUnresolvedTasks(Employee employee) {
         return repo.findByAssigneeIdAndStatusNot(employee.getId(), UNRESOLVED);
     }
-
     public Task changeStatus(Long id, Integer status) {
         Task task = repo.findOne(id);
         task.setStatus(status);
