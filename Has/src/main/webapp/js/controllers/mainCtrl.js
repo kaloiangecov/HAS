@@ -191,14 +191,17 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
             }
         }).then(
             function (response) { //success
-                return response.data;
+                return response;
             },
             function (response) { //error
                 $scope.displayMessage(response.data);
                 if (errorCallback)
                     errorCallback;
             })
-            .then(successCallback);
+            .then(function (response) {
+                if (response.status == 200)
+                    successCallback(response.data);
+            });
     };
 
     $scope.getSingleData = function (dataType, id, successCallback, errorCallback) {

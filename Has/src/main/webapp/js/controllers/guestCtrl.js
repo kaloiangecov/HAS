@@ -50,7 +50,7 @@ app.controller("guestCtrl", function ($scope, $state, $location, $stateParams, $
                     var html =
                         '<div class="btn-group btn-group-sm">' +
                         '<a class="btn btn-default action-btn" href="#!/guests/history/' +
-                        id + '"><i class="fa fa-history" aria-hidden="true"></i></a>' +
+                        id + '"><i class="fa fa-clock-o" aria-hidden="true"></i></a>' +
                         '<a class="btn btn-default action-btn" href="#!/guests/edit/' +
                         id + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
                         '<button class="btn btn-default action-btn delete-btn" id="del_' +

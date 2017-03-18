@@ -325,10 +325,10 @@ INSERT INTO ROOM (NUMBER, BEDS_DOUBLE, BEDS_SINGLE, ROOM_CLASS, STATUS, CHILDREN
 
 INSERT INTO RESERVATION
 (reservation_id, all_inclusive, breakfast, dinner, discount, end_date, group_id, last_modified_by_user_id, last_modified_time, number_adults, number_children, price, room_id, employee_id, start_date, status)
-VALUES('1', false, true, false, 0, '2017-03-14', null, null, null, 2, 1, 40.0, 5, '5', '2017-03-10', 0),
-('2', true, true, true, 10, '2017-03-17', 'asdasdmadafaka', null, null, 1, 1, 50.0, 8, '4', '2017-03-12', 1),
-('3', true, true, true, 10, '2017-03-17', 'asdasdmadafaka', null, null, 1, 1, 50.0, 10, '4', '2017-03-12', 1),
-('4', false, false, true, 10, '2017-03-22', null, null, null, 2, 0, 45.0, 2, '4', '2017-03-19', 1);
+VALUES('1', false, true, false, 0, '2017-03-20', null, null, null, 2, 1, 40.0, 5, '5', '2017-03-16', 0),
+('2', true, true, true, 10, '2017-03-22', 'asdasdmadafaka', null, null, 1, 1, 50.0, 8, '4', '2017-03-18', 1),
+('3', true, true, true, 10, '2017-03-22', 'asdasdmadafaka', null, null, 1, 1, 50.0, 10, '4', '2017-03-18', 1),
+('4', false, false, true, 10, '2017-03-24', null, null, null, 2, 0, 45.0, 2, '4', '2017-03-21', 1);
 
 INSERT INTO RESERVATION_GUEST (RESERVATION_GUEST_ID, reservation_id, guest_id, owner) VALUES
 (1, 1, 1, true),

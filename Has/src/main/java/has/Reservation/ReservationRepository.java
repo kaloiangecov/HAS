@@ -17,6 +17,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     Reservation findByReservationCodeAndStatus(String reservationCode, int status);
 
+    List<Reservation> findByGroupId(String groupId);
+
     @Query("select r from has.Reservation.Reservation r where r in (select rg.reservation from has.ReservationGuest.ReservationGuest rg where rg.guest.id = :id)")
     Page<Reservation> findByGuestId(@Param("id") Long id, Pageable request);
 

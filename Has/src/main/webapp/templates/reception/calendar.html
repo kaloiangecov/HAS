@@ -63,7 +63,7 @@
                         <div class="form-group col-xs-4">
                             <label for="breakfast">
                                 <input type="checkbox" id="breakfast" name="breakfast"
-                                       ng-disabled="reservationGuest.reservation.allInclusive"
+                                       ng-disabled="reservationGuest.reservation.allInclusive || isExistingGroup"
                                        ng-model="reservationGuest.reservation.breakfast"/>
                                 Breakfast
                             </label>
@@ -71,7 +71,7 @@
                         <div class="form-group col-xs-4">
                             <label for="dinner">
                                 <input type="checkbox" id="dinner" name="dinner"
-                                       ng-disabled="reservationGuest.reservation.allInclusive"
+                                       ng-disabled="reservationGuest.reservation.allInclusive || isExistingGroup"
                                        ng-model="reservationGuest.reservation.dinner"/>
                                 Dinner
                             </label>
@@ -79,6 +79,7 @@
                         <div class="form-group col-xs-4">
                             <label for="allInclusive">
                                 <input type="checkbox" id="allInclusive" name="allInclusive"
+                                       ng-disabled="isExistingGroup"
                                        ng-model="reservationGuest.reservation.allInclusive"/>
                                 All Inclusive
                             </label>

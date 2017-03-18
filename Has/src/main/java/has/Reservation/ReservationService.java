@@ -146,6 +146,35 @@ public class ReservationService {
         return repo.save(dbReservation);
     }
 
+    public Reservation checkIn(Long id, User user) throws Exception {
+        Reservation reservation = repo.findOne(id);
+        validateIdNotNull(reservation);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        reservation.setStatus(RESERVATION_STATUS_ARRIVED);
+        reservation.getRoom().setStatus(1);
+        reservation.setLastModifiedBy(user);
+        reservation.setLastModifiedTime(sdf.format(new Date()));
+
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+        String today = sdf2.format(new Date());
+        if (reservation.getGroupId() != null) {
+            List<Reservation> groupReservations = repo.findByGroupId(reservation.getGroupId());
+            for (Reservation gr : groupReservations) {
+                if (gr.getId() != reservation.getId()) {
+                    gr.setStatus(RESERVATION_STATUS_ARRIVED);
+                    gr.getRoom().setStatus(1);
+                    gr.setLastModifiedBy(user);
+                    gr.setLastModifiedTime(sdf.format(new Date()));
+
+                    repo.save(gr);
+                }
+            }
+        }
+
+        return repo.save(reservation);
+    }
+
     public Reservation close(Long id, User user) throws Exception {
         Reservation reservation = repo.findOne(id);
         validateIdNotNull(reservation);
@@ -183,8 +212,26 @@ public class ReservationService {
             reservation.setEndDate(today);
 
         reservation.setStatus(RESERVATION_STATUS_CLOSED);
+        reservation.getRoom().setStatus(2);
         reservation.setLastModifiedBy(user);
         reservation.setLastModifiedTime(sdf.format(new Date()));
+
+        if (reservation.getGroupId() != null && reservation.getReservationGuests().get(0).isOwner()) {
+            List<Reservation> groupReservations = repo.findByGroupId(reservation.getGroupId());
+            for (Reservation gr : groupReservations) {
+                if (gr.getId() != reservation.getId() && gr.getStatus() < 2) {
+                    if (gr.getEndDate().compareTo(today) > 0)
+                        gr.setEndDate(today);
+
+                    gr.setStatus(RESERVATION_STATUS_CLOSED);
+                    gr.getRoom().setStatus(2);
+                    gr.setLastModifiedBy(user);
+                    gr.setLastModifiedTime(sdf.format(new Date()));
+
+                    repo.save(gr);
+                }
+            }
+        }
 
         return repo.save(reservation);
     }

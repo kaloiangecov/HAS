@@ -132,8 +132,8 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                     endDate: reservation.endDate,
                     numberAdults: reservation.numberAdults,
                     numberChildren: reservation.numberChildren,
-                    pets: reservation.reservationGuests[0].room.pets,
-                    minibar: reservation.reservationGuests[0].room.minibar
+                    pets: reservation.room.pets,
+                    minibar: reservation.room.minibar
                 };
 
                 $scope.dr2 = $('#newDateRange').daterangepicker({
@@ -229,7 +229,6 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
         $scope.reservation = {
             startDate: $scope.filters.startDate,
             endDate: $scope.filters.endDate,
-            group: ($scope.selectedRooms.length > 0),
             status: 0,
             numberAdults: $scope.filters.numberAdults,
             numberChildren: $scope.filters.numberChildren,
@@ -252,12 +251,11 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
 
     $scope.submitReservation = function () {
         $scope.reservationGuest = {
-            room: $scope.selectedRooms[0],
             owner: true
         };
+        $scope.reservation.room = $scope.selectedRooms[0]
 
-
-        $scope.saveData("reservation", $scope.reservation, function (newReservation) {
+        $scope.saveData("reservation?group=" + ($scope.selectedRooms.length > 1), $scope.reservation, function (newReservation) {
             console.log("reservation", newReservation);
 
             $scope.reservationGuest.reservation = newReservation;
@@ -276,7 +274,7 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                         $scope.reservationGuest.guest = newGuest;
                         $scope.saveData("reservation-guest", $scope.reservationGuest, function (newReservationGuest) {
                             console.log(newReservationGuest);
-                            $scope.reservationInfo = newReservation
+                            $scope.reservationInfo = newReservation;
                             $scope.reservationInfo.reservationGuests = [newReservationGuest];
 
                             $scope.clearEverything();
@@ -319,8 +317,7 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
             },
             function () { //error
 
-            }, true
-        );
+            }, true);
     };
 
     function setDateRange(start, end) {
