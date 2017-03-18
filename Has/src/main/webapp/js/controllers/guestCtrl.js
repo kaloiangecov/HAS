@@ -94,7 +94,7 @@ app.controller("guestCtrl", function ($scope, $state, $location, $stateParams, $
 
         $scope.dtHistoryOptions = DTOptionsBuilder.newOptions()
             .withOption('ajax', {
-                url: ('reservations-guest/guest/' + $stateParams.id),
+                url: ('reservations/guest/' + $stateParams.id),
                 type: 'GET',
                 dataType: "json",
                 headers: {
@@ -120,10 +120,10 @@ app.controller("guestCtrl", function ($scope, $state, $location, $stateParams, $
 
         $scope.dtHistoryColumns = [
             DTColumnBuilder.newColumn('id', 'ID').notVisible(),
-            DTColumnBuilder.newColumn('reservation.startDate', 'Check in'),
+            DTColumnBuilder.newColumn('startDate', 'Check in'),
             DTColumnBuilder.newColumn('endDate', 'Check out'),
             DTColumnBuilder.newColumn('room.number', 'Room'),
-            DTColumnBuilder.newColumn('reservation.price', 'Price')
+            DTColumnBuilder.newColumn('price', 'Price')
         ];
 
         $scope.reloadHistoryTableData = function (resetPaging) {

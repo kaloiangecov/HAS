@@ -1,5 +1,7 @@
 package has.Reservation;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,6 +16,9 @@ import java.util.List;
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
     Reservation findByReservationCodeAndStatus(String reservationCode, int status);
+
+    @Query("select r from has.Reservation.Reservation r where r in (select rg.reservation from has.ReservationGuest.ReservationGuest rg where rg.guest.id = :id)")
+    Page<Reservation> findByGuestId(@Param("id") Long id, Pageable request);
 
     @Query("SELECT r FROM has.Reservation.Reservation r WHERE ((r.startDate BETWEEN :startDate AND :endDate) OR (r.endDate BETWEEN :startDate AND :endDate))")
     List<Reservation> findAllReservationsForCalendar(@Param("startDate") String startDate, @Param("endDate") String endDate);

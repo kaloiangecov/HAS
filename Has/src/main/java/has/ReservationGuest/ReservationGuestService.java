@@ -3,9 +3,6 @@ package has.ReservationGuest;
 import freemarker.template.TemplateException;
 import has.Utils.TemplateHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -69,11 +66,6 @@ public class ReservationGuestService {
         dbReservationGuest.setOwner(reservationGuest.isOwner());
 
         return repo.save(dbReservationGuest);
-    }
-
-    public Page<ReservationGuest> getClientHistory(Long id, int start, int length, String sortColumn, String sortDirection) {
-        PageRequest request = new PageRequest((start / length), length, Sort.Direction.fromString(sortDirection), sortColumn);
-        return repo.findByGuestId(id, request);
     }
 
     private void validateIdNotNull(ReservationGuest reservationGuest) throws Exception {
