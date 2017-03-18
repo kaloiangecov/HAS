@@ -18,6 +18,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
     };
     $scope.isNewGuest = true;
     $scope.isAdditionalGuest = false;
+    $scope.isGroupReservation = false;
     $scope.isExistingGroup = false;
     $scope.reservationGuest = {
         reservation: {},
@@ -30,6 +31,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         room: {}
     };
     $scope.groupReservationsList = [];
+    $scope.selectedGroupReservation = {};
     $scope.reservationInfo = {};
 
     $scope.getRooms = function (callback) {
@@ -88,8 +90,6 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         function afterEventCreated(data) {
             $scope.scheduler.message("New event created!");
 
-            console.log("New reservation: ", data);
-
             $scope.resetReservation();
         }
 
@@ -99,7 +99,8 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
             $scope.saveData("guest", $scope.reservationGuest.guest, function (data) {
                 $scope.reservationGuest.guest = data;
-                $scope.saveData("reservation-guest", $scope.reservationGuest, afterEventCreated, $scope.resetReservation);
+                $scope.saveData("reservation-guest", $scope.reservationGuest,
+                    afterEventCreated, $scope.resetReservation);
             }, $scope.resetReservation);
         }
         else { // use existing guest
@@ -148,24 +149,31 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
     };
 
     $scope.getGroupReservations = function () {
-        var searchFilters = {
+        var range = {
             startDate: $scope.config.startDate,
-            endDate: moment($scope.config.startDate).add($scope.config.days, 'days').format("YYYY-MM-DD"),
-            group: true
+            endDate: moment($scope.config.startDate).add($scope.config.days, 'days').format("YYYY-MM-DD")
         };
 
         $http({
-            method: "POST",
-            url: "reservations/search",
+            method: "GET",
+            url: ("reservations/search?startDate=" + range.startDate + "&endDate=" + range.endDate + "&group=true"),
             responseType: "json",
             headers: {
                 "Authorization": $scope.authentication
-            },
-            data: searchFilters
+            }
         })
             .then(
                 function (response) {
-                    $scope.groupReservationsList = response.data;
+                    $scope.groupReservationsList = [];
+                    angular.forEach(response.data, function (reservation, key) {
+                        var repeating = $filter('filter')(
+                            $scope.groupReservationsList,
+                            {groupId: reservation.groupId});
+
+                        if (!repeating || repeating.length == 0)
+                            $scope.groupReservationsList.push(reservation);
+                    });
+
                 },
                 function (response) {
                     $scope.displayMessage(response.data);
@@ -191,37 +199,46 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         return true;
     };
 
-    $scope.calculateRoomGuests = function (event) {
-        var n = 0;
+    var beginning = moment().subtract(3, "days");
+    var ending = moment().add(21, "days");
 
-        if (event.objReservation.group) {
-            angular.forEach(event.objReservation.reservationGuests, function (reservationGuest, key) {
-                if (reservationGuest.room.id == event.roomId)
-                    n++;
-            });
-        } else {
-            n = event.objReservation.reservationGuests.length;
-        }
-
-        return n;
-    };
-
-    $scope.startDate = new DayPilot.Date(new Date());
-    $scope.endDate = $scope.startDate.addDays(21);
-    $scope.startDate = $scope.startDate.addDays(-3);
+    $scope.startDate = beginning.format("YYYY-MM-DD");
+    $scope.endDate = ending.format("YYYY-MM-DD");
 
     $scope.conextMenuItems = {
         showInfo: {
             text: '<i class="fa fa-info"></i> Show info',
             onclick: function () {
-                var tmp = this.source.data.objReservation;
+                var tmp = angular.copy(this.source.data.objReservation);
                 $scope.$apply(function () {
                     $scope.reservationInfo = tmp;
-                    $scope.reservationInfo.startDate = new Date($scope.reservationInfo.startDate).toLocaleDateString();
-                    $scope.reservationInfo.endDate = new Date($scope.reservationInfo.endDate).toLocaleDateString();
-                    $('#infoModal').modal('show');
-                });
 
+                    if ($scope.reservationInfo.groupId) {
+                        var repeating = $filter('filter')(
+                            $scope.events.list, function (event) {
+                                return (event.objReservation.groupId == $scope.reservationInfo.groupId);
+                            });
+
+                        if (repeating && repeating.length > 0) {
+                            $scope.reservationInfo.guestsList = [];
+
+                            angular.forEach(repeating, function (event, key) {
+                                angular.forEach(event.objReservation.reservationGuests, function (reservationGuest, key) {
+                                    $scope.reservationInfo.guestsList.push(
+                                        {
+                                            guest: reservationGuest.guest,
+                                            room: event.objReservation.room,
+                                            owner: reservationGuest.owner
+                                        }
+                                    );
+                                });
+                            });
+                        }
+                        $scope.reservationInfo.startDate = new Date($scope.reservationInfo.startDate).toLocaleDateString();
+                        $scope.reservationInfo.endDate = new Date($scope.reservationInfo.endDate).toLocaleDateString();
+                        $('#infoModal').modal('show');
+                    }
+                });
             }
         },
         addAnotherGuest: {
@@ -230,7 +247,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 $scope.reservationGuest = this.source.data.objReservation.reservationGuests[0];
 
                 var selectedRoom = $filter('filter')($scope.config.resources, {id: this.source.resource()})[0];
-                var nGuests = $scope.calculateRoomGuests(this.source.data);
+                var nGuests = this.source.data.objReservation.reservationGuests.length;
                 var roomCapacity = (selectedRoom.bedsDouble * 2) + selectedRoom.bedsSingle;
 
                 if (nGuests >= roomCapacity) {
@@ -317,32 +334,6 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 }
             }
         },
-        earlyCheckout: {
-            text: '<i class="fa fa-clock-o" aria-hidden="true"></i> <i class="fa fa-times"></i> Early check out',
-            onclick: function () {
-                if (this.source.data.objReservation.status != 1)
-                    return;
-
-                if (confirm("Checkout this room?")) {
-                    //$scope.scheduler.events.remove(this.source);
-                    var selectedRoom = $filter('filter')($scope.config.resources, {id: this.source.resource()})[0];
-
-                    $scope.closeRoom(this.source.data.objReservation.id, selectedRoom.id, function (data) {
-                        $scope.scheduler.message("Room closed!");
-                        selectedRoom.status = 2;
-
-                        $scope.saveData("room", selectedRoom, function () {
-                        }, function () {
-                            $scope.resetReservation();
-                        }, true);
-
-                        $scope.resetReservation();
-                    });
-                } else {
-                    loadEvents();
-                }
-            }
-        },
         cancel: {
             text: '<i class="fa fa-ban"></i> Cancel',
             onclick: function () {
@@ -369,7 +360,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         //resources: $scope.events.resources,
         timeHeaders: [{groupBy: "Month"}, {groupBy: "Day", format: "d"}],
         eventDeleteHandling: "Update",
-        eventClickHandling: "Select",
+        eventClickHandling: "Disabled",
         allowEventOverlap: false,
         cellWidthSpec: "Auto",
         eventHeight: 50,
@@ -426,7 +417,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             }
 
             var selectedRoom = $filter('filter')($scope.config.resources, {id: args.newResource})[0];
-            var nGuests = $scope.calculateRoomGuests(args.e.data);
+            var nGuests = tmpReservation.reservationGuests.length;
             var roomCapacity = (selectedRoom.bedsDouble * 2) + selectedRoom.bedsSingle;
 
             if (nGuests > roomCapacity) {
@@ -460,21 +451,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             tmpReservation.endDate = newRange.end;
 
             $scope.getSingleData("room", args.newResource, function (room) {
-                if (!tmpReservation.group) {
-                    angular.forEach(tmpReservation.reservationGuests, function (value, key) {
-                        value.room = room;
-                    });
-                } else {
-                    var oldRoomId = args.e.data.roomId;
-
-                    angular.forEach(tmpReservation.reservationGuests, function (resGuest, key) {
-                        if (resGuest.room.id == oldRoomId) {
-                            resGuest.room = room;
-                        }
-                    });
-
-                    args.e.data.roomId = room.id;
-                }
+                tmpReservation.room = room;
 
                 $scope.saveData("reservation", tmpReservation, function (data) {
                     $scope.scheduler.message("Reservation moved: " + args.e.text());
@@ -557,8 +534,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         },
         onTimeRangeSelected: function (args) {
             $scope.scheduler.clearSelection();
-            //clearInterval($scope.timer);
-            //loadEvents();
+
             if (!$scope.events.new.start && (args.start.value.substr(0, 10) >= moment().format('YYYY-MM-DD'))) {
                 $scope.$apply(function () {
                     $scope.events.new = {
@@ -583,13 +559,13 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 $('#reservationModal').modal('show');
             }
         },
-        onEventClick: function (args) {
+        onEventMouseOver: function (args) {
             var reservationStatus = args.e.data.objReservation.status;
             var menuItems = [
                 $scope.conextMenuItems.showInfo
             ];
 
-            var selectedRoom = $filter('filter')($scope.config.resources, {id: args.e.data.roomId})[0];
+            //var selectedRoom = $filter('filter')($scope.config.resources, {id: args.e.data.resource})[0];
 
             switch (reservationStatus) {
                 case 0:
@@ -600,14 +576,12 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 case 1:
                     menuItems.push($scope.conextMenuItems.addAnotherGuest);
                     menuItems.push($scope.conextMenuItems.checkOut);
-                    if (args.e.data.objReservation.group
-                        && args.e.data.objReservation.reservationGuests[0].room.id != args.e.data.roomId)
-                        menuItems.push($scope.conextMenuItems.earlyCheckout);
                     break;
             }
 
-            $scope.config.contextMenu = new DayPilot.Menu({items: menuItems});
-
+            $scope.$apply(function () {
+                $scope.config.contextMenu = new DayPilot.Menu({items: menuItems});
+            });
         },
         onBeforeEventRender: function (args) {
             var start = new DayPilot.Date(args.data.start);
@@ -671,13 +645,12 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         };
 
         $http({
-            method: "POST",
-            url: "reservations/search",
+            method: "GET",
+            url: ("reservations/search?startDate=" + range.startDate + "&endDate=" + range.endDate),
             responseType: "json",
             headers: {
                 "Authorization": $scope.authentication
-            },
-            data: range
+            }
         }).then(
             function (response) { //success
                 $scope.events.list = [];
@@ -685,9 +658,9 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 angular.forEach(response.data, function (reservation, key) {
                     var tmpEvent = {
                         start: reservation.startDate,
-                        //end: reservation.endDate,
-                        //id: reservation.id,
-                        //resource: reservation.reservationGuests[0].room.id,
+                        end: reservation.endDate,
+                        id: reservation.id,
+                        resource: reservation.room.id,
                         status: reservation.status,
                         text: reservation.reservationGuests[0].guest.personalData.fullName,
                         objReservation: reservation
@@ -702,32 +675,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                         }
                     }
 
-                    if (!reservation.group) {
-                        tmpEvent.id = reservation.id;
-                        tmpEvent.end = reservation.endDate;
-                        tmpEvent.resource = reservation.reservationGuests[0].room.id;
-                        $scope.events.list.push(tmpEvent);
-                    } else {
-                        var resRooms = [];
-                        angular.forEach(reservation.reservationGuests, function (resGuest, index) {
-                            if (resRooms.indexOf(resGuest.room.id) == -1) {
-                                resRooms.push(resGuest.room.id);
-
-                                var tmpEvent2 = angular.extend(
-                                    {},
-                                    tmpEvent,
-                                    {
-                                        id: (key + '_' + (index + 1)),
-                                        resource: resGuest.room.id,
-                                        roomId: resGuest.room.id,
-                                        end: (resGuest.endDate ? resGuest.endDate : reservation.endDate)
-                                    }
-                                );
-
-                                $scope.events.list.push(tmpEvent2);
-                            }
-                        });
-                    }
+                    $scope.events.list.push(tmpEvent);
                 });
             },
             function (response) { //error
@@ -772,39 +720,36 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
     $scope.addReservation = function () {
 
-        $scope.getEmployeeByUserId($scope.loginData.id, function (data) {
-            $scope.reservationGuest.room = $filter('filter')($scope.config.resources, {id: $scope.events.new.resource})[0];
-            $scope.reservationGuest.room.status = 1;
+        $scope.getEmployeeByUserId($scope.loginData.id, function (employee) {
+            var room = $filter('filter')($scope.config.resources, {id: $scope.events.new.resource})[0];
             $scope.reservationGuest.owner = true;
 
-            var objReservation = {};
+            var objReservation = {
+                startDate: $scope.events.new.start.value.substr(0, 10),
+                endDate: $scope.events.new.end.value.substr(0, 10),
+                breakfast: $scope.reservationGuest.reservation.breakfast,
+                dinner: $scope.reservationGuest.reservation.dinner,
+                allInclusive: $scope.reservationGuest.reservation.allInclusive,
+                price: 40.0,
+                discount: 0,
+                numberAdults: 1,
+                numberChildren: 0,
+                status: 0,
+                //group: $scope.reservationGuest.reservation.group,
+                receptionist: employee,
+                room: room
+            };
 
-            if ($scope.isExistingGroup && $scope.reservationGuest.reservation.id) {
-                objReservation = $scope.reservationGuest.reservation;
+            var url = "reservation?group=" + $scope.isGroupReservation;
+            if ($scope.isGroupReservation && $scope.isExistingGroup && $scope.selectedGroupReservation) {
+                objReservation.groupId = $scope.selectedGroupReservation.groupId;
+                url += "&groupId=" + objReservation.groupId;
                 $scope.reservationGuest.owner = false;
-                $scope.saveReservation();
-
-                $('#reservationModal').modal('hide');
-                return;
-            } else {
-                objReservation = {
-                    startDate: $scope.events.new.start.value.substr(0, 10),
-                    endDate: $scope.events.new.end.value.substr(0, 10),
-                    breakfast: $scope.reservationGuest.reservation.breakfast,
-                    dinner: $scope.reservationGuest.reservation.dinner,
-                    allInclusive: $scope.reservationGuest.reservation.allInclusive,
-                    price: 40.0,
-                    discount: 0,
-                    numberAdults: 1,
-                    numberChildren: 0,
-                    status: 0,
-                    group: $scope.reservationGuest.reservation.group,
-                    receptionist: data
-                };
             }
 
-            $scope.saveData("reservation", objReservation, function (newReservation) {
+            $scope.saveData(url, objReservation, function (newReservation) {
                 $scope.reservationGuest.reservation = newReservation;
+                console.log("New reservation: ", $scope.reservationGuest.reservation);
                 $scope.saveReservation();
             }, $scope.resetReservation);
 
@@ -893,14 +838,10 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
     angular.element(document).ready(function () {
         $scope.changeRoomType();
 
-        loadEvents();
-
-        //$scope.timer = setInterval(loadEvents, 10000);
-
         $('#dateRange').daterangepicker({
             parentEl: "#scheduleContainer",
-            startDate: $scope.startDate,
-            endDate: $scope.endDate,
+            startDate: new Date($scope.startDate),
+            endDate: new Date($scope.endDate),
             locale: {
                 format: "DD/MM/YY"
             }
@@ -908,6 +849,6 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
         $('.calendar').css({float: 'left'});
 
-        //$('#selectGuest').select2();
+        loadEvents();
     });
 });

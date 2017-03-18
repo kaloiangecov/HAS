@@ -14,7 +14,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by kaloi on 12/20/2016.
@@ -37,8 +40,18 @@ public class ReservationService {
     private static final int RESERVATION_STATUS_ARRIVED = 1;
     private static final int RESERVATION_STATUS_CLOSED = 2;
 
-    public Reservation save(Reservation reservation, User user) throws IOException, TemplateException {
+    public Reservation save(Reservation reservation, boolean isGroup, String groupId, User user) throws IOException, TemplateException {
         setLastModified(reservation, user);
+
+        if (isGroup) {
+            if (groupId != null) {
+                reservation.setGroupId(groupId);
+            } else {
+                UUID code = UUID.randomUUID();
+                reservation.setGroupId(String.valueOf(code));
+            }
+        }
+
         return repo.save(reservation);
     }
 
@@ -52,7 +65,7 @@ public class ReservationService {
         List<Reservation> reservations = new ArrayList<Reservation>();
 
         if (isGroup != null && isGroup == true) {
-            reservations = repo.findGroupReservationsForCalendar(true, startDate, endDate);
+            reservations = repo.findGroupReservationsForCalendar(startDate, endDate);
         } else {
             reservations = repo.findAllReservationsForCalendar(startDate, endDate);
         }
@@ -100,24 +113,18 @@ public class ReservationService {
         dbReservation.setAllInclusive(reservation.isAllInclusive());
         dbReservation.setBreakfast(reservation.isBreakfast());
         dbReservation.setDinner(reservation.isDinner());
-        dbReservation.setGroup(reservation.isGroup());
         dbReservation.setDiscount(reservation.getDiscount());
 
         dbReservation.setEndDate(reservation.getEndDate());
-        dbReservation.setGroup(reservation.isGroup());
         dbReservation.setNumberAdults(reservation.getNumberAdults());
         dbReservation.setStartDate(reservation.getStartDate());
+        dbReservation.setRoom(reservation.getRoom());
         dbReservation.setNumberChildren(reservation.getNumberChildren());
 
         setLastModified(dbReservation, user);
         templateHandler.notifyCustomer(dbReservation);
         dbReservation.setReceptionist(reservation.getReceptionist());
 
-        int i = 0;
-        for (ReservationGuest dbReservationGuest : dbReservation.getReservationGuests()) {
-            dbReservationGuest.setRoom(reservation.getReservationGuests().get(i).getRoom());
-            i++;
-        }
         return repo.save(dbReservation);
     }
 
@@ -144,35 +151,31 @@ public class ReservationService {
         LocalDate endDate = LocalDate.parse(reservation.getEndDate());
         int reservationDuration = Days.daysBetween(startDate, endDate).getDays();
 
-        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-        String today = sdf2.format(new Date());
         if ((reservation.getStatus() == RESERVATION_STATUS_ARRIVED)) {
             for (ReservationGuest reservationGuest : reservation.getReservationGuests()) {
                 int reservationsMade = reservationGuest.getGuest().getNumberReservations();
                 reservationGuest.getGuest().setNumberReservations(reservationsMade + reservationDuration);
-
-                if (reservationGuest.getEndDate() == null) {
-                    reservationGuest.setEndDate(today);
-                }
             }
         }
         //TODO: testing out pricing this is some bullshit here
         {
-            if (reservation.isGroup() == false) {
+            if (reservation.getGroupId() == null) {
                 ReservationGuest guest = reservation.getReservationGuests().get(0);
-                int bedsSingle = guest.getRoom().getBedsSingle();
-                int bedsDouble = guest.getRoom().getBedsDouble();
+                int bedsSingle = reservation.getRoom().getBedsSingle();
+                int bedsDouble = reservation.getRoom().getBedsDouble();
                 boolean allInclusive = reservation.isAllInclusive();
                 boolean dinner = reservation.isDinner();
                 boolean breakfast = reservation.isBreakfast();
                 int guestRang = guest.getGuest().getNumberReservations();
-                int roomClass = guest.getRoom().getRoomClass();
+                int roomClass = reservation.getRoom().getRoomClass();
 
                 reservation.setPrice(configurationInstance.getReservationCost(bedsSingle, bedsDouble, allInclusive,
                         dinner, breakfast, guestRang, reservationDuration, roomClass));
             }
         }
 
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+        String today = sdf2.format(new Date());
         if (reservation.getEndDate().compareTo(today) > 0)
             reservation.setEndDate(today);
 
@@ -181,10 +184,6 @@ public class ReservationService {
         reservation.setLastModifiedTime(sdf.format(new Date()));
 
         return repo.save(reservation);
-    }
-
-    public List<Reservation> getClientHistory(Long id) {
-        return repo.findByReservationGuestsGuestId(id);
     }
 
     private void setLastModified(Reservation reservation, User user) throws IOException, TemplateException {

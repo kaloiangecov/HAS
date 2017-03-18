@@ -235,6 +235,16 @@ var stateGuestEdit = {
     }
 };
 
+var stateGuestHistory = {
+    url: '/guests/history/:id',
+    views: {
+        'content@loggedin': {
+            templateUrl: 'templates/guests/history.html',
+            controller: 'guestCtrl'
+        }
+    }
+};
+
 //------------------------------------------------//
 
 

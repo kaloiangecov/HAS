@@ -324,17 +324,18 @@ INSERT INTO ROOM (NUMBER, BEDS_DOUBLE, BEDS_SINGLE, ROOM_CLASS, STATUS, CHILDREN
 (402, 1, 2, 0, 0, TRUE, TRUE, TRUE);
 
 INSERT INTO RESERVATION
-(reservation_id, all_inclusive, breakfast, dinner, discount, end_date, C_GROUP, last_modified_by_user_id, last_modified_time, number_adults, number_children, price, employee_id, start_date, status)
-VALUES('1', false, true, false, 0, '2017-03-14', false, null, null, 2, 1, 40.0, '5', '2017-03-10', 0),
-('2', true, true, true, 10, '2017-03-17', true, null, null, 1, 1, 50.0, '4', '2017-03-12', 1),
-('3', false, false, true, 10, '2017-03-22', false, null, null, 2, 0, 45.0, '4', '2017-03-19', 1);
+(reservation_id, all_inclusive, breakfast, dinner, discount, end_date, group_id, last_modified_by_user_id, last_modified_time, number_adults, number_children, price, room_id, employee_id, start_date, status)
+VALUES('1', false, true, false, 0, '2017-03-14', null, null, null, 2, 1, 40.0, 5, '5', '2017-03-10', 0),
+('2', true, true, true, 10, '2017-03-17', 'asdasdmadafaka', null, null, 1, 1, 50.0, 8, '4', '2017-03-12', 1),
+('3', true, true, true, 10, '2017-03-17', 'asdasdmadafaka', null, null, 1, 1, 50.0, 10, '4', '2017-03-12', 1),
+('4', false, false, true, 10, '2017-03-22', null, null, null, 2, 0, 45.0, 2, '4', '2017-03-19', 1);
 
-INSERT INTO RESERVATION_GUEST (RESERVATION_GUEST_ID, reservation_id, guest_id, room_id, owner) VALUES
-(1, 1, 1, 5, true),
-(2, 2, 2, 8, true),
-(3, 2, 3, 10, false),
-(4, 3, 1, 2, true),
-(5, 3, 2, 2, false);
+INSERT INTO RESERVATION_GUEST (RESERVATION_GUEST_ID, reservation_id, guest_id, owner) VALUES
+(1, 1, 1, true),
+(2, 2, 2, true),
+(3, 3, 3, false),
+(4, 4, 1, true),
+(5, 4, 2, false);
 
 INSERT INTO MEAL_CATEGORY (MEAL_CATEGORY_ID, TITLE, IMG, DESCRIPTION) VALUES
 (1, 'Dessert', 'img/cake.jpg', 'Find the best desserts here.'),

@@ -23,6 +23,6 @@ public interface GuestRepository extends JpaRepository<Guest, Long> {
 
     Page<Guest> findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContaining(String fullName, String phone, Pageable pageRequest);
 
-    @Query("select g from has.Guest.Guest g where g.id not in (select rg.guest.id from has.ReservationGuest.ReservationGuest rg where rg.reservation.id = :reservationId)")
+    @Query("select g from has.Guest.Guest g where g not in (select rg.guest from has.ReservationGuest.ReservationGuest rg where rg.reservation.id = :reservationId)")
     List<Guest> findReservationFreeGuests(@Param("reservationId") Long reservationId);
 }

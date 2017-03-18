@@ -49,6 +49,8 @@ app.controller("guestCtrl", function ($scope, $state, $location, $stateParams, $
                 .renderWith(function (id) {
                     var html =
                         '<div class="btn-group btn-group-sm">' +
+                        '<a class="btn btn-default action-btn" href="#!/guests/history/' +
+                        id + '"><i class="fa fa-history" aria-hidden="true"></i></a>' +
                         '<a class="btn btn-default action-btn" href="#!/guests/edit/' +
                         id + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
                         '<button class="btn btn-default action-btn delete-btn" id="del_' +
@@ -82,6 +84,50 @@ app.controller("guestCtrl", function ($scope, $state, $location, $stateParams, $
         $scope.reloadTableData = function () {
             var resetPaging = false;
             $scope.dtInstance.reloadData(function (list) {
+                //console.log(list);
+                $scope.addDeleteFunctions();
+            }, resetPaging);
+        };
+    } else if ($location.path().includes("history")) {
+        // guests table
+        $scope.dtHistoryInstance = {};
+
+        $scope.dtHistoryOptions = DTOptionsBuilder.newOptions()
+            .withOption('ajax', {
+                url: ('reservations-guest/guest/' + $stateParams.id),
+                type: 'GET',
+                dataType: "json",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': $scope.authentication
+                },
+                data: $scope.filters,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $scope.displayMessage({
+                        status: jqXHR.status,
+                        error: jqXHR.statusText,
+                        message: jqXHR.responseText
+                    });
+                }
+            })
+            .withDataProp('data')
+            .withOption('responsive', true)
+            .withOption('processing', true)
+            .withOption('serverSide', true)
+            .withOption('pagingType', 'full_numbers')
+            .withOption('dom', 'lrtip');
+
+        $scope.dtHistoryColumns = [
+            DTColumnBuilder.newColumn('id', 'ID').notVisible(),
+            DTColumnBuilder.newColumn('reservation.startDate', 'Check in'),
+            DTColumnBuilder.newColumn('endDate', 'Check out'),
+            DTColumnBuilder.newColumn('room.number', 'Room'),
+            DTColumnBuilder.newColumn('reservation.price', 'Price')
+        ];
+
+        $scope.reloadHistoryTableData = function (resetPaging) {
+            $scope.dtHistoryInstance.reloadData(function (list) {
                 //console.log(list);
                 $scope.addDeleteFunctions();
             }, resetPaging);
