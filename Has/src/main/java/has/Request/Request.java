@@ -1,6 +1,8 @@
 package has.Request;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import has.Employee.Employee;
+import has.RequestMeal.RequestMeal;
 import has.ReservationGuest.ReservationGuest;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +13,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by kaloi on 12/20/2016.
@@ -35,6 +38,10 @@ public class Request implements Serializable {
     @JoinColumn(name = "EMPLOYEE_ID")
     private Employee employee;
 
+    @JsonManagedReference
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<RequestMeal> mealRequests;
+
     @NotNull
     @Min(0)
     @Max(2)
@@ -42,7 +49,6 @@ public class Request implements Serializable {
 
     private String timeFinished;
 
-    @NotNull
     private String timePlaced;
 
     @NotNull

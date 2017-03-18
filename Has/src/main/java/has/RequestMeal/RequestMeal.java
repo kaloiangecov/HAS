@@ -1,5 +1,6 @@
 package has.RequestMeal;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import has.Meal.Meal;
 import has.Request.Request;
 import lombok.Getter;
@@ -30,6 +31,7 @@ public class RequestMeal implements Serializable {
     private Meal meal;
 
     @NotNull
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "REQUEST_ID")
     private Request request;
