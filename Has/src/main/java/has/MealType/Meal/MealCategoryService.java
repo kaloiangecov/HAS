@@ -25,7 +25,6 @@ public class MealCategoryService {
 
     public List<MealCategory> getAllMealCategories() {
         List<MealCategory> categories = repo.findAll();
-
         return categories;
     }
 
