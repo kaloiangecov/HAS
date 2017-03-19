@@ -45,7 +45,7 @@ public class TaskHandler {
         Employee assignee;
 
         for (Employee employee : employees) {
-            if (taskRepository.findByAssigneeIdAndStatusNot(employee.getId(), TASK_STATUS_CREATED) == null) {
+            if (taskRepository.findByAssigneeIdAndStatusNotOrderByTimePlaced(employee.getId(), TASK_STATUS_CREATED) == null) {
 //                if (employee.s)
                 availableEmployees.add(employee);
             }
