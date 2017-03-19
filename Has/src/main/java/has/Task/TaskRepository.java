@@ -13,5 +13,5 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     List<Task> findByAssigneeId(Long id);
 
-    List<Task> findByAssigneeIdAndStatusNot(Long id, Integer status);
+    List<Task> findByAssigneeIdAndStatusNotOrderByTimePlaced(Long id, Integer status);
 }
