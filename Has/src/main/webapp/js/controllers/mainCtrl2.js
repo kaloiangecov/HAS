@@ -298,7 +298,10 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
         }
     };
 
-    $scope.submitReservation = function () {
+    $scope.submitReservation = function (bookingGuestForm) {
+        if (!bookingGuestForm.$valid)
+            return;
+
         $scope.reservationGuest = {
             owner: true
         };
@@ -376,12 +379,12 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
 
                     $scope.page.message = {
                         type: 'success',
-                        title: groups[0].reservationGuests[0].personalData.fullName,
+                        title: groups[0].reservationGuests[0].guest.personalData.fullName,
                         text: 'Reservation was successfully changed'
                     };
                     $('#messageModal').modal('show');
 
-                    $state.go('app.root.home');
+                    //$state.go('app.root.home');
                     $scope.clearEverything();
                 },
                 function () {
@@ -390,12 +393,12 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
             $scope.saveData("reservation", $scope.reservation, function (updatedReservation) { //success
                     $scope.page.message = {
                         type: 'success',
-                        title: updatedReservation.reservationGuests[0].personalData.fullName,
+                        title: updatedReservation.reservationGuests[0].guest.personalData.fullName,
                         text: 'Reservation was successfully changed'
                     };
                     $('#messageModal').modal('show');
 
-                    $state.go('app.root.reservationSuccessful');
+                    //$state.go('app.root.reservationSuccessful');
                     $scope.clearEverything();
                 },
                 function (response) { //error
@@ -408,7 +411,7 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
         $scope.deleteData("reservation", $scope.reservation.id, function () {
             $scope.page.message = {
                 type: 'success',
-                title: $scope.reservation.reservationGuests[0].personalData.fullName,
+                title: $scope.reservation.reservationGuests[0].guest.personalData.fullName,
                 text: 'Reservation was successfully canceled'
             };
             $('#messageModal').modal('show');

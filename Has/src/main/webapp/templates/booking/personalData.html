@@ -2,7 +2,7 @@
     <h2>Fill in your details</h2>
 </div>
 
-<form method="POST" id="bookingGuestForm" name="bookingGuestForm" novalidate class="booking-results">
+<form method="POST" name="bookingGuestForm" novalidate class="booking-results">
     <div class="row text-center">
         <label for="breakfast">
             <input type="checkbox" class="js-switch" id="breakfast"
@@ -154,7 +154,7 @@
                 Change rooms
                 <i class="fa fa-hand-o-left"></i>
             </button>
-            <button type="submit" class="btn btn-primary" ng-click="submitReservation()">
+            <button type="submit" class="btn btn-primary" ng-click="submitReservation(bookingGuestForm)">
                 Continue <i class="fa fa-hand-o-right"></i>
             </button>
         </div>
