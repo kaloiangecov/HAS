@@ -48,10 +48,14 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             .then(callback);
     };
 
-    $scope.getFreeGuests = function (reservationId, updateCallback) {
+    $scope.getFreeGuests = function (reservationId, groupId, updateCallback) {
+        var url = "guests/free/" + reservationId;
+        if (groupId)
+            url += ("?groupId=" + groupId);
+
         $http({
             method: "GET",
-            url: ("guests/free/" + reservationId),
+            url: url,
             responseType: "json",
             headers: {
                 "Authorization": $scope.authentication
@@ -224,6 +228,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
                         if (repeating && repeating.length > 0) {
                             $scope.reservationInfo.guestsList = [];
+                            $scope.reservationInfo.group = true;
 
                             angular.forEach(repeating, function (event, key) {
                                 angular.forEach(event.objReservation.reservationGuests, function (reservationGuest, key) {
@@ -250,35 +255,41 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         addAnotherGuest: {
             text: '<i class="fa fa-user-plus"></i> Add another guest',
             onclick: function () {
-                $scope.reservationGuest = this.source.data.objReservation.reservationGuests[0];
+                $scope.reservationGuest = {};
+
+                var tmpReservation = this.source.data.objReservation;
 
                 var selectedRoom = $filter('filter')($scope.config.resources, {id: this.source.resource()})[0];
-                var nGuests = this.source.data.objReservation.reservationGuests.length;
-                var roomCapacity = (selectedRoom.bedsDouble * 2) + selectedRoom.bedsSingle;
+                if (tmpReservation.reservationGuests && tmpReservation.reservationGuests.length > 0) {
+                    var nGuests = this.source.data.objReservation.reservationGuests.length;
+                    var roomCapacity = (selectedRoom.bedsDouble * 2) + selectedRoom.bedsSingle;
 
-                if (nGuests >= roomCapacity) {
-                    $scope.page.message = {
-                        type: 'danger',
-                        title: "Can't add guest!",
-                        text: "This room has reached its guest capacity!"
-                    };
-                    $('#messageModal').modal('show');
+                    if (nGuests >= roomCapacity) {
+                        $scope.page.message = {
+                            type: 'danger',
+                            title: "Can't add guest!",
+                            text: "This room has reached its guest capacity!"
+                        };
+                        $('#messageModal').modal('show');
 
-                    $scope.resetReservation();
-                    return;
+                        $scope.resetReservation();
+                        return;
+                    }
                 }
 
                 $scope.reservationGuest.guest = {};
-                $scope.reservationGuest.reservation = angular.copy(this.source.data.objReservation);
+                $scope.reservationGuest.reservation = angular.copy(tmpReservation);
                 $scope.reservationGuest.room = selectedRoom;
-                $scope.reservationGuest.id = null;
                 $scope.reservationGuest.owner = false;
 
                 delete $scope.reservationGuest.reservation.reservationGuests;
 
                 $scope.isAdditionalGuest = true;
 
-                $scope.getFreeGuests($scope.reservationGuest.reservation.id, function (data) {
+                $scope.getFreeGuests(
+                    $scope.reservationGuest.reservation.id,
+                    $scope.reservationGuest.reservation.groupId,
+                    function (data) {
                     $scope.guests.list = data;
 
                     if (data.length > 0)
@@ -539,7 +550,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
                 $scope.getGroupReservations();
 
-                $scope.getFreeGuests(-1, function (data) {
+                $scope.getFreeGuests(-1, $scope.reservationGuest.reservation.groupId, function (data) {
                     $scope.guests.list = data;
 
                     if (data.length > 0)
@@ -621,11 +632,18 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                     break;
             }
 
+            var reservation = args.data.objReservation;
+            var isRoomEmpty = (!reservation.reservationGuests || reservation.reservationGuests.length == 0);
+
+            // set event text
+            if (!isRoomEmpty)
+                args.data.text = reservation.reservationGuests[0].guest.personalData.fullName;
+
             // customize the reservation HTML: text, start and end dates
             args.data.html = args.data.text + " (" + start.toString("d/M/yyyy") + " - " + end.toString("d/M/yyyy") + ")"
                 + "<br /><span style='color:gray'>" + status + "</span>";
 
-            var groupId = args.data.objReservation.groupId;
+            var groupId = reservation.groupId;
             if (groupId) {
                 var color;
                 if ($scope.events.groups[groupId]) {
@@ -633,14 +651,14 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 } else {
                     $scope.events.groups[groupId] = {
                         color: getRandomColor(),
-                        reservations: [args.data.objReservation]
+                        reservations: [reservation]
                     }
                 }
 
                 args.data.html += '<br/><span class="label label-default" style="background-color:'
                     + $scope.events.groups[groupId].color + '">Group</span>';
 
-                if (args.data.objReservation.reservationGuests[0].owner)
+                if (!isRoomEmpty && reservation.reservationGuests[0].owner)
                     args.data.html += ' <span class="label label-warning">Owner</span>';
             }
 
@@ -676,7 +694,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                         id: reservation.id,
                         resource: reservation.room.id,
                         status: reservation.status,
-                        text: reservation.reservationGuests[0].guest.personalData.fullName,
+                        text: "Empty",
                         objReservation: reservation
                     };
 

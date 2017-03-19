@@ -25,4 +25,7 @@ public interface GuestRepository extends JpaRepository<Guest, Long> {
 
     @Query("select g from has.Guest.Guest g where g not in (select rg.guest from has.ReservationGuest.ReservationGuest rg where rg.reservation.id = :reservationId)")
     List<Guest> findReservationFreeGuests(@Param("reservationId") Long reservationId);
+
+    @Query("select g from has.Guest.Guest g where g not in (select rg.guest from has.ReservationGuest.ReservationGuest rg where rg.reservation.groupId = :groupId)")
+    List<Guest> findGroupReservationFreeGuests(@Param("groupId") String groupId);
 }

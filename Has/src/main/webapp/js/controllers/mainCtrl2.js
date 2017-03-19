@@ -136,16 +136,16 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                     minibar: reservation.room.minibar
                 };
 
-                $scope.dr2 = $('#newDateRange').daterangepicker({
-                    startDate: new Date($scope.reservation.startDate),
-                    endDate: new Date($scope.reservation.endDate)
-                });
-                $scope.dr2.on('apply.daterangepicker', function (ev, picker) {
-                    setDateRange(picker.startDate.format('YYYY-MM-DD'), picker.endDate.format('YYYY-MM-DD'))
-                });
-                $('.calendar').css({float: 'left'});
-
                 $timeout(function () {
+                    $scope.dr2 = $('#newDateRange').daterangepicker({
+                        startDate: new Date($scope.reservation.startDate),
+                        endDate: new Date($scope.reservation.endDate)
+                    });
+                    $scope.dr2.on('apply.daterangepicker', function (ev, picker) {
+                        setDateRange(picker.startDate.format('YYYY-MM-DD'), picker.endDate.format('YYYY-MM-DD'))
+                    });
+                    $('.calendar').css({float: 'left'});
+
                     $rootScope.switchNewPets = new Switchery(document.getElementById('newPets'), {color: "#266CEa"});
                     $rootScope.switchNewMinibar = new Switchery(document.getElementById('newMinibar'), {color: "#266CEa"});
                     $rootScope.switchNewBreakfast = new Switchery(document.getElementById('newBreakfast'), {color: "#266CEa"});
@@ -169,14 +169,17 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
             }
         }).then(
             function (response) { //success
-                return response.data;
+                return response;
             },
             function (response) { //error
                 $scope.displayMessage(response.data);
                 if (errorCallback)
                     errorCallback;
             })
-            .then(successCallback);
+            .then(function (response) {
+                if (response.status == 200)
+                    successCallback(response.data);
+            });
     };
 
     $scope.deleteData = function (dataType, id, callback) {
@@ -195,6 +198,39 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                 $scope.displayMessage(response.data);
             })
             .then(callback);
+    };
+
+    $scope.updateGroupReservations = function (successCallback, errorCallback) {
+        var rooms = "";
+        if ($scope.selectedRooms.length > 0) {
+            for (var i = 0; i < $scope.selectedRooms.length; i++)
+                rooms += (',' + $scope.selectedRooms[i].id);
+        }
+
+        var url = "reservation/group?rooms=";
+        url += (rooms ? rooms.substr(1) : "-");
+
+        $http({
+            method: 'PUT',
+            url: url,
+            data: $scope.reservation,
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
+        }).then(
+            function (response) { //success
+                return response;
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+                if (errorCallback)
+                    errorCallback;
+            })
+            .then(function (response) {
+                if (response.status == 200)
+                    successCallback(response.data);
+            });
     };
 
     $scope.clearGuestData = function () {
@@ -249,13 +285,28 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
         $scope.results = [];
     };
 
+    $scope.addReservationsToGroup = function (mainReservations) {
+        delete mainReservations.reservationCode;
+        delete mainReservations.id;
+
+        for (var i = 1; i < $scope.selectedRooms.length; i++) {
+            $scope.saveData("reservation?group=true&groupId=" + (mainReservations.groupId),
+                angular.extend({}, mainReservations, {room: $scope.selectedRooms[i]}),
+                function (newGroup) {
+                    console.log('additional group ' + (i + 1), mainReservations);
+                });
+        }
+    };
+
     $scope.submitReservation = function () {
         $scope.reservationGuest = {
             owner: true
         };
-        $scope.reservation.room = $scope.selectedRooms[0]
+        $scope.reservation.room = $scope.selectedRooms[0];
 
-        $scope.saveData("reservation?group=" + ($scope.selectedRooms.length > 1), $scope.reservation, function (newReservation) {
+        var isGroup = ($scope.selectedRooms.length > 1);
+
+        $scope.saveData("reservation?group=" + isGroup, $scope.reservation, function (newReservation) {
             console.log("reservation", newReservation);
 
             $scope.reservationGuest.reservation = newReservation;
@@ -274,6 +325,10 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                         $scope.reservationGuest.guest = newGuest;
                         $scope.saveData("reservation-guest", $scope.reservationGuest, function (newReservationGuest) {
                             console.log(newReservationGuest);
+
+                            if (isGroup)
+                                $scope.addReservationsToGroup(angular.copy(newReservation));
+
                             $scope.reservationInfo = newReservation;
                             $scope.reservationInfo.reservationGuests = [newReservationGuest];
 
@@ -289,6 +344,10 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
 
                 $scope.saveData("reservation-guest", $scope.reservationGuest, function (newReservationGuest) {
                     console.log("reservation owner", newReservationGuest);
+
+                    if (isGroup)
+                        $scope.addReservationsToGroup(angular.copy(newReservation));
+
                     $scope.reservationInfo = newReservation
                     $scope.reservationInfo.reservationGuests = [newReservationGuest];
 
@@ -302,22 +361,60 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
 
     $scope.editReservation = function () {
         if ($scope.selectedRooms.length > 0) {
-            $scope.reservation.reservationGuests[0].room = $scope.selectedRooms[0];
+            $scope.reservation.room = $scope.selectedRooms[0];
         }
 
-        $scope.saveData("reservation", $scope.reservation,
-            function (data) { //success
-                $scope.page.message = {
-                    type: 'success',
-                    title: $scope.reservation.reservationGuests[0].personalData.fullName,
-                    text: 'Reservation was successfully changed'
-                };
-                $('#messageModal').modal('show');
-                $scope.clearEverything();
-            },
-            function () { //error
+        var isGroup = ($scope.reservation.groupId || $scope.selectedRooms.length > 1);
 
-            }, true);
+        $scope.reservation.startDate = $scope.filters.startDate;
+        $scope.reservation.endDate = $scope.filters.endDate;
+
+        if (isGroup) {
+            $scope.updateGroupReservations(
+                function (groups) {
+                    console.log(groups);
+
+                    $scope.page.message = {
+                        type: 'success',
+                        title: groups[0].reservationGuests[0].personalData.fullName,
+                        text: 'Reservation was successfully changed'
+                    };
+                    $('#messageModal').modal('show');
+
+                    $state.go('app.root.home');
+                    $scope.clearEverything();
+                },
+                function () {
+                });
+        } else {
+            $scope.saveData("reservation", $scope.reservation, function (updatedReservation) { //success
+                    $scope.page.message = {
+                        type: 'success',
+                        title: updatedReservation.reservationGuests[0].personalData.fullName,
+                        text: 'Reservation was successfully changed'
+                    };
+                    $('#messageModal').modal('show');
+
+                    $state.go('app.root.reservationSuccessful');
+                    $scope.clearEverything();
+                },
+                function (response) { //error
+                    $scope.displayMessage(response.data);
+                }, true);
+        }
+    };
+
+    $scope.deleteReservation = function () {
+        $scope.deleteData("reservation", $scope.reservation.id, function () {
+            $scope.page.message = {
+                type: 'success',
+                title: $scope.reservation.reservationGuests[0].personalData.fullName,
+                text: 'Reservation was successfully canceled'
+            };
+            $('#messageModal').modal('show');
+
+            $state.go('app.root.home');
+        });
     };
 
     function setDateRange(start, end) {
