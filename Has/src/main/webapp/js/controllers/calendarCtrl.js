@@ -633,11 +633,6 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             }
 
             var reservation = args.data.objReservation;
-            var isRoomEmpty = (!reservation.reservationGuests || reservation.reservationGuests.length == 0);
-
-            // set event text
-            if (!isRoomEmpty)
-                args.data.text = reservation.reservationGuests[0].guest.personalData.fullName;
 
             // customize the reservation HTML: text, start and end dates
             args.data.html = args.data.text + " (" + start.toString("d/M/yyyy") + " - " + end.toString("d/M/yyyy") + ")"
@@ -658,6 +653,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 args.data.html += '<br/><span class="label label-default" style="background-color:'
                     + $scope.events.groups[groupId].color + '">Group</span>';
 
+                var isRoomEmpty = (!reservation.reservationGuests || reservation.reservationGuests.length == 0);
                 if (!isRoomEmpty && reservation.reservationGuests[0].owner)
                     args.data.html += ' <span class="label label-warning">Owner</span>';
             }
@@ -694,9 +690,15 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                         id: reservation.id,
                         resource: reservation.room.id,
                         status: reservation.status,
-                        text: "Empty",
                         objReservation: reservation
                     };
+
+                    var isRoomEmpty = (!reservation.reservationGuests || reservation.reservationGuests.length == 0);
+                    // set event text
+                    if (!isRoomEmpty)
+                        tmpEvent.text = reservation.reservationGuests[0].guest.personalData.fullName;
+                    else
+                        tmpEvent.text = "Empty";
 
                     if (reservation.status > 0) {
                         tmpEvent.deleteEnabled = false;

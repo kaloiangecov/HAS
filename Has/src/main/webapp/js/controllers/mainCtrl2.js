@@ -384,7 +384,7 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                     };
                     $('#messageModal').modal('show');
 
-                    $state.go('app.root.home');
+                    //$state.go('app.root.home');
                     $scope.clearEverything();
                 },
                 function () {
@@ -398,7 +398,7 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                     };
                     $('#messageModal').modal('show');
 
-                    $state.go('app.root.reservationSuccessful');
+                    //$state.go('app.root.reservationSuccessful');
                     $scope.clearEverything();
                 },
                 function (response) { //error
