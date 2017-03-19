@@ -96,6 +96,17 @@ public class ReservationController {
         return reservationService.findByCode(code);
     }
 
+    @RequestMapping(value = "/reservation/group", method = RequestMethod.PUT,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    //@PreAuthorize("hasAuthority('PERM_VIEW_RESERVATION')")
+    public List<Reservation> updateGroupReservations(
+            @RequestBody @Valid Reservation reservation,
+            @RequestParam("rooms") String roomIds) throws Exception {
+        return reservationService.updateGroupReservationDetails(reservation, roomIds);
+    }
+
     @RequestMapping(value = "/reservation/{id}", method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)

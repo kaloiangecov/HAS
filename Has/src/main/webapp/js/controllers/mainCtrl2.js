@@ -200,6 +200,39 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
             .then(callback);
     };
 
+    $scope.updateGroupReservations = function (successCallback, errorCallback) {
+        var rooms = "";
+        if ($scope.selectedRooms.length > 0) {
+            for (var i = 0; i < $scope.selectedRooms.length; i++)
+                rooms += (',' + $scope.selectedRooms[i].id);
+        }
+
+        var url = "reservation/group?rooms=";
+        url += (rooms ? rooms.substr(1) : "-");
+
+        $http({
+            method: 'PUT',
+            url: url,
+            data: $scope.reservation,
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
+        }).then(
+            function (response) { //success
+                return response;
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+                if (errorCallback)
+                    errorCallback;
+            })
+            .then(function (response) {
+                if (response.status == 200)
+                    successCallback(response.data);
+            });
+    };
+
     $scope.clearGuestData = function () {
         $scope.guest = {};
         $scope.guestFound = false;
@@ -331,25 +364,57 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
             $scope.reservation.room = $scope.selectedRooms[0];
         }
 
-        var isGroup = ($scope.selectedRooms.length > 1);
+        var isGroup = ($scope.reservation.groupId || $scope.selectedRooms.length > 1);
 
         $scope.reservation.startDate = $scope.filters.startDate;
         $scope.reservation.endDate = $scope.filters.endDate;
 
+        if (isGroup) {
+            $scope.updateGroupReservations(
+                function (groups) {
+                    console.log(groups);
 
-        $scope.saveData("reservation", $scope.reservation,
-            function (data) { //success
-                $scope.page.message = {
-                    type: 'success',
-                    title: $scope.reservation.reservationGuests[0].personalData.fullName,
-                    text: 'Reservation was successfully changed'
-                };
-                $('#messageModal').modal('show');
-                $scope.clearEverything();
-            },
-            function () { //error
+                    $scope.page.message = {
+                        type: 'success',
+                        title: groups[0].reservationGuests[0].personalData.fullName,
+                        text: 'Reservation was successfully changed'
+                    };
+                    $('#messageModal').modal('show');
 
-            }, true);
+                    $state.go('app.root.home');
+                    $scope.clearEverything();
+                },
+                function () {
+                });
+        } else {
+            $scope.saveData("reservation", $scope.reservation, function (updatedReservation) { //success
+                    $scope.page.message = {
+                        type: 'success',
+                        title: updatedReservation.reservationGuests[0].personalData.fullName,
+                        text: 'Reservation was successfully changed'
+                    };
+                    $('#messageModal').modal('show');
+
+                    $state.go('app.root.reservationSuccessful');
+                    $scope.clearEverything();
+                },
+                function (response) { //error
+                    $scope.displayMessage(response.data);
+                }, true);
+        }
+    };
+
+    $scope.deleteReservation = function () {
+        $scope.deleteData("reservation", $scope.reservation.id, function () {
+            $scope.page.message = {
+                type: 'success',
+                title: $scope.reservation.reservationGuests[0].personalData.fullName,
+                text: 'Reservation was successfully canceled'
+            };
+            $('#messageModal').modal('show');
+
+            $state.go('app.root.home');
+        });
     };
 
     function setDateRange(start, end) {
