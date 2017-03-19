@@ -89,43 +89,44 @@
                     All Inclusive
                 </label>
             </div>
+        </div>
 
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Room Class</th>
-                    <th>Small Beds</th>
-                    <th>Big Beds</th>
-                    <th>Extras</th>
-                    <th>Select</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="res in results">
-                    <td>{{roomTypes[res.roomClass]}}</td>
-                    <td>{{res.bedsSingle}}</td>
-                    <td>{{res.bedsDouble}}</td>
-                    <td>
-                        <span class="label label-primary" ng-show="res.children">Children</span>
-                        <span class="label label-primary" ng-show="res.pets">Pets</span>
-                        <span class="label label-primary" ng-show="res.minibar">Mininbar</span>
-                    </td>
-                    <td>
-                        <input type="checkbox" name="selectedRooms[]" value="{{res}}"
-                               ng-checked="selectedRooms.indexOf(res) != -1"
-                               ng-click="toggleSelection(res)"/>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Room Class</th>
+                <th>Small Beds</th>
+                <th>Big Beds</th>
+                <th>Extras</th>
+                <th>Select</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="res in results">
+                <td>{{roomTypes[res.roomClass]}}</td>
+                <td>{{res.bedsSingle}}</td>
+                <td>{{res.bedsDouble}}</td>
+                <td>
+                    <span class="label label-primary" ng-show="res.children">Children</span>
+                    <span class="label label-primary" ng-show="res.pets">Pets</span>
+                    <span class="label label-primary" ng-show="res.minibar">Mininbar</span>
+                </td>
+                <td>
+                    <input type="checkbox" name="selectedRooms[]" value="{{res}}"
+                           ng-checked="selectedRooms.indexOf(res) != -1"
+                           ng-click="toggleSelection(res)"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
 
 
-            <button type="submit" class="btn btn-default" ng-click="search()">Search for a new room</button>
-            <button type="button" class="btn btn-primary" ng-click="editReservation()">Submit
-            </button>
-            <button class="btn btn-danger" title="Cancel reservation" ng-click="deleteReservation()">
-                <i class="fa fa-trash-o"></i>
-                Cancel reservation
-            </button>
+        <button type="submit" class="btn btn-default" ng-click="search()">Search for a new room</button>
+        <button type="button" class="btn btn-primary" ng-click="editReservation()">Submit
+        </button>
+        <button class="btn btn-danger" title="Cancel reservation" ng-click="deleteReservation()">
+            <i class="fa fa-trash-o"></i>
+            Cancel reservation
+        </button>
     </form>
 </div>
