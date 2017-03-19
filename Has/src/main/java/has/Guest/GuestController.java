@@ -75,8 +75,10 @@ public class GuestController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('PERM_VIEW_GUEST')")
-    public List<Guest> findReservationFreeGuests(@PathVariable Long reservationId) {
-        return guestService.findReservationFreeGuests(reservationId);
+    public List<Guest> findReservationFreeGuests(
+            @PathVariable Long reservationId,
+            @RequestParam(value = "groupId", required = false) String groupId) {
+        return guestService.findReservationFreeGuests(reservationId, groupId);
     }
 
     @RequestMapping(value = "/guest/{id}", method = RequestMethod.GET,

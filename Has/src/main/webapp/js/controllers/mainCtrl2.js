@@ -136,16 +136,16 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                     minibar: reservation.room.minibar
                 };
 
-                $scope.dr2 = $('#newDateRange').daterangepicker({
-                    startDate: new Date($scope.reservation.startDate),
-                    endDate: new Date($scope.reservation.endDate)
-                });
-                $scope.dr2.on('apply.daterangepicker', function (ev, picker) {
-                    setDateRange(picker.startDate.format('YYYY-MM-DD'), picker.endDate.format('YYYY-MM-DD'))
-                });
-                $('.calendar').css({float: 'left'});
-
                 $timeout(function () {
+                    $scope.dr2 = $('#newDateRange').daterangepicker({
+                        startDate: new Date($scope.reservation.startDate),
+                        endDate: new Date($scope.reservation.endDate)
+                    });
+                    $scope.dr2.on('apply.daterangepicker', function (ev, picker) {
+                        setDateRange(picker.startDate.format('YYYY-MM-DD'), picker.endDate.format('YYYY-MM-DD'))
+                    });
+                    $('.calendar').css({float: 'left'});
+
                     $rootScope.switchNewPets = new Switchery(document.getElementById('newPets'), {color: "#266CEa"});
                     $rootScope.switchNewMinibar = new Switchery(document.getElementById('newMinibar'), {color: "#266CEa"});
                     $rootScope.switchNewBreakfast = new Switchery(document.getElementById('newBreakfast'), {color: "#266CEa"});
@@ -328,8 +328,14 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
 
     $scope.editReservation = function () {
         if ($scope.selectedRooms.length > 0) {
-            $scope.reservation.reservationGuests[0].room = $scope.selectedRooms[0];
+            $scope.reservation.room = $scope.selectedRooms[0];
         }
+
+        var isGroup = ($scope.selectedRooms.length > 1);
+
+        $scope.reservation.startDate = $scope.filters.startDate;
+        $scope.reservation.endDate = $scope.filters.endDate;
+
 
         $scope.saveData("reservation", $scope.reservation,
             function (data) { //success

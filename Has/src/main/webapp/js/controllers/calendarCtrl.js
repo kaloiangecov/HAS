@@ -48,10 +48,14 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             .then(callback);
     };
 
-    $scope.getFreeGuests = function (reservationId, updateCallback) {
+    $scope.getFreeGuests = function (reservationId, groupId, updateCallback) {
+        var url = "guests/free/" + reservationId;
+        if (groupId)
+            url += ("?groupId=" + groupId);
+
         $http({
             method: "GET",
-            url: ("guests/free/" + reservationId),
+            url: url,
             responseType: "json",
             headers: {
                 "Authorization": $scope.authentication
@@ -282,7 +286,10 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
                 $scope.isAdditionalGuest = true;
 
-                $scope.getFreeGuests($scope.reservationGuest.reservation.id, function (data) {
+                $scope.getFreeGuests(
+                    $scope.reservationGuest.reservation.id,
+                    $scope.reservationGuest.reservation.groupId,
+                    function (data) {
                     $scope.guests.list = data;
 
                     if (data.length > 0)
@@ -543,7 +550,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
                 $scope.getGroupReservations();
 
-                $scope.getFreeGuests(-1, function (data) {
+                $scope.getFreeGuests(-1, $scope.reservationGuest.reservation.groupId, function (data) {
                     $scope.guests.list = data;
 
                     if (data.length > 0)
