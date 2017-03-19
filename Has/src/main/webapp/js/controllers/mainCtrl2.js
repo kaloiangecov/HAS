@@ -169,14 +169,17 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
             }
         }).then(
             function (response) { //success
-                return response.data;
+                return response;
             },
             function (response) { //error
                 $scope.displayMessage(response.data);
                 if (errorCallback)
                     errorCallback;
             })
-            .then(successCallback);
+            .then(function (response) {
+                if (response.status == 200)
+                    successCallback(response.data);
+            });
     };
 
     $scope.deleteData = function (dataType, id, callback) {
@@ -249,13 +252,28 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
         $scope.results = [];
     };
 
+    $scope.addReservationsToGroup = function (mainReservations) {
+        delete mainReservations.reservationCode;
+        delete mainReservations.id;
+
+        for (var i = 1; i < $scope.selectedRooms.length; i++) {
+            $scope.saveData("reservation?group=true&groupId=" + (mainReservations.groupId),
+                angular.extend({}, mainReservations, {room: $scope.selectedRooms[i]}),
+                function (newGroup) {
+                    console.log('additional group ' + (i + 1), mainReservations);
+                });
+        }
+    };
+
     $scope.submitReservation = function () {
         $scope.reservationGuest = {
             owner: true
         };
-        $scope.reservation.room = $scope.selectedRooms[0]
+        $scope.reservation.room = $scope.selectedRooms[0];
 
-        $scope.saveData("reservation?group=" + ($scope.selectedRooms.length > 1), $scope.reservation, function (newReservation) {
+        var isGroup = ($scope.selectedRooms.length > 1);
+
+        $scope.saveData("reservation?group=" + isGroup, $scope.reservation, function (newReservation) {
             console.log("reservation", newReservation);
 
             $scope.reservationGuest.reservation = newReservation;
@@ -274,6 +292,10 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                         $scope.reservationGuest.guest = newGuest;
                         $scope.saveData("reservation-guest", $scope.reservationGuest, function (newReservationGuest) {
                             console.log(newReservationGuest);
+
+                            if (isGroup)
+                                $scope.addReservationsToGroup(angular.copy(newReservation));
+
                             $scope.reservationInfo = newReservation;
                             $scope.reservationInfo.reservationGuests = [newReservationGuest];
 
@@ -289,6 +311,10 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
 
                 $scope.saveData("reservation-guest", $scope.reservationGuest, function (newReservationGuest) {
                     console.log("reservation owner", newReservationGuest);
+
+                    if (isGroup)
+                        $scope.addReservationsToGroup(angular.copy(newReservation));
+
                     $scope.reservationInfo = newReservation
                     $scope.reservationInfo.reservationGuests = [newReservationGuest];
 
