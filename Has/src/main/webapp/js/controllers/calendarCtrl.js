@@ -640,15 +640,11 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
             var groupId = reservation.groupId;
             if (groupId) {
-                var color;
-                if ($scope.events.groupColors[groupId]) {
-                    color = $scope.events.groupColors[groupId].color;
-                } else {
+                if (!$scope.events.groupColors[groupId])
                     $scope.events.groupColors[groupId] = getRandomColor();
-                }
 
                 args.data.html += '<br/><span class="label label-default" style="background-color:'
-                    + $scope.events.groupColors[groupId].color + '">Group</span>';
+                    + $scope.events.groupColors[groupId] + '">Group</span>';
 
                 var isRoomEmpty = (!reservation.reservationGuests || reservation.reservationGuests.length == 0);
                 if (!isRoomEmpty && reservation.reservationGuests[0].owner)
