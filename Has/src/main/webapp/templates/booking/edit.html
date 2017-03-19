@@ -121,8 +121,11 @@
 
 
             <button type="submit" class="btn btn-default" ng-click="search()">Search for a new room</button>
-            <button type="button" class="btn btn-primary" ng-click="editReservation()"
-                    ng-show="selectedRooms.length > 0">Submit
+            <button type="button" class="btn btn-primary" ng-click="editReservation()">Submit
+            </button>
+            <button class="btn btn-danger" title="Cancel reservation" ng-click="deleteReservation()">
+                <i class="fa fa-trash-o"></i>
+                Cancel reservation
             </button>
     </form>
 </div>

@@ -131,6 +131,41 @@ public class ReservationService {
         return repo.save(dbReservation);
     }
 
+    public List<Reservation> updateGroupReservationDetails(Reservation reservation, String roomIds) throws Exception {
+        List<Reservation> groups = repo.findByGroupId(reservation.getGroupId());
+        if (groups == null || groups.size() == 0)
+            throw new Exception("There aren't any reservations with such group ID!");
+
+        String[] arrRoomIds = null;
+        int i = 0;
+        boolean editRooms = roomIds == "-";
+
+        if (editRooms)
+            arrRoomIds = roomIds.split(",");
+
+        for (Reservation gr : groups) {
+            gr.setPrice(reservation.getPrice());
+            gr.setAllInclusive(reservation.isAllInclusive());
+            gr.setBreakfast(reservation.isBreakfast());
+            gr.setDinner(reservation.isDinner());
+
+            gr.setStartDate(reservation.getStartDate());
+            gr.setEndDate(reservation.getEndDate());
+            gr.setNumberAdults(reservation.getNumberAdults());
+            gr.setNumberChildren(reservation.getNumberChildren());
+
+            if (editRooms) {
+                gr.setRoom(repoRoom.getOne(Long.parseLong(arrRoomIds[i])));
+                i++;
+            }
+
+            setLastModified(gr, reservation.getReservationGuests().get(0).getGuest().getUser());
+            templateHandler.notifyCustomer(gr);
+        }
+
+        return repo.save(groups);
+    }
+
     public Reservation move(Long id, Reservation reservation, User user) throws Exception {
         Reservation dbReservation = repo.findOne(id);
         if (dbReservation == null) {
