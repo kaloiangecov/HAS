@@ -48,10 +48,8 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             .then(callback);
     };
 
-    $scope.getFreeGuests = function (reservationId, groupId, updateCallback) {
-        var url = "guests/free/" + reservationId;
-        if (groupId)
-            url += ("?groupId=" + groupId);
+    $scope.getFreeGuests = function (range, updateCallback) {
+        var url = "guests/free?startDate=" + range.startDate + "&endDate=" + range.endDate;
 
         $http({
             method: "GET",
@@ -287,17 +285,19 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 $scope.isAdditionalGuest = true;
 
                 $scope.getFreeGuests(
-                    $scope.reservationGuest.reservation.id,
-                    $scope.reservationGuest.reservation.groupId,
+                    {
+                        startDate: tmpReservation.startDate,
+                        endDate: tmpReservation.endDate
+                    },
                     function (data) {
-                    $scope.guests.list = data;
+                        $scope.guests.list = data;
 
-                    if (data.length > 0)
-                        $scope.guests.selectedGuest = data[0];
-                    else {
-                        $scope.isNewGuest = true;
-                    }
-                });
+                        if (data.length > 0)
+                            $scope.guests.selectedGuest = data[0];
+                        else {
+                            $scope.isNewGuest = true;
+                        }
+                    });
 
                 $scope.$apply();
 
@@ -537,7 +537,12 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         onTimeRangeSelected: function (args) {
             $scope.scheduler.clearSelection();
 
-            if (!$scope.events.new.start && (args.start.value.substr(0, 10) >= moment().format('YYYY-MM-DD'))) {
+            var range = {
+                startDate: args.start.value.substr(0, 10),
+                endDate: args.end.value.substr(0, 10)
+            };
+
+            if (!$scope.events.new.start && (range.startDate >= moment().format('YYYY-MM-DD'))) {
                 $scope.$apply(function () {
                     $scope.events.new = {
                         start: args.start,
@@ -550,7 +555,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
 
                 $scope.getGroupReservations();
 
-                $scope.getFreeGuests(-1, $scope.reservationGuest.reservation.groupId, function (data) {
+                $scope.getFreeGuests(range, function (data) {
                     $scope.guests.list = data;
 
                     if (data.length > 0)

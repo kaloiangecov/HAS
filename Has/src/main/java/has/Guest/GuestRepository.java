@@ -28,4 +28,7 @@ public interface GuestRepository extends JpaRepository<Guest, Long> {
 
     @Query("select g from has.Guest.Guest g where g not in (select rg.guest from has.ReservationGuest.ReservationGuest rg where rg.reservation.groupId = :groupId)")
     List<Guest> findGroupReservationFreeGuests(@Param("groupId") String groupId);
+
+    @Query("select g from has.Guest.Guest g where g not in (select rg.guest from has.ReservationGuest.ReservationGuest rg where ((rg.reservation.startDate between :startDate and :endDate) or (rg.reservation.endDate between :startDate and :endDate)))")
+    List<Guest> findFreeGuestsForPeriod(@Param("startDate") String startDate, @Param("endDate") String endDate);
 }

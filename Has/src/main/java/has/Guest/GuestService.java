@@ -36,13 +36,8 @@ public class GuestService {
         return repo.findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContaining(fullName, phone, request);
     }
 
-    public List<Guest> findReservationFreeGuests(Long reservationId, String groupId) {
-        if (reservationId == NEW_RESEVATION)
-            return repo.findAll();
-        else if (groupId != null)
-            return repo.findGroupReservationFreeGuests(groupId);
-        else
-            return repo.findReservationFreeGuests(reservationId);
+    public List<Guest> findReservationFreeGuests(String startDate, String endDate) {
+        return repo.findFreeGuestsForPeriod(startDate, endDate);
     }
 
     public Guest findById(Long id) throws Exception {
