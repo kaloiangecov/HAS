@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ReservationGuestRepository extends JpaRepository<ReservationGuest, Long> {
 
+    ReservationGuest findByReservationStatusAndGuestId(Integer status, Long guestId);
 }
