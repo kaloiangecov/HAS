@@ -2,6 +2,7 @@ package has.Task;
 
 import has.Employee.Employee;
 import has.Request.RequestRepository;
+import has.Utils.TaskHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +22,12 @@ public class TaskService {
     @Autowired
     private RequestRepository requestRepository;
 
+    @Autowired
+    private TaskHandler taskHandler;
+
     public Task save(Task task, String assigner) {
         task.setAssigner(assigner);
+        taskHandler.assignTask(task);
         return repo.save(task);
     }
 

@@ -61,6 +61,7 @@ public class RequestService {
         dbRequest.setTimeFinished(request.getTimeFinished());
         dbRequest.setTimePlaced(request.getTimePlaced());
         dbRequest.setType(request.getType());
+        dbRequest.setTargetTime(request.getTargetTime());
         return repo.save(dbRequest);
     }
 

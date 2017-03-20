@@ -3,6 +3,8 @@ package has.Task;
 import has.Employee.Employee;
 import has.Employee.EmployeeService;
 import has.User.User;
+import has.Utils.TaskHandler;
+import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,6 +26,9 @@ public class TaskController {
 
     @Autowired
     private EmployeeService employeeService;
+
+    @Autowired
+    private TaskHandler taskHandler;
 
     @RequestMapping(value = "/tasks", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE,
@@ -77,13 +82,32 @@ public class TaskController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('PERM_EDIT_TASK')")
     public Task changeTaskStatus(@PathVariable Long taskId, @PathVariable Integer status) throws Exception {
-        return service.changeStatus(taskId,status);
+        return service.changeStatus(taskId, status);
     }
 
     @RequestMapping(value = "/tasks/unresolved", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Task> getOwnUncompletedTasks(@AuthenticationPrincipal User user) throws Exception {
         Employee employee = employeeService.findByUserId(user.getId());
         return service.getEmployeesUnresolvedTasks(employee);
+    }
+
+    @RequestMapping(value = "/test2", method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    public Task test2(@Valid @RequestBody Task task) {
+
+        return service.save(task, "alhambra");
+    }
+
+    @RequestMapping(value = "/test3", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    public boolean test3() {
+
+        LocalTime time1 = LocalTime.parse("00:00");
+        LocalTime time2 = LocalTime.parse("00:00");
+        return time1.equals(time2);
     }
 
 }
