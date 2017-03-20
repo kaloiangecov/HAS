@@ -91,12 +91,8 @@ app.controller("mealCtrl", function ($scope, $http, $location, $state, $statePar
                 $(btns).on('click', function () {
                     var id = this.id.split('_')[1];
                     $scope.deleteData('meal', id, function () {
-                        $scope.page.message = {
-                            type: 'success',
-                            title: 'Deleted!',
-                            text: ('Meal with id ' + id + ' was successfully deleted!')
-                        };
-                        $('#messageModal').modal('show');
+                        $scope.reloadTableData(false);
+                        $scope.addDeleteFunctions();
                     });
                 });
             }, 300);
@@ -104,11 +100,9 @@ app.controller("mealCtrl", function ($scope, $http, $location, $state, $statePar
 
         $scope.$watch("searchFilters.meals.name", $scope.addDeleteFunctions);
 
-        $scope.reloadTableData = function () {
-            var resetPaging = false;
+        $scope.reloadTableData = function (resetPaging) {
             $scope.dtInstance.reloadData(function (list) {
                 //console.log(list);
-                $scope.addDeleteFunctions();
             }, resetPaging);
         };
     }

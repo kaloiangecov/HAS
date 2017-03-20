@@ -40,7 +40,7 @@ app.controller("guestCtrl", function ($scope, $state, $location, $stateParams, $
             DTColumnBuilder.newColumn('personalData.fullName', 'Full Name'),
             DTColumnBuilder.newColumn('personalData.phone', 'Phone Number'),
             DTColumnBuilder.newColumn('personalData.address', 'Address'),
-            DTColumnBuilder.newColumn('numberReservations', 'Number of Reservations'),
+            DTColumnBuilder.newColumn('numberReservations', 'Guest rating'),
             DTColumnBuilder.newColumn('id').notSortable().withClass('actions-column')
                 .renderWith(function (id) {
                     var html =
