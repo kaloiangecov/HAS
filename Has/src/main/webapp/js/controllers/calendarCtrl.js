@@ -884,7 +884,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
             startDate: new Date($scope.startDate),
             endDate: new Date($scope.endDate),
             locale: {
-                format: "DD/MM/YY"
+                format: "DD/MM/YYYY"
             }
         }, setDateRange);
 

@@ -3,11 +3,6 @@ app.controller("userCtrl", function ($scope, $http, $location, $state, $statePar
     $scope.page.title = "Users";
     $scope.master = {};
     $scope.rolesList = [];
-    $scope.filters = {
-        username: "",
-        email: "",
-        roleID: 1
-    };
     $scope.isEdit = false;
 
     $scope.changeUserStatus = function (userId, callback) {
@@ -40,7 +35,7 @@ app.controller("userCtrl", function ($scope, $http, $location, $state, $statePar
             $scope.rolesList = emptyArray.concat(data);
             $scope.rolesList.pop();
 
-            $scope.filters.roleID = $scope.rolesList[0].id;
+            $scope.searchFilters.users.roleID = $scope.rolesList[0].id;
         });
 
         // users table
@@ -55,7 +50,7 @@ app.controller("userCtrl", function ($scope, $http, $location, $state, $statePar
                     'Content-Type': 'application/json',
                     'Authorization': $scope.authentication
                 },
-                data: $scope.filters,
+                data: $scope.searchFilters.users,
                 error: function (jqXHR, textStatus, errorThrown) {
                     $scope.displayMessage({
                         status: jqXHR.status,
@@ -121,9 +116,9 @@ app.controller("userCtrl", function ($scope, $http, $location, $state, $statePar
             }, 300);
         };
 
-        $scope.$watch("filters.username", $scope.addDeleteFunctions);
-        $scope.$watch("filters.email", $scope.addDeleteFunctions);
-        $scope.$watch("filters.roleID", $scope.addDeleteFunctions);
+        $scope.$watch("searchFilters.users.username", $scope.addDeleteFunctions);
+        $scope.$watch("searchFilters.users.email", $scope.addDeleteFunctions);
+        $scope.$watch("searchFilters.users.roleID", $scope.addDeleteFunctions);
 
         $scope.reloadTableData = function (resetPaging) {
             $scope.dtInstance.reloadData(function (list) {

@@ -3,9 +3,6 @@ app.controller("mealCtrl", function ($scope, $http, $location, $state, $statePar
     $scope.page.title = "Meals";
     $scope.mealCategories = [];
     $scope.master = {};
-    $scope.filters = {
-        name: ''
-    };
     $scope.isEdit = false;
 
     $scope.getMealCategories = function (callback) {
@@ -39,7 +36,7 @@ app.controller("mealCtrl", function ($scope, $http, $location, $state, $statePar
                     'Content-Type': 'application/json',
                     'Authorization': $scope.authentication
                 },
-                data: $scope.filters,
+                data: $scope.searchFilters.meals,
                 error: function (jqXHR, textStatus, errorThrown) {
                     $scope.displayMessage({
                         status: jqXHR.status,
@@ -105,7 +102,7 @@ app.controller("mealCtrl", function ($scope, $http, $location, $state, $statePar
             }, 300);
         };
 
-        $scope.$watch("filters.name", $scope.addDeleteFunctions);
+        $scope.$watch("searchFilters.meals.name", $scope.addDeleteFunctions);
 
         $scope.reloadTableData = function () {
             var resetPaging = false;

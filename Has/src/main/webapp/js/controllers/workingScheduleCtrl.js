@@ -2,11 +2,6 @@ app.controller("workingScheduleCtrl", function ($scope, $http, $location, $state
     var ctrl = this;
     $scope.page.title = "Working Schedule";
     $scope.rolesList = [];
-    ctrl.filters = {
-        roleID: 1,
-        startDate: new Date().toISOString().substr(0, 10),
-        endDate: new Date().toISOString().substr(0, 10)
-    };
     $scope.master = {};
     ctrl.employees = [];
     $scope.isEdit = false;
@@ -27,7 +22,7 @@ app.controller("workingScheduleCtrl", function ($scope, $http, $location, $state
                     'Content-Type': 'application/json',
                     'Authorization': $scope.authentication
                 },
-                data: ctrl.filters,
+                data: $scope.searchFilters.schedules,
                 error: function (jqXHR, textStatus, errorThrown) {
                     $scope.displayMessage({
                         status: jqXHR.status,
@@ -71,7 +66,7 @@ app.controller("workingScheduleCtrl", function ($scope, $http, $location, $state
 
         $scope.getAllRoles(function (data) {
             $scope.rolesList = data;
-            ctrl.filters.roleID = $scope.rolesList[0].id;
+            $scope.searchFilters.schedules.roleID = $scope.rolesList[0].id;
         });
     } else {
         $scope.getAllEmployees = function (updateCallback) {
@@ -135,24 +130,32 @@ app.controller("workingScheduleCtrl", function ($scope, $http, $location, $state
 
     angular.element(document).ready(function () {
         if ($location.path().includes("list")) {
-            $('#filterStartDate,#filterEndDate').daterangepicker({
-                singleDatePicker: true,
-                showDropdowns: true,
+            $('#filterDateRange').daterangepicker({
+                parentEl: "#scheduleContainer",
+                startDate: new Date($scope.searchFilters.schedules.startDate),
+                endDate: new Date($scope.searchFilters.schedules.endDate),
                 locale: {
-                    format: "YYYY-MM-DD"
+                    format: "DD/MM/YYYY"
                 }
+            }, function (start, end) {
+                $scope.$apply(function () {
+                    $scope.searchFilters.schedules.startDate = start.format("YYYY-MM-DD");
+                    $scope.searchFilters.schedules.endDate = end.format("YYYY-MM-DD");
+                });
             });
+
+            $('.calendar').css({float: 'left'});
 
             $scope.reloadTableData();
         } else {
             /*
              $scope.$watch("schedule.date", function (newVal, oldVal) {
-                if ($scope.schedule.shift == 3) {
+             if ($scope.schedule.shift == 3) {
              $scope.schedule.date = moment(newVal).add(1, 'days').format('YYYY-MM-DD');
-                } else {
-                    $scope.schedule.endDate = newVal;
-                }
-            })
+             } else {
+             $scope.schedule.endDate = newVal;
+             }
+             })
              */
 
             $('#date').daterangepicker({

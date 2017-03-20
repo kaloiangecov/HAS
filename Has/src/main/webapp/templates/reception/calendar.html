@@ -1,6 +1,6 @@
 <div class="col-xs-12" id="scheduleContainer" ng-controller="calendarCtrl as ctrl">
     <div class="form-inline">
-        <input type="text" id="dateRange" name="dateRange" class="form-control"/>
+        <input type="text" size="24" id="dateRange" name="dateRange" class="form-control"/>
         <select class="form-control" ng-model="ctrl.selectedRoomType" ng-change="changeRoomType()"
                 ng-options="roomTypes.indexOf(item) as item for item in roomTypes">
         </select>
