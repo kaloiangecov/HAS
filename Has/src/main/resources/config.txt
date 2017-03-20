@@ -1,8 +1,8 @@
-#Sat Mar 18 19:22:15 EET 2017
+#Mon Mar 20 20:21:41 EET 2017
 breakfastPrice=5
 doubleBedPrice=1.8
 highClassPrice=2
-overnightPrice=25
+overnightPrice=changed
 seasonalDiscount=0.1
 allInclusivePrice=10
 singleBedPrice=1
