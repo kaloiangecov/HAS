@@ -1,7 +1,6 @@
 package has.Request;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import has.Employee.Employee;
 import has.RequestMeal.RequestMeal;
 import has.ReservationGuest.ReservationGuest;
 import lombok.Getter;
@@ -29,7 +28,6 @@ public class Request implements Serializable {
     @Column(name = "REQUEST_ID")
     private Long id;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "RESERVATION_GUEST_ID")
     private ReservationGuest reservationGuest;

@@ -1,5 +1,9 @@
 package has.Request;
 
+import has.Guest.Guest;
+import has.Guest.GuestRepository;
+import has.ReservationGuest.ReservationGuestRepository;
+import has.User.User;
 import has.Utils.TaskHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +20,18 @@ public class RequestService {
     private RequestRepository repo;
 
     @Autowired
+    private GuestRepository guestRepo;
+
+    @Autowired
+    private ReservationGuestRepository rgRepo;
+
+    @Autowired
     private TaskHandler taskHandler;
 
-    public Request save(Request request) {
-        taskHandler.createTaskFromRequest(request);
+    public Request save(Request request, User user) {
+        Guest guest = guestRepo.findByUserId(user.getId());
+        request.setReservationGuest(rgRepo.findByReservationStatusAndGuestId(1, guest.getId()));
+        //taskHandler.createTaskFromRequest(request);
         return repo.save(request);
     }
 

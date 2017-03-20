@@ -1,9 +1,11 @@
 package has.Request;
 
+import has.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,9 +24,8 @@ public class RequestController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('PERM_CREATE_REQUEST')")
-    public Request save(@RequestBody @Valid Request request) {
-        return requestService.save(request);
+    public Request save(@RequestBody @Valid Request request, @AuthenticationPrincipal User user) {
+        return requestService.save(request, user);
     }
 
     @RequestMapping(value = "/requests", method = RequestMethod.GET,
