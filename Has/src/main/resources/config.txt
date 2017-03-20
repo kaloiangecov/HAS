@@ -2,7 +2,7 @@
 breakfastPrice=5
 doubleBedPrice=1.8
 highClassPrice=2
-overnightPrice=changed
+overnightPrice=30
 seasonalDiscount=0.1
 allInclusivePrice=10
 singleBedPrice=1
