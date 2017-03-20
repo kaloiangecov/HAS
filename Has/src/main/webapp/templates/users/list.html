@@ -17,9 +17,9 @@
             </ul>
             <div class="clearfix"></div>
             <form class="form-inline text-center" ng-submit="reloadTableData()">
-                <input type="text" class="form-control" ng-model="filters.username" placeholder="Username"/>
-                <input type="text" class="form-control" ng-model="filters.email" placeholder="Email"/>
-                <select class="form-control roles" id="role" name="role" ng-model="filters.roleID"
+                <input type="text" class="form-control" ng-model="searchFilters.users.username" placeholder="Username"/>
+                <input type="text" class="form-control" ng-model="searchFilters.users.email" placeholder="Email"/>
+                <select class="form-control roles" id="role" name="role" ng-model="searchFilters.users.roleID"
                         ng-options="item.id as item.roleName for item in rolesList" required="required">
                 </select>
                 <button type="submit" class="btn btn-primary" style="position:relative;top:+3px;"><i

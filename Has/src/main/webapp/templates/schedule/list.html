@@ -17,9 +17,10 @@
             </ul>
             <div class="clearfix"></div>
             <form class="form-inline text-center" ng-submit="reloadTableData()">
-                <input class="form-control" id="filterStartDate" ng-model="ctrl.filters.startDate">
-                <input class="form-control" id="filterEndDate" ng-model="ctrl.filters.endDate">
-                <select class="form-control roles" id="filterRole" name="filterRole" ng-model="ctrl.filters.roleID"
+                <input class="form-control" id="filterStartDate" ng-model="searchFilters.schedules.startDate">
+                <input class="form-control" id="filterEndDate" ng-model="searchFilters.schedules.endDate">
+                <select class="form-control roles" id="filterRole" name="filterRole"
+                        ng-model="searchFilters.schedules.roleID"
                         ng-options="item.id as item.roleName for item in rolesList" required="required">
                 </select>
                 <button type="submit" class="btn btn-primary" style="position:relative;top:+3px;"><i

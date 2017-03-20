@@ -2,10 +2,6 @@ app.controller("roomCtrl", function ($scope, $http, $location, $state, $statePar
     var ctrl = this;
     $scope.page.title = "Rooms";
     $scope.master = {};
-    $scope.filters = {
-        number: 0,
-        roomClass: 0
-    };
     $scope.isEdit = false;
 
     if ($location.path().includes("list")) {
@@ -22,7 +18,7 @@ app.controller("roomCtrl", function ($scope, $http, $location, $state, $statePar
                     'Content-Type': 'application/json',
                     'Authorization': $scope.authentication
                 },
-                data: $scope.filters,
+                data: $scope.searchFilters.rooms,
                 error: function (jqXHR, textStatus, errorThrown) {
                     $scope.displayMessage({
                         status: jqXHR.status,
@@ -77,8 +73,8 @@ app.controller("roomCtrl", function ($scope, $http, $location, $state, $statePar
             }, 300);
         };
 
-        $scope.$watch("filters.number", $scope.addDeleteFunctions);
-        $scope.$watch("filters.roomClass", $scope.addDeleteFunctions);
+        $scope.$watch("searchFilters.rooms.number", $scope.addDeleteFunctions);
+        $scope.$watch("searchFilters.rooms.roomClass", $scope.addDeleteFunctions);
 
         $scope.reloadTableData = function () {
             var resetPaging = false;

@@ -17,7 +17,8 @@
             </ul>
             <div class="clearfix"></div>
             <form name="mealFiltersForm" class="form-inline text-center" ng-submit="reloadTableData()">
-                <input type="text" class="form-control" name="name" ng-model="filters.name" placeholder="Name"/>
+                <input type="text" class="form-control" name="name" ng-model="searchFilters.meals.name"
+                       placeholder="Name"/>
 
                 <button type="submit" class="btn btn-primary" style="position:relative;top:+3px;"><i
                         class="fa fa-search"></i> Search
