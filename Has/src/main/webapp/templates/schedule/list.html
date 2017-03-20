@@ -17,7 +17,7 @@
             </ul>
             <div class="clearfix"></div>
             <form class="form-inline text-center" ng-submit="reloadTableData()">
-                <input class="form-control" id="filterDateRange">
+                <input class="form-control" id="filterDateRange" size="24">
                 <select class="form-control roles" id="filterRole" name="filterRole"
                         ng-model="searchFilters.schedules.roleID"
                         ng-options="item.id as item.roleName for item in rolesList" required="required">
