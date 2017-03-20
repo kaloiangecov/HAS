@@ -1,11 +1,6 @@
 package has.Configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.DefaultPropertiesPersister;
-import org.springframework.util.PropertiesPersister;
-
 import java.io.*;
-import java.net.URL;
 import java.util.Properties;
 
 /**
@@ -14,37 +9,35 @@ import java.util.Properties;
 public class PropertiesReader {
 
     private Properties properties;
-    private InputStream iStream;
     private File file;
 
     public PropertiesReader() throws FileNotFoundException {
         properties = new Properties();
         file = new File("src/main/resources/config.txt");
-        iStream = new FileInputStream(file);
     }
 
     public String readProperty(String key) throws IOException {
-        properties.load(iStream);
+        properties.load(new FileInputStream(file));
         return properties.getProperty(key);
     }
 
     public Double readDouble(String key) throws IOException {
-        properties.load(iStream);
-        try{
+        properties.load(new FileInputStream(file));
+        try {
             return Double.parseDouble(properties.getProperty(key));
-        } catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             return null;
         }
     }
 
     public void editProperty(String key, String value) throws IOException {
-        properties.load(iStream);
-        properties.setProperty(key,value);
-        properties.store(new FileOutputStream(file),null);
+        properties.load(new FileInputStream(file));
+        properties.setProperty(key, value);
+        properties.store(new FileOutputStream(file), null);
     }
 
     public void listProperties() throws IOException {
-        properties.load(iStream);
+        properties.load(new FileInputStream(file));
         System.out.println(properties.stringPropertyNames());
     }
 }

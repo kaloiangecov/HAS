@@ -50,7 +50,7 @@ public class ReservationService {
                 reservation.setGroupId(String.valueOf(code));
             }
         }
-        reservation.setPrice(CalculationUtils.getReservationCost(reservation));
+        //reservation.setPrice(CalculationUtils.getReservationCost(reservation));
         return repo.save(reservation);
     }
 
@@ -123,7 +123,7 @@ public class ReservationService {
         setLastModified(dbReservation, user);
         templateHandler.notifyCustomer(dbReservation);
         dbReservation.setReceptionist(reservation.getReceptionist());
-        dbReservation.setPrice(CalculationUtils.getReservationCost(dbReservation));
+        //dbReservation.setPrice(CalculationUtils.getReservationCost(dbReservation));
         return repo.save(dbReservation);
     }
 
@@ -219,9 +219,9 @@ public class ReservationService {
         }
         //TODO: testing out pricing this is some bullshit here
         {
-            if (reservation.getGroupId() == null) {
-                reservation.setPrice(CalculationUtils.getReservationCost(reservation));
-            }
+//            if (reservation.getGroupId() == null) {
+//                reservation.setPrice(CalculationUtils.getReservationCost(reservation));
+//            }
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
