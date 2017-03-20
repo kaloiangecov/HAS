@@ -1,14 +1,12 @@
 package has.Reservation;
 
 import freemarker.template.TemplateException;
-import has.Configuration.Settings.HasConfigurationInstance;
 import has.ReservationGuest.ReservationGuest;
 import has.Room.Room;
 import has.Room.RoomRepository;
 import has.User.User;
+import has.Utils.CalculationUtils;
 import has.Utils.TemplateHandler;
-import org.joda.time.Days;
-import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,8 +35,6 @@ public class ReservationService {
     @Autowired
     private RoomRepository repoRoom;
 
-    private HasConfigurationInstance configurationInstance = HasConfigurationInstance.getInstance();
-
     private static final int RESERVATION_STATUS_CREATED = 0;
     private static final int RESERVATION_STATUS_ARRIVED = 1;
     private static final int RESERVATION_STATUS_CLOSED = 2;
@@ -54,7 +50,7 @@ public class ReservationService {
                 reservation.setGroupId(String.valueOf(code));
             }
         }
-
+        reservation.setPrice(CalculationUtils.getReservationCost(reservation));
         return repo.save(reservation);
     }
 
@@ -127,7 +123,7 @@ public class ReservationService {
         setLastModified(dbReservation, user);
         templateHandler.notifyCustomer(dbReservation);
         dbReservation.setReceptionist(reservation.getReceptionist());
-
+        dbReservation.setPrice(CalculationUtils.getReservationCost(dbReservation));
         return repo.save(dbReservation);
     }
 
@@ -213,34 +209,22 @@ public class ReservationService {
     public Reservation close(Long id, User user) throws Exception {
         Reservation reservation = repo.findOne(id);
         validateIdNotNull(reservation);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        LocalDate startDate = LocalDate.parse(reservation.getStartDate());
-        LocalDate endDate = LocalDate.parse(reservation.getEndDate());
-        int reservationDuration = Days.daysBetween(startDate, endDate).getDays();
 
         if ((reservation.getStatus() == RESERVATION_STATUS_ARRIVED)) {
             for (ReservationGuest reservationGuest : reservation.getReservationGuests()) {
                 int reservationsMade = reservationGuest.getGuest().getNumberReservations();
-                reservationGuest.getGuest().setNumberReservations(reservationsMade + reservationDuration);
+                reservationGuest.getGuest().setNumberReservations(reservationsMade +
+                        CalculationUtils.getReservationDuration(reservation));
             }
         }
         //TODO: testing out pricing this is some bullshit here
         {
             if (reservation.getGroupId() == null) {
-                ReservationGuest guest = reservation.getReservationGuests().get(0);
-                int bedsSingle = reservation.getRoom().getBedsSingle();
-                int bedsDouble = reservation.getRoom().getBedsDouble();
-                boolean allInclusive = reservation.isAllInclusive();
-                boolean dinner = reservation.isDinner();
-                boolean breakfast = reservation.isBreakfast();
-                int guestRang = guest.getGuest().getNumberReservations();
-                int roomClass = reservation.getRoom().getRoomClass();
-
-                reservation.setPrice(configurationInstance.getReservationCost(bedsSingle, bedsDouble, allInclusive,
-                        dinner, breakfast, guestRang, reservationDuration, roomClass));
+                reservation.setPrice(CalculationUtils.getReservationCost(reservation));
             }
         }
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
         String today = sdf2.format(new Date());
         if (reservation.getEndDate().compareTo(today) > 0)

@@ -1,0 +1,13 @@
+#Sat Mar 18 19:22:15 EET 2017
+breakfastPrice=5
+doubleBedPrice=1.8
+highClassPrice=2
+overnightPrice=25
+seasonalDiscount=0.1
+allInclusivePrice=10
+singleBedPrice=1
+guestDiscount=0
+lowClassPrice=1
+dinnerPrice=5
+mediumClassPrice=1.5
+maxDiscount=0.4
