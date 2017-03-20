@@ -49,39 +49,14 @@ app.controller("guestCtrl", function ($scope, $state, $location, $stateParams, $
                         id + '"><i class="fa fa-clock-o" aria-hidden="true"></i></a>' +
                         '<a class="btn btn-default action-btn" href="#!/guests/edit/' +
                         id + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
-                        '<button class="btn btn-default action-btn delete-btn" id="del_' +
-                        id + '"><i class="fa fa-trash-o" aria-hidden="true"></i></button>' +
                         '</div>';
                     return html;
                 })
         ];
 
-        $scope.addDeleteFunctions = function () {
-            $timeout(function () {
-                var btns = $('table').find('td').find('button');
-                $(btns).off('click');
-                $(btns).on('click', function () {
-                    var id = this.id.split('_')[1];
-                    $scope.deleteData('guest', id, function () {
-                        $scope.page.message = {
-                            type: 'success',
-                            title: 'Deleted!',
-                            text: ('Guest with id ' + id + ' was successfully deleted!')
-                        };
-                        $('#messageModal').modal('show');
-                    });
-                });
-            }, 300);
-        };
-
-        $scope.$watch("searchFilters.guests.fullName", $scope.addDeleteFunctions);
-        $scope.$watch("searchFilters.guests.phone", $scope.addDeleteFunctions);
-
-        $scope.reloadTableData = function () {
-            var resetPaging = false;
+        $scope.reloadTableData = function (resetPaging) {
             $scope.dtInstance.reloadData(function (list) {
                 //console.log(list);
-                $scope.addDeleteFunctions();
             }, resetPaging);
         };
     } else if ($location.path().includes("history")) {
