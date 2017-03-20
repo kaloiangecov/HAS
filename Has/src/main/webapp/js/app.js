@@ -23,41 +23,41 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         .state('loggedin.root.dashboard', stateDashboard);
 
     $stateProvider // Users module
-    //.state('loggedin.root.users', {abstract: true})
-        .state('loggedin.root.usersList', stateUserList)
-        .state('loggedin.root.usersAdd', stateUserAdd)
-        .state('loggedin.root.usersEdit', stateUserEdit);
+        .state('loggedin.root.users', {abstract: true, url: '/users'})
+        .state('loggedin.root.users.usersList', stateUserList)
+        .state('loggedin.root.users.usersAdd', stateUserAdd)
+        .state('loggedin.root.users.usersEdit', stateUserEdit);
 
     $stateProvider // Employees module
-    //.state('loggedin.root.employees', {abstract: true})
-        .state('loggedin.root.employeesList', stateEmployeeList)
-        .state('loggedin.root.employeesAdd', stateEmployeeAdd)
-        .state('loggedin.root.employeesEdit', stateEmployeeEdit);
+        .state('loggedin.root.employees', {abstract: true, url: '/employees'})
+        .state('loggedin.root.employees.employeesList', stateEmployeeList)
+        .state('loggedin.root.employees.employeesAdd', stateEmployeeAdd)
+        .state('loggedin.root.employees.employeesEdit', stateEmployeeEdit);
 
     $stateProvider // Working Schedule module
-    //.state('loggedin.root.schedule', {abstract: true})
-        .state('loggedin.root.scheduleList', stateScheduleList)
-        .state('loggedin.root.scheduleAdd', stateScheduleAdd)
-        .state('loggedin.root.scheduleEdit', stateScheduleEdit);
+        .state('loggedin.root.schedule', {abstract: true, url: '/schedule'})
+        .state('loggedin.root.schedule.scheduleList', stateScheduleList)
+        .state('loggedin.root.schedule.scheduleAdd', stateScheduleAdd)
+        .state('loggedin.root.schedule.scheduleEdit', stateScheduleEdit);
 
     $stateProvider // Guests module
-    //.state('loggedin.root.guests', {abstract: true})
-        .state('loggedin.root.guestsList', stateGuestList)
-        .state('loggedin.root.guestsAdd', stateGuestAdd)
-        .state('loggedin.root.guestsEdit', stateGuestEdit)
-        .state('loggedin.root.guestsHistory', stateGuestHistory);
+        .state('loggedin.root.guests', {abstract: true, url: '/guests'})
+        .state('loggedin.root.guests.guestsList', stateGuestList)
+        .state('loggedin.root.guests.guestsAdd', stateGuestAdd)
+        .state('loggedin.root.guests.guestsEdit', stateGuestEdit)
+        .state('loggedin.root.guests.guestsHistory', stateGuestHistory);
 
     $stateProvider // Rooms module
-    //.state('loggedin.root.rooms', {abstract: true})
-        .state('loggedin.root.roomsList', stateRoomList)
-        .state('loggedin.root.roomsAdd', stateRoomAdd)
-        .state('loggedin.root.roomsEdit', stateRoomEdit);
+        .state('loggedin.root.rooms', {abstract: true, url: '/rooms'})
+        .state('loggedin.root.rooms.roomsList', stateRoomList)
+        .state('loggedin.root.rooms.roomsAdd', stateRoomAdd)
+        .state('loggedin.root.rooms.roomsEdit', stateRoomEdit);
 
     $stateProvider // Meals module
-    //.state('loggedin.root.meals', {abstract: true})
-        .state('loggedin.root.mealsList', stateMealList)
-        .state('loggedin.root.mealsAdd', stateMealAdd)
-        .state('loggedin.root.mealsEdit', stateMealEdit);
+        .state('loggedin.root.meals', {abstract: true, url: '/meals'})
+        .state('loggedin.root.meals.mealsList', stateMealList)
+        .state('loggedin.root.meals.mealsAdd', stateMealAdd)
+        .state('loggedin.root.meals.mealsEdit', stateMealEdit);
 
     $urlRouterProvider.otherwise('/login');
 });

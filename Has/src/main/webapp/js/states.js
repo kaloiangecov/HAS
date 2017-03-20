@@ -106,7 +106,7 @@ var stateProfileView = {
 };
 
 var stateUserList = {
-    url: '/users/list',
+    url: '/list',
     views: {
         'content@loggedin': {
             templateUrl: 'templates/users/list.html',
@@ -116,7 +116,7 @@ var stateUserList = {
 };
 
 var stateUserAdd = {
-    url: '/users/add',
+    url: '/add',
     views: {
         'content@loggedin': {
             templateUrl: 'templates/users/add.html',
@@ -126,7 +126,7 @@ var stateUserAdd = {
 };
 
 var stateUserEdit = {
-    url: '/users/edit/:id',
+    url: '/edit/:id',
     views: {
         'content@loggedin': {
             templateUrl: 'templates/users/add.html',
@@ -140,7 +140,7 @@ var stateUserEdit = {
 
 //-------------------EMPLOYEES--------------------//
 var stateEmployeeList = {
-    url: '/employees/list',
+    url: '/list',
     views: {
         'content@loggedin': {
             templateUrl: 'templates/employees/list.html',
@@ -150,7 +150,7 @@ var stateEmployeeList = {
 };
 
 var stateEmployeeAdd = {
-    url: '/employees/add',
+    url: '/add',
     views: {
         'content@loggedin': {
             templateUrl: 'templates/employees/add.html',
@@ -160,7 +160,7 @@ var stateEmployeeAdd = {
 };
 
 var stateEmployeeEdit = {
-    url: '/employees/edit/:id',
+    url: '/edit/:id',
     views: {
         'content@loggedin': {
             templateUrl: 'templates/employees/add.html',
@@ -175,7 +175,7 @@ var stateEmployeeEdit = {
 //--------------------SCHEDULE--------------------//
 
 var stateScheduleList = {
-    url: '/schedule/list',
+    url: '/list',
     views: {
         'content@loggedin': {
             templateUrl: 'templates/schedule/list.html'
@@ -184,7 +184,7 @@ var stateScheduleList = {
 };
 
 var stateScheduleAdd = {
-    url: '/schedule/add',
+    url: '/add',
     views: {
         'content@loggedin': {
             templateUrl: 'templates/schedule/add.html'
@@ -193,7 +193,7 @@ var stateScheduleAdd = {
 };
 
 var stateScheduleEdit = {
-    url: '/schedule/edit/:id',
+    url: '/edit/:id',
     views: {
         'content@loggedin': {
             templateUrl: 'templates/schedule/add.html'
@@ -206,7 +206,7 @@ var stateScheduleEdit = {
 
 //---------------------GUESTS---------------------//
 var stateGuestList = {
-    url: '/guests/list',
+    url: '/list',
     views: {
         'content@loggedin': {
             templateUrl: 'templates/guests/list.html',
@@ -216,7 +216,7 @@ var stateGuestList = {
 };
 
 var stateGuestAdd = {
-    url: '/guests/add',
+    url: '/add',
     views: {
         'content@loggedin': {
             templateUrl: 'templates/guests/add.html',
@@ -226,7 +226,7 @@ var stateGuestAdd = {
 };
 
 var stateGuestEdit = {
-    url: '/guests/edit/:id',
+    url: '/edit/:id',
     views: {
         'content@loggedin': {
             templateUrl: 'templates/guests/add.html',
@@ -236,7 +236,7 @@ var stateGuestEdit = {
 };
 
 var stateGuestHistory = {
-    url: '/guests/history/:id',
+    url: '/history/:id',
     views: {
         'content@loggedin': {
             templateUrl: 'templates/guests/history.html',
@@ -251,7 +251,7 @@ var stateGuestHistory = {
 //---------------------ROOMS----------------------//
 
 var stateRoomList = {
-    url: '/rooms/list',
+    url: '/list',
     views: {
         'content@loggedin': {
             templateUrl: 'templates/rooms/list.html',
@@ -261,7 +261,7 @@ var stateRoomList = {
 };
 
 var stateRoomAdd = {
-    url: '/rooms/add',
+    url: '/add',
     views: {
         'content@loggedin': {
             templateUrl: 'templates/rooms/add.html',
@@ -271,7 +271,7 @@ var stateRoomAdd = {
 };
 
 var stateRoomEdit = {
-    url: '/rooms/edit/:id',
+    url: '/edit/:id',
     views: {
         'content@loggedin': {
             templateUrl: 'templates/rooms/add.html',
@@ -286,7 +286,7 @@ var stateRoomEdit = {
 //---------------------MEALS----------------------//
 
 var stateMealList = {
-    url: '/meals/list',
+    url: '/list',
     views: {
         'content@loggedin': {
             templateUrl: 'templates/meals/list.html',
@@ -296,7 +296,7 @@ var stateMealList = {
 };
 
 var stateMealAdd = {
-    url: '/meals/add',
+    url: '/add',
     views: {
         'content@loggedin': {
             templateUrl: 'templates/meals/add.html',
@@ -306,7 +306,7 @@ var stateMealAdd = {
 };
 
 var stateMealEdit = {
-    url: '/meals/edit/:id',
+    url: '/edit/:id',
     views: {
         'content@loggedin': {
             templateUrl: 'templates/meals/add.html',
