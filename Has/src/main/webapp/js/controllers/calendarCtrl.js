@@ -868,7 +868,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
         $scope.$apply(function () {
             var tmp = end._d.getTime() - start._d.getTime();
             //$scope.config.timeline = getTimeline(start._d, tmp / 86400000);
-            $scope.config.startDate = start._d.toISOString().substr(0, 10);
+            $scope.config.startDate = start.format('YYYY-MM-DD');
             $scope.config.days = tmp / 86400000;
 
             loadEvents();
@@ -887,6 +887,15 @@ app.controller("calendarCtrl", function ($scope, $filter, $http) {
                 format: "DD/MM/YYYY"
             }
         }, setDateRange);
+
+        $('#identityIssueDate,#identityExpireDate').daterangepicker({
+            parentEl: "#reservationModal",
+            singleDatePicker: true,
+            showDropdowns: true,
+            locale: {
+                format: "YYYY-MM-DD"
+            }
+        });
 
         $('.calendar').css({float: 'left'});
 

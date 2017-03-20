@@ -45,6 +45,7 @@ app2.config(function ($stateProvider, $urlRouterProvider) {
                         parentEl: "body",
                         startDate: new Date(),
                         endDate: new Date(),
+                        minDate: new Date(),
                         locale: {
                             format: "DD/MM/YY"
                         }
