@@ -2,7 +2,8 @@
     <daypilot-scheduler id="dashboard"
                         config="config"
                         events="events.list"
-                        on-event-selected="onEventSelected(args)">
+                        on-event-selected="onEventSelected(args)"
+                        on-event-moved="onEventMoved(args)">
     </daypilot-scheduler>
 
     <div id="infoModal" class="modal fade" tabindex="-1" role="dialog">
@@ -14,11 +15,11 @@
                     <h4 class="modal-title"><i class="fa fa-info"></i> Request Info</h4>
                 </div>
                 <div class="modal-body">
-                    <p><strong>Start time:</strong> {{requestInfo.timePlaced}}</p>
-                    <p><strong>End time:</strong> {{requestInfo.timeFinished}}</p>
-                    <p><strong>Room:</strong> {{requestInfo.reservationGuest.room.number}}</p>
-                    <p><strong>Guest:</strong> {{requestInfo.reservationGuest.guest.personalData.fullName}}</p>
-                    <p><strong>Assignee:</strong> {{requestInfo.employee.personalData.fullName}}</p>
+                    <p><strong>Start time:</strong> {{taskInfo.timePlaced}}</p>
+                    <p><strong>End time:</strong> {{taskInfo.timeFinished}}</p>
+                    <p><strong>Room:</strong> {{taskInfo.reservationGuest.room.number}}</p>
+                    <p><strong>Guest:</strong> {{taskInfo.reservationGuest.guest.personalData.fullName}}</p>
+                    <p><strong>Assignee:</strong> {{taskInfo.employee.personalData.fullName}}</p>
                 </div>
             </div>
         </div>

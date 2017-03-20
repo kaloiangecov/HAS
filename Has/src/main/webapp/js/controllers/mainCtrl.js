@@ -4,8 +4,16 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
     };
 
     $scope.loginData = {};
-    $scope.roomTypes = sampleRoomTypes;
-    $scope.roomStatuses = sampleRoomStatuses;
+    $scope.roomTypes = [
+        "Regular",
+        "Premium",
+        "Luxary"
+    ];
+    $scope.roomStatuses = [
+        "Available",
+        "Occupied",
+        "For Cleaning"
+    ];
     $scope.shifts = [
         "Morning",
         "Lunch",
