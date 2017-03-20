@@ -44,8 +44,8 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
         },
         schedules: {
             roleID: 1,
-            startDate: new Date().toISOString().substr(0, 10),
-            endDate: new Date().toISOString().substr(0, 10)
+            startDate: moment().format('YYYY-MM-DD'),
+            endDate: moment().format('YYYY-MM-DD')
         }
     };
 
