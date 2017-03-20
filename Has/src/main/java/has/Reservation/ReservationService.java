@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,7 +40,7 @@ public class ReservationService {
     private static final int RESERVATION_STATUS_ARRIVED = 1;
     private static final int RESERVATION_STATUS_CLOSED = 2;
 
-    public Reservation save(Reservation reservation, boolean isGroup, String groupId, User user) throws IOException, TemplateException {
+    public Reservation save(Reservation reservation, boolean isGroup, String groupId, User user) throws IOException, TemplateException, URISyntaxException {
         setLastModified(reservation, user);
 
         if (isGroup) {
@@ -50,7 +51,7 @@ public class ReservationService {
                 reservation.setGroupId(String.valueOf(code));
             }
         }
-        //reservation.setPrice(CalculationUtils.getReservationCost(reservation));
+        reservation.setPrice(CalculationUtils.getReservationCost(reservation));
         return repo.save(reservation);
     }
 
@@ -123,7 +124,7 @@ public class ReservationService {
         setLastModified(dbReservation, user);
         templateHandler.notifyCustomer(dbReservation);
         dbReservation.setReceptionist(reservation.getReceptionist());
-        //dbReservation.setPrice(CalculationUtils.getReservationCost(dbReservation));
+        dbReservation.setPrice(CalculationUtils.getReservationCost(dbReservation));
         return repo.save(dbReservation);
     }
 
@@ -219,9 +220,9 @@ public class ReservationService {
         }
         //TODO: testing out pricing this is some bullshit here
         {
-//            if (reservation.getGroupId() == null) {
-//                reservation.setPrice(CalculationUtils.getReservationCost(reservation));
-//            }
+            if (reservation.getGroupId() == null) {
+                reservation.setPrice(CalculationUtils.getReservationCost(reservation));
+            }
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

@@ -6,6 +6,7 @@ import org.joda.time.Days;
 import org.joda.time.LocalDate;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 
 public class CalculationUtils {
@@ -13,7 +14,7 @@ public class CalculationUtils {
     private CalculationUtils() {
     }
 
-    public static Double getReservationCost(Reservation reservation) throws IOException {
+    public static Double getReservationCost(Reservation reservation) throws IOException, URISyntaxException {
 
         PropertiesReader reader = new PropertiesReader();
         double overnightPrice = reader.readDouble("overnightPrice");
@@ -33,8 +34,11 @@ public class CalculationUtils {
                         : roomClass == 1 ? mediumClassPrice
                         : roomClass == 2 ? highClassPrice
                         : 0;
+        int guestRank = 0;
+        if (reservation.getReservationGuests() != null) {
+            guestRank = reservation.getReservationGuests().get(0).getGuest().getNumberReservations();
+        }
 
-        int guestRank = reservation.getReservationGuests().get(0).getGuest().getNumberReservations();
         double guestDiscount =
                 guestRank >= 10 && guestRank < 20 ? 0.05
                         : guestRank >= 20 && guestRank < 30 ? 0.1
@@ -43,7 +47,9 @@ public class CalculationUtils {
                         : 0;
 
         double totalDiscount = reader.readDouble("maxDiscount");
-        if (seasonalDiscount + guestDiscount <= totalDiscount) {
+        if (seasonalDiscount + guestDiscount <= totalDiscount)
+
+        {
             totalDiscount = seasonalDiscount + guestDiscount;
         }
 

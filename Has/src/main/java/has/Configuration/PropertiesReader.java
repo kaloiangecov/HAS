@@ -1,6 +1,7 @@
 package has.Configuration;
 
 import java.io.*;
+import java.net.URISyntaxException;
 import java.util.Properties;
 
 /**
@@ -9,20 +10,22 @@ import java.util.Properties;
 public class PropertiesReader {
 
     private Properties properties;
+    private InputStream iStream;
     private File file;
 
-    public PropertiesReader() throws FileNotFoundException {
+    public PropertiesReader() throws FileNotFoundException, URISyntaxException {
         properties = new Properties();
-        file = new File("src/main/resources/config.txt");
+        file = new File(getClass().getClassLoader().getResource("/config.txt").toURI());
+        iStream = new FileInputStream(file);
     }
 
     public String readProperty(String key) throws IOException {
-        properties.load(new FileInputStream(file));
+        properties.load(iStream);
         return properties.getProperty(key);
     }
 
     public Double readDouble(String key) throws IOException {
-        properties.load(new FileInputStream(file));
+        properties.load(iStream);
         try {
             return Double.parseDouble(properties.getProperty(key));
         } catch (NumberFormatException e) {
@@ -31,13 +34,13 @@ public class PropertiesReader {
     }
 
     public void editProperty(String key, String value) throws IOException {
-        properties.load(new FileInputStream(file));
+        properties.load(iStream);
         properties.setProperty(key, value);
         properties.store(new FileOutputStream(file), null);
     }
 
     public void listProperties() throws IOException {
-        properties.load(new FileInputStream(file));
+        properties.load(iStream);
         System.out.println(properties.stringPropertyNames());
     }
 }
