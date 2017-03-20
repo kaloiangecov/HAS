@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +37,7 @@ public class ReservationController {
     public Reservation save(@RequestBody Reservation reservation,
                             @AuthenticationPrincipal @Valid User user,
                             @RequestParam("group") boolean isGroup,
-                            @RequestParam(value = "groupId", required = false) String groupId) throws IOException, TemplateException {
+                            @RequestParam(value = "groupId", required = false) String groupId) throws IOException, TemplateException, URISyntaxException {
         return reservationService.save(reservation, isGroup, groupId, user);
     }
 

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,7 +40,7 @@ public class ReservationService {
     private static final int RESERVATION_STATUS_ARRIVED = 1;
     private static final int RESERVATION_STATUS_CLOSED = 2;
 
-    public Reservation save(Reservation reservation, boolean isGroup, String groupId, User user) throws IOException, TemplateException {
+    public Reservation save(Reservation reservation, boolean isGroup, String groupId, User user) throws IOException, TemplateException, URISyntaxException {
         setLastModified(reservation, user);
 
         if (isGroup) {

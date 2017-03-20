@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 /**
  * Created by Chokleet on 18.3.2017 г..
@@ -12,22 +13,22 @@ import java.io.IOException;
 public class PropertiesReaderTest {
 
     @Test
-    public void readPropertiesTest() throws IOException {
+    public void readPropertiesTest() throws IOException, FileNotFoundException, URISyntaxException {
         PropertiesReader reader = new PropertiesReader();
         String result = reader.readProperty("overnightPrice");
-        Assert.assertEquals("25",result);
+        Assert.assertEquals("25", result);
     }
 
     @Test
-    public void overwriteTest() throws IOException {
+    public void overwriteTest() throws IOException, URISyntaxException {
         PropertiesReader reader = new PropertiesReader();
-        reader.editProperty("overnightPrice","changed");
+        reader.editProperty("overnightPrice", "30");
         String result = reader.readProperty("overnightPrice");
-        Assert.assertEquals("changed",result);
+        Assert.assertEquals("30", result);
     }
 
     @Test
-    public void listTest() throws IOException {
+    public void listTest() throws IOException, URISyntaxException {
         PropertiesReader reader = new PropertiesReader();
         reader.listProperties();
     }
