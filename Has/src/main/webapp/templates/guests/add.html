@@ -9,16 +9,15 @@
                 <div class="x_content form-horizontal form-label-left">
 
                     <div class="form-group">
-                        <label class="control-label col-md-6 col-sm-6 col-xs-12" for="numberReservations">Number of
-                            Reservations *</label>
+                        <label class="control-label col-md-6 col-sm-6 col-xs-12" for="rating">Guest rating *</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="number" class="form-control" id="numberReservations" name="numberReservations"
+                            <input type="number" class="form-control" id="rating" name="rating"
                                    ng-model="guest.numberReservations" min="0" max="10000" required="required"/>
-                            <div ng-show="guestForm.$submitted || guestForm.numberReservations.$touched"
+                            <div ng-show="guestForm.$submitted || guestForm.rating.$touched"
                                  class="validation-message">
-                                <span ng-show="guestForm.numberReservations.$error.required">This field is required</span>
-                                <span ng-show="guestForm.numberReservations.$error.min">Number is too small</span>
-                                <span ng-show="guestForm.numberReservations.$error.max">Number is too big</span>
+                                <span ng-show="guestForm.rating.$error.required">This field is required</span>
+                                <span ng-show="guestForm.rating.$error.min">Number is too small</span>
+                                <span ng-show="guestForm.rating.$error.max">Number is too big</span>
                             </div>
                         </div>
                     </div>
