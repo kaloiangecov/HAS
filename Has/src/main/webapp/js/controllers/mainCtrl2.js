@@ -139,7 +139,8 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                 $timeout(function () {
                     $scope.dr2 = $('#newDateRange').daterangepicker({
                         startDate: new Date($scope.reservation.startDate),
-                        endDate: new Date($scope.reservation.endDate)
+                        endDate: new Date($scope.reservation.endDate),
+                        minDate: new Date(),
                     });
                     $scope.dr2.on('apply.daterangepicker', function (ev, picker) {
                         setDateRange(picker.startDate.format('YYYY-MM-DD'), picker.endDate.format('YYYY-MM-DD'))
