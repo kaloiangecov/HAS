@@ -2,10 +2,6 @@ app.controller("guestCtrl", function ($scope, $state, $location, $stateParams, $
     var ctrl = this;
     $scope.page.title = "Guests";
     $scope.master = {};
-    $scope.filters = {
-        fullName: "",
-        phone: ""
-    };
     $scope.usersList = [];
     $scope.isEdit = false;
 
@@ -23,7 +19,7 @@ app.controller("guestCtrl", function ($scope, $state, $location, $stateParams, $
                     'Content-Type': 'application/json',
                     'Authorization': $scope.authentication
                 },
-                data: $scope.filters,
+                data: $scope.searchFilters.guests,
                 error: function (jqXHR, textStatus, errorThrown) {
                     $scope.displayMessage({
                         status: jqXHR.status,
@@ -78,8 +74,8 @@ app.controller("guestCtrl", function ($scope, $state, $location, $stateParams, $
             }, 300);
         };
 
-        $scope.$watch("filters.fullName", $scope.addDeleteFunctions);
-        $scope.$watch("filters.phone", $scope.addDeleteFunctions);
+        $scope.$watch("searchFilters.guests.fullName", $scope.addDeleteFunctions);
+        $scope.$watch("searchFilters.guests.phone", $scope.addDeleteFunctions);
 
         $scope.reloadTableData = function () {
             var resetPaging = false;
@@ -102,7 +98,6 @@ app.controller("guestCtrl", function ($scope, $state, $location, $stateParams, $
                     'Content-Type': 'application/json',
                     'Authorization': $scope.authentication
                 },
-                data: $scope.filters,
                 error: function (jqXHR, textStatus, errorThrown) {
                     $scope.displayMessage({
                         status: jqXHR.status,

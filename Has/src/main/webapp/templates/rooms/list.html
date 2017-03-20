@@ -10,18 +10,19 @@
                     <a class="collapse-link" style="visibility:hidden"><i class="fa fa-chevron-up"></i></a>
                 </li>
                 <li>
-                    <a class="btn" href="#!/rooms/add" role="button" aria-expanded="false" title="Create new room"><i
+                    <a class="btn" ui-sref="loggedin.root.rooms.roomsAdd" role="button" aria-expanded="false"
+                       title="Create new room"><i
                             class="fa fa-plus"></i></a>
                 </li>
             </ul>
             <div class="clearfix"></div>
             <form name="roomFiltersForm" class="form-inline text-center" ng-submit="reloadTableData()">
-                <input type="number" class="form-control" name="number" ng-model="filters.number" min="0"
+                <input type="number" class="form-control" name="number" ng-model="searchFilters.rooms.number" min="0"
                        max="2000"
                        placeholder="Number"/>
-                <select class="form-control roles" ng-model="filters.roomClass" title="Type">
+                <select class="form-control roles" ng-model="searchFilters.rooms.roomClass" title="Type">
                     <option value="{{$index}}" ng-repeat="roomType in roomTypes"
-                            ng-selected="$index == filters.roomClass">
+                            ng-selected="$index == searchFilters.rooms.roomClass">
                         {{roomType}}
                     </option>
                 </select>

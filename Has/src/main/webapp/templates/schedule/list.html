@@ -10,15 +10,17 @@
                     <a class="collapse-link" style="visibility:hidden"><i class="fa fa-chevron-up"></i></a>
                 </li>
                 <li>
-                    <a class="btn" href="#!/schedule/add" role="button" aria-expanded="false" title="Create new user"><i
+                    <a class="btn" ui-sref="loggedin.root.schedule.scheduleAdd" role="button" aria-expanded="false"
+                       title="Create new user"><i
                             class="fa fa-user-plus"></i></a>
                 </li>
             </ul>
             <div class="clearfix"></div>
             <form class="form-inline text-center" ng-submit="reloadTableData()">
-                <input class="form-control" id="filterStartDate" ng-model="ctrl.filters.startDate">
-                <input class="form-control" id="filterEndDate" ng-model="ctrl.filters.endDate">
-                <select class="form-control roles" id="filterRole" name="filterRole" ng-model="ctrl.filters.roleID"
+                <input class="form-control" id="filterStartDate" ng-model="searchFilters.schedules.startDate">
+                <input class="form-control" id="filterEndDate" ng-model="searchFilters.schedules.endDate">
+                <select class="form-control roles" id="filterRole" name="filterRole"
+                        ng-model="searchFilters.schedules.roleID"
                         ng-options="item.id as item.roleName for item in rolesList" required="required">
                 </select>
                 <button type="submit" class="btn btn-primary" style="position:relative;top:+3px;"><i

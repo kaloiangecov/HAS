@@ -10,7 +10,7 @@
                     <a class="collapse-link" style="visibility:hidden"><i class="fa fa-chevron-up"></i></a>
                 </li>
                 <li>
-                    <a class="btn" href="#!/employees/add" role="button" aria-expanded="false"
+                    <a class="btn" ui-sref="loggedin.root.employees.employeesAdd" role="button" aria-expanded="false"
                        title="Create new employee"><i
                             class="fa fa-user-plus"></i></a>
                 </li>
@@ -18,14 +18,17 @@
             <div class="clearfix"></div>
 
             <form class="form-inline text-center" ng-submit="reloadTableData()">
-                <input type="text" class="form-control" ng-model="filters.fullName" placeholder="Full Name"/>
-                <input type="text" class="form-control" ng-model="filters.phone" placeholder="Phone Number"/>
-                <input type="text" class="form-control" id="filterDateHired" ng-model="filters.dateHired"
+                <input type="text" class="form-control" ng-model="searchFilters.employees.fullName"
+                       placeholder="Full Name"/>
+                <input type="text" class="form-control" ng-model="searchFilters.employees.phone"
+                       placeholder="Phone Number"/>
+                <input type="text" class="form-control" id="filterDateHired"
+                       ng-model="searchFilters.employees.dateHired"
                        placeholder="Date Hired"/>
                 <div class="form-control">
                     <label for="showDisabled">
                         <input type="checkbox" class="js-switch" id="showDisabled"
-                               ng-model="filters.showDisabled"/>
+                               ng-model="searchFilters.employees.showDisabled"/>
                         Display Unemployed
                     </label>
                 </div>

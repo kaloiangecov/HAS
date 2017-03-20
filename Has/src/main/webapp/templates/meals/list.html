@@ -10,13 +10,15 @@
                     <a class="collapse-link" style="visibility:hidden"><i class="fa fa-chevron-up"></i></a>
                 </li>
                 <li>
-                    <a class="btn" href="#!/meals/add" role="button" aria-expanded="false" title="Add new meal"><i
+                    <a class="btn" ui-sref="loggedin.root.meals.mealsAdd" role="button" aria-expanded="false"
+                       title="Add new meal"><i
                             class="fa fa-plus"></i></a>
                 </li>
             </ul>
             <div class="clearfix"></div>
             <form name="mealFiltersForm" class="form-inline text-center" ng-submit="reloadTableData()">
-                <input type="text" class="form-control" name="name" ng-model="filters.name" placeholder="Name"/>
+                <input type="text" class="form-control" name="name" ng-model="searchFilters.meals.name"
+                       placeholder="Name"/>
 
                 <button type="submit" class="btn btn-primary" style="position:relative;top:+3px;"><i
                         class="fa fa-search"></i> Search

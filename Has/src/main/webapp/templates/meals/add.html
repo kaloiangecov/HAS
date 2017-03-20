@@ -43,7 +43,7 @@
                         <div ng-show="mealForm.$submitted || mealForm.price.$touched"
                              class="validation-message">
                             <span ng-show="mealForm.price.$error.required">This field is required</span>
-                            <span ng-show="mealForm.price.$error.pattern">Allowed inputs:<br/>- an integer<br/>- a decimal number with a precission of 2 and '.' as adecimal separator</span>
+                            <span ng-show="mealForm.price.$error.pattern">Allowed inputs:<br/>- an integer<br/>- a decimal number with less han 1000 a precission of 2 and '.' as adecimal separator</span>
                         </div>
                     </div>
                 </div>
@@ -79,7 +79,7 @@
                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-4">
                         <button type="submit" ng-click="submit(meal)" class="btn btn-success">Submit</button>
                         <button type="reset" class="btn btn-default">Reset</button>
-                        <a type="button" class="btn btn-primary" ui-sref="loggedin.root.mealsList">Back</a>
+                        <a type="button" class="btn btn-primary" ui-sref="loggedin.root.meals.mealsList">Back</a>
                     </div>
                 </div>
 

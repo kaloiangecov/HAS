@@ -19,6 +19,36 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
     $scope.authentication = "";
     $scope.isLoginError = false;
 
+    $scope.searchFilters = {
+        users: {
+            username: "",
+            email: "",
+            roleID: 1
+        },
+        employees: {
+            fullName: "",
+            phone: "",
+            dateHired: "",
+            showDisabled: false
+        },
+        guests: {
+            fullName: "",
+            phone: ""
+        },
+        meals: {
+            name: ''
+        },
+        rooms: {
+            number: 0,
+            roomClass: 0
+        },
+        schedules: {
+            roleID: 1,
+            startDate: new Date().toISOString().substr(0, 10),
+            endDate: new Date().toISOString().substr(0, 10)
+        }
+    };
+
     $scope.displayMessage = function (response) {
         if (!response)
             return;
