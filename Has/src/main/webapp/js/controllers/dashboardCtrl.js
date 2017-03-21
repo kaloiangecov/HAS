@@ -7,12 +7,32 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http) {
         resources: []
     };
 
+    $scope.shiftHours = {
+        morning: {
+            start: '06:00',
+            end: '14:00'
+        },
+        lunch: {
+            start: '14:00',
+            end: '22:00'
+        },
+        night: {
+            start: '22:00',
+            end: '06:00'
+        }
+    };
+
+    var SHIFT_MORNING = 0;
+    var SHIFT_LUNCH = 1;
+    var SHIFT_NIGHT = 2;
+
+    $scope.task = {};
     $scope.taskInfo = {};
 
     $scope.config = {
         scale: "Hour",
         startDate: moment().format('YYYY-MM-DD HH:mm:ss'),
-        days: (1 / 3),
+        days: 1,
         resources: $scope.events.resources,
         timeHeaders: [{groupBy: "Day", format: "dd MMM yyyy"}, {groupBy: "Hour", format: 'HH'}],
         eventDeleteHandling: "Update",
@@ -40,10 +60,27 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http) {
             ]
         }),
         onBeforeCellRender: function (args) {
-            var today = new DayPilot.Date(new Date());
-            if (args.cell.start <= today && today < args.cell.end) {
+            var today = new Date().toISOString();
+            if (args.cell.start.value <= today && today < args.cell.end.value) {
                 args.cell.backColor = "#fff0b3";
             }
+
+            var nowHour = moment().format('HH:mm');
+            var cellStartHour = moment(args.cell.start.value).format('HH:mm');
+            var cellEndHour = moment(args.cell.end.value).format('HH:mm');
+
+
+            if (nowHour >= '06:00' && nowHour < '14:00') { //morning
+                if (cellEndHour < '06:00' || cellStartHour >= '14:00')
+                    args.cell.backColor = "#cc6655";
+            } else if (nowHour >= '14:00' && nowHour < '22:00') { //lunch
+                if (cellEndHour < '14:00' || cellStartHour >= '22:00')
+                    args.cell.backColor = "#cc6655";
+            } else if (nowHour < '06:00') { //night
+                if ((cellEndHour < '22:00' && cellEndHour >= '14') || (cellStartHour >= '06:00' && cellStartHour < '22:00'))
+                    args.cell.backColor = "#cc6655";
+            }
+
         },
         onBeforeResHeaderRender: function (args) {
             args.resource.name = args.resource.personalData.fullName;
@@ -67,33 +104,37 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http) {
         onTimeRangeSelected: function (args) {
             $scope.dashboard.clearSelection();
 
-            $scope.$apply(function () {
-                var tmpEvent = {
-                    start: args.start,
-                    end: args.end,
-                    id: new Date().getTime(),
-                    text: "New Task",
-                    resource: args.resource,
-                    status: 0
-                };
+            if (!$scope.events.new.start && (args.start.value.substr(0, 10) >= moment().format('YYYY-MM-DD'))) {
+                $scope.$apply(function () {
+                    $scope.events.new = {
+                        start: args.start,
+                        end: args.end,
+                        id: new Date().getTime(),
+                        text: "New Task",
+                        resource: args.resource,
+                        status: 0
+                    };
 
-                $scope.events.list.push(tmpEvent);
-            });
+                    $('#taskModal').modal('show');
+
+                    //$scope.events.list.push(tmpEvent);
+                });
+            }
         },
         onBeforeEventRender: function (args) {
             var status = "Placed";
 
             switch (args.e.status) {
                 case 0:
-                    args.data.barColor = "#e55";
+                    args.data.barColor = "#60f";
                     status = "Placed";
                     break;
                 case 1:
-                    args.data.barColor = "#feda55";
+                    args.data.barColor = "#a6f";
                     status = "In Progress";
                     break;
                 case 2:
-                    args.data.barColor = "#1ABB9C";
+                    args.data.barColor = "#caf";
                     status = "Finished";
                     break;
                 default:
@@ -111,19 +152,24 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http) {
         }
     };
 
+    function getCurrentShift() {
+        var nowHour = moment().format('HH:mm');
+        var shift = SHIFT_MORNING;
+
+        if (nowHour >= $scope.shiftHours.lunch.start && nowHour < $scope.shiftHours.lunch.end)
+            shift = SHIFT_LUNCH;
+        else if (nowHour < $scope.shiftHours.night.end)
+            shift = SHIFT_NIGHT;
+
+        return shift;
+    }
+
     $scope.loadEmployees = function () {
         var today = moment().format('YYYY-MM-DD');
-        var nowHour = moment().format('HH:mm');
-        var shift = 0;
-
-        if (nowHour >= '14:00' && nowHour < '22:00')
-            shift = 1;
-        else if (nowHour < '6:00')
-            shift = 2;
 
         $http({
             method: "GET",
-            url: ("employees/shift?date=" + today + "&shift=" + shift),
+            url: ("employees/service/shift?date=" + today + "&shift=" + getCurrentShift()),
             responseType: "json",
             headers: {
                 "Authorization": $scope.authentication
@@ -176,6 +222,25 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http) {
                 });
 
             });
+    };
+
+    $scope.resetTask = function () {
+        $scope.events.new = {};
+        $scope.task = {};
+
+        $scope.loadEvents();
+    };
+
+    $scope.submitTask = function () {
+        var assignee = $filter('filter')($scope.config.resources, {id: $scope.events.new.resource})[0];
+
+        var startTimeTicks = new Date($scope.events.new.start.value).getTime();
+        var endTimeTicks = new Date($scope.events.new.end.value).getTime();
+
+        var diffMinutes = (endTimeTicks - startTimeTicks) / 60000;
+
+        $scope.task.timePlaced = $scope.events.new.start.value;
+        $scope.task.assignee = assignee;
     };
 
     angular.element(document).ready(function () {

@@ -120,4 +120,11 @@ public class EmployeeController {
         return employeeService.findEmployeesForShift(date, shift);
     }
 
+    @RequestMapping(value = "/employees/service/shift", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_VIEW_EMPLOYEE')")
+    public List<Employee> findServiceEmployeesForShift(@RequestParam("date") String date, @Valid @RequestParam("shift") int shift) {
+        return employeeService.findServiceEmployeesForShift(date, shift);
+    }
 }
