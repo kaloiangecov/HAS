@@ -7,8 +7,16 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
 
     $scope.authentication = "Basic " + btoa("booking:B00king");
 
-    $scope.roomTypes = sampleRoomTypes;
-    $scope.roomStatuses = sampleRoomStatuses;
+    $scope.roomTypes = [
+        "Regular",
+        "Premium",
+        "Luxary"
+    ];
+    $scope.roomStatuses = [
+        "Available",
+        "Occupied",
+        "For Cleaning"
+    ];
 
     $scope.filters = {
         numberAdults: 1,
