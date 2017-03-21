@@ -12,6 +12,7 @@ import java.net.URISyntaxException;
 public class CalculationUtils {
 
     private CalculationUtils() {
+
     }
 
     public static Double getReservationCost(Reservation reservation) throws IOException, URISyntaxException {
@@ -47,9 +48,7 @@ public class CalculationUtils {
                         : 0;
 
         double totalDiscount = reader.readDouble("maxDiscount");
-        if (seasonalDiscount + guestDiscount <= totalDiscount)
-
-        {
+        if (seasonalDiscount + guestDiscount <= totalDiscount) {
             totalDiscount = seasonalDiscount + guestDiscount;
         }
 

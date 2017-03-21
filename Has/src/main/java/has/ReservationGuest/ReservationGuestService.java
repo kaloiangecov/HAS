@@ -25,12 +25,11 @@ public class ReservationGuestService {
     public ReservationGuest save(ReservationGuest reservationGuest) throws IOException, TemplateException {
         ReservationGuest savedGuest = null;
         savedGuest = repo.save(reservationGuest);
-        sendEmaiNotification(savedGuest);
-//        templateHandler.notifyCustomer(savedGuest.getReservation());
+        sendEmailNotification(savedGuest);
         return savedGuest;
     }
 
-    private void sendEmaiNotification(ReservationGuest reservationGuest) throws IOException, TemplateException {
+    private void sendEmailNotification(ReservationGuest reservationGuest) throws IOException, TemplateException {
         Map model = new HashMap();
         model.put("guest", reservationGuest.getGuest());
         model.put("reservation", reservationGuest.getReservation());
