@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.joda.time.LocalTime;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -67,7 +68,7 @@ public class EmployeeDTO {
     }
 
     public List<Task> getTargetTimeTasks() {
-        List<Task> targetTimeTasks = null;
+        List<Task> targetTimeTasks = new ArrayList<>();
         for (Task task : tasks) {
             if (task.getTargetTime() != null) {
                 targetTimeTasks.add(task);
