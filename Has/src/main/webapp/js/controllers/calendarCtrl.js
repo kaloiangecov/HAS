@@ -1,8 +1,7 @@
 app.controller("calendarCtrl", function ($scope, $filter, $http) {
     var ctrl = this;
-    $scope.page.title = "Calendar";
+    $scope.page.title = "Reception";
 
-    $scope.roomTypes = sampleRoomTypes;
     $scope.roomTypes[3] = "All";
 
     $scope.events = {
