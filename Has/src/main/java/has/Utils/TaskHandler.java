@@ -73,7 +73,7 @@ public class TaskHandler {
         task.setDescription(createDescription(request));
         task.setRequest(request);
         task.setTargetTime(request.getTargetTime());
-        task.setTimePlaced(request.getTimePlaced());
+        task.setTimePlaced(new Date().toString());
         task.setPriority(2);
         task = assignTask(task, findShift(new LocalTime()));
         //TODO set description, employee, duration and target time(евентуално)
