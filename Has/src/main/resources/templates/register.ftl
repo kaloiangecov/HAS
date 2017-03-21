@@ -4,6 +4,7 @@
 <#assign startDate = reservation.startDate >
 <#assign endDate = reservation.endDate >
 <#assign price = reservation.price >
+<#assign code = reservation.reservationCode >
 <#assign moreInformationUrl = "http://has.gg/booking.html#!/about" >
 
 <#if reservation.allInclusive == true>
@@ -47,42 +48,59 @@
 
     <tr>
         <td colspan="2" width="25%"
-            style="padding: 10px; clear: both; background-color: #e9f3fb; font-weight: bold;">Your reservation includes:</td>
+            style="padding: 10px; clear: both; background-color: #e9f3fb; font-weight: bold;">Your reservation includes:
+        </td>
         <td colspan="2" width="25%"
             style="padding: 10px; clear: both; background-color: #e9f3fb; font-weight: bold;">${reservationIncludes}</td>
     </tr>
 
     <tr>
         <td colspan="2" width="25%"
-            style="padding: 10px; clear: both; background-color: #F4EFEF; font-weight: bold; color: #4783A8;">Number of adults</td>
+            style="padding: 10px; clear: both; background-color: #F4EFEF; font-weight: bold; color: #4783A8;">Number of
+            adults
+        </td>
         <td colspan="2" width="25%"
             style="padding: 10px; clear: both; background-color: #F4EFEF; font-weight: bold; color: #4783A8;">${numberAdults}</td>
     </tr>
     <tr>
         <td colspan="2" width="25%"
-            style="padding: 10px; clear: both; background-color: #e9f3fb; font-weight: bold;">Number of children</td>
+            style="padding: 10px; clear: both; background-color: #e9f3fb; font-weight: bold;">Number of children
+        </td>
         <td colspan="2" width="25%"
             style="padding: 10px; clear: both; background-color: #e9f3fb; font-weight: bold;">${numberChildren}</td>
     </tr>
 
     <tr>
         <td colspan="2" width="25%"
-            style="padding: 10px; clear: both; background-color: #F4EFEF; font-weight: bold; color: #4783A8;">Check-In date</td>
+            style="padding: 10px; clear: both; background-color: #F4EFEF; font-weight: bold; color: #4783A8;">Check-In
+            date
+        </td>
         <td colspan="2" width="25%"
             style="padding: 10px; clear: both; background-color: #F4EFEF; font-weight: bold; color: #4783A8;">${startDate}</td>
     </tr>
     <tr>
         <td colspan="2" width="25%"
-            style="padding: 10px; clear: both; background-color: #e9f3fb; font-weight: bold;">Check-Out date</td>
+            style="padding: 10px; clear: both; background-color: #e9f3fb; font-weight: bold;">Check-Out date
+        </td>
         <td colspan="2" width="25%"
             style="padding: 10px; clear: both; background-color: #e9f3fb; font-weight: bold;">${endDate}</td>
     </tr>
 
     <tr>
         <td colspan="2" width="25%"
-            style="padding: 10px; clear: both; background-color: #F4EFEF; font-weight: bold; color: #4783A8;">Staying price</td>
+            style="padding: 10px; clear: both; background-color: #F4EFEF; font-weight: bold; color: #4783A8;">Staying
+            price
+        </td>
         <td colspan="2" width="25%"
             style="padding: 10px; clear: both; background-color: #F4EFEF; font-weight: bold; color: #4783A8;">${price}</td>
+    </tr>
+
+    <tr>
+        <td colspan="2" width="25%"
+            style="padding: 10px; clear: both; background-color: #e9f3fb; font-weight: bold;">Reservation code
+        </td>
+        <td colspan="2" width="25%"
+            style="padding: 10px; clear: both; background-color: #e9f3fb; font-weight: bold;">${code}</td>
     </tr>
 
     <tr>

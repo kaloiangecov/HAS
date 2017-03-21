@@ -59,10 +59,6 @@ public class TemplateHandler {
             String templatePath = "roomCode.ftl";
             sendMail(model, templatePath, reservationGuest);
         }
-//        else if (reservation.getStatus() == RESERVATION_STATUS_CREATED) {
-//            String templatePath = "register.ftl";
-//            sendMail(model, templatePath, reservationGuest);
-//        }
     }
 
     public TemplateHandler() {
