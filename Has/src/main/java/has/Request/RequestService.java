@@ -58,8 +58,6 @@ public class RequestService {
         validateIdNotNull(dbRequest);
 
         dbRequest.setStatus(request.getStatus());
-        dbRequest.setTimeFinished(request.getTimeFinished());
-        dbRequest.setTimePlaced(request.getTimePlaced());
         dbRequest.setType(request.getType());
         dbRequest.setTargetTime(request.getTargetTime());
         return repo.save(dbRequest);

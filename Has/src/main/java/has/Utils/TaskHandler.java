@@ -216,7 +216,7 @@ public class TaskHandler {
         LocalTime task1TimeStart = parse(task1.getStartTime());
         LocalTime task1TimeEnd = addTime(parse(task1.getStartTime()),
                 parse(task1.getDuration()));
-        LocalTime task2TimeStart = parse(task2.getStartTime());
+        LocalTime task2TimeStart = parse(task2.getTargetTime());
         LocalTime task2TimeEnd = addTime(parse(task2.getStartTime()),
                 parse(task2.getDuration()));
 
@@ -254,12 +254,12 @@ public class TaskHandler {
     }
 
     public List<Task> organiseTasks(EmployeeDTO employeeDTO) {
-        Task lastTask = null;
+        Task lastTask = new Task();
         List<Task> targetTimeTasks = targetTimeTasks = employeeDTO.getTargetTimeTasks();
         List<Task> tasks = employeeDTO.getTasks();
         Task currentTask = employeeDTO.getCurrentTask();
         tasks = bubbleSortByPriority(tasks);
-        List<Task> nextShiftTasks = null;
+        List<Task> nextShiftTasks = new ArrayList<>();
 
         for (Task task : tasks) {
             if (task.getStatus() == TASK_STATUS_SCHEDULED) {
@@ -313,10 +313,10 @@ public class TaskHandler {
     }
 
     private Task findIntersectingTask(List<Task> tasks, Task task) {
-        Task intersectingTask = null;
+        Task intersectingTask = new Task();
         if (tasks != null) {
             for (Task task1 : tasks) {
-                if (!notIntersecting(task1, task)) {
+                if (!notIntersecting(task, task1)) {
                     intersectingTask = task1;
                 }
             }

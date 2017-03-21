@@ -41,10 +41,6 @@ public class Request implements Serializable {
     @Max(2)
     private int status;
 
-    private String timeFinished;
-
-    private String timePlaced;
-
     private String targetTime;
 
     @NotNull
