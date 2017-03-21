@@ -28,7 +28,7 @@ public class WorkingSchedule implements Serializable {
     @NotNull
     @Min(0)
     @Max(2)
-    private Integer shift;
+    private Integer shift; //0 morning, 1 lunch, 2 night
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "EMPLOYEE_ID")

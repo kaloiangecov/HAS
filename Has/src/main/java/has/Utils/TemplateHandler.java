@@ -50,12 +50,12 @@ public class TemplateHandler {
     }
 
     public void notifyCustomer(Reservation reservation) throws IOException, TemplateException {
-
+        ReservationGuest reservationGuest = reservation.getReservationGuests().get(FIRST);
+        Map model = new HashMap();
+        model.put("reservation", reservation);
+        model.put("guest", reservationGuest.getGuest());
         if (reservation.getStatus() == RESERVATION_STATUS_ARRIVED) {
-            ReservationGuest reservationGuest = reservation.getReservationGuests().get(FIRST);
-            Map model = new HashMap();
-            model.put("reservation", reservation);
-            model.put("guest", reservationGuest.getGuest());
+
             String templatePath = "roomCode.ftl";
             sendMail(model, templatePath, reservationGuest);
         }

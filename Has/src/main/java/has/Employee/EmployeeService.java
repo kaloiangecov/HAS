@@ -1,12 +1,17 @@
 package has.Employee;
 
+import has.Task.TaskRepository;
+import has.Utils.TimeFormatter;
 import has.Utils.Validator;
+import has.WorkingSchedule.WorkingSchedule;
+import has.WorkingSchedule.WorkingScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,6 +22,15 @@ public class EmployeeService {
 
     @Autowired
     private EmployeeRepository repo;
+
+    @Autowired
+    private TaskRepository taskRepo;
+
+    @Autowired
+    private WorkingScheduleRepository workingScheduleRepository;
+
+    @Autowired
+    private TimeFormatter timeFormatter;
 
     public Employee save(Employee employee) throws Exception {
         validateEgn(employee);
@@ -130,4 +144,34 @@ public class EmployeeService {
             throw new Exception("Employee with Identity Number " + employee.getPersonalData().getIdentityNumber() + " already exists.");
         }
     }
+
+    public List<EmployeeDTO> getEmployeesOnShift(int shift) {
+        String date = timeFormatter.getNewDateAsString();
+        List<Employee> employees = repo.findAllEmployeesForShift(date, shift);
+        List<EmployeeDTO> employeesDTO = new ArrayList<>(employees.size());
+        int index = 0;
+        for (Employee employee : employees) {
+            employeesDTO.add(new EmployeeDTO());
+            employeesDTO.get(index).
+                    setWorkingSchedule(workingScheduleRepository.findByEmployeeIdAndDate(employee.getId(), date));
+            employeesDTO.get(index).setTasks(taskRepo.findByAssigneeIdAndTimePlacedStartingWith(employee.getId(), date));
+            index++;
+        }
+        return employeesDTO;
+    }
+
+    public EmployeeDTO transferEmployeeToDTO(Long id) throws Exception {
+        String date = timeFormatter.getNewDateAsString();
+        EmployeeDTO employeeDTO = new EmployeeDTO();
+        WorkingSchedule workingSchedule = workingScheduleRepository.findByEmployeeIdAndDate(id, date);
+        if (workingSchedule != null) {
+            employeeDTO.setWorkingSchedule(workingSchedule);
+        } else {
+            throw new Exception("Employee with id: " + id + " is not on shift today!");
+        }
+
+        employeeDTO.setTasks(taskRepo.findByAssigneeIdAndTimePlacedStartingWith(id, date));
+        return employeeDTO;
+    }
+
 }

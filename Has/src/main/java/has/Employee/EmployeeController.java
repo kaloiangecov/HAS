@@ -119,4 +119,5 @@ public class EmployeeController {
     public List<Employee> findEmployeesForShift(@RequestParam("date") String date, @Valid @RequestParam("shift") int shift) {
         return employeeService.findEmployeesForShift(date, shift);
     }
+
 }
