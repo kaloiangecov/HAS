@@ -1,20 +1,17 @@
 package has.Employee;
 
 import has.Task.TaskRepository;
+import has.Utils.TimeFormatter;
 import has.Utils.Validator;
+import has.WorkingSchedule.WorkingSchedule;
 import has.WorkingSchedule.WorkingScheduleRepository;
-import org.joda.time.LocalTime;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.DateTimeFormatterBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,6 +28,9 @@ public class EmployeeService {
 
     @Autowired
     private WorkingScheduleRepository workingScheduleRepository;
+
+    @Autowired
+    private TimeFormatter timeFormatter;
 
     public Employee save(Employee employee) throws Exception {
         validateEgn(employee);
@@ -146,8 +146,7 @@ public class EmployeeService {
     }
 
     public List<EmployeeDTO> getEmployeesOnShift(int shift) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String date = sdf.format(new Date());
+        String date = timeFormatter.getNewDateAsString();
         List<Employee> employees = repo.findAllEmployeesForShift(date, shift);
         List<EmployeeDTO> employeesDTO = new ArrayList<>(employees.size());
         int index = 0;
@@ -161,14 +160,18 @@ public class EmployeeService {
         return employeesDTO;
     }
 
-    public int testLocalTime() {
-        LocalTime timeNow = new LocalTime();
-        DateTimeFormatter parseFormat = new DateTimeFormatterBuilder().appendPattern("h:mm").toFormatter();
-        LocalTime timeToAdd = LocalTime.parse("1:30", parseFormat);
-        timeNow = timeNow.plusMinutes(timeToAdd.getMinuteOfHour());
-        timeNow = timeNow.plusHours(timeToAdd.getHourOfDay());
-        int morningShiftEnd = LocalTime.parse("23:30").getHourOfDay();
-        return morningShiftEnd;
+    public EmployeeDTO transferEmployeeToDTO(Long id) throws Exception {
+        String date = timeFormatter.getNewDateAsString();
+        EmployeeDTO employeeDTO = new EmployeeDTO();
+        WorkingSchedule workingSchedule = workingScheduleRepository.findByEmployeeIdAndDate(id, date);
+        if (workingSchedule != null) {
+            employeeDTO.setWorkingSchedule(workingSchedule);
+        } else {
+            throw new Exception("Employee with id: " + id + " is not on shift today!");
+        }
+
+        employeeDTO.setTasks(taskRepo.findByAssigneeIdAndTimePlacedStartingWith(id, date));
+        return employeeDTO;
     }
 
 }

@@ -22,7 +22,6 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-
     @RequestMapping(value = "/employee", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -119,23 +118,6 @@ public class EmployeeController {
     @PreAuthorize("hasAuthority('PERM_VIEW_EMPLOYEE')")
     public List<Employee> findEmployeesForShift(@RequestParam("date") String date, @Valid @RequestParam("shift") int shift) {
         return employeeService.findEmployeesForShift(date, shift);
-    }
-
-    //TODO delete these methods
-
-    @RequestMapping(value = "/employeesDTO", method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('PERM_VIEW_EMPLOYEE')")
-    public List<EmployeeDTO> testDTO(@Valid @RequestParam("shift") int shift) {
-        return employeeService.getEmployeesOnShift(shift);
-    }
-
-    @RequestMapping(value = "/test1", method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
-    public int testLocalTime() {
-        return employeeService.testLocalTime();
     }
 
 }

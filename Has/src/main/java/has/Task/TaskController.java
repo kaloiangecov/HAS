@@ -4,7 +4,6 @@ import has.Employee.Employee;
 import has.Employee.EmployeeService;
 import has.User.User;
 import has.Utils.TaskHandler;
-import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,6 +36,15 @@ public class TaskController {
     @PreAuthorize("hasAuthority('PERM_CREATE_TASK')")
     public Task save(@RequestBody @Valid Task Task, @AuthenticationPrincipal User user) {
         return service.save(Task, user.getUsername());
+    }
+
+    @RequestMapping(value = "/tasks/automated-assign", method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_CREATE_TASK')")
+    public Task saveAutomatically(@RequestBody @Valid Task Task) {
+        return service.save(Task);
     }
 
     @RequestMapping(value = "/tasks", method = RequestMethod.GET,
@@ -91,23 +99,33 @@ public class TaskController {
         return service.getEmployeesUnresolvedTasks(employee);
     }
 
+
+    //TODO: from here on is tests
+
+    @RequestMapping(value = "/tasks/organise/{employeeId}", method = RequestMethod.PUT,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_EDIT_TASK')")
+    public List<Task> organiseTasks(@PathVariable Long employeeId) throws Exception {
+        return service.organiseTasks(employeeId);
+    }
+
+    @RequestMapping(value = "/tasks/equalize", method = RequestMethod.PUT,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_EDIT_TASK')")
+    public List<Task> equalizeTasks() {
+        return service.equalize();
+    }
+
     @RequestMapping(value = "/test2", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     public Task test2(@Valid @RequestBody Task task) {
 
-        return service.save(task, "alhambra");
-    }
-
-    @RequestMapping(value = "/test3", method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
-    public boolean test3() {
-
-        LocalTime time1 = LocalTime.parse("00:00");
-        LocalTime time2 = LocalTime.parse("00:00");
-        return time1.equals(time2);
+        return service.save(task);
     }
 
 }

@@ -1,7 +1,7 @@
 package has.Utils;
 
-import has.Employee.Employee;
 import has.Employee.EmployeeDTO;
+import has.Employee.EmployeeRepository;
 import has.Employee.EmployeeService;
 import has.Request.Request;
 import has.Task.Task;
@@ -11,6 +11,7 @@ import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -28,7 +29,14 @@ public class TaskHandler {
     @Autowired
     private EmployeeService employeeService;
 
-    private static final int TASK_STATUS_CREATED = 1;
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    private TimeFormatter timeFormatter;
+
+    private static final int TASK_STATUS_SCHEDULED = 0;
+
+    private static final String FIVE_MINUTES = "00:05";
     private static final String START_MORNING_SHIFT = "06:00";
     private static final String END_MORNING_SHIFT = "14:00";
     private static final String START_LUNCH_SHIFT = "14:00";
@@ -38,6 +46,15 @@ public class TaskHandler {
     private static final int MORNING_SHIFT = 0;
     private static final int LUNCH_SHIFT = 1;
     private static final int NIGHT_SHIFT = 2;
+
+    private static final int HIGH_PRIORITY = 0;
+    private static final int MEDIUM_PRIORITY = 1;
+    private static final int LOW_PRIORITY = 2;
+
+    private static final int FIRST = 0;
+    private static final int ONE_ELEMENT = 1;
+
+    private static final int NOT_INITIALIZED = 255;
 
     private Map<Integer, Shift> shifts = new HashMap<>();
 
@@ -55,67 +72,68 @@ public class TaskHandler {
         task.setTitle("Request " + request.getId());
         task.setDescription(createDescription(request));
         task.setRequest(request);
-        task.setAssigner("SYSTEM");
         task.setTargetTime(request.getTargetTime());
         task.setTimePlaced(request.getTimePlaced());
         task.setPriority(2);
-        task = assignTask(task);
+        task = assignTask(task, findShift(new LocalTime()));
         //TODO set description, employee, duration and target time(евентуално)
         return taskRepository.save(task);
     }
 
-    public Task assignTask(Task task) {
+    public Task assignTask(Task task, int shift) {
 
+        task.setAssigner("SYSTEM");
         if (task.getTargetTime() == null) {
-
-
-            List<EmployeeDTO> employeesOnShift
-                    = employeeService.getEmployeesOnShift(findShift(new LocalTime()));
-            if (employeesOnShift != null) {
-                LocalTime timeNow = new LocalTime();
-                LocalTime timeToAdd = LocalTime.parse(task.getDuration());
-                timeNow.plusMinutes(timeToAdd.getMinuteOfHour());
-                timeNow.plusHours(timeToAdd.getHourOfDay());
+            List<EmployeeDTO> employeesOnShift;
+            if (shift == NOT_INITIALIZED) {
+                employeesOnShift = employeeService.getEmployeesOnShift(findShift(new LocalTime()));
+            } else {
+                employeesOnShift = employeeService.getEmployeesOnShift(shift);
             }
-
-
+            if (!employeesOnShift.isEmpty()) {
+                if (task.getPriority() < LOW_PRIORITY) {
+                    task = assignAccordingToPriority(task, employeesOnShift);
+                } else {
+                    task = assignToLeastBusy(task, employeesOnShift);
+                }
+            } else {
+                task = resolveConflict(task);
+            }
         } else {
-
-            List<EmployeeDTO> employeesOnShift
-                    = employeeService.getEmployeesOnShift(findShift(LocalTime.parse(task.getTargetTime())));
-
-            System.out.println("shift: " + findShift(LocalTime.parse(task.getTargetTime())));
-            System.out.println("employees on shift: " + employeesOnShift.size());
-
             if (completeTaskBeforeShiftEnd(task)) {
-                List<EmployeeDTO> availableEmployees = availableForTask(employeesOnShift, task);
-                System.out.println("can take task: " + availableEmployees.size());
+                List<EmployeeDTO> employeesOnShift = findEmployeesOnShiftDTO(parse(task.getTargetTime()));
+                List<EmployeeDTO> availableEmployees = availableForTaskTargetTime(employeesOnShift, task);
                 if (!availableEmployees.isEmpty()) {
                     task = assignToLeastBusy(task, availableEmployees);
+                } else {
+                    task = resolveConflict(task);
                 }
+            } else {
+                task = resolveConflict(task);
             }
-
         }
 
         return task;
+    }
+
+    public List<EmployeeDTO> findEmployeesOnShiftDTO(LocalTime localTime) {
+        return employeeService.getEmployeesOnShift(findShift(localTime));
+
     }
 
     private Task assignToLeastBusy(Task task, List<EmployeeDTO> availableEmployees) {
         EmployeeDTO leastBusy = null;
 
         for (EmployeeDTO employeeDTO : availableEmployees) {
-            for (Task employeeTask : employeeDTO.getTasks()) {
-                employeeDTO.setSumDuration(
-                        addTime(LocalTime.parse(employeeDTO.getSumDuration()),
-                                LocalTime.parse(employeeTask.getDuration())).toString());
-            }
             if (leastBusy == null) {
                 leastBusy = employeeDTO;
-            } else if (!firstDurationLessThanSecond(LocalTime.parse(leastBusy.getSumDuration()), LocalTime.parse(employeeDTO.getSumDuration()))) {
+            } else if (!firstDurationLessThanSecond(parse(leastBusy.getSumDuration()), parse(employeeDTO.getSumDuration()))) {
                 leastBusy = employeeDTO;
             }
         }
-        System.out.println(leastBusy.getWorkingSchedule().getEmployee().getPersonalData().getFullName());
+        if (availableEmployees.size() == ONE_ELEMENT) {
+            leastBusy = availableEmployees.get(FIRST);
+        }
         task.setAssignee(leastBusy.getWorkingSchedule().getEmployee());
         return task;
     }
@@ -132,14 +150,7 @@ public class TaskHandler {
         return description.toString();
     }
 
-    private Employee getLeastDurationEmployee(List<Employee> employees) {
-        //TODO not implemented yet
-        Random randomGenerator = new Random();
-        int index = randomGenerator.nextInt(employees.size());
-        return employees.get(index);
-    }
-
-    private int findShift(LocalTime timeNow) {
+    public int findShift(LocalTime timeNow) {
 
         LocalTime morningShiftStart = LocalTime.parse(START_MORNING_SHIFT);
         LocalTime morningShiftEnd = LocalTime.parse(END_MORNING_SHIFT);
@@ -154,16 +165,14 @@ public class TaskHandler {
             return LUNCH_SHIFT;
         } else if (timeNow.isAfter(nightShiftStart) || timeNow.isBefore(nightShiftEnd)) {
             return NIGHT_SHIFT;
+        } else if (timeNow.equals(morningShiftStart)) {
+            return MORNING_SHIFT;
+        } else if (timeNow.equals(lunchShiftStart)) {
+            return LUNCH_SHIFT;
+        } else if (timeNow.equals(nightShiftStart)) {
+            return NIGHT_SHIFT;
         }
         return 255;
-    }
-
-    private int getHours(String time) {
-        return LocalTime.parse(time).getHourOfDay();
-    }
-
-    private int getMinutes(String time) {
-        return LocalTime.parse(time).getMinuteOfHour();
     }
 
     private LocalTime addTime(LocalTime time1, LocalTime time2) {
@@ -173,18 +182,20 @@ public class TaskHandler {
     }
 
     private boolean completeTaskBeforeShiftEnd(Task task) {
-        LocalTime targetTime = LocalTime.parse(task.getTargetTime());
-        LocalTime endTime = LocalTime.parse(task.getDuration());
+        if (task.getTargetTime() != null) {
+            task.setStartTime(task.getTargetTime());
+        }
+        LocalTime targetTime = parse(task.getStartTime());
+        LocalTime endTime = parse(task.getDuration());
         endTime = addTime(targetTime, endTime);
-        if (endTime.isBefore(LocalTime.parse(shifts.get(findShift(targetTime)).getEndShift()))) {
+        if (endTime.isBefore(parse(shifts.get(findShift(targetTime)).getEndShift()))) {
             return true;
         }
         return false;
     }
 
-    private List<EmployeeDTO> availableForTask(List<EmployeeDTO> employees, Task task) {
+    private List<EmployeeDTO> availableForTaskTargetTime(List<EmployeeDTO> employees, Task task) {
         List<EmployeeDTO> availableEmployees = new ArrayList<>();
-
         for (EmployeeDTO employeeDTO : employees) {
             boolean notLegit = false;
             for (Task employeeTask : employeeDTO.getTasks()) {
@@ -202,12 +213,12 @@ public class TaskHandler {
     }
 
     private boolean notIntersecting(Task task1, Task task2) {
-        LocalTime task1TimeStart = LocalTime.parse(task1.getTargetTime());
-        LocalTime task1TimeEnd = addTime(LocalTime.parse(task1.getTargetTime()),
-                LocalTime.parse(task1.getDuration()));
-        LocalTime task2TimeStart = LocalTime.parse(task2.getTargetTime());
-        LocalTime task2TimeEnd = addTime(LocalTime.parse(task2.getTargetTime()),
-                LocalTime.parse(task2.getDuration()));
+        LocalTime task1TimeStart = parse(task1.getStartTime());
+        LocalTime task1TimeEnd = addTime(parse(task1.getStartTime()),
+                parse(task1.getDuration()));
+        LocalTime task2TimeStart = parse(task2.getStartTime());
+        LocalTime task2TimeEnd = addTime(parse(task2.getStartTime()),
+                parse(task2.getDuration()));
 
         if (task1TimeStart.isAfter(task2TimeEnd) || task1TimeEnd.isBefore(task2TimeStart)) {
             return true;
@@ -215,12 +226,24 @@ public class TaskHandler {
         return false;
     }
 
-    private Task manualHandleTask(Task task) {
-        return task;
+    private Task resolveConflict(Task task) {
+        Task resolveConflict = new Task();
+        taskRepository.save(task);
+        //TODO: tasks should have unique identifier other than the DB ID;
+        resolveConflict.setTitle("Task conflict");
+        resolveConflict.setDuration("00:10");
+        resolveConflict.setDescription("There is conflict involving task with id: " + task.getId());
+        resolveConflict.setPriority(HIGH_PRIORITY);
+        resolveConflict.setAssigner("SYSTEM");
+        resolveConflict.setStartTime(new LocalTime().toString());
+        resolveConflict.setStatus(TASK_STATUS_SCHEDULED);
+
+        //TODO: task should be sent to a MANAGER
+        resolveConflict.setAssignee(employeeRepository.findOne(1L));
+        return resolveConflict;
     }
 
     private boolean firstDurationLessThanSecond(LocalTime lastEmployeeTime, LocalTime currentEmployeeTime) {
-
         if (lastEmployeeTime.isBefore(currentEmployeeTime)) {
             return true;
         }
@@ -230,7 +253,159 @@ public class TaskHandler {
         return false;
     }
 
-    private void organiseTasks(Employee employee) {
+    public List<Task> organiseTasks(EmployeeDTO employeeDTO) {
+        Task lastTask = null;
+        List<Task> targetTimeTasks = targetTimeTasks = employeeDTO.getTargetTimeTasks();
+        List<Task> tasks = employeeDTO.getTasks();
+        Task currentTask = employeeDTO.getCurrentTask();
+        tasks = bubbleSortByPriority(tasks);
+        List<Task> nextShiftTasks = null;
 
+        for (Task task : tasks) {
+            if (task.getStatus() == TASK_STATUS_SCHEDULED) {
+                if (lastTask != null) {
+                    if (task.getTargetTime() == null) {
+                        task.setStartTime(addTime(parse(lastTask.getFinishTime()), parse(FIVE_MINUTES)).toString());
+                        task.setFinishTime(addTime(parse(task.getStartTime()), parse(task.getDuration())).toString());
+
+                        Task intersectingTask = findIntersectingTask(targetTimeTasks, task);
+                        if (intersectingTask != null) {
+                            if (!completeTaskBeforeShiftEnd(task)) {
+                                nextShiftTasks.add(task);
+                            }
+                        } else {
+                            task.setStartTime(addTime(parse(lastTask.getFinishTime()), parse(FIVE_MINUTES)).toString());
+                            task.setFinishTime(addTime(parse(task.getStartTime()), parse(task.getDuration())).toString());
+                            if (!completeTaskBeforeShiftEnd(task)) {
+                                nextShiftTasks.add(task);
+                            }
+                        }
+                    }
+                } else {
+                    if (currentTask == null) {
+                        task.setStartTime(timeFormatter.hoursAndMinutes(new LocalTime()));
+                        task.setFinishTime(addTime(parse(task.getStartTime()), parse(task.getDuration())).toString());
+                        if (!completeTaskBeforeShiftEnd(task)) {
+                            nextShiftTasks.add(task);
+                        }
+                    } else {
+                        task.setStartTime(addTime(parse(currentTask.getFinishTime()), parse(FIVE_MINUTES)).toString());
+                        task.setFinishTime(addTime(parse(task.getStartTime()), parse(task.getDuration())).toString());
+                        if (!completeTaskBeforeShiftEnd(task)) {
+                            nextShiftTasks.add(task);
+                        }
+                    }
+                }
+            }
+            lastTask = task;
+        }
+
+        if (nextShiftTasks != null) {
+            moveRemainingTasks(nextShiftTasks);
+        }
+        return tasks;
+    }
+
+    private void moveRemainingTasks(List<Task> nextShiftTasks) {
+        for (Task task : nextShiftTasks) {
+            assignTask(task, NOT_INITIALIZED);
+        }
+    }
+
+    private Task findIntersectingTask(List<Task> tasks, Task task) {
+        Task intersectingTask = null;
+        if (tasks != null) {
+            for (Task task1 : tasks) {
+                if (!notIntersecting(task1, task)) {
+                    intersectingTask = task1;
+                }
+            }
+        }
+        return intersectingTask;
+    }
+
+    private List<Task> bubbleSortByPriority(List<Task> tasks) {
+        for (int i = 0; i < tasks.size(); i++) {
+            for (int j = i + 1; j < tasks.size(); j++) {
+                Task tempTask = null;
+                if (tasks.get(i).getPriority() > tasks.get(j).getPriority()) {
+                    tempTask = tasks.get(i);
+                    tasks.set(i, tasks.get(j));
+                    tasks.set(j, tempTask);
+                }
+            }
+        }
+        return tasks;
+    }
+
+    public List<Task> equalizeTasks(List<EmployeeDTO> employeesDTO) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String today = sdf.format(new Date());
+        List<Task> mediumTasks = taskRepository.findByPriorityAndTimePlacedStartingWith(MEDIUM_PRIORITY, today);
+        List<Task> lowTasks = taskRepository.findByPriorityAndTimePlacedStartingWith(LOW_PRIORITY, today);
+        List<Task> allTasks = new ArrayList<>();
+
+        mediumTasks = equalize(employeesDTO, mediumTasks);
+        lowTasks = equalize(employeesDTO, lowTasks);
+        allTasks.addAll(mediumTasks);
+        allTasks.addAll(lowTasks);
+        return allTasks;
+    }
+
+    private List<Task> equalize(List<EmployeeDTO> employeesDTO, List<Task> tasks) {
+        LocalTime afterOneHour = new LocalTime();
+        afterOneHour.plusHours(1);
+
+        tasks = bubbleSortByDuration(tasks);
+
+        for (int i = 0; i < tasks.size(); i++) {
+            if (parse(tasks.get(i).getStartTime()).isBefore(afterOneHour)) {
+                tasks.remove(i);
+            }
+        }
+
+        for (Task task : tasks) {
+            assignToLeastBusy(task, employeesDTO);
+        }
+        return tasks;
+    }
+
+    private List<Task> bubbleSortByDuration(List<Task> tasks) {
+        for (int i = 0; i < tasks.size(); i++) {
+            for (int j = i + 1; j < tasks.size(); j++) {
+                Task tempTask = null;
+                if (parse(tasks.get(i).getDuration()).isAfter(parse(tasks.get(j).getDuration()))) {
+                    tempTask = tasks.get(i);
+                    tasks.set(i, tasks.get(j));
+                    tasks.set(j, tempTask);
+                }
+            }
+        }
+        return tasks;
+    }
+
+    private Task assignAccordingToPriority(Task task, List<EmployeeDTO> employees) {
+        EmployeeDTO leastBusy = null;
+        int priorityToFind = task.getPriority();
+
+        for (EmployeeDTO employeeDTO : employees) {
+            if (leastBusy == null) {
+                leastBusy = employeeDTO;
+            } else if (parse(leastBusy.getSumDurationForPriority(priorityToFind)).
+                    isAfter(parse(employeeDTO.getSumDurationForPriority(priorityToFind)))) {
+                leastBusy = employeeDTO;
+            } else if (parse(leastBusy.getSumDurationForPriority(priorityToFind)).
+                    equals(parse(employeeDTO.getSumDurationForPriority(priorityToFind)))) {
+                if (parse(leastBusy.getSumDuration()).isAfter(parse(employeeDTO.getSumDuration()))) {
+                    leastBusy = employeeDTO;
+                }
+            }
+        }
+        task.setAssignee(leastBusy.getWorkingSchedule().getEmployee());
+        return task;
+    }
+
+    private LocalTime parse(String dateToParse) {
+        return LocalTime.parse(dateToParse);
     }
 }
