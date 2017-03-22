@@ -188,7 +188,10 @@ public class TaskHandler {
         LocalTime targetTime = parse(task.getStartTime());
         LocalTime endTime = parse(task.getDuration());
         endTime = addTime(targetTime, endTime);
-        if (endTime.isBefore(parse(shifts.get(findShift(targetTime)).getEndShift()))) {
+        String shiftEndTime = shifts.get(findShift(targetTime)).getEndShift();
+        if (shiftEndTime.equals(END_NIGHT_SHIFT) && endTime.isAfter(parse(shiftEndTime))) {
+            return true;
+        } else if (endTime.isBefore(parse(shiftEndTime))) {
             return true;
         }
         return false;
@@ -254,7 +257,7 @@ public class TaskHandler {
     }
 
     public List<Task> organiseTasks(EmployeeDTO employeeDTO) {
-        Task lastTask = new Task();
+        Task lastTask = null;
         List<Task> targetTimeTasks = targetTimeTasks = employeeDTO.getTargetTimeTasks();
         List<Task> tasks = employeeDTO.getTasks();
         Task currentTask = employeeDTO.getCurrentTask();
