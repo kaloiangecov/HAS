@@ -36,9 +36,10 @@ public class ReservationController {
     @PreAuthorize("hasAuthority('PERM_CREATE_RESERVATION')")
     public Reservation save(@RequestBody Reservation reservation,
                             @AuthenticationPrincipal @Valid User user,
+                            @RequestParam(value = "recepcionistUserId", required = false) Long recepcionistUserId,
                             @RequestParam("group") boolean isGroup,
                             @RequestParam(value = "groupId", required = false) String groupId) throws IOException, TemplateException, URISyntaxException {
-        return reservationService.save(reservation, isGroup, groupId, user);
+        return reservationService.save(reservation, isGroup, groupId, recepcionistUserId, user);
     }
 
     @RequestMapping(value = "/reservations", method = RequestMethod.POST,
