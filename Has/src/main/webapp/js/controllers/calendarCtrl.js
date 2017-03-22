@@ -789,7 +789,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce) {
     };
 
     $scope.addReservation = function () {
-        var room = $filter('filter')($scope.config.resources, {id: $scope.events.new.resource})[0];
+        //var room = $filter('filter')($scope.config.resources, {id: $scope.events.new.resource})[0];
         $scope.reservationGuest.owner = true;
 
         var objReservation = {
@@ -803,8 +803,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce) {
             numberAdults: 1,
             numberChildren: 0,
             status: 0,
-            //group: $scope.reservationGuest.reservation.group,
-            room: room
+            room: {id: $scope.events.new.resource}
         };
 
         var url = "reservation?recepcionistUserId=" + $scope.loginData.id;
