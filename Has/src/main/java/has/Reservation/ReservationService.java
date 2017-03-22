@@ -1,6 +1,8 @@
 package has.Reservation;
 
 import freemarker.template.TemplateException;
+import has.Employee.Employee;
+import has.Employee.EmployeeRepository;
 import has.ReservationGuest.ReservationGuest;
 import has.Room.Room;
 import has.Room.RoomRepository;
@@ -36,12 +38,21 @@ public class ReservationService {
     @Autowired
     private RoomRepository repoRoom;
 
+    @Autowired
+    private EmployeeRepository repoEmployee;
+
     private static final int RESERVATION_STATUS_CREATED = 0;
     private static final int RESERVATION_STATUS_ARRIVED = 1;
     private static final int RESERVATION_STATUS_CLOSED = 2;
 
-    public Reservation save(Reservation reservation, boolean isGroup, String groupId, User user) throws IOException, TemplateException, URISyntaxException {
+    public Reservation save(Reservation reservation, boolean isGroup, String groupId, Long recepcionistUserId, User user) throws IOException, TemplateException, URISyntaxException {
         setLastModified(reservation, user);
+
+        if (recepcionistUserId != null) {
+            Employee recepcionist = repoEmployee.findByUserId(recepcionistUserId);
+            if (recepcionist != null)
+                reservation.setReceptionist(recepcionist);
+        }
 
         if (isGroup) {
             if (groupId != null) {

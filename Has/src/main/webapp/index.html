@@ -68,7 +68,7 @@
                     <h4 class="modal-title">{{page.message.title}}</h4>
                 </div>
                 <div class="modal-body">
-                    <p>{{page.message.text}}</p>
+                    <p ng-bind-html="page.message.text"></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button close" class="btn btn-{{page.message.type}}" data-dismiss="modal">OK</button>
