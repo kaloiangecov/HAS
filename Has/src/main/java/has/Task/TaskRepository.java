@@ -18,4 +18,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findByAssigneeIdAndStatusNotOrderByTimePlaced(Long id, Integer status);
 
     List<Task> findByPriorityAndTimePlacedStartingWith(int priority, String date);
+
+    List<Task> findByTargetTimeGreaterThan(String targetTime);
 }

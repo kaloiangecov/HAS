@@ -29,6 +29,23 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http) {
     $scope.task = {};
     $scope.taskInfo = {};
 
+    $scope.getEmployeeByUserId = function (userID, updateCallback) {
+        $http({
+            method: "GET",
+            url: ("employee/by-user/" + userID),
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
+        }).then(
+            function (response) { //success
+                return response.data;
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+            }).then(updateCallback);
+    };
+
     $scope.config = {
         scale: "Hour",
         startDate: moment().format('YYYY-MM-DD HH:mm:ss'),
@@ -142,10 +159,10 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http) {
                     break;
             }
 
-            //args.data.text = args.data.objTask.assigner;
+            args.data.text = args.data.objTask.assignee.personalData.fullName;
 
             // customize the TASK HTML: text, start and end dates
-            args.data.html = args.data.text + "<br /><span style='color:gray'>" + status + "</span>";
+            args.data.html = args.data.text + "<br /><span style='color:gray'>" + args.data.objTask.title + "</span>";
 
             // reservation tooltip that appears on hover - displays the status text
             args.e.toolTip = status;
@@ -158,7 +175,7 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http) {
 
         if (nowHour >= $scope.shiftHours.lunch.start && nowHour < $scope.shiftHours.lunch.end)
             shift = SHIFT_LUNCH;
-        else if (nowHour < $scope.shiftHours.night.end)
+        else if (nowHour >= $scope.shiftHours.night.start || nowHour < $scope.shiftHours.night.end)
             shift = SHIFT_NIGHT;
 
         return shift;
@@ -189,7 +206,7 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http) {
     $scope.loadEvents = function () {
         $http({
             method: "GET",
-            url: "tasks",
+            url: ("tasks/current/" + moment().format('YYYY-MM-DDTHH:mm:ss')),
             responseType: "json",
             headers: {
                 "Authorization": $scope.authentication
@@ -205,12 +222,12 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http) {
                 $scope.events.list = [];
                 angular.forEach(data, function (task, key) {
 
-                    var estimatedTime = moment(task.timePlaced);
+                    var estimatedTime = moment(task.targetTime);
                     estimatedTime.add({hours: task.duration.substr(0, 2), minutes: task.duration.substr(3, 2)});
 
                     var tmpEvent = {
-                        start: task.timePlaced,
-                        end: estimatedTime.format('YYYY-MM-DD HH:mm:ss'),
+                        start: task.targetTime,
+                        end: estimatedTime.format('YYYY-MM-DDTHH:mm:ss'),
                         id: task.id,
                         text: task.title,
                         resource: task.assignee.id,
@@ -232,19 +249,29 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http) {
     };
 
     $scope.submitTask = function () {
-        var assignee = $filter('filter')($scope.config.resources, {id: $scope.events.new.resource})[0];
+        $scope.getEmployeeByUserId($scope.loginData.id, function (employee) {
+            var assignee = $filter('filter')($scope.config.resources, {id: $scope.events.new.resource})[0];
 
-        var startTimeTicks = new Date($scope.events.new.start.value).getTime();
-        var endTimeTicks = new Date($scope.events.new.end.value).getTime();
+            var duration = moment($scope.events.new.end.ticks - $scope.events.new.start.ticks)
+                .format('HH:mm');
 
-        var diffMinutes = (endTimeTicks - startTimeTicks) / 60000;
+            $scope.task.status = 0;
+            $scope.task.timePlaced = moment().format('YYYY-MM-DDTHH:mm:ss');
+            $scope.task.targetTime = $scope.events.new.start.value;
+            $scope.task.duration = duration;
+            $scope.task.assignee = assignee;
+            $scope.task.assigner = employee.personalData.fullName;
 
-        $scope.task.timePlaced = $scope.events.new.start.value;
-        $scope.task.assignee = assignee;
+            $scope.saveData("tasks", $scope.task, function (task) {
+                console.log(task);
+                $scope.resetTask();
+                $('#taskModal').modal('hide');
+            }, $scope.resetTask);
+        });
     };
 
     angular.element(document).ready(function () {
         $scope.loadEmployees();
-        //$scope.loadEvents();
+        $scope.loadEvents();
     });
 });

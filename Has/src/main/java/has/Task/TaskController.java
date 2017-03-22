@@ -99,6 +99,12 @@ public class TaskController {
         return service.getEmployeesUnresolvedTasks(employee);
     }
 
+    @RequestMapping(value = "/tasks/current/{time}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Task> getCurreentTasks(@PathVariable String time, @AuthenticationPrincipal User user) throws Exception {
+        return service.getCurrentTasks(time);
+    }
+
 
     //TODO: from here on is tests
 

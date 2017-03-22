@@ -32,4 +32,10 @@ public class TimeFormatter {
         return date;
     }
 
+    public static String getNewDateAsFullString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+        String date = sdf.format(new Date());
+        return date;
+    }
+
 }

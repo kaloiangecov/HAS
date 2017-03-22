@@ -283,12 +283,12 @@ INSERT INTO PERSONAL_DATA (PERSONAL_DATA_ID, address, egn, FULL_NAME, IDENTITY_E
 INSERT INTO EMPLOYEE (EMPLOYEE_ID, DATE_HIRED, PERSONAL_DATA_ID, USER_ID, EMPLOYED, SALARY, BUSY) VALUES
   ('1', '2016-11-12', '1', '1', 'true', 750.50, FALSE),
   ('2', '2016-12-29', '2', '2', 'true', 750.50, FALSE),
-  ('3', '2014-01-27', '3', '3', 'false', 649.99, FALSE),
+  ('3', '2014-01-27', '3', '3', 'true', 649.99, FALSE),
   ('4', '2017-01-27', '4', '4', 'true', 649.50, TRUE),
   ('5', '2017-01-27', '5', '5', 'false', 649.50, FALSE),
   ('6', '2017-01-27', '6', '6', 'false', 590.9, TRUE),
   ('7', '2017-01-17', '7', '7', 'true', 590.9, FALSE),
-  ('8', '2017-01-04', '8', '8', 'false', 650.50, TRUE),
+  ('8', '2017-01-04', '8', '8', 'true', 650.50, TRUE),
   ('9', '2017-02-01', '9', '9', 'true', 650.50, TRUE),
   ('10', '2017-02-03', '10', '10', 'true', 650.50, FALSE),
   ('11', '2017-02-03', '14', '12', 'true', 800.00, FALSE);
