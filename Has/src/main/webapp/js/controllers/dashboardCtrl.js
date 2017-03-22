@@ -7,20 +7,20 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http) {
         resources: []
     };
 
-    $scope.shiftHours = {
-        morning: {
+    $scope.shiftHours = [
+        {
             start: '06:00',
             end: '14:00'
         },
-        lunch: {
+        {
             start: '14:00',
             end: '22:00'
         },
-        night: {
+        {
             start: '22:00',
             end: '06:00'
         }
-    };
+    ];
 
     var SHIFT_MORNING = 0;
     var SHIFT_LUNCH = 1;
@@ -83,21 +83,29 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http) {
             }
 
             var nowHour = moment().format('HH:mm');
+
+            var cellStartTime = moment(args.cell.start.value).format('YYYY-MM-DDTHH:mm:ss');
             var cellStartHour = moment(args.cell.start.value).format('HH:mm');
+
+            var cellEndTime = moment(args.cell.end.value).format('YYYY-MM-DDTHH:mm:ss');
             var cellEndHour = moment(args.cell.end.value).format('HH:mm');
 
+            var currentShift = getCurrentShift();
 
-            if (nowHour >= '06:00' && nowHour < '14:00') { //morning
-                if (cellEndHour < '06:00' || cellStartHour >= '14:00')
-                    args.cell.backColor = "#cc6655";
-            } else if (nowHour >= '14:00' && nowHour < '22:00') { //lunch
-                if (cellEndHour < '14:00' || cellStartHour >= '22:00')
-                    args.cell.backColor = "#cc6655";
-            } else if (nowHour < '06:00') { //night
-                if ((cellEndHour < '22:00' && cellEndHour >= '14') || (cellStartHour >= '06:00' && cellStartHour < '22:00'))
-                    args.cell.backColor = "#cc6655";
+            switch (currentShift) {
+                case SHIFT_MORNING:
+                    if (cellStartHour < $scope.shiftHours[SHIFT_MORNING].start || cellStartHour >= $scope.shiftHours[SHIFT_MORNING].end)
+                        args.cell.backColor = "#cc6655";
+                    break;
+                case SHIFT_LUNCH:
+                    if (cellStartHour < $scope.shiftHours[SHIFT_LUNCH].start || cellStartHour >= $scope.shiftHours[SHIFT_LUNCH].end)
+                        args.cell.backColor = "#cc6655";
+                    break;
+                case SHIFT_NIGHT:
+                    if (cellStartTime < $scope.shiftHours[SHIFT_LUNCH].start || cellStartHour >= $scope.shiftHours[SHIFT_LUNCH].end)
+                        args.cell.backColor = "#cc6655";
+                    break;
             }
-
         },
         onBeforeResHeaderRender: function (args) {
             args.resource.name = args.resource.personalData.fullName;
@@ -171,12 +179,12 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http) {
 
     function getCurrentShift() {
         var nowHour = moment().format('HH:mm');
-        var shift = SHIFT_MORNING;
+        var shift = SHIFT_NIGHT;
 
-        if (nowHour >= $scope.shiftHours.lunch.start && nowHour < $scope.shiftHours.lunch.end)
+        if (nowHour >= $scope.shiftHours[SHIFT_MORNING].start && nowHour < $scope.shiftHours[SHIFT_MORNING].end)
+            shift = SHIFT_MORNING;
+        else if (nowHour >= $scope.shiftHours[SHIFT_LUNCH].start && nowHour < $scope.shiftHours[SHIFT_LUNCH].end)
             shift = SHIFT_LUNCH;
-        else if (nowHour >= $scope.shiftHours.night.start || nowHour < $scope.shiftHours.night.end)
-            shift = SHIFT_NIGHT;
 
         return shift;
     }
