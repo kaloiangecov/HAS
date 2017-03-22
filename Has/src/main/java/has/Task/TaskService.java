@@ -84,6 +84,10 @@ public class TaskService {
         return repo.findByAssigneeIdAndStatusNotOrderByTimePlaced(employee.getId(), UNRESOLVED);
     }
 
+    public List<Task> getCurrentTasks(String time) {
+        return repo.findByTargetTimeGreaterThan(time);
+    }
+
     public Task changeStatus(Long id, Integer status) {
         Task task = repo.findOne(id);
         task.setStatus(status);

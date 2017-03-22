@@ -83,6 +83,10 @@ public class EmployeeService {
         return repo.findAllEmployeesForShift(date, shift);
     }
 
+    public List<Employee> findServiceEmployeesForShift(String date, int shift) {
+        return repo.findServiceEmployeesForShift(date, shift);
+    }
+
     public Employee findByUserId(Long userId) throws Exception {
         Employee employee = repo.findByUserId(userId);
         return employee;

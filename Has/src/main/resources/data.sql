@@ -283,12 +283,12 @@ INSERT INTO PERSONAL_DATA (PERSONAL_DATA_ID, address, egn, FULL_NAME, IDENTITY_E
 INSERT INTO EMPLOYEE (EMPLOYEE_ID, DATE_HIRED, PERSONAL_DATA_ID, USER_ID, EMPLOYED, SALARY, BUSY) VALUES
   ('1', '2016-11-12', '1', '1', 'true', 750.50, FALSE),
   ('2', '2016-12-29', '2', '2', 'true', 750.50, FALSE),
-  ('3', '2014-01-27', '3', '3', 'false', 649.99, FALSE),
+  ('3', '2014-01-27', '3', '3', 'true', 649.99, FALSE),
   ('4', '2017-01-27', '4', '4', 'true', 649.50, TRUE),
   ('5', '2017-01-27', '5', '5', 'false', 649.50, FALSE),
   ('6', '2017-01-27', '6', '6', 'false', 590.9, TRUE),
   ('7', '2017-01-17', '7', '7', 'true', 590.9, FALSE),
-  ('8', '2017-01-04', '8', '8', 'false', 650.50, TRUE),
+  ('8', '2017-01-04', '8', '8', 'true', 650.50, TRUE),
   ('9', '2017-02-01', '9', '9', 'true', 650.50, TRUE),
   ('10', '2017-02-03', '10', '10', 'true', 650.50, FALSE),
   ('11', '2017-02-03', '14', '12', 'true', 800.00, FALSE);
@@ -326,13 +326,13 @@ INSERT INTO ROOM (NUMBER, BEDS_DOUBLE, BEDS_SINGLE, ROOM_CLASS, STATUS, CHILDREN
   (402, 1, 2, 0, 0, TRUE, TRUE, TRUE);
 
 INSERT INTO RESERVATION
-(reservation_id, all_inclusive, breakfast, dinner, discount, end_date, group_id, last_modified_by_user_id, last_modified_time, number_adults, number_children, price, room_id, employee_id, start_date, status)
-VALUES('1', false, true, false, 0, '2017-03-20', null, null, null, 2, 1, 40.0, 5, '5', '2017-03-16', 0),
-  ('2', true, true, true, 10, '2017-03-22', 'asdasdmadafaka', null, null, 2, 1, 50.0, 8, '4', '2017-03-18', 1),
-  ('3', true, true, true, 10, '2017-03-22', 'asdasdmadafaka', null, null, 1, 1, 50.0, 10, '4', '2017-03-18', 1),
-  ('4', false, false, true, 10, '2017-03-24', null, null, null, 2, 0, 45.0, 2, '4', '2017-03-21', 1),
-  ('5', true, false, true, 0, '2017-04-01', 'asdasdmadafaka2', null, null, 4, 0, 45.0, 7, '4', '2017-03-29', 0),
-  ('6', true, false, true, 0, '2017-04-01', 'asdasdmadafaka2', null, null, 4, 0, 45.0, 11, '4', '2017-03-29', 0);
+(reservation_id, reservation_code, all_inclusive, breakfast, dinner, discount, end_date, group_id, last_modified_by_user_id, last_modified_time, number_adults, number_children, price, room_id, employee_id, start_date, status)
+VALUES('1', 'ksjdfh-alskdj-weiruowi-123213as', false, true, false, 0, '2017-03-20', null, null, null, 2, 1, 40.0, 5, '5', '2017-03-16', 0),
+  ('2', '123dfh-eeekdj-weasuowi-123213as', true, true, true, 10, '2017-03-22', 'asdasdmadafaka', null, null, 2, 1, 50.0, 8, '4', '2017-03-18', 1),
+  ('3', 'asddfh-alskdj-weirasda-123213as', true, true, true, 10, '2017-03-22', 'asdasdmadafaka', null, null, 1, 1, 50.0, 10, '4', '2017-03-18', 1),
+  ('4', 'kswer4-alskdj-weiruowi-eee213as', false, false, true, 10, '2017-03-24', null, null, null, 2, 0, 45.0, 2, '4', '2017-03-21', 1),
+  ('5', 'keeefh-alskdj-weiruowi-000013as', true, false, true, 0, '2017-04-01', 'asdasdmadafaka2', null, null, 4, 0, 45.0, 7, '4', '2017-03-29', 0),
+  ('6', 'mmjdfh-mmmmmm-weiruowi-00213as', true, false, true, 0, '2017-04-01', 'asdasdmadafaka2', null, null, 4, 0, 45.0, 11, '4', '2017-03-29', 0);
 
 INSERT INTO RESERVATION_GUEST (RESERVATION_GUEST_ID, reservation_id, guest_id, owner) VALUES
   (1, 1, 1, true),

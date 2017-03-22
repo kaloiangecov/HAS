@@ -15,8 +15,11 @@ import java.util.List;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
-    @Query("SELECT e FROM has.Employee.Employee e, has.WorkingSchedule.WorkingSchedule ws WHERE ws.date = :date AND ws.shift = :shift AND e = ws.employee AND e.employed is true")
+    @Query("SELECT e FROM has.Employee.Employee e, has.WorkingSchedule.WorkingSchedule ws WHERE ws.date = :date AND ws.shift = :shift AND e = ws.employee")
     List<Employee> findAllEmployeesForShift(@Param(value = "date") String date, @Param(value = "shift") int shift);
+
+    @Query("SELECT e FROM has.Employee.Employee e, has.WorkingSchedule.WorkingSchedule ws WHERE e.user.userRole.id = 4 AND e.employed = true AND ws.date = :date AND ws.shift = :shift AND e = ws.employee")
+    List<Employee> findServiceEmployeesForShift(@Param(value = "date") String date, @Param(value = "shift") int shift);
 
     @Query("SELECT e FROM has.Employee.Employee e, has.WorkingSchedule.WorkingSchedule ws WHERE ws.date = :date AND ws.shift = :shift AND e = ws.employee AND e.busy is false AND e.employed is true")
     List<Employee> findAllAvailableEmployeesForShift(@Param("date") String date, @Param("shift") int shift);
