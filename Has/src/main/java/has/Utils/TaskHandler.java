@@ -135,6 +135,7 @@ public class TaskHandler {
             leastBusy = availableEmployees.get(FIRST);
         }
         task.setAssignee(leastBusy.getWorkingSchedule().getEmployee());
+        leastBusy.updateTask(task);
         return task;
     }
 
@@ -251,7 +252,7 @@ public class TaskHandler {
             return true;
         }
         if (lastEmployeeTime.equals(currentEmployeeTime)) {
-            return false;
+            return true;
         }
         return false;
     }
@@ -357,19 +358,26 @@ public class TaskHandler {
 
     private List<Task> equalize(List<EmployeeDTO> employeesDTO, List<Task> tasks) {
         LocalTime afterOneHour = new LocalTime();
-        afterOneHour.plusHours(1);
+        afterOneHour = afterOneHour.plusHours(1);
 
         tasks = bubbleSortByDuration(tasks);
 
         for (int i = 0; i < tasks.size(); i++) {
+            if (tasks.get(i).getStartTime() == null) {
+                tasks.remove(i);
+            }
             if (parse(tasks.get(i).getStartTime()).isBefore(afterOneHour)) {
                 tasks.remove(i);
             }
         }
 
-        for (Task task : tasks) {
-            assignToLeastBusy(task, employeesDTO);
+        for (int i = 0; i < tasks.size(); i++) {
+            taskRepository.save(assignToLeastBusy(tasks.get(i), employeesDTO));
+
         }
+//        for (Task task : tasks) {
+//            employeesDTO taskRepository.save(assignToLeastBusy(task, employeesDTO));
+//        }
         return tasks;
     }
 

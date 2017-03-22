@@ -85,4 +85,17 @@ public class EmployeeDTO {
         }
         return null;
     }
+
+    public void updateTask(Task task) {
+        boolean taskUpdated = false;
+        for (int i = 0; i < tasks.size(); i++) {
+            if (tasks.get(i).getId() == task.getId()) {
+                tasks.set(i, task);
+                taskUpdated = true;
+            }
+        }
+        if (taskUpdated == false) {
+            tasks.add(task);
+        }
+    }
 }
