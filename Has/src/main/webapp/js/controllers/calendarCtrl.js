@@ -1,4 +1,4 @@
-app.controller("calendarCtrl", function ($scope, $filter, $http, $sce) {
+app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval) {
     var ctrl = this;
     $scope.page.title = "Reception";
 
@@ -935,5 +935,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce) {
         $('.calendar').css({float: 'left'});
 
         loadEvents();
+
+        $interval(loadEvents, 5000);
     });
 });
