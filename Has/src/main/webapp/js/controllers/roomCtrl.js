@@ -60,14 +60,10 @@ app.controller("roomCtrl", function ($scope, $http, $location, $state, $statePar
                 var btns = $('table').find('td').find('button');
                 $(btns).off('click');
                 $(btns).on('click', function () {
-                    var id = this.id.split('_')[1];
-                    $scope.deleteData('room', id, function () {
-                        $scope.page.message = {
-                            type: 'success',
-                            title: 'Deleted!',
-                            text: ('Room with id ' + id + ' was successfully deleted!')
-                        };
-                        $('#messageModal').modal('show');
+                    var roomId = this.id.split('_')[1];
+                    $scope.deleteData('room', roomId, function () {
+                        $scope.reloadTableData(false);
+                        $scope.addDeleteFunctions();
                     });
                 });
             }, 300);
@@ -76,13 +72,12 @@ app.controller("roomCtrl", function ($scope, $http, $location, $state, $statePar
         $scope.$watch("searchFilters.rooms.number", $scope.addDeleteFunctions);
         $scope.$watch("searchFilters.rooms.roomClass", $scope.addDeleteFunctions);
 
-        $scope.reloadTableData = function () {
-            var resetPaging = false;
+        $scope.reloadTableData = function (resetPaging) {
             $scope.dtInstance.reloadData(function (list) {
                 //console.log(list);
-                $scope.addDeleteFunctions();
             }, resetPaging);
         };
+
     }
     else {
         if ($stateParams && $stateParams.id) {

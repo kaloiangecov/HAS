@@ -54,6 +54,9 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
             roleID: 1,
             startDate: moment().format('YYYY-MM-DD'),
             endDate: moment().format('YYYY-MM-DD')
+        },
+        tasks: {
+            assignee: ''
         }
     };
 

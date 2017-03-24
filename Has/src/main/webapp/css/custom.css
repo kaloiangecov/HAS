@@ -22,7 +22,8 @@ button > i.fa-refresh:hover {
 
 a > i.fa-trash-o,
 button > i.fa-trash-o,
-button > i.fa-ban {
+button > i.fa-ban,
+button > i.fa-calendar-times-o {
     color: #e55;
 }
 

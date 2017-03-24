@@ -1,181 +1,37 @@
-app.controller("dashboardCtrl", function ($scope, $filter, $http) {
-    $scope.page.title = "Manager Dashboard";
-
-    $scope.events = {
-        list: [],
-        new: {},
-        resources: []
-    };
-
-    $scope.shiftHours = [
-        {
-            start: '06:00',
-            end: '14:00'
-        },
-        {
-            start: '14:00',
-            end: '22:00'
-        },
-        {
-            start: '22:00',
-            end: '06:00'
-        }
-    ];
+app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $state, $stateParams, $interval, DTOptionsBuilder, DTColumnBuilder) {
+    $scope.page.title = "Tasks";
+    $scope.assigner = {};
 
     var SHIFT_MORNING = 0;
     var SHIFT_LUNCH = 1;
     var SHIFT_NIGHT = 2;
 
-    $scope.task = {};
-    $scope.taskInfo = {};
+    $scope.taskStatuses = [
+        "New",
+        "In Progress",
+        "Finished"
+    ];
+    $scope.taskStatusLabels = [
+        "danger",
+        "warning",
+        "success"
+    ];
 
-    $scope.getEmployeeByUserId = function (userID, updateCallback) {
-        $http({
-            method: "GET",
-            url: ("employee/by-user/" + userID),
-            responseType: "json",
-            headers: {
-                "Authorization": $scope.authentication
-            }
-        }).then(
-            function (response) { //success
-                return response.data;
-            },
-            function (response) { //error
-                $scope.displayMessage(response.data);
-            }).then(updateCallback);
-    };
 
-    $scope.config = {
-        scale: "Hour",
-        startDate: moment().format('YYYY-MM-DD HH:mm:ss'),
-        days: 1,
-        resources: $scope.events.resources,
-        timeHeaders: [{groupBy: "Day", format: "dd MMM yyyy"}, {groupBy: "Hour", format: 'HH'}],
-        eventDeleteHandling: "Update",
-        eventClickHandling: "Select",
-        eventResizeHandling: "Disabled",
-        allowEventOverlap: false,
-        cellWidthSpec: "Auto",
-        eventHeight: 50,
-        rowHeaderColumns: [
-            {title: "Employee", width: 100}
-        ],
-        contextMenu: new DayPilot.Menu({
-            items: [
-                {
-                    text: '<i class="fa fa-info"></i> Show info',
-                    onclick: function () {
-                        var task = this.source.data.objTask;
-                        $scope.$apply(function () {
-                            $scope.taskInfo = task;
-
-                            $('#infoModal').modal('show');
-                        });
-                    }
-                }
-            ]
-        }),
-        onBeforeCellRender: function (args) {
-            var today = new Date().toISOString();
-            if (args.cell.start.value <= today && today < args.cell.end.value) {
-                args.cell.backColor = "#fff0b3";
-            }
-
-            var nowHour = moment().format('HH:mm');
-
-            var cellStartTime = moment(args.cell.start.value).format('YYYY-MM-DDTHH:mm:ss');
-            var cellStartHour = moment(args.cell.start.value).format('HH:mm');
-
-            var cellEndTime = moment(args.cell.end.value).format('YYYY-MM-DDTHH:mm:ss');
-            var cellEndHour = moment(args.cell.end.value).format('HH:mm');
-
-            var currentShift = getCurrentShift();
-
-            switch (currentShift) {
-                case SHIFT_MORNING:
-                    if (cellStartHour < $scope.shiftHours[SHIFT_MORNING].start || cellStartHour >= $scope.shiftHours[SHIFT_MORNING].end)
-                        args.cell.backColor = "#cc6655";
-                    break;
-                case SHIFT_LUNCH:
-                    if (cellStartHour < $scope.shiftHours[SHIFT_LUNCH].start || cellStartHour >= $scope.shiftHours[SHIFT_LUNCH].end)
-                        args.cell.backColor = "#cc6655";
-                    break;
-                case SHIFT_NIGHT:
-                    if (cellStartTime < $scope.shiftHours[SHIFT_LUNCH].start || cellStartHour >= $scope.shiftHours[SHIFT_LUNCH].end)
-                        args.cell.backColor = "#cc6655";
-                    break;
-            }
+    $scope.shiftHours = [
+        { // SHIFT_MORNING
+            start: '06:00',
+            end: '14:00'
         },
-        onBeforeResHeaderRender: function (args) {
-            args.resource.name = args.resource.personalData.fullName;
+        { // SHIFT_LUNCH
+            start: '14:00',
+            end: '22:00'
         },
-        onEventSelected: function (args) {
-            $scope.$apply(function () {
-                $scope.events.selected = $scope.dashboard.multiselect.events();
-            });
-        },
-        onEventDeleted: function (args) {
-            $scope.dashboard.clearSelection();
-
-            if (confirm("Delete task " + args.e.text() + " ?")) {
-                $scope.dashboard.events.remove(args.e);
-
-            } else {
-                loadEvents();
-            }
-
-        },
-        onTimeRangeSelected: function (args) {
-            $scope.dashboard.clearSelection();
-
-            if (!$scope.events.new.start && (args.start.value.substr(0, 10) >= moment().format('YYYY-MM-DD'))) {
-                $scope.$apply(function () {
-                    $scope.events.new = {
-                        start: args.start,
-                        end: args.end,
-                        id: new Date().getTime(),
-                        text: "New Task",
-                        resource: args.resource,
-                        status: 0
-                    };
-
-                    $('#taskModal').modal('show');
-
-                    //$scope.events.list.push(tmpEvent);
-                });
-            }
-        },
-        onBeforeEventRender: function (args) {
-            var status = "Placed";
-
-            switch (args.e.status) {
-                case 0:
-                    args.data.barColor = "#60f";
-                    status = "Placed";
-                    break;
-                case 1:
-                    args.data.barColor = "#a6f";
-                    status = "In Progress";
-                    break;
-                case 2:
-                    args.data.barColor = "#caf";
-                    status = "Finished";
-                    break;
-                default:
-                    status = "Unexpected state";
-                    break;
-            }
-
-            args.data.text = args.data.objTask.assignee.personalData.fullName;
-
-            // customize the TASK HTML: text, start and end dates
-            args.data.html = args.data.text + "<br /><span style='color:gray'>" + args.data.objTask.title + "</span>";
-
-            // reservation tooltip that appears on hover - displays the status text
-            args.e.toolTip = status;
+        { // SHIFT_NIGHT
+            start: '22:00',
+            end: '06:00'
         }
-    };
+    ];
 
     function getCurrentShift() {
         var nowHour = moment().format('HH:mm');
@@ -189,12 +45,10 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http) {
         return shift;
     }
 
-    $scope.loadEmployees = function () {
-        var today = moment().format('YYYY-MM-DD');
-
+    $scope.getEmployeeByUserId = function (userID, callback) {
         $http({
             method: "GET",
-            url: ("employees/service/shift?date=" + today + "&shift=" + getCurrentShift()),
+            url: ("employee/by-user/" + userID),
             responseType: "json",
             headers: {
                 "Authorization": $scope.authentication
@@ -205,81 +59,197 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http) {
             },
             function (response) { //error
                 $scope.displayMessage(response.data);
-            })
-            .then(function (data) {
-                $scope.config.resources = data;
-            });
+            }).then(callback);
     };
 
-    $scope.loadEvents = function () {
-        $http({
-            method: "GET",
-            url: ("tasks/current/" + moment().format('YYYY-MM-DDTHH:mm:ss')),
-            responseType: "json",
-            headers: {
-                "Authorization": $scope.authentication
-            }
-        }).then(
-            function (response) { //success
-                return response.data;
-            },
-            function (response) { //error
-                $scope.displayMessage(response.data);
+    if ($location.path().includes("dashboard")) {
+        $scope.loadTasks = function (callback) {
+            $http({
+                method: "GET",
+                url: ("tasks/current/" + moment().format('YYYY-MM-DDTHH:mm:ss')),
+                responseType: "json",
+                headers: {
+                    "Authorization": $scope.authentication
+                }
+            }).then(
+                function (response) { //success
+                    return response.data;
+                },
+                function (response) { //error
+                    $scope.displayMessage(response.data);
+                })
+                .then(callback);
+        };
+
+        var shiftHour = moment().format('YYYY-MM-DD');
+        shiftHour += ('T' + $scope.shiftHours[getCurrentShift()].start + ':00');
+
+        $scope.dtInstance = {};
+
+        $scope.dtOptions = DTOptionsBuilder.newOptions()
+            .withOption('ajax', {
+                url: ('tasks/current/' + shiftHour),
+                type: 'GET',
+                dataType: "json",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': $scope.authentication
+                },
+                data: $scope.searchFilters.tasks,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $scope.displayMessage({
+                        status: jqXHR.status,
+                        error: jqXHR.statusText,
+                        message: jqXHR.responseText
+                    });
+                }
             })
-            .then(function (data) {
-                $scope.events.list = [];
-                angular.forEach(data, function (task, key) {
+            .withDataProp('data')
+            .withOption('processing', true)
+            .withOption('serverSide', true)
+            .withOption('pagingType', 'full_numbers')
+            .withOption('dom', 'lrtip');
 
-                    var estimatedTime = moment(task.targetTime);
-                    estimatedTime.add({hours: task.duration.substr(0, 2), minutes: task.duration.substr(3, 2)});
+        $scope.dtColumns = [
+            DTColumnBuilder.newColumn('id', 'ID').notVisible(),
+            DTColumnBuilder.newColumn('targetTime', 'Target Time')
+                .renderWith(function (date) {
+                    return new Date(date).toLocaleString();
+                }),
+            DTColumnBuilder.newColumn('dueTime', 'Due TIme')
+                .renderWith(function (date) {
+                    return new Date(date).toLocaleString();
+                }),
+            DTColumnBuilder.newColumn('title', 'Title'),
+            DTColumnBuilder.newColumn('assignee.personalData.fullName', 'Assignee'),
+            DTColumnBuilder.newColumn('status', 'Status')
+                .renderWith(function (status) {
+                    var html = '<span class="label label-' + $scope.taskStatusLabels[status] +
+                        '">' + $scope.taskStatuses[status] + '</span>';
+                    return html;
+                }),
+            DTColumnBuilder.newColumn('id').notSortable().withClass('actions-column')
+                .renderWith(function (id) {
+                    var html =
+                        '<div class="btn-group btn-group-sm">' +
+                        '<a class="btn btn-default action-btn" href="#!/tasks/edit/' +
+                        id + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
+                        '<button class="btn btn-default action-btn delete-btn" id="del_' +
+                        id + '"><i class="fa fa-calendar-times-o" aria-hidden="true"></i></button>' +
+                        '</div>';
+                    return html;
+                })
+        ];
 
-                    var tmpEvent = {
-                        start: task.targetTime,
-                        end: estimatedTime.format('YYYY-MM-DDTHH:mm:ss'),
-                        id: task.id,
-                        text: task.title,
-                        resource: task.assignee.id,
-                        status: task.status,
-                        objTask: task
-                    };
-
-                    $scope.events.list.push(tmpEvent)
-                });
-
-            });
-    };
-
-    $scope.resetTask = function () {
-        $scope.events.new = {};
+        $scope.reloadTableData = function (resetPaging) {
+            $scope.dtInstance.reloadData(function (list) {
+                //console.log(list);
+            }, resetPaging);
+        };
+    }
+    else {
         $scope.task = {};
+        $scope.master = {};
+        $scope.loadEmployees = function () {
+            var today = moment().format('YYYY-MM-DD');
 
-        $scope.loadEvents();
-    };
+            $http({
+                method: "GET",
+                url: ("employees/service/shift?date=" + today + "&shift=" + getCurrentShift()),
+                responseType: "json",
+                headers: {
+                    "Authorization": $scope.authentication
+                }
+            }).then(
+                function (response) { //success
+                    return response.data;
+                },
+                function (response) { //error
+                    $scope.displayMessage(response.data);
+                })
+                .then(function (data) {
+                    $scope.employees = data;
+                });
+        };
 
-    $scope.submitTask = function () {
-        $scope.getEmployeeByUserId($scope.loginData.id, function (employee) {
-            var assignee = $filter('filter')($scope.config.resources, {id: $scope.events.new.resource})[0];
+        if ($stateParams && $stateParams.id) {
+            $scope.getSingleData("tasks", $stateParams.id, function (data) {
+                $scope.task = data;
 
-            var duration = moment($scope.events.new.end.ticks - $scope.events.new.start.ticks)
-                .format('HH:mm');
+                $scope.loadEmployees();
+            });
+        }
 
-            $scope.task.status = 0;
-            $scope.task.timePlaced = moment().format('YYYY-MM-DDTHH:mm:ss');
-            $scope.task.targetTime = $scope.events.new.start.value;
-            $scope.task.duration = duration;
-            $scope.task.assignee = assignee;
-            $scope.task.assigner = employee.personalData.fullName;
+        $scope.resetTask = function (task) {
+            task = angular.copy($scope.master);
+        };
+
+        $scope.submitTask = function (task) {
+            $scope.master = angular.copy(task);
 
             $scope.saveData("tasks", $scope.task, function (task) {
                 console.log(task);
-                $scope.resetTask();
-                $('#taskModal').modal('hide');
-            }, $scope.resetTask);
-        });
-    };
+
+                $scope.page.message = {
+                    type: 'success',
+                    title: 'Success!',
+                    text: 'Task editted'
+                };
+                $('#messageModal').modal('show');
+
+                $location.path('/tasks/dashboard');
+            }, $scope.resetTask, true);
+        };
+    }
+
 
     angular.element(document).ready(function () {
-        $scope.loadEmployees();
-        $scope.loadEvents();
+        $scope.getEmployeeByUserId($scope.loginData.id, function (employee) {
+            $scope.assigner = employee;
+        });
+
+        if ($location.path().includes("dashboard")) {
+            $interval(function () {
+                $scope.reloadTableData(false);
+            }, 5000);
+        } else {
+            $('#targetTime').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                timePicker: true,
+                startDate: $scope.task.targetTime,
+                minDate: $scope.task.targetTime,
+                timePicker24Hour: true,
+                locale: {
+                    format: 'DD/MM/YYYY HH:mm',
+                    firstDay: 1
+                }
+            }, function (start) {
+                $scope.$apply(function () {
+                    $scope.task.targetTime = start.format("YYYY-MM-DDTHH:mm:ss");
+                    $('#targetTime').val($scope.task.targetTime);
+                });
+            });
+
+            $('#dueTime').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                timePicker: true,
+                startDate: $scope.task.dueTime,
+                minDate: $scope.task.dueTime,
+                timePicker24Hour: true,
+                locale: {
+                    format: 'DD/MM/YYYY HH:mm',
+                    firstDay: 1
+                }
+            }, function (start) {
+                $scope.$apply(function () {
+                    $scope.task.dueTime = start.format("YYYY-MM-DDTHH:mm:ss");
+                    $('#targetTime').val($scope.task.dueTime);
+                });
+            });
+        }
+
     });
 });

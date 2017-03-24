@@ -20,7 +20,9 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         .state('loggedin.root.calendar', stateCalendar);
 
     $stateProvider // Dashboard module
-        .state('loggedin.root.dashboard', stateDashboard);
+        .state('loggedin.root.tasks', {abstract: true, url: '/tasks'})
+        .state('loggedin.root.tasks.dashboard', stateDashboard)
+        .state('loggedin.root.tasks.edit', stateEditTask);
 
     $stateProvider // Users module
         .state('loggedin.root.users', {abstract: true, url: '/users'})

@@ -92,6 +92,16 @@ var stateDashboard = {
     }
 };
 
+var stateEditTask = {
+    url: '/edit/:id',
+    views: {
+        'content@loggedin': {
+            templateUrl: 'templates/tasks/add.html',
+            controller: 'dashboardCtrl'
+        }
+    }
+};
+
 
 //---------------------USERS----------------------//
 

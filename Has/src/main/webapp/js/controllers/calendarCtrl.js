@@ -1,4 +1,4 @@
-app.controller("calendarCtrl", function ($scope, $filter, $http, $sce) {
+app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval) {
     var ctrl = this;
     $scope.page.title = "Reception";
 
@@ -919,7 +919,8 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce) {
             startDate: new Date($scope.startDate),
             endDate: new Date($scope.endDate),
             locale: {
-                format: "DD/MM/YYYY"
+                format: "DD/MM/YYYY",
+                firstDay: 1
             }
         }, setDateRange);
 
@@ -928,12 +929,15 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce) {
             singleDatePicker: true,
             showDropdowns: true,
             locale: {
-                format: "YYYY-MM-DD"
+                format: "YYYY-MM-DD",
+                firstDay: 1
             }
         });
 
         $('.calendar').css({float: 'left'});
 
         loadEvents();
+
+        $interval(loadEvents, 5000);
     });
 });
