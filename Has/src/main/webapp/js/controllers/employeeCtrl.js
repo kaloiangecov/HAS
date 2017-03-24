@@ -188,7 +188,8 @@ app.controller("employeeCtrl", function ($scope, $location, $state, $stateParams
                 singleDatePicker: true,
                 showDropdowns: true,
                 locale: {
-                    format: "YYYY-MM-DD"
+                    format: "YYYY-MM-DD",
+                    firstDay: 1
                 }
             });
         }

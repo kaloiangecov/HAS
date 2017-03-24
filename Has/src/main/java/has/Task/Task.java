@@ -43,7 +43,7 @@ public class Task implements Serializable {
 
     private String targetTime;
 
-    private String dueDate;
+    private String dueTime;
 
     @NotNull
     private Integer priority;

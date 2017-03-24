@@ -6,6 +6,9 @@ import has.Employee.EmployeeService;
 import has.Utils.TaskHandler;
 import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -84,8 +87,10 @@ public class TaskService {
         return repo.findByAssigneeIdAndStatusNotOrderByTimePlaced(employee.getId(), UNRESOLVED);
     }
 
-    public List<Task> getCurrentTasks(String time) {
-        return repo.findByTargetTimeGreaterThan(time);
+    public Page<Task> searchCurrentShift(int start, int length, String sortColumn, String sortDirection,
+                                         String time, String assignee) {
+        PageRequest request = new PageRequest((start / length), length, Sort.Direction.fromString(sortDirection), sortColumn);
+        return repo.findByTargetTimeGreaterThanAndAssigneePersonalDataFullNameContaining(time, assignee, request);
     }
 
     public Task changeStatus(Long id, Integer status) {

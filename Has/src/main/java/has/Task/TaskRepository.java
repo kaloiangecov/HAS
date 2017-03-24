@@ -1,5 +1,7 @@
 package has.Task;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -19,5 +21,5 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     List<Task> findByPriorityAndTimePlacedStartingWith(int priority, String date);
 
-    List<Task> findByTargetTimeGreaterThan(String targetTime);
+    Page<Task> findByTargetTimeGreaterThanAndAssigneePersonalDataFullNameContaining(String targetTime, String assignee, Pageable request);
 }

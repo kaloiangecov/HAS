@@ -189,7 +189,8 @@ app.controller("guestCtrl", function ($scope, $state, $location, $stateParams, $
                 singleDatePicker: true,
                 showDropdowns: true,
                 locale: {
-                    format: "YYYY-MM-DD"
+                    format: "YYYY-MM-DD",
+                    firstDay: 1
                 }
             });
         }

@@ -3,8 +3,11 @@ package has.Task;
 import has.Employee.Employee;
 import has.Employee.EmployeeService;
 import has.User.User;
+import has.Utils.DataTableResult;
 import has.Utils.TaskHandler;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by kaloi on 2/24/2017.
@@ -101,8 +105,28 @@ public class TaskController {
 
     @RequestMapping(value = "/tasks/current/{time}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Task> getCurreentTasks(@PathVariable String time, @AuthenticationPrincipal User user) throws Exception {
-        return service.getCurrentTasks(time);
+    public DataTableResult getCurrentTasks(@PathVariable String time, HttpServletRequest request, @AuthenticationPrincipal User user) throws Exception {
+        Map<String, String[]> parameterMap = request.getParameterMap();
+
+        char sortColumnNumber = parameterMap.get("order[0][column]")[0].charAt(0);
+        String sortColumnParam = "columns[" + sortColumnNumber + "][data]";
+
+        Page<Task> tasks = service.searchCurrentShift(
+                Integer.parseInt(parameterMap.get("start")[0]),
+                Integer.parseInt(parameterMap.get("length")[0]),
+                parameterMap.get(sortColumnParam)[0],
+                parameterMap.get("order[0][dir]")[0],
+                time,
+                parameterMap.get("assignee")[0]
+        );
+
+        return new DataTableResult(
+                Integer.parseInt(parameterMap.get("draw")[0]),
+                Integer.parseInt(parameterMap.get("start")[0]),
+                Integer.parseInt(parameterMap.get("length")[0]),
+                tasks.getTotalElements(),
+                tasks.getTotalElements(),
+                tasks.getContent());
     }
 
 

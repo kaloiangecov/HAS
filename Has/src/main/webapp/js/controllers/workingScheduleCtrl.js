@@ -162,7 +162,8 @@ app.controller("workingScheduleCtrl", function ($scope, $http, $location, $state
                 singleDatePicker: true,
                 showDropdowns: true,
                 locale: {
-                    format: "YYYY-MM-DD"
+                    format: "YYYY-MM-DD",
+                    firstDay: 1
                 }
             });
         }

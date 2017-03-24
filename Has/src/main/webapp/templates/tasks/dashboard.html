@@ -1,69 +1,32 @@
 <div ng-controller="dashboardCtrl as ctrl">
-    <daypilot-scheduler id="dashboard"
-                        config="config"
-                        events="events.list"
-                        on-event-selected="onEventSelected(args)"
-                        on-event-moved="onEventMoved(args)">
-    </daypilot-scheduler>
-
-    <div id="infoModal" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            ariadden="true">&times;</span></button>
-                    <h4 class="modal-title"><i class="fa fa-info"></i> Request Info</h4>
-                </div>
-                <div class="modal-body">
-                    <p><strong>Start time:</strong> {{taskInfo.timePlaced}}</p>
-                    <p><strong>End time:</strong> {{taskInfo.timeFinished}}</p>
-                    <p><strong>Room:</strong> {{taskInfo.reservationGuest.room.number}}</p>
-                    <p><strong>Guest:</strong> {{taskInfo.reservationGuest.guest.personalData.fullName}}</p>
-                    <p><strong>Assignee:</strong> {{taskInfo.employee.personalData.fullName}}</p>
-                </div>
-            </div>
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-tasks"></i> Dashboard
+                <small>Tasks for current shift</small>
+            </h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li>
+                    <a class="collapse-link" style="visibility:hidden"><i class="fa fa-chevron-up"></i></a>
+                </li>
+                <li>
+                    <a class="collapse-link" style="visibility:hidden"><i class="fa fa-chevron-up"></i></a>
+                </li>
+                <li>
+                    <a class="collapse-link" style="visibility:hidden"><i class="fa fa-plus"></i></a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+            <form class="form-inline text-center" ng-submit="reloadTableData()">
+                <input type="text" class="form-control" id="filterAssignee" ng-model="searchFilters.tasks.assignee"
+                       plceholder="Assignee name"/>
+                <button type="submit" class="btn btn-primary" style="position:relative;top:+3px;"><i
+                        class="fa fa-search"></i> Search
+                </button>
+            </form>
         </div>
-    </div>
-
-    <div class="modal fade" id="taskModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-
-                <forcm method="POST" name="taskForm" novalidate>
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" ng-click="resetTask()">&times;</button>
-                        <h2 class="modal-title">Modal Header</h2>
-                    </div>
-
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="form-group col-sm-8 col-xs-12">
-                                <label>Title</label>
-                                <input type="text" class="form-control" ng-model="task.title" required/>
-                            </div>
-                            <div class="form-group col-sm-4 col-xs-12">
-                                <label>Priority</label>
-                                <select class="form-control" ng-model="task.priority" required>
-                                    <option value="0">LOW</option>
-                                    <option value="1">NORMAL</option>
-                                    <option value="2">HIGH</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Description</label>
-                            <textarea class="form-control" minlength="3" maxlength="100" rows="3" required="required"
-                                      ng-model="task.description" style="resize: vertical;"/>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="submit" ng-click="submitTask()" class="btn btn-primary">Submit</button>
-                        <button type="reset" class="btn btn-default">Reset</button>
-                    </div>
-                </forcm>
-
-            </div>
+        <div class="x_content">
+            <table datatable="" dt-options="dtOptions" dt-columns="dtColumns" dt-instance="dtInstance"
+                   class="table table-hover" style="width:100%"></table>
         </div>
     </div>
 </div>

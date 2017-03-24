@@ -47,7 +47,8 @@ app2.config(function ($stateProvider, $urlRouterProvider) {
                         endDate: new Date(),
                         minDate: new Date(),
                         locale: {
-                            format: "DD/MM/YY"
+                            format: "DD/MM/YY",
+                            firstDay: 1
                         }
                     });
 
@@ -73,7 +74,8 @@ app2.config(function ($stateProvider, $urlRouterProvider) {
                         singleDatePicker: true,
                         showDropdowns: true,
                         locale: {
-                            format: "YYYY-MM-DD"
+                            format: "YYYY-MM-DD",
+                            firstDay: 1
                         }
                     });
 
