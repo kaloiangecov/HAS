@@ -76,12 +76,11 @@ public class TaskHandler {
         task.setTimePlaced(new Date().toString());
         task.setPriority(2);
         task.setStatus(0);
-        task.setTimePlaced(timeFormatter.getNewDateAsString());
-        task.setDuration("00:20");
-        task.setAssigner("SYSTEM");
+        task.setDuration("Not specified yet");
+        task = assignTask(task, findShift(new LocalTime()));
+
         //TODO set description, employee, duration and target time(евентуално)
-        taskRepository.save(task);
-        return assignTask(task, findShift(new LocalTime()));
+        return taskRepository.save(task);
     }
 
     public Task assignTask(Task task, int shift) {
@@ -355,7 +354,6 @@ public class TaskHandler {
         mediumTasks = equalize(employeesDTO, mediumTasks);
         lowTasks = equalize(employeesDTO, lowTasks);
         allTasks.addAll(mediumTasks);
-        allTasks.addAll(lowTasks);
         allTasks.addAll(lowTasks);
         return allTasks;
     }

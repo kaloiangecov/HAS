@@ -24,7 +24,7 @@ public class RequestController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    public Request save(@RequestBody @Valid Request request, @AuthenticationPrincipal User user) {
+    public Request save(@RequestBody @Valid Request request, @AuthenticationPrincipal User user) throws Exception {
         return requestService.save(request, user);
     }
 

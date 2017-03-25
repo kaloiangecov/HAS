@@ -2,8 +2,8 @@ package has.Request;
 
 import has.Guest.Guest;
 import has.Guest.GuestRepository;
+import has.ReservationGuest.ReservationGuest;
 import has.ReservationGuest.ReservationGuestRepository;
-import has.Task.TaskService;
 import has.User.User;
 import has.Utils.TaskHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,16 +29,22 @@ public class RequestService {
     @Autowired
     private TaskHandler taskHandler;
 
-    @Autowired
-    private TaskService taskService;
-
-    public Request save(Request request, User user) {
-        Guest guest = guestRepo.findByUserId(user.getId());
-        request.setReservationGuest(rgRepo.findByReservationStatusAndGuestId(1, guest.getId()));
-        repo.save(request);
-        taskService.save(taskHandler.createTaskFromRequest(request));
-        return request;
-
+    public Request save(Request request, User user) throws Exception {
+        if (user.getUserRole().getId() == 5) {
+            Guest guest = guestRepo.findByUserId(user.getId());
+            if (guest == null) {
+                throw new Exception("Not a valid guest");
+            }
+            ReservationGuest rGuest = rgRepo.findByReservationStatusAndGuestId(1, guest.getId());
+            if (rGuest != null) {
+                request.setReservationGuest(rGuest);
+            } else {
+                throw new Exception("Guest does not have an active reservation");
+            }
+        }
+        Request result = repo.save(request);
+        taskHandler.createTaskFromRequest(request);
+        return result;
     }
 
     public List<Request> getAllRequests() {
