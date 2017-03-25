@@ -52,6 +52,8 @@ public class TemplateHandler {
     public void notifyCustomer(Reservation reservation) throws IOException, TemplateException {
         ReservationGuest reservationGuest = reservation.getReservationGuests().get(FIRST);
         Map model = new HashMap();
+        String message = "Your reservation has been updated.";
+        model.put("message", message);
         model.put("reservation", reservation);
         model.put("guest", reservationGuest.getGuest());
         if (reservation.getStatus() == RESERVATION_STATUS_ARRIVED) {

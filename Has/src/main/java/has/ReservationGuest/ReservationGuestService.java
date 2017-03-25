@@ -35,6 +35,8 @@ public class ReservationGuestService {
 
     private void sendEmailNotification(ReservationGuest reservationGuest) throws IOException, TemplateException {
         Map model = new HashMap();
+        String message = "Thank you for registering in our hotel.";
+        model.put("message", message);
         model.put("guest", reservationGuest.getGuest());
         model.put("reservation", reservationGuest.getReservation());
         String templatePath = "register.ftl";

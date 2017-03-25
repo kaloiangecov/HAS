@@ -198,6 +198,7 @@ public class ReservationService {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         dbReservation.setLastModifiedTime(sdf.format(new Date()));
+        templateHandler.notifyCustomer(dbReservation);
         return repo.save(dbReservation);
     }
 
