@@ -648,7 +648,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
                 endDate: args.end.value.substr(0, 10)
             };
 
-            if (!$scope.events.new.start && (range.startDate >= moment().format('YYYY-MM-DD'))) {
+            if (range.startDate >= moment().format('YYYY-MM-DD')) {
                 $scope.$apply(function () {
                     $scope.events.new = {
                         start: args.start,
