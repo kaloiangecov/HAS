@@ -99,6 +99,7 @@
                 <th>Big Beds</th>
                 <th>Extras</th>
                 <th>Select</th>
+                <th style="width:70px"></th>
             </tr>
             </thead>
             <tbody>
@@ -116,11 +117,16 @@
                            ng-checked="selectedRooms.indexOf(res) != -1"
                            ng-click="toggleSelection(res)"/>
                 </td>
+                <td>
+                    <span class="label label-warning" ng-show="selectedRooms.indexOf(res) == 0">Owner</span>
+                    <span class="label label-warning" ng-show="res.id == reservation.room.id">Currently selected</span>
+                </td>
             </tr>
             </tbody>
         </table>
 
-        <div class="alert alert-danger" ng-show="results.length == 0">There aren't any available rooms according to your
+        <div class="alert alert-danger" ng-show="isSearchPerformed && results.length == 0">There aren't any available
+            rooms according to your
             search criteria! Please, change your filters and try again.
         </div>
 

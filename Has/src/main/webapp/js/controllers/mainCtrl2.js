@@ -5,6 +5,8 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
         activePage: "home"
     };
 
+    $scope.isSearchPerformed = false;
+
     $scope.authentication = "Basic " + btoa("booking:B00king");
 
     $scope.roomTypes = [
@@ -116,6 +118,8 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                 $scope.displayMessage(response.data);
             })
             .then(function (reservation) {
+                $scope.isSearchPerformed = false;
+
                 $scope.reservation = reservation;
 
                 $scope.filters = {
@@ -253,6 +257,7 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                 $scope.displayMessage(response.data);
             })
             .then(function (results) {
+                $scope.isSearchPerformed = true;
                 $scope.results = results;
             });
     };

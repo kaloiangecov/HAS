@@ -58,6 +58,11 @@ public class RequestService {
         return request;
     }
 
+    public List<Request> findByReservationId(Long id) throws Exception {
+        List<Request> requests = repo.findByReservationGuestReservationId(id);
+        return requests;
+    }
+
     public Request remove(Long id) throws Exception {
         Request request = repo.findOne(id);
         validateIdNotNull(request);

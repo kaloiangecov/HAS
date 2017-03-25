@@ -60,4 +60,12 @@ public class RequestController {
     public Request updateRequest(@PathVariable Long id, @RequestBody @Valid Request request) throws Exception {
         return requestService.update(id, request);
     }
+
+    @RequestMapping(value = "/requests/reservation/{id}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_VIEW_REQUEST')")
+    public List<Request> findRequestByReservation(@PathVariable Long id) throws Exception {
+        return requestService.findByReservationId(id);
+    }
 }
