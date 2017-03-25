@@ -37,6 +37,7 @@ public class TaskHandler {
     private static final int TASK_STATUS_SCHEDULED = 0;
 
     private static final String FIVE_MINUTES = "00:05";
+    private static final String NOT_SPECIFIED = "00:20";
     private static final String START_MORNING_SHIFT = "06:00";
     private static final String END_MORNING_SHIFT = "14:00";
     private static final String START_LUNCH_SHIFT = "14:00";
@@ -76,7 +77,7 @@ public class TaskHandler {
         task.setTimePlaced(new Date().toString());
         task.setPriority(2);
         task.setStatus(0);
-        task.setDuration("Not specified yet");
+        task.setDuration(NOT_SPECIFIED);
         task = assignTask(task, findShift(new LocalTime()));
 
         //TODO set description, employee, duration and target time(евентуално)
