@@ -353,18 +353,18 @@ INSERT INTO MEAL_CATEGORY (MEAL_CATEGORY_ID, TITLE, IMG, DESCRIPTION) VALUES
   (6, 'Drinks', 'img/whiskey.jpg','Find the best beverages here.');
 
 INSERT INTO MEAL(MEAL_ID, MEAL_NAME, IMG, DESCRIPTION, PRICE, MEAL_CATEGORY_ID, DATE_POSTED) VALUES
-  (1, 'Chocolate cake', 'img/meal.png', 'This is chocolate cake', 5.50, 1 , '2017-02-10'),
-  (2, 'Vanilla cake', 'img/meal.png', 'This is chocolate cake', 4.30, 1 , '2017-02-10'),
-  (3, 'Fruit cake', 'img/meal.png', 'This is chocolate cake', 5.60, 1, '2017-02-10' ),
-  (4, 'Chocolate muffin', 'img/meal.png', 'This is chocolate cake', 2.50, 1, '2017-02-10' ),
-  (5, 'Italian salad', 'img/meal.png', 'Delicious italian salad.', 4.50, 2 , '2017-02-10'),
-  (6, 'Ceasar salad', 'img/meal.png', 'Delicious ceasar salad.', 5.99, 2 , '2017-02-10'),
-  (7, 'Greece salad ', 'img/meal.png', 'Delicious greece salad.', 4.70, 2 , '2017-02-10'),
-  (8, 'Shopska salad', 'img/meal.png', 'Delicious shopska salad.', 3.50, 2 , '2017-02-10'),
-  (9, 'Veal bbq', 'img/meal.png', 'This is veal bbq.', 12.50, 3 , '2017-02-10'),
-  (10, 'Chicken bbq', 'img/meal.png', 'This is chicken bbq', 9.90, 3 , '2017-02-10'),
-  (11, 'Fork bbq', 'img/meal.png', 'This is fork bbq.', 7.90, 3, '2017-02-10' ),
-  (12, 'Shol bbq', 'img/meal.png', 'This is most delicious meat from veal', 15.50, 3 , '2017-02-10');
+ (1, 'Chocolate cake', 'img/chocolate-cake.jpg', 'This is chocolate cake', 5.50, 1 , '2017-02-10'),
+ (2, 'Vanilla cake', 'img/vanilla.jpg', 'This is vanilla cake', 4.30, 1 , '2017-02-10'),
+ (3, 'Fruit cake', 'img/fruit.jpg', 'This is fruit cake', 5.60, 1, '2017-02-10' ),
+ (4, 'Chocolate muffin', 'img/muffin.jpg', 'This is chocolate muffin', 2.50, 1, '2017-02-10' ),
+ (5, 'Italian salad', 'img/selska.jpg', 'Delicious italian salad.', 4.50, 2 , '2017-02-10'),
+ (6, 'Ceasar salad', 'img/salad.jpg', 'Delicious ceasar salad.', 5.99, 2 , '2017-02-10'),
+ (7, 'Greece salad ', 'img/greece.jpg', 'Delicious greece salad.', 4.70, 2 , '2017-02-10'),
+ (8, 'Shopska salad', 'img/shopska.jpg', 'Delicious shopska salad.', 3.50, 2 , '2017-02-10'),
+ (9, 'Veal bbq', 'img/telesko.jpg', 'This is veal bbq.', 12.50, 3 , '2017-02-10'),
+ (10, 'Chicken bbq', 'img/chicken.jpg', 'This is chicken bbq', 9.90, 3 , '2017-02-10'),
+ (11, 'Fork bbq', 'img/fork.jpg', 'This is fork bbq.', 7.90, 3, '2017-02-10' ),
+ (12, 'Shol bbq', 'img/shol.jpg', 'This is most delicious meat from veal', 15.50, 3 , '2017-02-10');
 
 INSERT INTO MEAL (MEAL_ID, MEAl_CATEGORY_ID, DATE_POSTED, IMG, DESCRIPTION, MEAL_NAME, PRICE) VALUES
   (13, 1, '2017-02-14', 'img/meal.png', 'Home made beans with vegetables and sausage', 'Beans and sausage', '10'),
