@@ -3,7 +3,9 @@ package has.Utils;
 import has.Employee.EmployeeDTO;
 import has.Employee.EmployeeRepository;
 import has.Employee.EmployeeService;
+import has.Meal.MealRepository;
 import has.Request.Request;
+import has.RequestMeal.RequestMeal;
 import has.Task.Task;
 import has.Task.TaskRepository;
 import has.Task.TaskService;
@@ -31,6 +33,9 @@ public class TaskHandler {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private MealRepository mealRepo;
 
     private TimeFormatter timeFormatter;
 
@@ -146,17 +151,36 @@ public class TaskHandler {
     public String createDescription(Request req) {
         StringBuilder description = new StringBuilder();
         description
-                .append("Room request: " + req.getId() + System.lineSeparator())
-                .append("Type of request: " + req.getType());
+                .append("Room request: " + req.getId())
+                .append(System.lineSeparator())
+                .append("Type of request: " + req.getType())
+                .append(System.lineSeparator());
         if (req.getReservationGuest() != null) {
-            description.append("From room: " + req.getReservationGuest().getReservation().getRoom());
+            description
+                    .append("From room: " + req.getReservationGuest().getReservation().getRoom())
+                    .append(System.lineSeparator());
         } else {
-            description.append("Ordered from an employee");
+            description
+                    .append("Ordered from an employee")
+                    .append(System.lineSeparator());
         }
         if (req.getMealRequests() != null) {
-            description.append("Meals requested: " + req.getMealRequests().toString());
+            description
+                    .append("Meals requested:")
+                    .append(System.lineSeparator())
+                    .append(getMeals(req.getMealRequests()));
         }
         return description.toString();
+    }
+
+    public String getMeals(List<RequestMeal> mealRequests) {
+        String message = "";
+        for (RequestMeal req : mealRequests) {
+            String name = req.getMeal().getName() == null ?
+                    mealRepo.getOne(req.getMeal().getId()).getName() : req.getMeal().getName();
+            message += "Name: " + name + " (x" + req.getQuantity() + ")" + System.lineSeparator();
+        }
+        return message;
     }
 
     public int findShift(LocalTime timeNow) {
