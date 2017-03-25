@@ -42,8 +42,12 @@ public class TaskService {
         return repo.save(taskHandler.assignTask(task, taskHandler.findShift(new LocalTime())));
     }
 
-    public List<Task> equalize() {
-        return repo.save(taskHandler.equalizeTasks(taskHandler.findEmployeesOnShiftDTO(new LocalTime())));
+    public List<Task> equalize() throws Exception {
+        List<EmployeeDTO> employees = taskHandler.findEmployeesOnShiftDTO(new LocalTime());
+        organise(employees);
+        List<Task> tasks = repo.save(taskHandler.equalizeTasks(taskHandler.findEmployeesOnShiftDTO(new LocalTime())));
+        organise(employees);
+        return tasks;
     }
 
     public List<Task> getAllTasks() {
@@ -118,6 +122,11 @@ public class TaskService {
     public List<Task> organiseTasks(Long employeeId) throws Exception {
         EmployeeDTO employeeDTO = employeeService.transferEmployeeToDTO(employeeId);
         return repo.save(taskHandler.organiseTasks(employeeDTO));
+    }
 
+    private void organise(List<EmployeeDTO> employees) throws Exception {
+        for (EmployeeDTO employeeDTO : employees) {
+            organiseTasks(employeeDTO.getWorkingSchedule().getEmployee().getId());
+        }
     }
 }

@@ -3,6 +3,7 @@ package has.Task;
 import has.Employee.Employee;
 import has.Request.Request;
 import lombok.Data;
+import org.springframework.context.annotation.Scope;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -17,6 +18,7 @@ import java.util.Date;
  */
 @Data
 @Entity(name = "TASK")
+@Scope("session")
 public class Task implements Serializable {
 
     @Id

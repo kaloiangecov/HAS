@@ -145,7 +145,7 @@ public class TaskController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('PERM_EDIT_TASK')")
-    public List<Task> equalizeTasks() {
+    public List<Task> equalizeTasks() throws Exception {
         return service.equalize();
     }
 
