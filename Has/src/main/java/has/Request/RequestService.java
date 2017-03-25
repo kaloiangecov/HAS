@@ -35,7 +35,7 @@ public class RequestService {
             if (guest == null) {
                 throw new Exception("Not a valid guest");
             }
-            ReservationGuest rGuest = rgRepo.findByReservationStatusAndGuestId(1, guest.getId());
+            ReservationGuest rGuest = rgRepo.findByReservationStatusAndGuestId(0, guest.getId());
             if (rGuest != null) {
                 request.setReservationGuest(rGuest);
             } else {
