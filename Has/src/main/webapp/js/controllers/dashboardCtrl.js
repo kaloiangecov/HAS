@@ -113,11 +113,11 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
 
         $scope.dtColumns = [
             DTColumnBuilder.newColumn('id', 'ID').notVisible(),
-            DTColumnBuilder.newColumn('targetTime', 'Target Time')
+            DTColumnBuilder.newColumn('startTime', 'Target Time')
                 .renderWith(function (date) {
                     return new Date(date).toLocaleString();
                 }),
-            DTColumnBuilder.newColumn('dueTime', 'Due TIme')
+            DTColumnBuilder.newColumn('finishTime', 'Finish Time')
                 .renderWith(function (date) {
                     return new Date(date).toLocaleString();
                 }),
@@ -214,12 +214,12 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
                 $scope.reloadTableData(false);
             }, 5000);
         } else {
-            $('#targetTime').daterangepicker({
+            $('#startTime').daterangepicker({
                 singleDatePicker: true,
                 showDropdowns: true,
                 timePicker: true,
-                startDate: $scope.task.targetTime,
-                minDate: $scope.task.targetTime,
+                startDate: $scope.task.startTime,
+                minDate: $scope.task.startTime,
                 timePicker24Hour: true,
                 locale: {
                     format: 'DD/MM/YYYY HH:mm',
@@ -227,17 +227,17 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
                 }
             }, function (start) {
                 $scope.$apply(function () {
-                    $scope.task.targetTime = start.format("YYYY-MM-DDTHH:mm:ss");
-                    $('#targetTime').val($scope.task.targetTime);
+                    $scope.task.startTime = start.format("YYYY-MM-DDTHH:mm:ss");
+                    $('#targetTime').val($scope.task.startTime);
                 });
             });
 
-            $('#dueTime').daterangepicker({
+            $('#finishTime').daterangepicker({
                 singleDatePicker: true,
                 showDropdowns: true,
                 timePicker: true,
-                startDate: $scope.task.dueTime,
-                minDate: $scope.task.dueTime,
+                startDate: $scope.task.finishTime,
+                minDate: $scope.task.finishTime,
                 timePicker24Hour: true,
                 locale: {
                     format: 'DD/MM/YYYY HH:mm',
@@ -245,8 +245,8 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
                 }
             }, function (start) {
                 $scope.$apply(function () {
-                    $scope.task.dueTime = start.format("YYYY-MM-DDTHH:mm:ss");
-                    $('#targetTime').val($scope.task.dueTime);
+                    $scope.task.finishTime = start.format("YYYY-MM-DDTHH:mm:ss");
+                    $('#targetTime').val($scope.task.finishTime);
                 });
             });
         }
