@@ -19,15 +19,15 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     Page<Room> findByNumber(Integer number, Pageable pageRequest);
 
-    @Query("SELECT r FROM has.Room.Room r WHERE (r.bedsSingle + r.bedsDouble*2) >= :numberAdults AND r.pets = :pets AND r.minibar = :minibar AND r NOT IN (SELECT res.room FROM has.Reservation.Reservation res WHERE (res.startDate BETWEEN :startDate AND :endDate) OR (res.endDate BETWEEN :startDate AND :endDate))")
+    @Query("SELECT r FROM has.Room.Room r WHERE (r.bedsSingle + r.bedsDouble*2) >= :numberAdults AND r.pets = :pets AND r.minibar = :minibar AND r NOT IN (SELECT res.room FROM has.Reservation.Reservation res WHERE (res.startDate >= :startDate AND res.startDate < :endDate) OR (res.endDate > :startDate AND res.endDate <= :endDate))")
     List<Room> findInSite(@Param("startDate") String startDate, @Param("endDate") String endDate, @Param("numberAdults") int numberAdults, @Param("pets") boolean pets, @Param("minibar") boolean minibar);
 
-    @Query("SELECT r FROM has.Room.Room r WHERE (r.bedsSingle + r.bedsDouble*2) >= :numberAdults AND r.pets = :pets AND r.minibar = :minibar AND r NOT IN (SELECT res.room FROM has.Reservation.Reservation res WHERE res.id <> :existingId AND ((res.startDate BETWEEN :startDate AND :endDate) OR (res.endDate BETWEEN :startDate AND :endDate)))")
+    @Query("SELECT r FROM has.Room.Room r WHERE (r.bedsSingle + r.bedsDouble*2) >= :numberAdults AND r.pets = :pets AND r.minibar = :minibar AND r NOT IN (SELECT res.room FROM has.Reservation.Reservation res WHERE res.id <> :existingId AND ((res.startDate >= :startDate AND res.startDate < :endDate) OR (res.endDate > :startDate AND res.endDate <= :endDate)))")
     List<Room> findInSiteForEdit(@Param("startDate") String startDate, @Param("endDate") String endDate, @Param("numberAdults") int numberAdults, @Param("pets") boolean pets, @Param("minibar") boolean minibar, @Param("existingId") Long existingId);
 
-    @Query("SELECT r FROM has.Room.Room r WHERE (r.bedsSingle + r.bedsDouble*2) >= :numberAdults AND r.children = :children AND r.pets = :pets AND r.minibar = :minibar AND r NOT IN (SELECT res.room FROM has.Reservation.Reservation res WHERE (res.startDate BETWEEN :startDate AND :endDate) OR (res.endDate BETWEEN :startDate AND :endDate))")
+    @Query("SELECT r FROM has.Room.Room r WHERE (r.bedsSingle + r.bedsDouble*2) >= :numberAdults AND r.children = :children AND r.pets = :pets AND r.minibar = :minibar AND r NOT IN (SELECT res.room FROM has.Reservation.Reservation res WHERE (res.startDate >= :startDate AND res.startDate < :endDate) OR (res.endDate > :startDate AND res.endDate <= :endDate))")
     List<Room> findInSiteWithChildren(@Param("startDate") String startDate, @Param("endDate") String endDate, @Param("numberAdults") int numberAdults, @Param("children") boolean children, @Param("pets") boolean pets, @Param("minibar") boolean minibar);
 
-    @Query("SELECT r FROM has.Room.Room r WHERE (r.bedsSingle + r.bedsDouble*2) >= :numberAdults AND r.children = :children AND r.pets = :pets AND r.minibar = :minibar AND r NOT IN (SELECT res.room FROM has.Reservation.Reservation res WHERE res.id <> :existingId AND ((res.startDate BETWEEN :startDate AND :endDate) OR (res.endDate BETWEEN :startDate AND :endDate)))")
+    @Query("SELECT r FROM has.Room.Room r WHERE (r.bedsSingle + r.bedsDouble*2) >= :numberAdults AND r.children = :children AND r.pets = :pets AND r.minibar = :minibar AND r NOT IN (SELECT res.room FROM has.Reservation.Reservation res WHERE res.id <> :existingId AND ((res.startDate >= :startDate AND res.startDate < :endDate) OR (res.endDate > :startDate AND res.endDate <= :endDate)))")
     List<Room> findInSiteWithChildrenForEdit(@Param("startDate") String startDate, @Param("endDate") String endDate, @Param("numberAdults") int numberAdults, @Param("children") boolean children, @Param("pets") boolean pets, @Param("minibar") boolean minibar, @Param("existingId") Long existingId);
 }

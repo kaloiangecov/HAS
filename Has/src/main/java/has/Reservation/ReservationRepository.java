@@ -28,7 +28,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Query("SELECT r FROM has.Reservation.Reservation r WHERE r.groupId is not null AND ((r.startDate BETWEEN :startDate AND :endDate) OR (r.endDate BETWEEN :startDate AND :endDate))")
     List<Reservation> findGroupReservationsForCalendar(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
-    @Query("SELECT count(r) FROM has.Reservation.Reservation r WHERE r.room.id = :roomId AND ((r.startDate BETWEEN :startDate AND :endDate) OR (r.endDate BETWEEN :startDate AND :endDate))")
-    int findExistingReservationsCount(@Param("startDate") String startDate, @Param("endDate") String endDate, @Param("roomId") Long roomId);
+    @Query("SELECT r FROM has.Reservation.Reservation r WHERE r.id <> :reservationId AND r.room.id = :roomId AND ((r.startDate >= :startDate AND r.startDate < :endDate) OR (r.endDate > :startDate AND r.endDate <= :endDate))")
+    Reservation findExistingReservationInSlot(@Param("startDate") String startDate, @Param("endDate") String endDate, @Param("roomId") Long roomId, @Param("reservationId") Long reservationId);
 
 }
