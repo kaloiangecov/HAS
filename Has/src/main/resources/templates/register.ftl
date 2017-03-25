@@ -6,6 +6,7 @@
 <#assign price = reservation.price >
 <#assign code = reservation.reservationCode >
 <#assign username = guest.user.username >
+<#assign password = guest.user.password >
 <#assign moreInformationUrl = "http://has.gg/booking.html#!/about" >
 
 <#if reservation.allInclusive == true>
@@ -111,6 +112,14 @@
         </td>
         <td colspan="2" width="25%"
             style="padding: 10px; clear: both; background-color: #F4EFEF; font-weight: bold; color: #4783A8;">${username}</td>
+    </tr>
+
+    <tr>
+        <td colspan="2" width="25%"
+            style="padding: 10px; clear: both; background-color: #e9f3fb; font-weight: bold;">Password:
+        </td>
+        <td colspan="2" width="25%"
+            style="padding: 10px; clear: both; background-color: #e9f3fb; font-weight: bold;">${password}</td>
     </tr>
 
     <tr>
