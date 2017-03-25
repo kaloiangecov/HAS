@@ -30,7 +30,9 @@ public class RequestService {
 
     public Request save(Request request, User user) {
         Guest guest = guestRepo.findByUserId(user.getId());
-        request.setReservationGuest(rgRepo.findByReservationStatusAndGuestId(1, guest.getId()));
+        if (user.getUserRole().getId() == 5) {
+            request.setReservationGuest(rgRepo.findByReservationStatusAndGuestId(1, guest.getId()));
+        }
         //taskHandler.createTaskFromRequest(request);
         return repo.save(request);
     }
