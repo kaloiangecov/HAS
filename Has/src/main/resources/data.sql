@@ -61,7 +61,6 @@ INSERT INTO PERMISSION (PERMISSION_ID, permission) VALUES ('59', 'PERM_EDIT_CONF
 INSERT INTO PERMISSION (PERMISSION_ID, permission) VALUES ('60', 'PERM_REMOVE_CONFIGURATION');
 
 
-
 INSERT INTO ROLE (USER_ROLE_ID, ROLE_NAME) VALUES ('1', 'ADMIN');
 INSERT INTO ROLE (USER_ROLE_ID, ROLE_NAME) VALUES ('2', 'MANAGER');
 INSERT INTO ROLE (USER_ROLE_ID, ROLE_NAME) VALUES ('3', 'RECEPTION');
@@ -179,6 +178,7 @@ INSERT INTO ROLE_PERMISSION (USER_ROLE_ID, PERMISSION_ID) VALUES ('3', '11');
 INSERT INTO ROLE_PERMISSION (USER_ROLE_ID, PERMISSION_ID) VALUES ('3', '12');
 INSERT INTO ROLE_PERMISSION (USER_ROLE_ID, PERMISSION_ID) VALUES ('3', '13');
 INSERT INTO ROLE_PERMISSION (USER_ROLE_ID, PERMISSION_ID) VALUES ('3', '14');
+INSERT INTO ROLE_PERMISSION (USER_ROLE_ID, PERMISSION_ID) VALUES ('3', '15');
 INSERT INTO ROLE_PERMISSION (USER_ROLE_ID, PERMISSION_ID) VALUES ('3', '17');
 INSERT INTO ROLE_PERMISSION (USER_ROLE_ID, PERMISSION_ID) VALUES ('3', '20');
 INSERT INTO ROLE_PERMISSION (USER_ROLE_ID, PERMISSION_ID) VALUES ('3', '25');
@@ -197,7 +197,9 @@ INSERT INTO ROLE_PERMISSION (USER_ROLE_ID, PERMISSION_ID) VALUES ('4', '11');
 INSERT INTO ROLE_PERMISSION (USER_ROLE_ID, PERMISSION_ID) VALUES ('4', '12');
 INSERT INTO ROLE_PERMISSION (USER_ROLE_ID, PERMISSION_ID) VALUES ('4', '13');
 INSERT INTO ROLE_PERMISSION (USER_ROLE_ID, PERMISSION_ID) VALUES ('4', '14');
+INSERT INTO ROLE_PERMISSION (USER_ROLE_ID, PERMISSION_ID) VALUES ('4', '15');
 
+INSERT INTO ROLE_PERMISSION (USER_ROLE_ID, PERMISSION_ID) VALUES ('5', '15');
 INSERT INTO ROLE_PERMISSION (USER_ROLE_ID, PERMISSION_ID) VALUES ('5', '24');
 
 INSERT INTO ROLE_PERMISSION (USER_ROLE_ID, PERMISSION_ID) VALUES ('6', '6');
@@ -205,6 +207,7 @@ INSERT INTO ROLE_PERMISSION (USER_ROLE_ID, PERMISSION_ID) VALUES ('6', '11');
 INSERT INTO ROLE_PERMISSION (USER_ROLE_ID, PERMISSION_ID) VALUES ('6', '12');
 INSERT INTO ROLE_PERMISSION (USER_ROLE_ID, PERMISSION_ID) VALUES ('6', '13');
 INSERT INTO ROLE_PERMISSION (USER_ROLE_ID, PERMISSION_ID) VALUES ('6', '14');
+INSERT INTO ROLE_PERMISSION (USER_ROLE_ID, PERMISSION_ID) VALUES ('6', '15');
 INSERT INTO ROLE_PERMISSION (USER_ROLE_ID, PERMISSION_ID) VALUES ('6', '28');
 INSERT INTO ROLE_PERMISSION (USER_ROLE_ID, PERMISSION_ID) VALUES ('6', '30');
 INSERT INTO ROLE_PERMISSION (USER_ROLE_ID, PERMISSION_ID) VALUES ('6', '38');
@@ -233,7 +236,7 @@ INSERT INTO T_USER (USER_ID, LAST_LOGIN, password, email, REG_DATE, username, en
   ('17', '2017-01-10T12:30:00', 'password', 'Mordor@gmail.com', '2016-11-12', 'sauron', 'true'),
   ('18', '2017-03-10T11:31:25', '123123123a', 'ginkata@abv.com', '2017-02-12', 'ginka90', 'true'),
   ('19', '2017-03-11T23:00:25', '123password', 'dani89@hotmail.com', '2017-03-06', 'dani89', 'true'),
-  ('20', null, 'B00king', 'booking@msehas.bg', '2016-01-01', 'booking', 'true');
+  ('20', NULL, 'B00king', 'booking@msehas.bg', '2016-01-01', 'booking', 'true');
 
 
 INSERT INTO USER_ROLE (USER_ID, USER_ROLE_ID) VALUES ('1', '1');
@@ -258,8 +261,8 @@ INSERT INTO USER_ROLE (USER_ID, USER_ROLE_ID) VALUES ('19', '5');
 INSERT INTO USER_ROLE (USER_ID, USER_ROLE_ID) VALUES ('20', '6');
 
 
-
-INSERT INTO PERSONAL_DATA (PERSONAL_DATA_ID, address, egn, FULL_NAME, IDENTITY_EXPIRE_DATE, IDENTITY_ISSUE_DATE, IDENTITY_ISSUED_BY, IDENTITY_NUMBER, phone) VALUES
+INSERT INTO PERSONAL_DATA (PERSONAL_DATA_ID, address, egn, FULL_NAME, IDENTITY_EXPIRE_DATE, IDENTITY_ISSUE_DATE, IDENTITY_ISSUED_BY, IDENTITY_NUMBER, phone)
+VALUES
   ('1', 'some street', '9201275304', 'Spas Spasov', '2020-12-10', '2010-12-10', 'some MVR', '123456789', '213124124'),
   ('2', 'street 11', '9105165327', 'Grigor Dimitrov', '2020-12-15', '2010-12-15', 'MVR Ruse', '526441710', '0883888888'),
   ('3', 'street 12', '3102128936', 'Pena Ivanova', '2019-11-17', '2009-11-17', 'MVR Varna', '899121883', '0885455661'),
@@ -273,12 +276,17 @@ INSERT INTO PERSONAL_DATA (PERSONAL_DATA_ID, address, egn, FULL_NAME, IDENTITY_E
   ('11', 'street 20', '9112053964', 'Bai Tanas Debelia', '2023-05-17', '2013-05-17', 'MVR Silistra', '114875313', '0883112341'),
   ('12', 'street 21', '9012053911', 'Toni Naika', '2024-05-12', '2014-05-12', 'MVR Sofia', '004875311', '0884135341'),
   ('13', 'street 22', '8801054212', 'Atanas Kolev', '2025-05-12', '2015-05-12', 'MVR Sofia', '112875303', '0871115341'),
-  ('14', 'Jackson st.', '8822054212', 'Timothy Smith', '2025-05-12', '2015-05-12', 'MVR Sofia', '112875353', '0871625341'),
-  ('15', 'Picadili circus', '9202053914', 'Pesho pesho', '2023-05-17', '2013-05-17', 'MVR Ruse', '394875373', '0883562343'),
-  ('16', 'wolfsburg 26', '9112053994', 'Axl Law', '2023-05-17', '2013-05-17', 'MVR Silistra', '114875303', '0883112341'),
+  ('14', 'Jackson st.', '8822054212', 'Timothy Smith', '2025-05-12', '2015-05-12', 'MVR Sofia', '112875353',
+   '0871625341'),
+  ('15', 'Picadili circus', '9202053914', 'Pesho pesho', '2023-05-17', '2013-05-17', 'MVR Ruse', '394875373',
+   '0883562343'),
+  ('16', 'wolfsburg 26', '9112053994', 'Axl Law', '2023-05-17', '2013-05-17', 'MVR Silistra', '114875303',
+   '0883112341'),
   ('17', 'johannesburg', '9012053931', 'Tom Soyer', '2024-05-12', '2014-05-12', 'MVR Sofia', '001875311', '0884135341'),
-  ('18', 'kings street 1' , '8801054222', 'Luke Skywalker', '2025-05-12', '2015-05-12', 'MVR Sofia', '002875303', '0871115341'),
-  ('19', 'a barrel of snakes', '4822054212', 'Boba fett', '2025-05-12', '2015-05-12', 'MVR Sofia', '212875353', '0871625341');
+  ('18', 'kings street 1', '8801054222', 'Luke Skywalker', '2025-05-12', '2015-05-12', 'MVR Sofia', '002875303',
+   '0871115341'),
+  ('19', 'a barrel of snakes', '4822054212', 'Boba fett', '2025-05-12', '2015-05-12', 'MVR Sofia', '212875353',
+   '0871625341');
 
 INSERT INTO EMPLOYEE (EMPLOYEE_ID, DATE_HIRED, PERSONAL_DATA_ID, USER_ID, EMPLOYED, SALARY, BUSY) VALUES
   ('1', '2016-11-12', '1', '1', 'true', 750.50, FALSE),
@@ -293,7 +301,7 @@ INSERT INTO EMPLOYEE (EMPLOYEE_ID, DATE_HIRED, PERSONAL_DATA_ID, USER_ID, EMPLOY
   ('10', '2017-02-03', '10', '10', 'true', 650.50, FALSE),
   ('11', '2017-02-03', '14', '12', 'true', 800.00, FALSE);
 
-INSERT INTO WORKING_SCHEDULE(ID, EMPLOYEE_ID, SHIFT, SCHEDULE_DATE) VALUES
+INSERT INTO WORKING_SCHEDULE (ID, EMPLOYEE_ID, SHIFT, SCHEDULE_DATE) VALUES
   (1, 2, 0, '2017-02-08'),
   (2, 5, 1, '2017-02-08'),
   (3, 8, 2, '2017-02-08'),
@@ -311,7 +319,7 @@ INSERT INTO GUEST (GUEST_ID, NUMBER_RESERVATIONS, STATUS, PERSONAL_DATA_ID) VALU
 INSERT INTO GUEST (GUEST_ID, NUMBER_RESERVATIONS, STATUS, PERSONAL_DATA_ID) VALUES (7, 0, 0, '18');
 INSERT INTO GUEST (GUEST_ID, NUMBER_RESERVATIONS, STATUS, PERSONAL_DATA_ID, USER_ID) VALUES (8, 1, 0, '19', '17');
 
-INSERT INTO ROOM (NUMBER, BEDS_DOUBLE, BEDS_SINGLE, ROOM_CLASS, STATUS, CHILDREN, PETS, MINIBAR)  VALUES
+INSERT INTO ROOM (NUMBER, BEDS_DOUBLE, BEDS_SINGLE, ROOM_CLASS, STATUS, CHILDREN, PETS, MINIBAR) VALUES
   (101, 1, 0, 0, 0, FALSE, FALSE, TRUE),
   (102, 0, 1, 2, 1, FALSE, FALSE, FALSE),
   (103, 0, 1, 2, 0, FALSE, FALSE, FALSE),
@@ -327,58 +335,69 @@ INSERT INTO ROOM (NUMBER, BEDS_DOUBLE, BEDS_SINGLE, ROOM_CLASS, STATUS, CHILDREN
 
 INSERT INTO RESERVATION
 (reservation_id, reservation_code, all_inclusive, breakfast, dinner, discount, end_date, group_id, last_modified_by_user_id, last_modified_time, number_adults, number_children, price, room_id, employee_id, start_date, status)
-VALUES('1', 'ksjdfh-alskdj-weiruowi-123213as', false, true, false, 0, '2017-03-20', null, null, null, 2, 1, 40.0, 5, '5', '2017-03-16', 0),
-  ('2', '123dfh-eeekdj-weasuowi-123213as', true, true, true, 10, '2017-03-22', 'asdasdmadafaka', null, null, 2, 1, 50.0, 8, '4', '2017-03-18', 1),
-  ('3', 'asddfh-alskdj-weirasda-123213as', true, true, true, 10, '2017-03-22', 'asdasdmadafaka', null, null, 1, 1, 50.0, 10, '4', '2017-03-18', 1),
-  ('4', 'kswer4-alskdj-weiruowi-eee213as', false, false, true, 10, '2017-03-24', null, null, null, 2, 0, 45.0, 2, '4', '2017-03-21', 1),
-  ('5', 'keeefh-alskdj-weiruowi-000013as', true, false, true, 0, '2017-04-01', 'asdasdmadafaka2', null, null, 4, 0, 45.0, 7, '4', '2017-03-29', 0),
-  ('6', 'mmjdfh-mmmmmm-weiruowi-00213as', true, false, true, 0, '2017-04-01', 'asdasdmadafaka2', null, null, 4, 0, 45.0, 11, '4', '2017-03-29', 0);
+VALUES
+  ('1', 'ksjdfh-alskdj-weiruowi-123213as', FALSE, TRUE, FALSE, 0, '2017-03-20', NULL, NULL, NULL, 2, 1, 40.0, 5, '5',
+   '2017-03-16', 0),
+  ('2', '123dfh-eeekdj-weasuowi-123213as', TRUE, TRUE, TRUE, 10, '2017-03-22', 'asdasdmadafaka', NULL, NULL, 2, 1, 50.0,
+   8, '4', '2017-03-18', 1),
+  ('3', 'asddfh-alskdj-weirasda-123213as', TRUE, TRUE, TRUE, 10, '2017-03-22', 'asdasdmadafaka', NULL, NULL, 1, 1, 50.0,
+   10, '4', '2017-03-18', 1),
+  ('4', 'kswer4-alskdj-weiruowi-eee213as', FALSE, FALSE, TRUE, 10, '2017-03-24', NULL, NULL, NULL, 2, 0, 45.0, 2, '4',
+   '2017-03-21', 1),
+  ('5', 'keeefh-alskdj-weiruowi-000013as', TRUE, FALSE, TRUE, 0, '2017-04-01', 'asdasdmadafaka2', NULL, NULL, 4, 0,
+   45.0, 7, '4', '2017-03-29', 0),
+  ('6', 'mmjdfh-mmmmmm-weiruowi-00213as', TRUE, FALSE, TRUE, 0, '2017-04-01', 'asdasdmadafaka2', NULL, NULL, 4, 0, 45.0,
+   11, '4', '2017-03-29', 0);
 
 INSERT INTO RESERVATION_GUEST (RESERVATION_GUEST_ID, reservation_id, guest_id, owner) VALUES
-  (1, 1, 1, true),
-  (2, 2, 2, true),
-  (3, 3, 3, false),
-  (4, 4, 1, true),
-  (5, 4, 2, false),
-  (6, 5, 4, true),
-  (7, 6, 5, false),
-  (8, 6, 3, false);
+  (1, 1, 1, TRUE),
+  (2, 2, 2, TRUE),
+  (3, 3, 3, FALSE),
+  (4, 4, 1, TRUE),
+  (5, 4, 2, FALSE),
+  (6, 5, 4, TRUE),
+  (7, 6, 5, FALSE),
+  (8, 6, 3, FALSE);
 
 INSERT INTO MEAL_CATEGORY (MEAL_CATEGORY_ID, TITLE, IMG, DESCRIPTION) VALUES
   (1, 'Dessert', 'img/cake.jpg', 'Find the best desserts here.'),
-  (2, 'Salad', 'img/salad.jpg','Find the best salads here.'),
-  (3, 'BBQ', 'img/bbq.jpg','Find the best BBQs here.'),
-  (4, 'Pizza', 'img/pizza.jpg','Find the best Italian pizzas here.'),
-  (5, 'Pasta', 'img/pasta.jpg','Find the best Italian pastas here.'),
-  (6, 'Drinks', 'img/whiskey.jpg','Find the best beverages here.');
+  (2, 'Salad', 'img/salad.jpg', 'Find the best salads here.'),
+  (3, 'BBQ', 'img/bbq.jpg', 'Find the best BBQs here.'),
+  (4, 'Pizza', 'img/pizza.jpg', 'Find the best Italian pizzas here.'),
+  (5, 'Pasta', 'img/pasta.jpg', 'Find the best Italian pastas here.'),
+  (6, 'Drinks', 'img/whiskey.jpg', 'Find the best beverages here.');
 
-INSERT INTO MEAL(MEAL_ID, MEAL_NAME, IMG, DESCRIPTION, PRICE, MEAL_CATEGORY_ID, DATE_POSTED) VALUES
- (1, 'Chocolate cake', 'img/chocolate-cake.jpg', 'This is chocolate cake', 5.50, 1 , '2017-02-10'),
- (2, 'Vanilla cake', 'img/vanilla.jpg', 'This is vanilla cake', 4.30, 1 , '2017-02-10'),
- (3, 'Fruit cake', 'img/fruit.jpg', 'This is fruit cake', 5.60, 1, '2017-02-10' ),
- (4, 'Chocolate muffin', 'img/muffin.jpg', 'This is chocolate muffin', 2.50, 1, '2017-02-10' ),
- (5, 'Italian salad', 'img/selska.jpg', 'Delicious italian salad.', 4.50, 2 , '2017-02-10'),
- (6, 'Ceasar salad', 'img/salad.jpg', 'Delicious ceasar salad.', 5.99, 2 , '2017-02-10'),
- (7, 'Greece salad ', 'img/greece.jpg', 'Delicious greece salad.', 4.70, 2 , '2017-02-10'),
- (8, 'Shopska salad', 'img/shopska.jpg', 'Delicious shopska salad.', 3.50, 2 , '2017-02-10'),
- (9, 'Veal bbq', 'img/telesko.jpg', 'This is veal bbq.', 12.50, 3 , '2017-02-10'),
- (10, 'Chicken bbq', 'img/chicken.jpg', 'This is chicken bbq', 9.90, 3 , '2017-02-10'),
- (11, 'Fork bbq', 'img/fork.jpg', 'This is fork bbq.', 7.90, 3, '2017-02-10' ),
- (12, 'Shol bbq', 'img/shol.jpg', 'This is most delicious meat from veal', 15.50, 3 , '2017-02-10');
+INSERT INTO MEAL (MEAL_ID, MEAL_NAME, IMG, DESCRIPTION, PRICE, MEAL_CATEGORY_ID, DATE_POSTED) VALUES
+  (1, 'Chocolate cake', 'img/chocolate-cake.jpg', 'This is chocolate cake', 5.50, 1, '2017-02-10'),
+  (2, 'Vanilla cake', 'img/vanilla.jpg', 'This is vanilla cake', 4.30, 1, '2017-02-10'),
+  (3, 'Fruit cake', 'img/fruit.jpg', 'This is fruit cake', 5.60, 1, '2017-02-10'),
+  (4, 'Chocolate muffin', 'img/muffin.jpg', 'This is chocolate muffin', 2.50, 1, '2017-02-10'),
+  (5, 'Italian salad', 'img/selska.jpg', 'Delicious italian salad.', 4.50, 2, '2017-02-10'),
+  (6, 'Ceasar salad', 'img/salad.jpg', 'Delicious ceasar salad.', 5.99, 2, '2017-02-10'),
+  (7, 'Greece salad ', 'img/greece.jpg', 'Delicious greece salad.', 4.70, 2, '2017-02-10'),
+  (8, 'Shopska salad', 'img/shopska.jpg', 'Delicious shopska salad.', 3.50, 2, '2017-02-10'),
+  (9, 'Veal bbq', 'img/telesko.jpg', 'This is veal bbq.', 12.50, 3, '2017-02-10'),
+  (10, 'Chicken bbq', 'img/chicken.jpg', 'This is chicken bbq', 9.90, 3, '2017-02-10'),
+  (11, 'Fork bbq', 'img/fork.jpg', 'This is fork bbq.', 7.90, 3, '2017-02-10'),
+  (12, 'Shol bbq', 'img/shol.jpg', 'This is most delicious meat from veal', 15.50, 3, '2017-02-10');
 
 INSERT INTO MEAL (MEAL_ID, MEAl_CATEGORY_ID, DATE_POSTED, IMG, DESCRIPTION, MEAL_NAME, PRICE) VALUES
   (13, 1, '2017-02-14', 'img/meal.png', 'Home made beans with vegetables and sausage', 'Beans and sausage', '10'),
   (14, 1, '2017-02-14', 'img/meal.png', 'Fried eggs with red pepper', 'Fried eggs', '5'),
-  (15, 2, '2017-02-14', 'img/meal.png', 'Steamed vegetables include: carrots, peas, corn and a gram of pure coke', 'Steamed vegetables', '15'),
-  (16, 2, '2017-02-14', 'img/meal.png', 'Pasta Bolognese includes: chopped vegetables, minced beef and red wine', 'Pasta Bolognese', '10'),
+  (15, 2, '2017-02-14', 'img/meal.png', 'Steamed vegetables include: carrots, peas, corn and a gram of pure coke',
+   'Steamed vegetables', '15'),
+  (16, 2, '2017-02-14', 'img/meal.png', 'Pasta Bolognese includes: chopped vegetables, minced beef and red wine',
+   'Pasta Bolognese', '10'),
   (17, 3, '2017-02-14', 'img/meal.png', 'Freshly baked tost bread', 'Toast', '2');
 
 INSERT INTO REQUEST (REQUEST_ID, RESERVATION_GUEST_ID, STATUS, REQUEST_TYPE) VALUES
   (1, 1, 0, 2),
   (2, 2, 0, 1);
 
-INSERT INTO TASK(TASK_ID, TITLE, DESCRIPTION, TIME_PLACED, START_TIME, FINISH_TIME, ASSIGNER, DURATION, PRIORITY, EMPLOYEE_ID, STATUS) VALUES
-  (1, 'Clean Room', 'Clean Room 201', '2017-03-06T11:45:00', '2017-03-06T11:50:00', '2017-03-06T12:20:00', 'SYSTEM', '00:30', 3, 3, 3),
+INSERT INTO TASK (TASK_ID, TITLE, DESCRIPTION, TIME_PLACED, START_TIME, FINISH_TIME, ASSIGNER, DURATION, PRIORITY, EMPLOYEE_ID, STATUS)
+VALUES
+  (1, 'Clean Room', 'Clean Room 201', '2017-03-06T11:45:00', '2017-03-06T11:50:00', '2017-03-06T12:20:00', 'SYSTEM',
+      '00:30', 3, 3, 3),
   (2, 'Deliver Meal', 'Deliver Meal 203', '2017-03-06T15:00:00', '2017-03-06T15:25:00', '2017-03-06T15:35:00', 'SYSTEM', '00:10', 1, 7, 1),
   (3, 'Restock', 'Restock Restroom 201b', '2017-03-06T13:24:00', '2017-03-06T13:30:00', '2017-03-06T14:00:00', 'Grigor Dimitrov', '00:30', 3, 8, 1),
   (4, 'Clean Room', 'Clean Room 101', '2017-03-06T09:00:00', '2017-03-06T09:05:00', '2017-03-06T09:35:00', 'SYSTEM', '00:30', 1, 9, 1),
@@ -389,16 +408,28 @@ INSERT INTO TASK(TASK_ID, TITLE, DESCRIPTION, TIME_PLACED, START_TIME, FINISH_TI
   (9, 'Bring shampoo', 'Bring shampoo in room 201', '2017-03-12T11:00:00', '2017-03-12T11:05:00', '2017-03-12T11:30:00', 'SYSTEM', '00:25', 1, 9, 3),
   (10, 'Deliver Meal', 'Deliver Meal to room 203', '2017-03-12T11:00:00', '2017-03-12T11:05:00', '2017-03-12T11:55:00', 'SYSTEM', '00:50', 1, 9, 3),
   (11, 'Clean room', 'Clean room 304 and prepare it for new guests', '2017-03-12T13:00:00', '2017-03-12T13:05:00', '2017-03-12T15:00:00', 'SYSTEM', '01:55', 1, 9, 2),
-  (12, 'Clean room', 'Clean room 303 and prepare it for new guests', '2017-03-12T15:00:00', '2017-03-12T15:05:00', '2017-03-12T17:00:00', 'SYSTEM', '01:55', 1, 9, 1),
-  (13, 'Change sheets', 'Change sheets in room 303', '2017-03-13T09:00:00', '2017-03-13T09:05:00', '2017-03-13T09:35:00', 'SYSTEM', '00:30', 1, 3, 3),
-  (14, 'Change towels', 'Change towels in room 301', '2017-03-13T09:35:00', '2017-03-13T09:40:00', '2017-03-13T10:00:00', 'SYSTEM', '00:20', 1, 3, 2),
-  (15, 'Bring toilet paper', 'Bring 2 rolls toilet paper in room 101', '2017-03-13T10:00:00', '2017-03-13T10:05:00', '2017-03-13T10:30:00', 'SYSTEM', '00:25', 1, 3, 3),
-  (16, 'Bring soap', 'Bring soap in room 103', '2017-03-13T10:30:00', '2017-03-13T10:35:00', '2017-03-13T11:00:00', 'SYSTEM', '00:25', 1, 3, 1),
-  (17, 'Bring shampoo', 'Bring shampoo in room 201', '2017-03-13T11:00:00', '2017-03-13T11:05:00', '2017-03-13T11:30:00', 'SYSTEM', '00:25', 1, 7, 3),
-  (18, 'Deliver Meal', 'Deliver Meal to room 203', '2017-03-13T11:00:00', '2017-03-13T11:05:00', '2017-03-13T11:55:00', 'SYSTEM', '00:50', 1, 7, 3),
-  (19, 'Clean room', 'Clean room 304 and prepare it for new guests', '2017-03-13T13:00:00', '2017-03-13T13:05:00', '2017-03-13T15:00:00', 'SYSTEM', '01:55', 1, 7, 2),
-  (20, 'Clean room', 'Clean room 202 and prepare it for new guests', '2017-03-13T15:00:00', '2017-03-13T15:05:00', '2017-03-13T17:00:00', 'SYSTEM', '01:55', 1, 7, 1);
+  (12, 'Clean room', 'Clean room 303 and prepare it for new guests', '2017-03-12T15:00:00', '2017-03-12T15:05:00',
+       '2017-03-12T17:00:00', 'SYSTEM', '01:55', 1, 9, 1),
+  (13, 'Change sheets', 'Change sheets in room 303', '2017-03-13T09:00:00', '2017-03-13T09:05:00',
+       '2017-03-13T09:35:00', 'SYSTEM', '00:30', 1, 3, 3),
+  (14, 'Change towels', 'Change towels in room 301', '2017-03-13T09:35:00', '2017-03-13T09:40:00',
+       '2017-03-13T10:00:00', 'SYSTEM', '00:20', 1, 3, 2),
+  (15, 'Bring toilet paper', 'Bring 2 rolls toilet paper in room 101', '2017-03-13T10:00:00', '2017-03-13T10:05:00',
+       '2017-03-13T10:30:00', 'SYSTEM', '00:25', 1, 3, 3),
+  (16, 'Bring soap', 'Bring soap in room 103', '2017-03-13T10:30:00', '2017-03-13T10:35:00', '2017-03-13T11:00:00',
+       'SYSTEM', '00:25', 1, 3, 1),
+  (17, 'Bring shampoo', 'Bring shampoo in room 201', '2017-03-13T11:00:00', '2017-03-13T11:05:00',
+       '2017-03-13T11:30:00', 'SYSTEM', '00:25', 1, 7, 3),
+  (18, 'Deliver Meal', 'Deliver Meal to room 203', '2017-03-13T11:00:00', '2017-03-13T11:05:00', '2017-03-13T11:55:00',
+       'SYSTEM', '00:50', 1, 7, 3),
+  (19, 'Clean room', 'Clean room 304 and prepare it for new guests', '2017-03-13T13:00:00', '2017-03-13T13:05:00',
+       '2017-03-13T15:00:00', 'SYSTEM', '01:55', 1, 7, 2),
+  (20, 'Clean room', 'Clean room 202 and prepare it for new guests', '2017-03-13T15:00:00', '2017-03-13T15:05:00',
+       '2017-03-13T17:00:00', 'SYSTEM', '01:55', 1, 7, 1);
 
-INSERT INTO TASK(TASK_ID, TITLE, DESCRIPTION, TIME_PLACED, TARGET_TIME, DUE_TIME, START_TIME, FINISH_TIME, ASSIGNER, DURATION, PRIORITY, EMPLOYEE_ID, STATUS) VALUES
-(21, 'Deliver shit', 'Deliver some shit to room 301 QUICKKKKK', '2017-03-24T19:00:00', '2017-03-24T23:10:00', '2017-03-24T23:30:00', '2017-03-24T23:10:00', null, 'SYSTEM', '00:20', 1, 7, 1),
-(22, 'Deliver shit 2', 'Deliver some shit to room 101 QUICKKKKK', '2017-03-24T19:00:00', '2017-03-24T23:15:00', '2017-03-24T23:35:00', '2017-03-24T23:15:00', null, 'SYSTEM', '00:20', 1, 8, 1);
+INSERT INTO TASK (TASK_ID, TITLE, DESCRIPTION, TIME_PLACED, TARGET_TIME, DUE_TIME, START_TIME, FINISH_TIME, ASSIGNER, DURATION, PRIORITY, EMPLOYEE_ID, STATUS)
+VALUES
+  (21, 'Deliver shit', 'Deliver some shit to room 301 QUICKKKKK', '2017-03-24T19:00:00', '2017-03-24T23:10:00',
+       '2017-03-24T23:30:00', '2017-03-24T23:10:00', NULL, 'SYSTEM', '00:20', 1, 7, 1),
+  (22, 'Deliver shit 2', 'Deliver some shit to room 101 QUICKKKKK', '2017-03-24T19:00:00', '2017-03-24T23:15:00',
+       '2017-03-24T23:35:00', '2017-03-24T23:15:00', NULL, 'SYSTEM', '00:20', 1, 8, 1);
