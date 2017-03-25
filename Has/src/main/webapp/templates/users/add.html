@@ -33,12 +33,11 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-md-4 col-sm-4 col-xs-12" for="email">E-Mail *</label>
+                    <label class="control-label col-md-4 col-sm-4 col-xs-12" for="email">E-Mail</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         <input type="email" class="form-control" id="email" name="email" placeholder="name@mail.com"
-                               ng-model="user.email" required="required"/>
+                               ng-model="user.email"/>
                         <div ng-show="userForm.$submitted || userForm.email.$touched" class="validation-message">
-                            <span ng-show="userForm.email.$error.required">This field is required</span>
                             <span ng-show="userForm.email.$error.email">This is not a valid email</span>
                         </div>
                     </div>
