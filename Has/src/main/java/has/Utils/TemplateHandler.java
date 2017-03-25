@@ -53,14 +53,33 @@ public class TemplateHandler {
         ReservationGuest reservationGuest = reservation.getReservationGuests().get(FIRST);
         Map model = new HashMap();
         String message = "Your reservation has been updated.";
-        model.put("message", message);
+        model.put("headerMessage", "Your reservation has been updated.");
         model.put("reservation", reservation);
         model.put("guest", reservationGuest.getGuest());
-        if (reservation.getStatus() == RESERVATION_STATUS_ARRIVED) {
 
-            String templatePath = "roomCode.ftl";
-            sendMail(model, templatePath, reservationGuest);
-        }
+        String templatePath = "register.ftl";
+        sendMail(model, templatePath, reservationGuest);
+    }
+
+    public void sendReservationCode(Reservation reservation) throws IOException, TemplateException {
+        ReservationGuest reservationGuest = reservation.getReservationGuests().get(FIRST);
+        Map model = new HashMap();
+        model.put("reservation", reservation);
+        model.put("guest", reservationGuest.getGuest());
+
+        String templatePath = "roomCode.ftl";
+        sendMail(model, templatePath, reservationGuest);
+    }
+
+    public void sendEmailNotification(ReservationGuest reservationGuest) throws IOException, TemplateException {
+        Map model = new HashMap();
+        String message = "Thank you for registering in our hotel.";
+        model.put("headerMessage", "Thank you for registering in our hotel.");
+        model.put("guest", reservationGuest.getGuest());
+        model.put("reservation", reservationGuest.getReservation());
+        String templatePath = "register.ftl";
+
+        sendMail(model, templatePath, reservationGuest);
     }
 
     public TemplateHandler() {

@@ -18,10 +18,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by kaloi on 12/20/2016.
@@ -145,9 +142,9 @@ public class ReservationService {
         dbReservation.setNumberChildren(reservation.getNumberChildren());
 
         setLastModified(dbReservation, user);
-        templateHandler.notifyCustomer(dbReservation);
         dbReservation.setReceptionist(reservation.getReceptionist());
         dbReservation.setPrice(CalculationUtils.getReservationCost(dbReservation));
+        templateHandler.notifyCustomer(dbReservation);
         return repo.save(dbReservation);
     }
 
@@ -227,7 +224,7 @@ public class ReservationService {
                 }
             }
         }
-
+        templateHandler.sendReservationCode(reservation);
         return repo.save(reservation);
     }
 
@@ -296,4 +293,5 @@ public class ReservationService {
             throw new Exception("There is no reservation with such ID");
         }
     }
+
 }

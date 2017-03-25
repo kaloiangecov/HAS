@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by kaloi on 1/31/2017.
@@ -29,19 +27,8 @@ public class ReservationGuestService {
     public ReservationGuest save(ReservationGuest reservationGuest) throws IOException, TemplateException {
         ReservationGuest savedGuest = null;
         savedGuest = repo.save(reservationGuest);
-        sendEmailNotification(savedGuest);
+        templateHandler.sendEmailNotification(savedGuest);
         return savedGuest;
-    }
-
-    private void sendEmailNotification(ReservationGuest reservationGuest) throws IOException, TemplateException {
-        Map model = new HashMap();
-        String message = "Thank you for registering in our hotel.";
-        model.put("message", message);
-        model.put("guest", reservationGuest.getGuest());
-        model.put("reservation", reservationGuest.getReservation());
-        String templatePath = "register.ftl";
-
-        templateHandler.sendMail(model, templatePath, reservationGuest);
     }
 
     public List<ReservationGuest> getAllReservationGuestConnections() {

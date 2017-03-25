@@ -5,7 +5,6 @@
 <#assign endDate = reservation.endDate >
 <#assign price = reservation.price >
 <#assign code = reservation.reservationCode >
-<#assign message = message >
 <#assign moreInformationUrl = "http://has.gg/booking.html#!/about" >
 
 <#if reservation.allInclusive == true>
@@ -43,7 +42,7 @@
 
     <tr style="clear: both; padding: 1rem; background-color: #F4EFEF">
         <td colspan="8" width="100%"><p
-                style="margin: 0px; padding: 2px;">Greetings ${fullName}! {message}
+                style="margin: 0px; padding: 2px;">Greetings ${fullName}! Thank you for registering in our hotel.
             <br><br></p>
     </tr>
 
