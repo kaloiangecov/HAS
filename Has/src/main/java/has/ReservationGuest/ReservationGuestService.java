@@ -50,10 +50,11 @@ public class ReservationGuestService {
     }
 
     public ReservationGuest update(Long id, ReservationGuest reservationGuest) throws Exception {
-        if (repoReservation.findExistingReservationsCount(
+        if (repoReservation.findExistingReservationInSlot(
                 reservationGuest.getReservation().getStartDate(),
                 reservationGuest.getReservation().getEndDate(),
-                reservationGuest.getReservation().getRoom().getId()) == 0)
+                reservationGuest.getReservation().getRoom().getId(),
+                reservationGuest.getReservation().getId()) != null)
             throw new Exception("There already is a reservation on the same room within the same time range! Please, try a new one.");
 
 

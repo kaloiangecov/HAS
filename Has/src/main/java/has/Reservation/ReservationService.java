@@ -60,10 +60,11 @@ public class ReservationService {
     private static final int RESERVATION_STATUS_CLOSED = 2;
 
     public Reservation save(Reservation reservation, boolean isGroup, String groupId, Long recepcionistUserId, User user) throws IOException, TemplateException, URISyntaxException {
-        if (repo.findExistingReservationsCount(
+        if (repo.findExistingReservationInSlot(
                 reservation.getStartDate(),
                 reservation.getEndDate(),
-                reservation.getRoom().getId()) > 0)
+                reservation.getRoom().getId(),
+                reservation.getId()) != null)
             throw new IOException("There already is a reservation on the same room within the same time range! Please, try a new one.");
 
         setLastModified(reservation, user);
@@ -142,6 +143,14 @@ public class ReservationService {
     }
 
     public Reservation update(Long id, Reservation reservation, User user) throws Exception {
+        if (repo.findExistingReservationInSlot(
+                reservation.getStartDate(),
+                reservation.getEndDate(),
+                reservation.getRoom().getId(),
+                reservation.getId()) != null)
+            throw new IOException("There already is a reservation on the same room within the same time range! Please, try a new one.");
+
+
         Reservation dbReservation = repo.findOne(id);
         validateIdNotNull(dbReservation);
 

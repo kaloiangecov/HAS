@@ -339,10 +339,10 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                         $scope.clearEverything();
 
                         $state.go('app.root.reservationSuccessful');
-                    }, $scope.resetReservation);
+                    });
 
-                }, $scope.resetReservation);
-            }, $scope.resetReservation);
+                });
+            });
 
         }
         else { // use existing guest
