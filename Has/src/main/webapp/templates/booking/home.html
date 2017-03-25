@@ -98,7 +98,8 @@
             </tbody>
         </table>
 
-        <div class="alert alert-danger" ng-show="results.length == 0">There aren't any available rooms according to your
+        <div class="alert alert-danger" ng-show="isSearchPerformed && results.length == 0">There aren't any available
+            rooms according to your
             search criteria! Please, change your filters and try again.
         </div>
 

@@ -188,6 +188,23 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
             );
     };
 
+    $scope.getReservationRequests = function (id, callback) {
+        $http({
+            method: "GET",
+            url: ("requests/reservation/" + id),
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
+        }).then(
+            function (response) { //success
+                return response.data;
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+            }).then(callback);
+    };
+
     $scope.validateCheckInDate = function (reservation, newRange) {
         var today = new Date().toISOString().substr(0, 10);
 
@@ -288,6 +305,34 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
 
                     $scope.reservationInfo.startDate = new Date($scope.reservationInfo.startDate).toLocaleDateString();
                     $scope.reservationInfo.endDate = new Date($scope.reservationInfo.endDate).toLocaleDateString();
+
+                    $scope.getReservationRequests(tmp.id, function (data) {
+                        if (data.length > 0) {
+                            $scope.reservationInfo.requestMeals = [];
+                            var totalPrice = 0.0;
+
+                            angular.forEach(data, function (request, key) {
+                                if (request.requestMeals && request.requestMeals.length > 0) {
+                                    angular.forEach(request.requestMeals, function (requestMeal, key2) {
+                                        var requestPrice = (requestMeal.meal.price * requestMeal.quantity);
+                                        totalPrice += requestPrice;
+                                        $scope.reservationInfo.requestMeals.push({
+                                            meal: requestMeal.meal.name,
+                                            quantity: requestMeal.quantity,
+                                            price: requestPrice
+                                        });
+                                    });
+                                }
+                            });
+
+                            $scope.reservationInfo.requestMeals.push({
+                                meal: '',
+                                quantity: '',
+                                price: totalPrice
+                            });
+                        }
+                    });
+
                     $('#infoModal').modal('show');
                 });
             }
