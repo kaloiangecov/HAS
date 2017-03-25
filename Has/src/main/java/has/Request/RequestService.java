@@ -3,6 +3,7 @@ package has.Request;
 import has.Guest.Guest;
 import has.Guest.GuestRepository;
 import has.ReservationGuest.ReservationGuestRepository;
+import has.Task.TaskService;
 import has.User.User;
 import has.Utils.TaskHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +29,16 @@ public class RequestService {
     @Autowired
     private TaskHandler taskHandler;
 
+    @Autowired
+    private TaskService taskService;
+
     public Request save(Request request, User user) {
         Guest guest = guestRepo.findByUserId(user.getId());
-        if (user.getUserRole().getId() == 5) {
-            request.setReservationGuest(rgRepo.findByReservationStatusAndGuestId(1, guest.getId()));
-        }
-        //taskHandler.createTaskFromRequest(request);
-        return repo.save(request);
+        request.setReservationGuest(rgRepo.findByReservationStatusAndGuestId(1, guest.getId()));
+        repo.save(request);
+        taskService.save(taskHandler.createTaskFromRequest(request));
+        return request;
+
     }
 
     public List<Request> getAllRequests() {

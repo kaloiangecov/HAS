@@ -75,9 +75,13 @@ public class TaskHandler {
         task.setTargetTime(request.getTargetTime());
         task.setTimePlaced(new Date().toString());
         task.setPriority(2);
-        task = assignTask(task, findShift(new LocalTime()));
+        task.setStatus(0);
+        task.setTimePlaced(timeFormatter.getNewDateAsString());
+        task.setDuration("00:20");
+        task.setAssigner("SYSTEM");
         //TODO set description, employee, duration and target time(евентуално)
-        return taskRepository.save(task);
+        taskRepository.save(task);
+        return assignTask(task, findShift(new LocalTime()));
     }
 
     public Task assignTask(Task task, int shift) {
@@ -118,7 +122,6 @@ public class TaskHandler {
 
     public List<EmployeeDTO> findEmployeesOnShiftDTO(LocalTime localTime) {
         return employeeService.getEmployeesOnShift(findShift(localTime));
-
     }
 
     private Task assignToLeastBusy(Task task, List<EmployeeDTO> availableEmployees) {
@@ -353,6 +356,7 @@ public class TaskHandler {
         lowTasks = equalize(employeesDTO, lowTasks);
         allTasks.addAll(mediumTasks);
         allTasks.addAll(lowTasks);
+        allTasks.addAll(lowTasks);
         return allTasks;
     }
 
@@ -375,9 +379,6 @@ public class TaskHandler {
             taskRepository.save(assignToLeastBusy(tasks.get(i), employeesDTO));
 
         }
-//        for (Task task : tasks) {
-//            employeesDTO taskRepository.save(assignToLeastBusy(task, employeesDTO));
-//        }
         return tasks;
     }
 
@@ -418,5 +419,16 @@ public class TaskHandler {
 
     private LocalTime parse(String dateToParse) {
         return LocalTime.parse(dateToParse);
+    }
+
+    public List<EmployeeDTO> getEmployeesOnShift(int shift) {
+        List<EmployeeDTO> employeesDTO = null;
+
+        if (shift == NOT_INITIALIZED) {
+            employeesDTO = employeeService.getEmployeesOnShift(findShift(new LocalTime()));
+        } else {
+            employeesDTO = employeeService.getEmployeesOnShift(shift);
+        }
+        return employeesDTO;
     }
 }
