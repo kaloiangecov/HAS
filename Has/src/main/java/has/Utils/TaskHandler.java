@@ -147,10 +147,14 @@ public class TaskHandler {
         StringBuilder description = new StringBuilder();
         description
                 .append("Room request: " + req.getId() + System.lineSeparator())
-                .append("Type of request: " + req.getType())
-                .append("From room: " + req.getReservationGuest().getReservation().getRoom());
+                .append("Type of request: " + req.getType());
+        if (req.getReservationGuest() != null) {
+            description.append("From room: " + req.getReservationGuest().getReservation().getRoom());
+        } else {
+            description.append("Ordered from an employee");
+        }
         if (req.getMealRequests() != null) {
-            description.append("Meals requested: " + req.getMealRequests());
+            description.append("Meals requested: " + req.getMealRequests().toString());
         }
         return description.toString();
     }
