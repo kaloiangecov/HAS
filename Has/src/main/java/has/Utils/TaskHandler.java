@@ -68,17 +68,19 @@ public class TaskHandler {
         shifts.put(NIGHT_SHIFT, shift3);
     }
 
-    public Task createTaskFromRequest(Request request) {
+    public Task createTaskFromRequest(Request request) throws Exception {
         Task task = new Task();
         task.setTitle("Request " + request.getId());
         task.setDescription(createDescription(request));
         task.setRequest(request);
         task.setTargetTime(request.getTargetTime());
-        task.setTimePlaced(new Date().toString());
+        task.setTimePlaced(timeFormatter.getNewDateAsString());
         task.setPriority(2);
         task.setStatus(0);
         task.setDuration(NOT_SPECIFIED);
         task = assignTask(task, findShift(new LocalTime()));
+        EmployeeDTO employeeDTO = employeeService.transferEmployeeToDTO(task.getAssignee().getId());
+        organizeTasks(employeeDTO);
 
         //TODO set description, employee, duration and target time(евентуално)
         return taskRepository.save(task);
@@ -116,7 +118,6 @@ public class TaskHandler {
                 task = resolveConflict(task);
             }
         }
-
         return task;
     }
 
@@ -260,7 +261,7 @@ public class TaskHandler {
         return false;
     }
 
-    public List<Task> organiseTasks(EmployeeDTO employeeDTO) {
+    public List<Task> organizeTasks(EmployeeDTO employeeDTO) {
         Task lastTask = null;
         List<Task> targetTimeTasks = targetTimeTasks = employeeDTO.getTargetTimeTasks();
         List<Task> tasks = employeeDTO.getTasks();
@@ -275,8 +276,11 @@ public class TaskHandler {
                         task.setStartTime(addTime(parse(lastTask.getFinishTime()), parse(FIVE_MINUTES)).toString());
                         task.setFinishTime(addTime(parse(task.getStartTime()), parse(task.getDuration())).toString());
 
+
                         Task intersectingTask = findIntersectingTask(targetTimeTasks, task);
-                        if (intersectingTask != null) {
+                        if (intersectingTask.getAssigner() != null) {
+                            task.setStartTime(addTime(parse(intersectingTask.getFinishTime()), parse(FIVE_MINUTES)).toString());
+                            task.setFinishTime(addTime(parse(task.getStartTime()), parse(task.getDuration())).toString());
                             if (!completeTaskBeforeShiftEnd(task)) {
                                 nextShiftTasks.add(task);
                             }
@@ -307,7 +311,7 @@ public class TaskHandler {
             lastTask = task;
         }
 
-        if (nextShiftTasks != null) {
+        if (!nextShiftTasks.isEmpty()) {
             moveRemainingTasks(nextShiftTasks);
         }
         return tasks;

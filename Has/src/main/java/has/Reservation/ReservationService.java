@@ -6,9 +6,14 @@ import has.Employee.EmployeeRepository;
 import has.ReservationGuest.ReservationGuest;
 import has.Room.Room;
 import has.Room.RoomRepository;
+import has.Task.Task;
+import has.Task.TaskService;
 import has.User.User;
 import has.Utils.CalculationUtils;
+import has.Utils.TaskHandler;
 import has.Utils.TemplateHandler;
+import has.Utils.TimeFormatter;
+import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +23,10 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by kaloi on 12/20/2016.
@@ -30,6 +38,9 @@ public class ReservationService {
     private TemplateHandler templateHandler;
 
     @Autowired
+    private TaskHandler taskHandler;
+
+    @Autowired
     private ReservationRepository repo;
 
     @Autowired
@@ -37,6 +48,12 @@ public class ReservationService {
 
     @Autowired
     private EmployeeRepository repoEmployee;
+
+    @Autowired
+    private TaskService taskService;
+
+    @Autowired
+    private TimeFormatter timeFormatter;
 
     private static final int RESERVATION_STATUS_CREATED = 0;
     private static final int RESERVATION_STATUS_ARRIVED = 1;
@@ -273,8 +290,24 @@ public class ReservationService {
                 }
             }
         }
-
+        createTaskCleanRoom(reservation);
         return repo.save(reservation);
+    }
+
+    private void createTaskCleanRoom(Reservation reservation) throws Exception {
+        Task task = new Task();
+
+        task.setTitle("Clean Room ");
+        task.setDescription("Clean Room " + reservation.getRoom().getNumber());
+        task.setRequest(null);
+        task.setTargetTime(null);
+        task.setTimePlaced(timeFormatter.getNewDateAsString());
+        task.setPriority(1);
+        task.setStatus(0);
+        task.setDuration("00:30");
+        task = taskHandler.assignTask(task, taskHandler.findShift(new LocalTime()));
+        task = taskService.save(task, "SYSTEM");
+        taskService.organizeTasks(task.getAssignee().getId());
     }
 
     public Page<Reservation> getClientHistory(Long id, int start, int length, String sortColumn, String sortDirection) {

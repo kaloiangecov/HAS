@@ -47,7 +47,7 @@ public class TaskController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('PERM_CREATE_TASK')")
-    public Task saveAutomatically(@RequestBody @Valid Task Task) {
+    public Task saveAutomatically(@RequestBody @Valid Task Task) throws Exception {
         return service.save(Task);
     }
 
@@ -137,7 +137,7 @@ public class TaskController {
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('PERM_EDIT_TASK')")
     public List<Task> organiseTasks(@PathVariable Long employeeId) throws Exception {
-        return service.organiseTasks(employeeId);
+        return service.organizeTasks(employeeId);
     }
 
     @RequestMapping(value = "/tasks/equalize", method = RequestMethod.PUT,
@@ -153,7 +153,7 @@ public class TaskController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    public Task test2(@Valid @RequestBody Task task) {
+    public Task test2(@Valid @RequestBody Task task) throws Exception {
 
         return service.save(task);
     }

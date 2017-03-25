@@ -37,16 +37,17 @@ public class TaskService {
         return repo.save(task);
     }
 
-    public Task save(Task task) {
+    public Task save(Task task) throws Exception {
         task = validateTargetTime(task);
-        return repo.save(taskHandler.assignTask(task, taskHandler.findShift(new LocalTime())));
+        task = repo.save(taskHandler.assignTask(task, taskHandler.findShift(new LocalTime())));
+        organizeTasks(task.getAssignee().getId());
+        return task;
     }
 
     public List<Task> equalize() throws Exception {
         List<EmployeeDTO> employees = taskHandler.findEmployeesOnShiftDTO(new LocalTime());
-        organise(employees);
         List<Task> tasks = repo.save(taskHandler.equalizeTasks(taskHandler.findEmployeesOnShiftDTO(new LocalTime())));
-        organise(employees);
+        organize(employees);
         return tasks;
     }
 
@@ -80,7 +81,9 @@ public class TaskService {
         dbTask.setAssigner(task.getAssigner());
         dbTask.setAssignee(task.getAssignee());
         dbTask.setDuration(task.getDuration());
-        return repo.save(dbTask);
+        dbTask = repo.save(dbTask);
+        organizeTasks(dbTask.getAssignee().getId());
+        return dbTask;
     }
 
     public List<Task> getEmployeesTasks(Employee employee) {
@@ -119,14 +122,14 @@ public class TaskService {
         return task;
     }
 
-    public List<Task> organiseTasks(Long employeeId) throws Exception {
+    public List<Task> organizeTasks(Long employeeId) throws Exception {
         EmployeeDTO employeeDTO = employeeService.transferEmployeeToDTO(employeeId);
-        return repo.save(taskHandler.organiseTasks(employeeDTO));
+        return repo.save(taskHandler.organizeTasks(employeeDTO));
     }
 
-    private void organise(List<EmployeeDTO> employees) throws Exception {
+    private void organize(List<EmployeeDTO> employees) throws Exception {
         for (EmployeeDTO employeeDTO : employees) {
-            organiseTasks(employeeDTO.getWorkingSchedule().getEmployee().getId());
+            organizeTasks(employeeDTO.getWorkingSchedule().getEmployee().getId());
         }
     }
 }
