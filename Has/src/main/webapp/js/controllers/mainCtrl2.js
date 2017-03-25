@@ -231,9 +231,13 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
     };
 
     $scope.search = function () {
+        var url = "reservations/booking";
+        if ($scope.reservation && $scope.reservation.id)
+            url += ("?existingId=" + $scope.reservation.id);
+
         $http({
             method: "POST",
-            url: "reservations/booking",
+            url: url,
             responseType: "json",
             headers: {
                 //'Accept': 'application/json',
@@ -301,22 +305,23 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
 
         var isGroup = ($scope.selectedRooms.length > 1);
 
-        $scope.saveData("reservation?group=" + isGroup, $scope.reservation, function (newReservation) {
-            console.log("reservation", newReservation);
+        $scope.guest.numberReservations = 0;
+        $scope.guest.status = 0;
 
-            $scope.reservationGuest.reservation = newReservation;
+        if (!$scope.guest.user.username && $scope.guest.user.email) { // create new guest
+            $scope.guest.user.username = $scope.guest.user.email;
+            $scope.guest.user.password = base64encode($scope.guest.user.email);
+            $scope.guest.user.userRole = {id: 5};
+            $scope.guest.user.regDate = (new Date()).toISOString().substr(0, 10);
 
-            if (!$scope.guest.user.username && $scope.guest.user.email) { // create new guest
-                $scope.guest.user.username = $scope.guest.user.email;
-                $scope.guest.user.password = base64encode($scope.guest.user.email);
-                $scope.guest.user.userRole = {id: 5};
-                $scope.guest.user.regDate = (new Date()).toISOString().substr(0, 10);
+            $scope.saveData("guest", $scope.guest, function (newGuest) {
+                $scope.reservationGuest.guest = newGuest;
 
-                $scope.guest.numberReservations = 0;
-                $scope.guest.status = 0;
+                $scope.saveData("reservation?group=" + isGroup, $scope.reservation, function (newReservation) {
+                    console.log("reservation", newReservation);
 
-                $scope.saveData("guest", $scope.guest, function (newGuest) {
-                    $scope.reservationGuest.guest = newGuest;
+                    $scope.reservationGuest.reservation = newReservation;
+
                     $scope.saveData("reservation-guest", $scope.reservationGuest, function (newReservationGuest) {
                         console.log(newReservationGuest);
 
@@ -329,11 +334,19 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                         $scope.clearEverything();
 
                         $state.go('app.root.reservationSuccessful');
-                    });
+                    }, $scope.resetReservation);
+
                 }, $scope.resetReservation);
-            }
-            else { // use existing guest
-                $scope.reservationGuest.guest = $scope.guest;
+            }, $scope.resetReservation);
+
+        }
+        else { // use existing guest
+            $scope.reservationGuest.guest = $scope.guest;
+
+            $scope.saveData("reservation?group=" + isGroup, $scope.reservation, function (newReservation) {
+                console.log("reservation", newReservation);
+
+                $scope.reservationGuest.reservation = newReservation;
 
                 $scope.saveData("reservation-guest", $scope.reservationGuest, function (newReservationGuest) {
                     console.log("reservation owner", newReservationGuest);
@@ -341,15 +354,15 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                     if (isGroup)
                         $scope.addReservationsToGroup(angular.copy(newReservation));
 
-                    $scope.reservationInfo = newReservation
+                    $scope.reservationInfo = newReservation;
                     $scope.reservationInfo.reservationGuests = [newReservationGuest];
 
                     $scope.clearEverything();
 
                     $state.go('app.root.reservationSuccessful');
-                });
-            }
-        });
+                }, $scope.resetReservation);
+            }, $scope.resetReservation);
+        }
     };
 
     $scope.editReservation = function () {

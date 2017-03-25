@@ -65,7 +65,7 @@
 <div class="row booking-results">
     <form name="bookingSubmitForm" class="col-md-8 col-sm-12" ng-submit="selectRooms()">
         <h3>Results:</h3>
-        <table class="table">
+        <table class="table" ng-show="results.length > 0">
             <thead>
             <tr>
                 <th>Room Class</th>
@@ -97,6 +97,10 @@
             </tr>
             </tbody>
         </table>
+
+        <div class="alert alert-danger" ng-show="results.length == 0">There aren't any available rooms according to your
+            search criteria! Please, change your filters and try again.
+        </div>
 
         <button type="submit" class="btn btn-default" ng-disabled="selectedRooms.length == 0">Continue <i
                 class="fa fa-hand-o-right"></i></button>

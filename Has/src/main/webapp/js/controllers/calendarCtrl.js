@@ -83,7 +83,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
             }).then(updateCallback);
     };
 
-    $scope.saveReservationGuest = function () {
+    $scope.saveReservationGuest = function (reservation) {
         function afterEventCreated(data) {
             $scope.scheduler.message("New event created!");
             $scope.resetReservation();
@@ -95,13 +95,25 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
 
             $scope.saveData("guest", $scope.reservationGuest.guest, function (data) {
                 $scope.reservationGuest.guest = data;
-                $scope.saveData("reservation-guest", $scope.reservationGuest,
-                    afterEventCreated, $scope.resetReservation);
+
+                $scope.saveData("reservation", reservation, function (newReservation) {
+
+                    $scope.reservationGuest.reservation = newReservation;
+                    $scope.saveData("reservation-guest", $scope.reservationGuest,
+                        afterEventCreated, $scope.resetReservation);
+
+                }, $scope.resetReservation);
+
             }, $scope.resetReservation);
+
+            $scope.resetReservation();
         }
         else { // use existing guest
             $scope.reservationGuest.guest = $scope.guests.selectedGuest;
-            $scope.saveData("reservation-guest", $scope.reservationGuest, afterEventCreated, $scope.resetReservation);
+            $scope.saveData("reservation-guest",
+                $scope.reservationGuest,
+                afterEventCreated,
+                $scope.resetReservation);
         }
     };
 
@@ -822,11 +834,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
             $scope.reservationGuest.owner = false;
         }
 
-        $scope.saveData(url, objReservation, function (newReservation) {
-            $scope.reservationGuest.reservation = newReservation;
-            console.log("New reservation: ", $scope.reservationGuest.reservation);
-            $scope.saveReservationGuest();
-        }, $scope.resetReservation);
+        $scope.saveReservationGuest(objReservation);
 
         $('#reservationModal').modal('hide');
 

@@ -70,7 +70,9 @@ public class ReservationController {
     //@PreAuthorize("hasAuthority('PERM_VIEW_RESERVATION')")
     public
     @ResponseBody
-    List<Room> bookingSearch(@RequestBody BookingSearchRequest request) {
+    List<Room> bookingSearch(
+            @RequestParam(name = "existingId", required = false) Long existingId,
+            @RequestBody BookingSearchRequest request) {
 
         return reservationService.searchReservationsWeb(
                 request.getStartDate(),
@@ -78,7 +80,8 @@ public class ReservationController {
                 request.getNumberAdults(),
                 (request.getNumberChildren() > 0),
                 request.isPets(),
-                request.isMinibar()
+                request.isMinibar(),
+                existingId
         );
     }
 

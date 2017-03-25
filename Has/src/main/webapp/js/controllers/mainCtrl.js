@@ -166,7 +166,7 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
             });
     };
 
-    $scope.getFreeUsers = function (id, type, updateCallback) {
+    $scope.getFreeUsers = function (id, type, callback) {
         $http({
             method: "GET",
             url: ("users/free-" + type + "/" + id),
@@ -180,10 +180,10 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
             },
             function (response) { //error
                 $scope.displayMessage(response.data);
-            }).then(updateCallback);
+            }).then(callback);
     };
 
-    $scope.getAllRoles = function (updateCallback) {
+    $scope.getAllRoles = function (callback) {
         $http({
             method: "GET",
             url: "roles",
@@ -197,10 +197,10 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
             },
             function (response) { //error
                 $scope.displayMessage(response.data);
-            }).then(updateCallback);
+            }).then(callback);
     };
 
-    $scope.deleteData = function (dataType, id, callback) {
+    $scope.deleteData = function (dataType, id, succcessCallback, errorCallback) {
         $http({
             method: "DELETE",
             url: (dataType + "/" + id),
@@ -210,12 +210,18 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
             }
         }).then(
             function (response) { //success
-                response.data;
+                return response;
             },
             function (response) { //error
-                $scope.displayMessage(response.data);
+                if (errorCallback)
+                    errorCallback;
+                else
+                    $scope.displayMessage(response.data);
             })
-            .then(callback);
+            .then(function (response) {
+                if (response.status === 200)
+                    succcessCallback;
+            });
     };
 
     $scope.saveData = function (dataType, data, successCallback, errorCallback, isEdit) {

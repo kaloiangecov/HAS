@@ -46,6 +46,12 @@ public class ReservationService {
     private static final int RESERVATION_STATUS_CLOSED = 2;
 
     public Reservation save(Reservation reservation, boolean isGroup, String groupId, Long recepcionistUserId, User user) throws IOException, TemplateException, URISyntaxException {
+        if (repo.findExistingReservationsCount(
+                reservation.getStartDate(),
+                reservation.getEndDate(),
+                reservation.getRoom().getId()) > 0)
+            throw new IOException("There already is a reservation on the same room within the same time range! Please, try a new one.");
+
         setLastModified(reservation, user);
 
         if (recepcionistUserId != null) {
@@ -83,13 +89,19 @@ public class ReservationService {
         return reservations;
     }
 
-    public List<Room> searchReservationsWeb(String startDate, String endDate, int numberAdults, boolean children, boolean pets, boolean minibar) {
+    public List<Room> searchReservationsWeb(String startDate, String endDate, int numberAdults, boolean children, boolean pets, boolean minibar, Long exsistingId) {
         List<Room> freeRooms;
 
         if (children) {
-            freeRooms = repoRoom.findInSiteWithChildren(startDate, endDate, numberAdults, children, pets, minibar);
+            if (exsistingId == null)
+                freeRooms = repoRoom.findInSiteWithChildren(startDate, endDate, numberAdults, children, pets, minibar);
+            else
+                freeRooms = repoRoom.findInSiteWithChildrenForEdit(startDate, endDate, numberAdults, children, pets, minibar, exsistingId);
         } else {
-            freeRooms = repoRoom.findInSite(startDate, endDate, numberAdults, pets, minibar);
+            if (exsistingId == null)
+                freeRooms = repoRoom.findInSite(startDate, endDate, numberAdults, pets, minibar);
+            else
+                freeRooms = repoRoom.findInSiteForEdit(startDate, endDate, numberAdults, pets, minibar, exsistingId);
         }
         return freeRooms;
     }

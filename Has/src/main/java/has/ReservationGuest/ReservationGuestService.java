@@ -1,6 +1,7 @@
 package has.ReservationGuest;
 
 import freemarker.template.TemplateException;
+import has.Reservation.ReservationRepository;
 import has.Utils.TemplateHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,9 @@ public class ReservationGuestService {
 
     @Autowired
     private ReservationGuestRepository repo;
+
+    @Autowired
+    private ReservationRepository repoReservation;
 
     @Autowired
     private TemplateHandler templateHandler;
@@ -57,6 +61,13 @@ public class ReservationGuestService {
     }
 
     public ReservationGuest update(Long id, ReservationGuest reservationGuest) throws Exception {
+        if (repoReservation.findExistingReservationsCount(
+                reservationGuest.getReservation().getStartDate(),
+                reservationGuest.getReservation().getEndDate(),
+                reservationGuest.getReservation().getRoom().getId()) == 0)
+            throw new Exception("There already is a reservation on the same room within the same time range! Please, try a new one.");
+
+
         ReservationGuest dbReservationGuest = repo.findOne(id);
         validateIdNotNull(dbReservationGuest);
 

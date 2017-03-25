@@ -62,6 +62,13 @@ app.controller("roomCtrl", function ($scope, $http, $location, $state, $statePar
                 $(btns).on('click', function () {
                     var roomId = this.id.split('_')[1];
                     $scope.deleteData('room', roomId, function () {
+                        $scope.page.message = {
+                            type: 'success',
+                            title: 'Success!',
+                            text: 'Room was successfully deleted'
+                        };
+                        $('#messageModal').modal('show');
+
                         $scope.reloadTableData(false);
                         $scope.addDeleteFunctions();
                     });
