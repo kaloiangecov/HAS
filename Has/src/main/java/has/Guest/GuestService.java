@@ -1,5 +1,8 @@
 package has.Guest;
 
+import has.Exceptions.EmailAlreadyExists;
+import has.User.User;
+import has.User.UserRepository;
 import has.Utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,12 +21,16 @@ public class GuestService {
     @Autowired
     private GuestRepository repo;
 
+    @Autowired
+    private UserRepository repoUser;
+
     private static final int NEW_RESEVATION = -1;
 
     public Guest save(Guest guest) throws Exception {
         validateEgn(guest);
         validateIssueDate(guest);
         validateIdentityNumber(guest);
+        validateUserEmail(guest);
         return repo.save(guest);
     }
 
@@ -98,6 +105,13 @@ public class GuestService {
         Guest dbGuest = repo.findByPersonalDataIdentityNumber(guest.getPersonalData().getIdentityNumber());
         if (dbGuest != null && dbGuest.getId() != guest.getId()) {
             throw new Exception("Guest with Identity Number " + guest.getPersonalData().getIdentityNumber() + " already exists.");
+        }
+    }
+
+    private void validateUserEmail(Guest guest) throws Exception {
+        User dbUser2 = repoUser.findByEmail(guest.getUser().getEmail());
+        if (dbUser2 != null && dbUser2.getId() != guest.getUser().getId()) {
+            throw new EmailAlreadyExists(guest.getUser().getEmail());
         }
     }
 }
