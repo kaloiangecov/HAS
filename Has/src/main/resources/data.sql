@@ -343,7 +343,7 @@ VALUES
   ('3', 'asddfh-alskdj-weirasda-123213as', TRUE, TRUE, TRUE, 10, '2017-03-22', 'asdasdmadafaka', NULL, NULL, 1, 1, 50.0,
    10, '4', '2017-03-18', 1),
   ('4', 'kswer4-alskdj-weiruowi-eee213as', FALSE, FALSE, TRUE, 10, '2017-03-24', NULL, NULL, NULL, 2, 0, 45.0, 2, '4',
-   '2017-03-21', 1),
+   '2017-03-21', 0),
   ('5', 'keeefh-alskdj-weiruowi-000013as', TRUE, FALSE, TRUE, 0, '2017-04-01', 'asdasdmadafaka2', NULL, NULL, 4, 0,
    45.0, 7, '4', '2017-03-29', 0),
   ('6', 'mmjdfh-mmmmmm-weiruowi-00213as', TRUE, FALSE, TRUE, 0, '2017-04-01', 'asdasdmadafaka2', NULL, NULL, 4, 0, 45.0,
