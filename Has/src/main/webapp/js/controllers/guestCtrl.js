@@ -115,15 +115,7 @@ app.controller("guestCtrl", function ($scope, $state, $location, $stateParams, $
                     userID = $scope.guest.user.id;
 
                 $scope.getFreeUsers(userID, "guests", function (data) {
-                    var emptyArray = [
-                        {
-                            id: 0,
-                            username: "-- None --",
-                            email: "-- None --"
-                        }
-                    ];
-
-                    $scope.usersList = emptyArray.concat(data);
+                    $scope.usersList = data;
 
                     if (!$scope.guest.user)
                         $scope.guest.user = $scope.usersList[0];
@@ -138,20 +130,12 @@ app.controller("guestCtrl", function ($scope, $state, $location, $stateParams, $
                 personalData: {}
             };
             $scope.getFreeUsers(-1, "guests", function (data) {
-                var emptyArray = [
-                    {
-                        id: 0,
-                        username: "-- None --",
-                        email: "-- None --"
-                    }
-                ];
+                $scope.usersList = data;
 
-                $scope.usersList = emptyArray.concat(data);
-
-                $scope.guest.user = $scope.usersList[0];
+                if ($scope.usersList.length > 0)
+                    $scope.guest.user = $scope.usersList[0];
             });
         }
-
 
         $scope.submit = function (guest) {
             if ($scope.guestForm.$valid) {
