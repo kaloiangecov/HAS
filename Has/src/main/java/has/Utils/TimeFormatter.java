@@ -21,7 +21,7 @@ public class TimeFormatter {
     }
 
     public static String hoursAndMinutes(LocalTime time) {
-        DateTimeFormatter parseFormat = new DateTimeFormatterBuilder().appendPattern("h:mm").toFormatter();
+        DateTimeFormatter parseFormat = new DateTimeFormatterBuilder().appendPattern("hh:mm").toFormatter();
         String timeToParse = parseFormat.print(time);
         return timeToParse;
     }
