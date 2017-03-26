@@ -153,7 +153,7 @@ public class TaskHandler {
         description
                 .append("Room request: " + req.getId())
                 .append(System.lineSeparator())
-                .append("Type of request: " + req.getType())
+                .append("Type of request: " + getTypeDescription(req.getType()))
                 .append(System.lineSeparator());
         if (req.getReservationGuest() != null) {
             description
@@ -169,16 +169,7 @@ public class TaskHandler {
                     .append("Meals requested:")
                     .append(System.lineSeparator())
                     .append(getMeals(req.getMealRequests()));
-        }else{
-            String taskType = req.getType() == 1 ?
-                    "Bring a towel" : req.getType() == 3 ?
-                    "Room cleaning" : req.getType() == 4 ?
-                    "Car parking" : req.getType() == 5 ?
-                    "SPA" : "Invalid request";
-            description
-                    .append(taskType)
-                    .append(System.lineSeparator());
-            }
+        }
         return description.toString();
     }
 
@@ -192,6 +183,15 @@ public class TaskHandler {
         return message;
     }
 
+    public String getTypeDescription(int type){
+            String taskType = type == 1 ?
+                    "Bring a towel" : type == 2 ?
+                    "Meal request" : type  == 3 ?
+                    "Room cleaning" : type == 4 ?
+                    "Car parking" : type == 5 ?
+                    "SPA" : "Invalid request";
+            return taskType;
+    }
     public int findShift(LocalTime timeNow) {
 
         LocalTime morningShiftStart = LocalTime.parse(START_MORNING_SHIFT);
