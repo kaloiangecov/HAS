@@ -226,10 +226,10 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
         } else {
             $('#startTime').daterangepicker({
                 singleDatePicker: true,
-                showDropdowns: true,
+                showDropdowns: false,
                 timePicker: true,
-                startDate: $scope.task.startTime,
-                minDate: $scope.task.startTime,
+                startDate: $scope.task.timePlaced,
+                minDate: $scope.task.timePlaced,
                 timePicker24Hour: true,
                 locale: {
                     format: 'DD/MM/YYYY HH:mm',
@@ -237,17 +237,17 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
                 }
             }, function (start) {
                 $scope.$apply(function () {
-                    $scope.task.startTime = start.format("YYYY-MM-DDTHH:mm:ss");
+                    $scope.task.startTime = start.format("HH:mm:ss");
                     $('#targetTime').val($scope.task.startTime);
                 });
             });
 
             $('#finishTime').daterangepicker({
                 singleDatePicker: true,
-                showDropdowns: true,
+                showDropdowns: false,
                 timePicker: true,
-                startDate: $scope.task.finishTime,
-                minDate: $scope.task.finishTime,
+                startDate: $scope.task.timePlaced,
+                minDate: $scope.task.timePlaced,
                 timePicker24Hour: true,
                 locale: {
                     format: 'DD/MM/YYYY HH:mm',
@@ -255,7 +255,7 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
                 }
             }, function (start) {
                 $scope.$apply(function () {
-                    $scope.task.finishTime = start.format("YYYY-MM-DDTHH:mm:ss");
+                    $scope.task.finishTime = start.format("HH:mm:ss");
                     $('#targetTime').val($scope.task.finishTime);
                 });
             });
