@@ -181,12 +181,19 @@ public class ReservationService {
 
         String[] arrRoomIds = null;
         int i = 0;
-        boolean editRooms = roomIds == "-";
+        boolean editRooms = (roomIds == "-");
 
         if (editRooms)
             arrRoomIds = roomIds.split(",");
 
         for (Reservation gr : groups) {
+            if (repo.findExistingReservationInSlot(
+                    reservation.getStartDate(),
+                    reservation.getEndDate(),
+                    gr.getRoom().getId(),
+                    gr.getId()) != null)
+                throw new IOException("There already is a reservation on the same room within the same time range! Please, try a new one.");
+
             gr.setPrice(reservation.getPrice());
             gr.setAllInclusive(reservation.isAllInclusive());
             gr.setBreakfast(reservation.isBreakfast());

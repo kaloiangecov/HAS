@@ -36,7 +36,7 @@ public class CalculationUtils {
                         : roomClass == 2 ? highClassPrice
                         : 0;
         int guestRank = 0;
-        if (reservation.getReservationGuests() != null) {
+        if (reservation.getReservationGuests() != null && reservation.getReservationGuests().size() > 0) {
             guestRank = reservation.getReservationGuests().get(0).getGuest().getNumberReservations();
         }
 
