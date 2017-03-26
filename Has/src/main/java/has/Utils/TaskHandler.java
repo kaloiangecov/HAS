@@ -86,7 +86,7 @@ public class TaskHandler {
         task = assignTask(task, findShift(new LocalTime()));
         EmployeeDTO employeeDTO = employeeService.transferEmployeeToDTO(task.getAssignee().getId());
         Task savedTask = taskRepository.save(task);
-        taskRepository.save(organizeTasks(employeeDTO));
+        List<Task> updatedTasks = taskRepository.save(organizeTasks(employeeDTO));
         return savedTask;
     }
 
@@ -272,6 +272,9 @@ public class TaskHandler {
 
     private Task resolveConflict(Task task) {
         Task resolveConflict = new Task();
+        List<EmployeeDTO> employees = findEmployeesOnShiftDTO(new LocalTime(), true);
+        task.setAssignee(employees.get(FIRST).getWorkingSchedule().getEmployee());
+
         taskRepository.save(task);
         //TODO: tasks should have unique identifier other than the DB ID;
         resolveConflict.setTitle("Task conflict");
@@ -280,11 +283,11 @@ public class TaskHandler {
         resolveConflict.setPriority(HIGH_PRIORITY);
         resolveConflict.setAssigner("SYSTEM");
         resolveConflict.setStartTime(new LocalTime().toString());
+        resolveConflict.setFinishTime(addTime(parse(resolveConflict.getStartTime()), parse(resolveConflict.getDuration())).toString());
         resolveConflict.setStatus(TASK_STATUS_SCHEDULED);
 
         //TODO: task should be sent to a MANAGER
-        List<EmployeeDTO> employees = findEmployeesOnShiftDTO(new LocalTime(), true);
-        resolveConflict.setAssignee(employeeRepository.findOne(1L));
+        resolveConflict.setAssignee(employees.get(FIRST).getWorkingSchedule().getEmployee());
         return resolveConflict;
     }
 

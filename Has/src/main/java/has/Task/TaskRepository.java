@@ -21,5 +21,5 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     List<Task> findByPriorityAndTimePlacedStartingWith(int priority, String date);
 
-    Page<Task> findByStatusLessThanAndAssigneePersonalDataFullNameContaining(int status, String assignee, Pageable request);
+    Page<Task> findByStatusLessThanAndAssigneePersonalDataFullNameContainingIgnoreCase(int status, String assignee, Pageable request);
 }
