@@ -28,6 +28,8 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
     $scope.selectedGroupReservation = {};
     $scope.reservationInfo = {};
 
+    $scope.refreshInterval = undefined;
+
     $scope.getRooms = function (callback) {
         $http({
             method: "GET",
@@ -993,6 +995,15 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
 
         loadEvents();
 
-        $interval(loadEvents, 5000);
+        if (!$scope.refreshInterval) {
+            $scope.refreshInterval = $interval(loadEvents, 5000);
+        }
+
+        $scope.$on("$destroy", function () {
+            if ($scope.refreshInterval) {
+                $interval.cancel($scope.refreshInterval);
+                $scope.refreshInterval = undefined;
+            }
+        });
     });
 });
