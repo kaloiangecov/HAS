@@ -148,13 +148,4 @@ public class TaskController {
         return service.equalize();
     }
 
-    @RequestMapping(value = "/test2", method = RequestMethod.POST,
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
-    public Task test2(@Valid @RequestBody Task task) throws Exception {
-
-        return service.save(task);
-    }
-
 }
