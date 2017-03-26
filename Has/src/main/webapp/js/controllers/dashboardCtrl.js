@@ -33,6 +33,8 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
         }
     ];
 
+    $scope.refreshInterval = undefined;
+
     function getCurrentShift() {
         var nowHour = moment().format('HH:mm');
         var shift = SHIFT_NIGHT;
@@ -88,7 +90,7 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
 
         $scope.dtOptions = DTOptionsBuilder.newOptions()
             .withOption('ajax', {
-                url: ('tasks/current/' + shiftHour),
+                url: 'tasks/current',
                 type: 'GET',
                 dataType: "json",
                 headers: {
@@ -210,9 +212,18 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
         });
 
         if ($location.path().includes("dashboard")) {
-            $interval(function () {
-                $scope.reloadTableData(false);
-            }, 5000);
+            if (!$scope.refreshInterval) {
+                $scope.refreshInterval = $interval(function () {
+                    $scope.reloadTableData(false);
+                }, 5000);
+            }
+
+            $scope.$on("$destroy", function () {
+                if ($scope.refreshInterval) {
+                    $interval.cancel($scope.refreshInterval);
+                    $scope.refreshInterval = undefined;
+                }
+            });
         } else {
             $('#startTime').daterangepicker({
                 singleDatePicker: true,

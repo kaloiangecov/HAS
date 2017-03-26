@@ -94,10 +94,9 @@ public class TaskService {
         return repo.findByAssigneeIdAndStatusNotOrderByTimePlaced(employee.getId(), UNRESOLVED);
     }
 
-    public Page<Task> searchCurrentShift(int start, int length, String sortColumn, String sortDirection,
-                                         String time, String assignee) {
+    public Page<Task> searchCurrentShift(int start, int length, String sortColumn, String sortDirection, String assignee) {
         PageRequest request = new PageRequest((start / length), length, Sort.Direction.fromString(sortDirection), sortColumn);
-        return repo.findByTargetTimeGreaterThanAndAssigneePersonalDataFullNameContaining(time, assignee, request);
+        return repo.findByStatusLessThanAndAssigneePersonalDataFullNameContaining(2, assignee, request);
     }
 
     public Task changeStatus(Long id, Integer status) {

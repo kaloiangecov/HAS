@@ -48,11 +48,11 @@
                         <label for="finishTime">Finish Time *</label>
                         <input type="text" class="form-control" id="finishTime" name="finishTime"
                                minlength="4" maxlength="10" required="required"/>
-                        <div ng-show="taskForm.$submitted || taskForm.dueTime.$touched"
+                        <div ng-show="taskForm.$submitted || taskForm.finishTime.$touched"
                              class="validation-message">
-                            <span ng-show="taskForm.dueTime.$error.required">This field is required</span>
-                            <span ng-show="taskForm.dueTime.$error.minlength">Input too short</span>
-                            <span ng-show="taskForm.dueTime.$error.maxlength">Input too long</span>
+                            <span ng-show="taskForm.finishTime.$error.required">This field is required</span>
+                            <span ng-show="taskForm.finishTime.$error.minlength">Input too short</span>
+                            <span ng-show="taskForm.finishTime.$error.maxlength">Input too long</span>
                         </div>
                     </div>
                 </div>
