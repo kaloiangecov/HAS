@@ -97,9 +97,9 @@ public class TaskHandler {
         if (task.getTargetTime() == null) {
             List<EmployeeDTO> employeesOnShift;
             if (shift == NOT_INITIALIZED) {
-                employeesOnShift = employeeService.getEmployeesOnShift(findShift(new LocalTime()));
+                employeesOnShift = employeeService.getEmployeesOnShift(findShift(new LocalTime()), false);
             } else {
-                employeesOnShift = employeeService.getEmployeesOnShift(shift);
+                employeesOnShift = employeeService.getEmployeesOnShift(shift, false);
             }
             if (!employeesOnShift.isEmpty()) {
                 if (task.getPriority() < LOW_PRIORITY) {
@@ -112,7 +112,7 @@ public class TaskHandler {
             }
         } else {
             if (completeTaskBeforeShiftEnd(task)) {
-                List<EmployeeDTO> employeesOnShift = findEmployeesOnShiftDTO(parse(task.getTargetTime()));
+                List<EmployeeDTO> employeesOnShift = findEmployeesOnShiftDTO(parse(task.getTargetTime()), false);
                 List<EmployeeDTO> availableEmployees = availableForTaskTargetTime(employeesOnShift, task);
                 if (!availableEmployees.isEmpty()) {
                     task = assignToLeastBusy(task, availableEmployees);
@@ -126,8 +126,8 @@ public class TaskHandler {
         return task;
     }
 
-    public List<EmployeeDTO> findEmployeesOnShiftDTO(LocalTime localTime) {
-        return employeeService.getEmployeesOnShift(findShift(localTime));
+    public List<EmployeeDTO> findEmployeesOnShiftDTO(LocalTime localTime, boolean requiresManager) {
+        return employeeService.getEmployeesOnShift(findShift(localTime), requiresManager);
     }
 
     private Task assignToLeastBusy(Task task, List<EmployeeDTO> availableEmployees) {
@@ -169,7 +169,16 @@ public class TaskHandler {
                     .append("Meals requested:")
                     .append(System.lineSeparator())
                     .append(getMeals(req.getMealRequests()));
-        }
+        }else{
+            String taskType = req.getType() == 1 ?
+                    "Bring a towel" : req.getType() == 3 ?
+                    "Room cleaning" : req.getType() == 4 ?
+                    "Car parking" : req.getType() == 5 ?
+                    "SPA" : "Invalid request";
+            description
+                    .append(taskType)
+                    .append(System.lineSeparator());
+            }
         return description.toString();
     }
 
@@ -178,7 +187,7 @@ public class TaskHandler {
         for (RequestMeal req : mealRequests) {
             String name = req.getMeal().getName() == null ?
                     mealRepo.getOne(req.getMeal().getId()).getName() : req.getMeal().getName();
-            message += "Name: " + name + " (x" + req.getQuantity() + ")" + System.lineSeparator();
+            message += name + " (x" + req.getQuantity() + ")" + System.lineSeparator();
         }
         return message;
     }
@@ -275,6 +284,7 @@ public class TaskHandler {
         resolveConflict.setStatus(TASK_STATUS_SCHEDULED);
 
         //TODO: task should be sent to a MANAGER
+        List<EmployeeDTO> employees = findEmployeesOnShiftDTO(new LocalTime(), true);
         resolveConflict.setAssignee(employeeRepository.findOne(1L));
         return resolveConflict;
     }
@@ -452,14 +462,14 @@ public class TaskHandler {
         return LocalTime.parse(dateToParse);
     }
 
-    public List<EmployeeDTO> getEmployeesOnShift(int shift) {
-        List<EmployeeDTO> employeesDTO = null;
-
-        if (shift == NOT_INITIALIZED) {
-            employeesDTO = employeeService.getEmployeesOnShift(findShift(new LocalTime()));
-        } else {
-            employeesDTO = employeeService.getEmployeesOnShift(shift);
-        }
-        return employeesDTO;
-    }
+//    public List<EmployeeDTO> getEmployeesOnShift(int shift) {
+//        List<EmployeeDTO> employeesDTO = null;
+//
+//        if (shift == NOT_INITIALIZED) {
+//            employeesDTO = employeeService.getEmployeesOnShift(findShift(new LocalTime()), true);
+//        } else {
+//            employeesDTO = employeeService.getEmployeesOnShift(shift, true);
+//        }
+//        return employeesDTO;
+//    }
 }
