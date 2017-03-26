@@ -85,10 +85,11 @@ public class TaskHandler {
         task.setDuration(NOT_SPECIFIED);
         task = assignTask(task, findShift(new LocalTime()));
         EmployeeDTO employeeDTO = employeeService.transferEmployeeToDTO(task.getAssignee().getId());
-        organizeTasks(employeeDTO);
+
+        List<Task> savedTasks = taskRepository.save(organizeTasks(employeeDTO));
 
         //TODO set description, employee, duration and target time(евентуално)
-        return taskRepository.save(task);
+        return savedTasks.get(FIRST);
     }
 
     public Task assignTask(Task task, int shift) {

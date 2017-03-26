@@ -1,7 +1,11 @@
 <div class="col-xs-12">
     <div class="x_panel">
         <div class="x_title">
-            <h2><i class="fa fa-calendar-minus-o"></i> Edit Task</h2>
+            <h2>
+                <i class="fa fa-calendar-minus-o"></i>
+                Edit Task
+                <span class="label label-{{taskStatusLabels[task.status]}}" style="color:white">{{taskStatuses[task.status]}}</span>
+            </h2>
             <div class="clearfix"></div>
         </div>
         <div class="x_content form-horizontal form-label-left">
