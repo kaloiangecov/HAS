@@ -147,9 +147,15 @@
                     <span ng-show="bookingGuestForm.identityExpireDate.$error.maxlength">Input too long</span>
                 </div>
             </div>
+            <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                <div id="bookCapcha"></div>
+                <div ng-show="bookingGuestForm.$submitted" class="validation-message">
+                    <span ng-hide="bookCapchaResponse">Please, verify that you are a human!</span>
+                </div>
+            </div>
         </div>
 
-        <div class="col-md-8 col-md-offset-2 col-xs-12">
+        <div class="col-md-6 col-md-offset-4 col-sm-6 col-sm-offset-4 col-xs-12">
             <button type="button" class="btn btn-warning" ui-sref="app.root.home">
                 Change rooms
                 <i class="fa fa-hand-o-left"></i>
