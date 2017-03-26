@@ -103,9 +103,9 @@ public class TaskController {
         return service.getEmployeesUnresolvedTasks(employee);
     }
 
-    @RequestMapping(value = "/tasks/current/{time}", method = RequestMethod.GET,
+    @RequestMapping(value = "/tasks/current", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public DataTableResult getCurrentTasks(@PathVariable String time, HttpServletRequest request, @AuthenticationPrincipal User user) throws Exception {
+    public DataTableResult getCurrentTasks(HttpServletRequest request, @AuthenticationPrincipal User user) throws Exception {
         Map<String, String[]> parameterMap = request.getParameterMap();
 
         char sortColumnNumber = parameterMap.get("order[0][column]")[0].charAt(0);
@@ -116,7 +116,6 @@ public class TaskController {
                 Integer.parseInt(parameterMap.get("length")[0]),
                 parameterMap.get(sortColumnParam)[0],
                 parameterMap.get("order[0][dir]")[0],
-                time,
                 parameterMap.get("assignee")[0]
         );
 

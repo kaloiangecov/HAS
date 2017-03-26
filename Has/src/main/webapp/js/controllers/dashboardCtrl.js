@@ -33,6 +33,8 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
         }
     ];
 
+    $scope.refreshInterval = undefined;
+
     function getCurrentShift() {
         var nowHour = moment().format('HH:mm');
         var shift = SHIFT_NIGHT;
@@ -81,14 +83,13 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
                 .then(callback);
         };
 
-        var shiftHour = moment().format('YYYY-MM-DD');
-        shiftHour += ('T' + $scope.shiftHours[getCurrentShift()].start + ':00');
+        var today = moment().format('YYYY-MM-DD');
 
         $scope.dtInstance = {};
 
         $scope.dtOptions = DTOptionsBuilder.newOptions()
             .withOption('ajax', {
-                url: ('tasks/current/' + shiftHour),
+                url: 'tasks/current',
                 type: 'GET',
                 dataType: "json",
                 headers: {
@@ -113,13 +114,13 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
 
         $scope.dtColumns = [
             DTColumnBuilder.newColumn('id', 'ID').notVisible(),
-            DTColumnBuilder.newColumn('startTime', 'Target Time')
-                .renderWith(function (date) {
-                    return new Date(date).toLocaleString();
+            DTColumnBuilder.newColumn('startTime', 'Start Time')
+                .renderWith(function (time) {
+                    return new Date(today + 'T' + time).toLocaleString();
                 }),
             DTColumnBuilder.newColumn('finishTime', 'Finish Time')
-                .renderWith(function (date) {
-                    return new Date(date).toLocaleString();
+                .renderWith(function (time) {
+                    return new Date(today + 'T' + time).toLocaleString();
                 }),
             DTColumnBuilder.newColumn('title', 'Title'),
             DTColumnBuilder.newColumn('assignee.personalData.fullName', 'Assignee'),
@@ -210,9 +211,18 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
         });
 
         if ($location.path().includes("dashboard")) {
-            $interval(function () {
-                $scope.reloadTableData(false);
-            }, 5000);
+            if (!$scope.refreshInterval) {
+                $scope.refreshInterval = $interval(function () {
+                    $scope.reloadTableData(false);
+                }, 5000);
+            }
+
+            $scope.$on("$destroy", function () {
+                if ($scope.refreshInterval) {
+                    $interval.cancel($scope.refreshInterval);
+                    $scope.refreshInterval = undefined;
+                }
+            });
         } else {
             $('#startTime').daterangepicker({
                 singleDatePicker: true,
