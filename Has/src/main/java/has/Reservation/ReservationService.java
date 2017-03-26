@@ -310,7 +310,7 @@ public class ReservationService {
         task.setDescription("Clean Room " + reservation.getRoom().getNumber());
         task.setRequest(null);
         task.setTargetTime(null);
-        task.setTimePlaced(timeFormatter.getNewDateAsString());
+        task.setTimePlaced(timeFormatter.getNewDateAsFullString());
         task.setPriority(1);
         task.setStatus(0);
         task.setDuration("00:30");
