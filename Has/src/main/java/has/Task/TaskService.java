@@ -45,8 +45,8 @@ public class TaskService {
     }
 
     public List<Task> equalize() throws Exception {
-        List<EmployeeDTO> employees = taskHandler.findEmployeesOnShiftDTO(new LocalTime());
-        List<Task> tasks = repo.save(taskHandler.equalizeTasks(taskHandler.findEmployeesOnShiftDTO(new LocalTime())));
+        List<EmployeeDTO> employees = taskHandler.findEmployeesOnShiftDTO(new LocalTime(), true);
+        List<Task> tasks = repo.save(taskHandler.equalizeTasks(taskHandler.findEmployeesOnShiftDTO(new LocalTime(), true)));
         organize(employees);
         return tasks;
     }

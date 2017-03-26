@@ -151,9 +151,14 @@ public class EmployeeService {
         }
     }
 
-    public List<EmployeeDTO> getEmployeesOnShift(int shift) {
+    public List<EmployeeDTO> getEmployeesOnShift(int shift, boolean requiresManager) {
         String date = timeFormatter.getNewDateAsString();
-        List<Employee> employees = repo.findAllEmployeesForShift(date, shift);
+        List<Employee> employees = null;
+        if (!requiresManager) {
+            employees = repo.findServiceEmployeesForShift(date, shift);
+        } else {
+            employees = repo.findManagerEmployeesForShift(date, shift);
+        }
         List<EmployeeDTO> employeesDTO = new ArrayList<>(employees.size());
         int index = 0;
         for (Employee employee : employees) {
