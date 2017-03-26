@@ -50,15 +50,17 @@ public class TemplateHandler {
     }
 
     public void notifyCustomer(Reservation reservation) throws IOException, TemplateException {
-        ReservationGuest reservationGuest = reservation.getReservationGuests().get(FIRST);
-        Map model = new HashMap();
-        String message = "Your reservation has been updated.";
-        model.put("headerMessage", "Your reservation has been updated.");
-        model.put("reservation", reservation);
-        model.put("guest", reservationGuest.getGuest());
+        if (reservation.getReservationGuests() != null && reservation.getReservationGuests().size() > 0) {
+            ReservationGuest reservationGuest = reservation.getReservationGuests().get(FIRST);
+            Map model = new HashMap();
+            String message = "Your reservation has been updated.";
+            model.put("headerMessage", "Your reservation has been updated.");
+            model.put("reservation", reservation);
+            model.put("guest", reservationGuest.getGuest());
 
-        String templatePath = "register.ftl";
-        sendMail(model, templatePath, reservationGuest);
+            String templatePath = "register.ftl";
+            sendMail(model, templatePath, reservationGuest);
+        }
     }
 
     public void sendReservationCode(Reservation reservation) throws IOException, TemplateException {

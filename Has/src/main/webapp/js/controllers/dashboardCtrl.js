@@ -116,11 +116,17 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
             DTColumnBuilder.newColumn('id', 'ID').notVisible(),
             DTColumnBuilder.newColumn('startTime', 'Start Time')
                 .renderWith(function (time) {
-                    return new Date(today + 'T' + time).toLocaleString();
+                    if (time)
+                        return today + ' ' + time.substr(0, 5);
+                    else
+                        return "N\\A";
                 }),
             DTColumnBuilder.newColumn('finishTime', 'Finish Time')
                 .renderWith(function (time) {
-                    return new Date(today + 'T' + time).toLocaleString();
+                    if (time)
+                        return today + ' ' + time.substr(0, 5);
+                    else
+                        return "N\\A";
                 }),
             DTColumnBuilder.newColumn('title', 'Title'),
             DTColumnBuilder.newColumn('assignee.personalData.fullName', 'Assignee'),

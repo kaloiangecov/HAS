@@ -60,6 +60,11 @@ app.controller("guestCtrl", function ($scope, $state, $location, $stateParams, $
             }, resetPaging);
         };
     } else if ($location.path().includes("history")) {
+
+        $scope.getSingleData("guest", $stateParams.id, function (data) {
+            $scope.guest = data;
+        });
+
         // guests table
         $scope.dtHistoryInstance = {};
 
