@@ -69,6 +69,14 @@ app2.config(function ($stateProvider, $urlRouterProvider) {
             },
             onEnter: function ($rootScope) {
                 setTimeout(function () {
+                    $rootScope.bookCapcha = grecaptcha.render(
+                        "bookCapcha",
+                        {
+                            sitekey: '6LedaBoUAAAAAFVLXtjPNI-6Jh5eMRHzqwGr9y1a',
+                            theme: 'light'
+                        }
+                    );
+
                     $('#identityIssueDate,#identityExpireDate').daterangepicker({
                         parentEl: "body",
                         singleDatePicker: true,

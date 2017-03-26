@@ -142,11 +142,16 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                     });
                     $('.calendar').css({float: 'left'});
 
-                    $rootScope.switchNewPets = new Switchery(document.getElementById('newPets'), {color: "#266CEa"});
-                    $rootScope.switchNewMinibar = new Switchery(document.getElementById('newMinibar'), {color: "#266CEa"});
-                    $rootScope.switchNewBreakfast = new Switchery(document.getElementById('newBreakfast'), {color: "#266CEa"});
-                    $rootScope.switchNewDinner = new Switchery(document.getElementById('newDinner'), {color: "#266CEa"});
-                    $rootScope.switchNewAllInclusive = new Switchery(document.getElementById('newAllInclusive'), {color: "#EA6C26"});
+                    if (!$rootScope.switchNewPets)
+                        $rootScope.switchNewPets = new Switchery(document.getElementById('newPets'), {color: "#266CEa"});
+                    if (!$rootScope.switchNewMinibar)
+                        $rootScope.switchNewMinibar = new Switchery(document.getElementById('newMinibar'), {color: "#266CEa"});
+                    if (!$rootScope.switchNewBreakfast)
+                        $rootScope.switchNewBreakfast = new Switchery(document.getElementById('newBreakfast'), {color: "#266CEa"});
+                    if (!$rootScope.switchNewDinner)
+                        $rootScope.switchNewDinner = new Switchery(document.getElementById('newDinner'), {color: "#266CEa"});
+                    if (!$rootScope.switchNewAllInclusive)
+                        $rootScope.switchNewAllInclusive = new Switchery(document.getElementById('newAllInclusive'), {color: "#EA6C26"});
                 }, 200);
             });
     };
@@ -235,6 +240,16 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
     };
 
     $scope.search = function () {
+        if ($scope.filters.startDate == $scope.filters.endDate) {
+            $scope.page.message = {
+                type: 'danger',
+                title: 'Invalid date range',
+                text: "You can't have the same date for check in and out!"
+            };
+            $('#messageModal').modal('show');
+            return;
+        }
+
         var url = "reservations/booking";
         if ($scope.reservation && $scope.reservation.id)
             url += ("?existingId=" + $scope.reservation.id);
@@ -300,7 +315,10 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
     };
 
     $scope.submitReservation = function (bookingGuestForm) {
-        if (!bookingGuestForm.$valid)
+        if (angular.isDefined($rootScope.bookCapcha))
+            $scope.bookCapchaResponse = grecaptcha.getResponse($rootScope.bookCapcha);
+
+        if (!bookingGuestForm.$valid || !$scope.bookCapchaResponse)
             return;
 
         $scope.reservationGuest = {
@@ -465,7 +483,5 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                 });
             }
         }, 500);
-
-
     });
 });

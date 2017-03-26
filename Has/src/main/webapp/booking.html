@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <meta http-equiv="Content-Security-Policy"
-          content="default-src *; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
+          content="default-src *; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.google.com *.gstatic.com *.google-analytics.com">
 
     <title>Hotel Booking</title>
 
@@ -15,8 +15,6 @@
     <link href="bower_components/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
     <link href="bower_components/switchery/dist/switchery.min.css" rel="stylesheet">
     <link href="css/booking.css" rel="stylesheet">
-
-    <script src="js/sample_data.js"></script>
 
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="js/base64.js"></script>
@@ -30,6 +28,7 @@
 
     <script src="js/app2.js"></script>
     <script src="js/controllers/mainCtrl2.js"></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 
 <body class="nav-md" ng-app="booking" ng-controller="mainCtrl2 as ctrl">
