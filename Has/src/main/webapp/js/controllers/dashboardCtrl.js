@@ -83,8 +83,7 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
                 .then(callback);
         };
 
-        var shiftHour = moment().format('YYYY-MM-DD');
-        shiftHour += ('T' + $scope.shiftHours[getCurrentShift()].start + ':00');
+        var today = moment().format('YYYY-MM-DD');
 
         $scope.dtInstance = {};
 
@@ -115,13 +114,13 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
 
         $scope.dtColumns = [
             DTColumnBuilder.newColumn('id', 'ID').notVisible(),
-            DTColumnBuilder.newColumn('startTime', 'Target Time')
-                .renderWith(function (date) {
-                    return new Date(date).toLocaleString();
+            DTColumnBuilder.newColumn('startTime', 'Start Time')
+                .renderWith(function (time) {
+                    return new Date(today + 'T' + time).toLocaleString();
                 }),
             DTColumnBuilder.newColumn('finishTime', 'Finish Time')
-                .renderWith(function (date) {
-                    return new Date(date).toLocaleString();
+                .renderWith(function (time) {
+                    return new Date(today + 'T' + time).toLocaleString();
                 }),
             DTColumnBuilder.newColumn('title', 'Title'),
             DTColumnBuilder.newColumn('assignee.personalData.fullName', 'Assignee'),
