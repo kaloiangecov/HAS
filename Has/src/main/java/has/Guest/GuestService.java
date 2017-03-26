@@ -109,9 +109,11 @@ public class GuestService {
     }
 
     private void validateUserEmail(Guest guest) throws Exception {
-        User dbUser2 = repoUser.findByEmail(guest.getUser().getEmail());
-        if (dbUser2 != null && dbUser2.getId() != guest.getUser().getId()) {
-            throw new EmailAlreadyExists(guest.getUser().getEmail());
+        if (guest.getUser() != null) {
+            User dbUser2 = repoUser.findByEmail(guest.getUser().getEmail());
+            if (dbUser2 != null && dbUser2.getId() != guest.getUser().getId()) {
+                throw new EmailAlreadyExists(guest.getUser().getEmail());
+            }
         }
     }
 }
