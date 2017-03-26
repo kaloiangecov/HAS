@@ -46,7 +46,7 @@ public class TaskService {
 
     public List<Task> equalize() throws Exception {
         List<EmployeeDTO> employees = taskHandler.findEmployeesOnShiftDTO(new LocalTime(), false);
-        List<Task> tasks = repo.save(taskHandler.equalizeTasks(taskHandler.findEmployeesOnShiftDTO(new LocalTime(), true)));
+        List<Task> tasks = repo.save(taskHandler.equalizeTasks(employees));
         organize(employees);
         return tasks;
     }
@@ -99,11 +99,14 @@ public class TaskService {
         return repo.findByStatusLessThanAndAssigneePersonalDataFullNameContaining(2, assignee, request);
     }
 
-    public Task changeStatus(Long id, Integer status) {
+    public Task changeStatus(Long id, Integer status) throws Exception {
         Task task = repo.findOne(id);
         task.setStatus(status);
         if (status == 1) {
-            task.setStartTime(new Date().toString());
+            task.setStartTime(new LocalTime().toString());
+        } else if (status == 2){
+            task.setFinishTime(new LocalTime().toString());
+            organizeTasks(task.getAssignee().getId());
         }
         return repo.save(task);
     }
