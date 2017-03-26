@@ -75,7 +75,7 @@ public class TaskHandler {
 
     public Task createTaskFromRequest(Request request) throws Exception {
         Task task = new Task();
-        task.setTitle("Request " + request.getId());
+        task.setTitle("Task from request " + request.getId());
         task.setDescription(createDescription(request));
         task.setRequest(request);
         task.setTargetTime(request.getTargetTime());
@@ -85,11 +85,9 @@ public class TaskHandler {
         task.setDuration(NOT_SPECIFIED);
         task = assignTask(task, findShift(new LocalTime()));
         EmployeeDTO employeeDTO = employeeService.transferEmployeeToDTO(task.getAssignee().getId());
-
-        List<Task> savedTasks = taskRepository.save(organizeTasks(employeeDTO));
-
-        //TODO set description, employee, duration and target time(евентуално)
-        return savedTasks.get(FIRST);
+        Task savedTask = taskRepository.save(task);
+        taskRepository.save(organizeTasks(employeeDTO));
+        return savedTask;
     }
 
     public Task assignTask(Task task, int shift) {
