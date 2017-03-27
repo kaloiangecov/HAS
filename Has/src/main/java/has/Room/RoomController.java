@@ -97,4 +97,12 @@ public class RoomController {
     public Room updateRoom(@PathVariable Long id, @RequestBody @Valid Room room) throws Exception {
         return roomService.update(id, room);
     }
+
+    @RequestMapping(value = "/room/{roomId}/{status}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('PERM_EDIT_ROOM')")
+    public Room changeRoomStatus(@PathVariable Long roomId, @PathVariable Integer status) throws Exception {
+        return roomService.changeStatus(roomId, status);
+    }
+
 }
