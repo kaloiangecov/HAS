@@ -79,7 +79,8 @@ public class TemplateHandler {
         model.put("headerMessage", "Thank you for registering in our hotel.");
         model.put("guest", reservationGuest.getGuest());
         model.put("reservation", reservationGuest.getReservation());
-        String templatePath = "register.ftl";
+        String templatePath = "";
+        templatePath = "register.ftl";
 
         sendMail(model, templatePath, reservationGuest);
     }
