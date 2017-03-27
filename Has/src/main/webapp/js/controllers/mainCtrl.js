@@ -12,7 +12,8 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
     $scope.roomStatuses = [
         "Available",
         "Occupied",
-        "For Cleaning"
+        "For Cleaning",
+        "Disabled"
     ];
     $scope.shifts = [
         "Morning",

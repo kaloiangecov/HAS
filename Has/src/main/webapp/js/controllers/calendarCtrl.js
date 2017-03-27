@@ -33,7 +33,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
     $scope.getRooms = function (callback) {
         $http({
             method: "GET",
-            url: "rooms",
+            url: "rooms/active",
             responseType: "json",
             headers: {
                 "Authorization": $scope.authentication
