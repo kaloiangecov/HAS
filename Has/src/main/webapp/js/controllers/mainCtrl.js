@@ -246,7 +246,7 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
                     errorCallback;
             })
             .then(function (response) {
-                if (response.status == 200)
+                if (response.status == 200 && response.data)
                     successCallback(response.data);
             });
     };
