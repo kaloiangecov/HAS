@@ -5,10 +5,10 @@
 <#assign endDate = reservation.endDate >
 <#assign price = reservation.price >
 <#assign code = reservation.reservationCode >
-<#if guest.user.username??>
-    <#assign username = guest.user.username >
-    <#assign password = guest.user.password >
-</#if>
+<#--<#if guest.user.username??>-->
+    <#--<#assign username = guest.user.username >-->
+    <#--<#assign password = guest.user.password >-->
+<#--</#if>-->
 
 <#assign moreInformationUrl = "http://has.gg/booking.html#!/about" >
 
@@ -107,24 +107,24 @@
         <td colspan="2" width="25%"
             style="padding: 10px; clear: both; background-color: #e9f3fb; font-weight: bold;">${code}</td>
     </tr>
-<#if guest.user.username??>
-    <tr>
-        <td colspan="2" width="25%"
-            style="padding: 10px; clear: both; background-color: #F4EFEF; font-weight: bold; color: #4783A8;">In case
-            you forgot here is your username
-        </td>
-        <td colspan="2" width="25%"
-            style="padding: 10px; clear: both; background-color: #F4EFEF; font-weight: bold; color: #4783A8;">${username}</td>
-    </tr>
+<#--<#if guest.user.username??>-->
+    <#--<tr>-->
+        <#--<td colspan="2" width="25%"-->
+            <#--style="padding: 10px; clear: both; background-color: #F4EFEF; font-weight: bold; color: #4783A8;">In case-->
+            <#--you forgot here is your username-->
+        <#--</td>-->
+        <#--<td colspan="2" width="25%"-->
+            <#--style="padding: 10px; clear: both; background-color: #F4EFEF; font-weight: bold; color: #4783A8;">${username}</td>-->
+    <#--</tr>-->
 
-    <tr>
-        <td colspan="2" width="25%"
-            style="padding: 10px; clear: both; background-color: #e9f3fb; font-weight: bold;">Password:
-        </td>
-        <td colspan="2" width="25%"
-            style="padding: 10px; clear: both; background-color: #e9f3fb; font-weight: bold;">${password}</td>
-    </tr>
-</#if>
+    <#--<tr>-->
+        <#--<td colspan="2" width="25%"-->
+            <#--style="padding: 10px; clear: both; background-color: #e9f3fb; font-weight: bold;">Password:-->
+        <#--</td>-->
+        <#--<td colspan="2" width="25%"-->
+            <#--style="padding: 10px; clear: both; background-color: #e9f3fb; font-weight: bold;">${password}</td>-->
+    <#--</tr>-->
+<#--</#if>-->
     <tr>
         <td colspan="8" width="100%"><p
                 style="color: #4783A8; clear: both; margin: 0px; padding: 10px 2px;">Here you can find more information
