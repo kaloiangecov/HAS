@@ -30,12 +30,19 @@ public class RoomService {
         return repo.findByStatusLessThan(3);
     }
 
-    public Page<Room> searchRooms(int start, int length, String sortColumn, String sortDirection, int number) {
+    public Page<Room> searchRooms(int start, int length, String sortColumn, String sortDirection, int number, Integer roomClass) {
         PageRequest request = new PageRequest((start / length), length, Sort.Direction.fromString(sortDirection), sortColumn);
-        if (number > 0)
-            return repo.findByNumber(number, request);
-        else
-            return repo.findAll(request);
+        if (roomClass != null && roomClass != -1) {
+            if (number > 0)
+                return repo.findByNumberAndRoomClass(number, roomClass, request);
+            else
+                return repo.findByRoomClass(roomClass, request);
+        } else {
+            if (number > 0)
+                return repo.findByNumber(number, request);
+            else
+                return repo.findAll(request);
+        }
     }
 
     public Room findById(Long id) throws Exception {

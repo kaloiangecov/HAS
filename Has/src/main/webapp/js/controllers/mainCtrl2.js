@@ -29,11 +29,11 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
         endDate: moment().format('YYYY-MM-DD')
     };
     $scope.results = [];
+    $scope.selectedRooms = [];
 
     $scope.reservation = {};
     $scope.guest = {};
     $scope.guestFound = false;
-    $scope.selectedRooms = [];
 
     $scope.myInterval = 5000;
     $scope.noWrapSlides = false;
@@ -180,9 +180,10 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                 $scope.displayMessage(response.data);
                 if (errorCallback)
                     errorCallback;
+                return;
             })
             .then(function (response) {
-                if (response.status == 200 && response.data)
+                if (response && (response.status == 200) && response.data)
                     successCallback(response.data);
             });
     };
@@ -278,6 +279,7 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
             .then(function (results) {
                 $scope.isSearchPerformed = true;
                 $scope.results = results;
+                $scope.selectedRooms = [];
             });
     };
 
@@ -342,6 +344,8 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
             $scope.guest.user.regDate = (new Date()).toISOString().substr(0, 10);
 
             $scope.saveData("guest", $scope.guest, function (newGuest) {
+                $scope.guest = newGuest;
+
                 $scope.reservationGuest.guest = newGuest;
 
                 $scope.saveData("reservation?group=" + isGroup, $scope.reservation, function (newReservation) {
@@ -363,6 +367,10 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                         $state.go('app.root.reservationSuccessful');
                     });
 
+                }, function () { // error reservation
+                    $scope.results = [];
+                    $scope.selectedRooms = [];
+                    $scope.isSearchPerformed = false;
                 });
             });
 
@@ -387,8 +395,12 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                     $scope.clearEverything();
 
                     $state.go('app.root.reservationSuccessful');
-                }, $scope.resetReservation);
-            }, $scope.resetReservation);
+                });
+            }, function () { // error reservation
+                $scope.results = [];
+                $scope.selectedRooms = [];
+                $scope.isSearchPerformed = false;
+            });
         }
     };
 
@@ -417,7 +429,10 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                     //$state.go('app.root.home');
                     $scope.clearEverything();
                 },
-                function () {
+                function () { // error reservation
+                    $scope.results = [];
+                    $scope.selectedRooms = [];
+                    $scope.isSearchPerformed = false;
                 });
         } else {
             $scope.saveData("reservation", $scope.reservation, function (updatedReservation) { //success
@@ -430,9 +445,10 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
 
                     //$state.go('app.root.reservationSuccessful');
                     $scope.clearEverything();
-                },
-                function (response) { //error
-                    $scope.displayMessage(response.data);
+            }, function () { // error reservation
+                $scope.results = [];
+                $scope.selectedRooms = [];
+                $scope.isSearchPerformed = false;
                 }, true);
         }
     };

@@ -60,11 +60,10 @@ public class ReservationService {
     private static final int RESERVATION_STATUS_CLOSED = 2;
 
     public Reservation save(Reservation reservation, boolean isGroup, String groupId, Long recepcionistUserId, User user) throws IOException, TemplateException, URISyntaxException {
-        if (repo.findExistingReservationInSlot(
+        if (repo.findReservationInSlot(
                 reservation.getStartDate(),
                 reservation.getEndDate(),
-                reservation.getRoom().getId(),
-                reservation.getId()) != null)
+                reservation.getRoom().getId()) != null)
             throw new IOException("There already is a reservation on the same room within the same time range! Please, try a new one.");
 
         setLastModified(reservation, user);

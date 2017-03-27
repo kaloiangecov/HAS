@@ -49,7 +49,7 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
         },
         rooms: {
             number: 0,
-            roomClass: 0
+            roomClass: -1
         },
         schedules: {
             roleID: 1,
@@ -245,9 +245,10 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
                 $scope.displayMessage(response.data);
                 if (errorCallback)
                     errorCallback;
+                return;
             })
             .then(function (response) {
-                if (response.status == 200 && response.data)
+                if (response && response.status == 200 && response.data)
                     successCallback(response.data);
             });
     };
