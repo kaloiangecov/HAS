@@ -70,9 +70,9 @@ public class ReservationService {
         setLastModified(reservation, user);
 
         if (recepcionistUserId != null) {
-            Employee recepcionist = repoEmployee.findByUserId(recepcionistUserId);
-            if (recepcionist != null)
-                reservation.setReceptionist(recepcionist);
+            Employee receptionist = repoEmployee.findByUserId(recepcionistUserId);
+            if (receptionist != null)
+                reservation.setReceptionist(receptionist);
         }
 
         if (isGroup) {
