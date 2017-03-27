@@ -178,7 +178,7 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                     errorCallback;
             })
             .then(function (response) {
-                if (response.status == 200)
+                if (response.status == 200 && response.data)
                     successCallback(response.data);
             });
     };
@@ -331,7 +331,7 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
         $scope.guest.numberReservations = 0;
         $scope.guest.status = 0;
 
-        if (!$scope.guest.user.username && $scope.guest.user.email) { // create new guest
+        if (!$scope.guest.user.id) { // create new guest
             $scope.guest.user.username = $scope.guest.user.email;
             $scope.guest.user.password = base64encode($scope.guest.user.email);
             $scope.guest.user.userRole = {id: 5};
