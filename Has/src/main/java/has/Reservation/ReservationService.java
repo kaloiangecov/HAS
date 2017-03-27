@@ -180,7 +180,7 @@ public class ReservationService {
 
         String[] arrRoomIds = null;
         int i = 0;
-        boolean editRooms = (roomIds == "-");
+        boolean editRooms = (roomIds != "-");
 
         if (editRooms)
             arrRoomIds = roomIds.split(",");
@@ -189,7 +189,7 @@ public class ReservationService {
             if (repo.findExistingReservationInSlot(
                     reservation.getStartDate(),
                     reservation.getEndDate(),
-                    gr.getRoom().getId(),
+                    repoRoom.getOne(Long.parseLong(arrRoomIds[i])).getId(),
                     gr.getId()) != null)
                 throw new IOException("There already is a reservation on the same room within the same time range! Please, try a new one.");
 
