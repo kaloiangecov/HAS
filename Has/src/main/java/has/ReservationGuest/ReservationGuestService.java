@@ -27,7 +27,10 @@ public class ReservationGuestService {
     public ReservationGuest save(ReservationGuest reservationGuest) throws IOException, TemplateException {
         ReservationGuest savedGuest = null;
         savedGuest = repo.save(reservationGuest);
-        templateHandler.sendEmailNotification(savedGuest);
+        if (savedGuest.isOwner()) {
+            templateHandler.sendEmailNotification(savedGuest);
+        }
+
         return savedGuest;
     }
 
