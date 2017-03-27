@@ -69,7 +69,8 @@ public class RoomController {
                 Integer.parseInt(parameterMap.get("length")[0]),
                 parameterMap.get(sortColumnParam)[0],
                 parameterMap.get("order[0][dir]")[0],
-                roomNumber
+                roomNumber,
+                Integer.parseInt(parameterMap.get("roomClass")[0])
         );
 
         return new DataTableResult(

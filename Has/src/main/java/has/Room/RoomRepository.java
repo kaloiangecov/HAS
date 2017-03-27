@@ -17,7 +17,11 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     Room findByNumber(Integer number);
 
+    Page<Room> findByRoomClass(Integer roomClass, Pageable pageRequest);
+
     Page<Room> findByNumber(Integer number, Pageable pageRequest);
+
+    Page<Room> findByNumberAndRoomClass(Integer number, Integer roomClass, Pageable pageRequest);
 
     List<Room> findByStatusLessThan(Integer status);
 
