@@ -136,6 +136,10 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                         startDate: new Date($scope.reservation.startDate),
                         endDate: new Date($scope.reservation.endDate),
                         minDate: new Date(),
+                        locale: {
+                            format: "DD/MM/YYYY",
+                            firstDay: 1
+                        }
                     });
                     $scope.dr2.on('apply.daterangepicker', function (ev, picker) {
                         setDateRange(picker.startDate.format('YYYY-MM-DD'), picker.endDate.format('YYYY-MM-DD'))
