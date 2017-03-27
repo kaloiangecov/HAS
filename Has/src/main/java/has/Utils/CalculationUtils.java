@@ -52,9 +52,20 @@ public class CalculationUtils {
             totalDiscount = seasonalDiscount + guestDiscount;
         }
 
-        int allInclusiveValue = reservation.isAllInclusive() ? 1 : 0;
-        int dinnerValue = reservation.isDinner() ? 1 : 0;
-        int breakfastValue = reservation.isBreakfast() ? 1 : 0;
+        int allInclusiveValue = 0;
+        int dinnerValue = 0;
+        int breakfastValue = 0;
+
+        if (reservation.isAllInclusive()) {
+            allInclusiveValue = 1;
+        } else {
+            if (reservation.isDinner()) {
+                dinnerValue = 1;
+            }
+            if (reservation.isBreakfast()) {
+                breakfastValue = 1;
+            }
+        }
 
         double totalPrice = getReservationDuration(reservation) * (overnightPrice *
                 (reservation.getRoom().getBedsSingle() * singleBedPrice +

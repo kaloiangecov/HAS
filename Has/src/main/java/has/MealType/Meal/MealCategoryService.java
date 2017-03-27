@@ -55,7 +55,6 @@ public class MealCategoryService {
             throw new Exception("There is no meal with such ID");
         }
         dbMeal.setTitle(meal.getTitle());
-        //dbMeal.setImg(meal.getImg());
         return dbMeal;
     }
 }

@@ -25,12 +25,6 @@ public interface GuestRepository extends JpaRepository<Guest, Long> {
 
     Page<Guest> findByPersonalDataFullNameContainingIgnoreCaseAndPersonalDataPhoneContaining(String fullName, String phone, Pageable pageRequest);
 
-    @Query("select g from has.Guest.Guest g where g not in (select rg.guest from has.ReservationGuest.ReservationGuest rg where rg.reservation.id = :reservationId)")
-    List<Guest> findReservationFreeGuests(@Param("reservationId") Long reservationId);
-
-    @Query("select g from has.Guest.Guest g where g not in (select rg.guest from has.ReservationGuest.ReservationGuest rg where rg.reservation.groupId = :groupId)")
-    List<Guest> findGroupReservationFreeGuests(@Param("groupId") String groupId);
-
     @Query("select g from has.Guest.Guest g where g not in (select rg.guest from has.ReservationGuest.ReservationGuest rg where ((rg.reservation.startDate >= :startDate AND rg.reservation.startDate < :endDate) OR (rg.reservation.endDate > :startDate AND rg.reservation.endDate <= :endDate)))")
     List<Guest> findFreeGuestsForPeriod(@Param("startDate") String startDate, @Param("endDate") String endDate);
 }
