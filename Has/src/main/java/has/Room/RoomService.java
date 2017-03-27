@@ -79,4 +79,10 @@ public class RoomService {
             throw new Exception("Room with number " + room.getNumber() + " already exists!");
         }
     }
+
+    public Room changeStatus(Long id, Integer status) throws Exception {
+        Room room = repo.findOne(id);
+        room.setStatus(status);
+        return repo.save(room);
+    }
 }
