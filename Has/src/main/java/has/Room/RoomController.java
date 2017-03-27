@@ -39,6 +39,14 @@ public class RoomController {
         return roomService.getAllRooms();
     }
 
+    @RequestMapping(value = "/rooms/active", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_VIEW_ROOM')")
+    public List<Room> getActiveRooms() {
+        return roomService.getActiveRooms();
+    }
+
     @RequestMapping(value = "/rooms/search", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)

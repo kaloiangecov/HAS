@@ -43,7 +43,7 @@ public class Room implements Serializable {
 
     @NotNull
     @Min(0)
-    @Max(2)
+    @Max(3)
     private int status;
 
     private boolean children;

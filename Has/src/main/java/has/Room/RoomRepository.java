@@ -19,6 +19,8 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     Page<Room> findByNumber(Integer number, Pageable pageRequest);
 
+    List<Room> findByStatusLessThan(Integer status);
+
     @Query("SELECT r FROM has.Room.Room r WHERE (r.bedsSingle + r.bedsDouble*2) >= :numberAdults AND r.pets = :pets AND r.minibar = :minibar AND r NOT IN (SELECT res.room FROM has.Reservation.Reservation res WHERE (res.startDate >= :startDate AND res.startDate < :endDate) OR (res.endDate > :startDate AND res.endDate <= :endDate))")
     List<Room> findInSite(@Param("startDate") String startDate, @Param("endDate") String endDate, @Param("numberAdults") int numberAdults, @Param("pets") boolean pets, @Param("minibar") boolean minibar);
 
