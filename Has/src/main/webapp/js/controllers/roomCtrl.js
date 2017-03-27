@@ -43,14 +43,21 @@ app.controller("roomCtrl", function ($scope, $http, $location, $state, $statePar
             DTColumnBuilder.newColumn('bedsSingle', 'Single Beds'),
             DTColumnBuilder.newColumn('bedsDouble', 'Double Beds'),
             DTColumnBuilder.newColumn('id').notSortable().withClass('actions-column')
-                .renderWith(function (id) {
+                .renderWith(function (id, type, full) {
                     var html =
                         '<div class="btn-group btn-group-sm">' +
                         '<a class="btn btn-default action-btn" href="#!/rooms/edit/' +
-                        id + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
-                        '<button class="btn btn-default action-btn delete-btn" id="del_' +
-                        id + '"><i class="fa fa-trash-o" aria-hidden="true"></i></button>' +
-                        '</div>';
+                        id + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+
+                    html += '<button type="button" class="btn btn-default action-btn delete-btn" id="del_' +
+                        id + '">';
+
+                    if (full.status < 3)
+                        html += '<i class="fa fa-ban" aria-hidden="true"></i></button>';
+                    else
+                        html += '<i class="fa fa-refresh" aria-hidden="true"></i></button>';
+
+                    html += '</div>';
                     return html;
                 })
         ];
@@ -60,18 +67,18 @@ app.controller("roomCtrl", function ($scope, $http, $location, $state, $statePar
                 var btns = $('table').find('td').find('button');
                 $(btns).off('click');
                 $(btns).on('click', function () {
-                    var roomId = this.id.split('_')[1];
-                    $scope.deleteData('room', roomId, function () {
-                        $scope.page.message = {
-                            type: 'success',
-                            title: 'Success!',
-                            text: 'Room was successfully deleted'
-                        };
-                        $('#messageModal').modal('show');
 
-                        $scope.reloadTableData(false);
-                        $scope.addDeleteFunctions();
-                    });
+                    var roomId = this.id.split('_')[1];
+
+                    $scope.getSingleData("room", roomId, function (room) {
+                        room.status = (room.status == 3) ? 0 : 3;
+
+                        $scope.saveData('room', room, function () {
+                            $scope.reloadTableData(false);
+                            $scope.addDeleteFunctions();
+
+                        }, $scope.reloadTableData, true);
+                    }, $scope.reloadTableData);
                 });
             }, 300);
         };
