@@ -42,12 +42,6 @@ public class EmployeeService {
         return repo.save(employee);
     }
 
-    public List<Employee> getAllEmployedEmployees() {
-        List<Employee> employees = repo.findByEmployedTrue();
-
-        return employees;
-    }
-
     public List<Employee> getAllEmployees() {
         List<Employee> employees = repo.findAll();
 

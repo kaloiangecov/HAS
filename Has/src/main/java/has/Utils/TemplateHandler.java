@@ -19,10 +19,7 @@ import java.util.Map;
  */
 @Component
 public class TemplateHandler {
-
-    private static final int RESERVATION_STATUS_CREATED = 0;
-    private static final int RESERVATION_STATUS_ARRIVED = 1;
-    private static final int RESERVATION_STATUS_CLOSED = 2;
+    
     private static final int FIRST = 0;
 
     @Autowired
