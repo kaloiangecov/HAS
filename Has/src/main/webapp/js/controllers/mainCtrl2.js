@@ -234,7 +234,7 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                     errorCallback;
             })
             .then(function (response) {
-                if (response.status == 200)
+                if (response && response.status == 200 && response.data)
                     successCallback(response.data);
             });
     };
