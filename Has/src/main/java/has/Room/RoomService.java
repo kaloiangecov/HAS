@@ -26,6 +26,10 @@ public class RoomService {
         return repo.findAll();
     }
 
+    public List<Room> getActiveRooms() {
+        return repo.findByStatusLessThan(3);
+    }
+
     public Page<Room> searchRooms(int start, int length, String sortColumn, String sortDirection, int number) {
         PageRequest request = new PageRequest((start / length), length, Sort.Direction.fromString(sortDirection), sortColumn);
         if (number > 0)
