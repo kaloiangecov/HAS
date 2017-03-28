@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -96,7 +95,7 @@ public class TaskService {
 
     public Page<Task> searchCurrentShift(int start, int length, String sortColumn, String sortDirection, String assignee) {
         PageRequest request = new PageRequest((start / length), length, Sort.Direction.fromString(sortDirection), sortColumn);
-        return repo.findByStatusLessThanAndAssigneePersonalDataFullNameContainingIgnoreCase(2, assignee, request);
+        return repo.findByStatusLessThanAndAssigneePersonalDataFullNameContainingIgnoreCase(3, assignee, request);
     }
 
     public Task changeStatus(Long id, Integer status) throws Exception {
