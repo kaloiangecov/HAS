@@ -34,4 +34,13 @@ public class UserRole implements Serializable {
     public List<RolePermission> getPermissions() {
         return permissions;
     }
+
+    public UserRole() {
+
+    }
+
+    public UserRole(Long id, String roleName) {
+        this.id = id;
+        this.roleName = roleName;
+    }
 }
