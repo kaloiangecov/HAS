@@ -145,13 +145,19 @@ public class EmployeeService {
         }
     }
 
-    public List<EmployeeDTO> getEmployeesOnShift(int shift, boolean requiresManager) {
+    public List<EmployeeDTO> getEmployeesOnShift(int shift, boolean requiresManager) throws Exception {
         String date = timeFormatter.getNewDateAsString();
         List<Employee> employees = null;
         if (!requiresManager) {
             employees = repo.findServiceEmployeesForShift(date, shift);
+            if (employees.isEmpty()) {
+                throw new Exception("There is no service members on shift right now");
+            }
         } else {
             employees = repo.findManagerEmployeesForShift(date, shift);
+            if (employees.isEmpty()) {
+                throw new Exception("There are no manager members on shift right now");
+            }
         }
         List<EmployeeDTO> employeesDTO = new ArrayList<>(employees.size());
         int index = 0;

@@ -79,6 +79,10 @@ public class CalculationUtils {
     public static int getReservationDuration(Reservation reservation) {
         LocalDate startDate = LocalDate.parse(reservation.getStartDate());
         LocalDate endDate = LocalDate.parse(reservation.getEndDate());
-        return Days.daysBetween(startDate, endDate).getDays();
+        int duration = Days.daysBetween(startDate, endDate).getDays();
+        if (duration == 0) {
+            duration = 1;
+        }
+        return duration;
     }
 }

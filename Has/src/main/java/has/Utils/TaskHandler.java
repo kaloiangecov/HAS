@@ -90,7 +90,7 @@ public class TaskHandler {
         return savedTask;
     }
 
-    public Task assignTask(Task task, int shift) {
+    public Task assignTask(Task task, int shift) throws Exception {
 
         task.setAssigner("SYSTEM");
         if (task.getTargetTime() == null) {
@@ -125,7 +125,7 @@ public class TaskHandler {
         return task;
     }
 
-    public List<EmployeeDTO> findEmployeesOnShiftDTO(LocalTime localTime, boolean requiresManager) {
+    public List<EmployeeDTO> findEmployeesOnShiftDTO(LocalTime localTime, boolean requiresManager) throws Exception {
         return employeeService.getEmployeesOnShift(findShift(localTime), requiresManager);
     }
 
@@ -182,15 +182,16 @@ public class TaskHandler {
         return message;
     }
 
-    public String getTypeDescription(int type){
-            String taskType = type == 1 ?
-                    "Bring a towel" : type == 2 ?
-                    "Meal request" : type  == 3 ?
-                    "Room cleaning" : type == 4 ?
-                    "Car parking" : type == 5 ?
-                    "SPA" : "Invalid request";
-            return taskType;
+    public String getTypeDescription(int type) {
+        String taskType = type == 1 ?
+                "Bring a towel" : type == 2 ?
+                "Meal request" : type == 3 ?
+                "Room cleaning" : type == 4 ?
+                "Car parking" : type == 5 ?
+                "SPA" : "Invalid request";
+        return taskType;
     }
+
     public int findShift(LocalTime timeNow) {
 
         LocalTime morningShiftStart = LocalTime.parse(START_MORNING_SHIFT);
@@ -270,7 +271,7 @@ public class TaskHandler {
         return false;
     }
 
-    private Task resolveConflict(Task task) {
+    private Task resolveConflict(Task task) throws Exception {
         Task resolveConflict = new Task();
         List<EmployeeDTO> employees = findEmployeesOnShiftDTO(new LocalTime(), true);
         task.setAssignee(employees.get(FIRST).getWorkingSchedule().getEmployee());
@@ -301,7 +302,7 @@ public class TaskHandler {
         return false;
     }
 
-    public List<Task> organizeTasks(EmployeeDTO employeeDTO) {
+    public List<Task> organizeTasks(EmployeeDTO employeeDTO) throws Exception {
         Task lastTask = null;
         List<Task> targetTimeTasks = targetTimeTasks = employeeDTO.getTargetTimeTasks();
         List<Task> tasks = employeeDTO.getTasks();
@@ -357,7 +358,7 @@ public class TaskHandler {
         return tasks;
     }
 
-    private void moveRemainingTasks(List<Task> nextShiftTasks) {
+    private void moveRemainingTasks(List<Task> nextShiftTasks) throws Exception {
         for (Task task : nextShiftTasks) {
             assignTask(task, NOT_INITIALIZED);
         }
@@ -463,15 +464,5 @@ public class TaskHandler {
     private LocalTime parse(String dateToParse) {
         return LocalTime.parse(dateToParse);
     }
-
-//    public List<EmployeeDTO> getEmployeesOnShift(int shift) {
-//        List<EmployeeDTO> employeesDTO = null;
-//
-//        if (shift == NOT_INITIALIZED) {
-//            employeesDTO = employeeService.getEmployeesOnShift(findShift(new LocalTime()), true);
-//        } else {
-//            employeesDTO = employeeService.getEmployeesOnShift(shift, true);
-//        }
-//        return employeesDTO;
-//    }
+    
 }
