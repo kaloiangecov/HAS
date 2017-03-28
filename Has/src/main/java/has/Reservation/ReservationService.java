@@ -180,7 +180,7 @@ public class ReservationService {
 
         String[] arrRoomIds = null;
         int i = 0;
-        boolean editRooms = (roomIds != "-");
+        boolean editRooms = (roomIds != null);
 
         if (editRooms)
             arrRoomIds = roomIds.split(",");
@@ -204,7 +204,8 @@ public class ReservationService {
             gr.setNumberChildren(reservation.getNumberChildren());
 
             if (editRooms) {
-                gr.setRoom(repoRoom.getOne(Long.parseLong(arrRoomIds[i])));
+                Room newRoom = repoRoom.findOne(Long.parseLong(arrRoomIds[i]));
+                gr.setRoom(newRoom);
                 i++;
             }
 
