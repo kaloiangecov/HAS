@@ -6,6 +6,7 @@ import org.joda.time.format.DateTimeFormatterBuilder;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -36,6 +37,15 @@ public class TimeFormatter {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String date = sdf.format(new Date());
         return date;
+    }
+
+    public static String getTomorrowDate() {
+        Date dt = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(dt);
+        c.add(Calendar.DATE, 1);
+        dt = c.getTime();
+        return dt.toString();
     }
 
 }

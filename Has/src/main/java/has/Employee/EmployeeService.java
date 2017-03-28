@@ -145,8 +145,11 @@ public class EmployeeService {
         }
     }
 
-    public List<EmployeeDTO> getEmployeesOnShift(int shift, boolean requiresManager) throws Exception {
+    public List<EmployeeDTO> getEmployeesOnShift(int shift, boolean requiresManager, boolean tomorrowDate) throws Exception {
         String date = timeFormatter.getNewDateAsString();
+        if (tomorrowDate) {
+            date = timeFormatter.getTomorrowDate();
+        }
         List<Employee> employees = null;
         if (!requiresManager) {
             employees = repo.findServiceEmployeesForShift(date, shift);

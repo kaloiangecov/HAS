@@ -91,10 +91,12 @@ public class TaskHandler {
                 int nextShift = findShift(new LocalTime()) + 1;
                 if (nextShift == 3) {
                     nextShift = 0;
+                    employeesOnShift = employeeService.getEmployeesOnShift(nextShift, false, true);
+                } else {
+                    employeesOnShift = employeeService.getEmployeesOnShift(nextShift, false, false);
                 }
-                employeesOnShift = employeeService.getEmployeesOnShift(nextShift, false);
             } else {
-                employeesOnShift = employeeService.getEmployeesOnShift(shift, false);
+                employeesOnShift = employeeService.getEmployeesOnShift(shift, false, false);
             }
             if (!employeesOnShift.isEmpty()) {
                 if (task.getPriority() < LOW_PRIORITY) {
@@ -122,7 +124,7 @@ public class TaskHandler {
     }
 
     public List<EmployeeDTO> findEmployeesOnShiftDTO(LocalTime localTime, boolean requiresManager) throws Exception {
-        return employeeService.getEmployeesOnShift(findShift(localTime), requiresManager);
+        return employeeService.getEmployeesOnShift(findShift(localTime), requiresManager, false);
     }
 
     private Task assignToLeastBusy(Task task, List<EmployeeDTO> availableEmployees) {
@@ -300,6 +302,7 @@ public class TaskHandler {
 
     public List<Task> organizeTasks(EmployeeDTO employeeDTO) throws Exception {
         Task lastTask = null;
+        String firstTaskStartTime = new LocalTime().toString();
         List<Task> targetTimeTasks = employeeDTO.getTargetTimeTasks();
         List<Task> tasks = employeeDTO.getTasks();
         Task currentTask = employeeDTO.getCurrentTask();
@@ -324,7 +327,7 @@ public class TaskHandler {
                     }
                 } else {
                     if (currentTask == null) {
-                        task.setStartTime(new LocalTime().toString());
+                        task.setStartTime(firstTaskStartTime);
                         task.setFinishTime(addTime(parse(task.getStartTime()), parse(task.getDuration())).toString());
                     } else {
                         task.setStartTime(addTime(parse(currentTask.getFinishTime()), parse(FIVE_MINUTES)).toString());
