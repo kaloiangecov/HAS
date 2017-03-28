@@ -108,8 +108,14 @@ public class ReservationController {
     //@PreAuthorize("hasAuthority('PERM_VIEW_RESERVATION')")
     public List<Reservation> updateGroupReservations(
             @RequestBody @Valid Reservation reservation,
-            @RequestParam("rooms") String roomIds) throws Exception {
-        return reservationService.updateGroupReservationDetails(reservation, roomIds);
+            @RequestParam(value = "rooms", required = false) String roomIds) throws Exception {
+        List<Reservation> updated = reservationService.updateGroupReservationDetails(reservation, roomIds);
+
+        //just a temporal fix for a weird shit, it's just for the json
+        for (Reservation r : updated)
+            r.setRoom(null);
+
+        return updated;
     }
 
     @RequestMapping(value = "/reservation/{id}", method = RequestMethod.DELETE,
