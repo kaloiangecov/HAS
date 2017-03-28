@@ -228,7 +228,7 @@ public class TaskHandler {
         endTime = addTime(targetTime, endTime);
         String shiftEndTime = shifts.get(findShift(targetTime)).getEndShift();
         if (shiftEndTime.equals(END_NIGHT_SHIFT) && endTime.isAfter(parse(shiftEndTime))) {
-            return true;
+            return false;
         } else if (endTime.isBefore(parse(shiftEndTime))) {
             return true;
         }
@@ -347,7 +347,7 @@ public class TaskHandler {
 
     private void moveRemainingTasks(List<Task> nextShiftTasks) throws Exception {
         for (Task task : nextShiftTasks) {
-            assignTask(task, NOT_INITIALIZED);
+            taskRepository.save(assignTask(task, NOT_INITIALIZED));
         }
     }
 
