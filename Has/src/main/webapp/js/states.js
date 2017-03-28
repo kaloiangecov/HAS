@@ -93,6 +93,16 @@ var stateDashboard = {
     }
 };
 
+var stateAddTask = {
+    url: '/add',
+    views: {
+        'content@loggedin': {
+            templateUrl: 'templates/tasks/add.html',
+            controller: 'dashboardCtrl'
+        }
+    }
+};
+
 var stateEditTask = {
     url: '/edit/:id',
     views: {

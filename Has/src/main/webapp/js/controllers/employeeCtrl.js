@@ -100,6 +100,7 @@ app.controller("employeeCtrl", function ($scope, $location, $state, $stateParams
             }, 300);
         };
 
+        $scope.$watch("searchFilters.employees", $scope.addDeleteFunctions);
         $scope.$watch("searchFilters.employees.fullName", $scope.addDeleteFunctions);
         $scope.$watch("searchFilters.employees.phone", $scope.addDeleteFunctions);
         $scope.$watch("searchFilters.employees.dateHired", $scope.addDeleteFunctions);

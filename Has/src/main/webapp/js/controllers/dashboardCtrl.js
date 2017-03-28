@@ -1,6 +1,8 @@
 app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $state, $stateParams, $interval, DTOptionsBuilder, DTColumnBuilder) {
     $scope.page.title = "Tasks";
     $scope.assigner = {};
+    $scope.employees = [];
+    $scope.isEdit = false;
 
     var SHIFT_MORNING = 0;
     var SHIFT_LUNCH = 1;
@@ -33,6 +35,27 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
         }
     ];
 
+    $scope.timeSelect = {
+        hours: [],
+        minutes: []
+    };
+
+    $scope.picker = {
+        start: {
+            hours: 0,
+            minutes: 0
+        },
+        finish: {
+            hours: 0,
+            minutes: 0
+        }
+    };
+
+    for (var i = 0; i < 24; i++)
+        $scope.timeSelect.hours.push(i);
+    for (var i = 0; i < 60; i++)
+        $scope.timeSelect.minutes.push(i);
+
     $scope.refreshInterval = undefined;
 
     function getCurrentShift() {
@@ -64,7 +87,27 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
             }).then(callback);
     };
 
-    if ($location.path().includes("dashboard")) {
+    $scope.loadEmployees = function (callback) {
+        var today = moment().format('YYYY-MM-DD');
+
+        $http({
+            method: "GET",
+            url: ("employees/service/shift?date=" + today + "&shift=" + getCurrentShift()),
+            responseType: "json",
+            headers: {
+                "Authorization": $scope.authentication
+            }
+        }).then(
+            function (response) { //success
+                return response.data;
+            },
+            function (response) { //error
+                $scope.displayMessage(response.data);
+            })
+            .then(callback);
+    };
+
+    if ($location.path().includes("dashboard")) { // dashboard view
         $scope.loadTasks = function (callback) {
             $http({
                 method: "GET",
@@ -158,35 +201,56 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
     else {
         $scope.task = {};
         $scope.master = {};
-        $scope.loadEmployees = function () {
-            var today = moment().format('YYYY-MM-DD');
 
-            $http({
-                method: "GET",
-                url: ("employees/service/shift?date=" + today + "&shift=" + getCurrentShift()),
-                responseType: "json",
-                headers: {
-                    "Authorization": $scope.authentication
+        $scope.getEmployeeByUserId($scope.loginData.id, function (employee) {
+            $scope.assigner = employee;
+
+            $scope.loadEmployees(function (employees) {
+                $scope.employees = employees;
+
+                if ($stateParams && $stateParams.id) { //edit (re-assign)
+                    $scope.isEdit = true;
+
+                    $scope.getSingleData("tasks", $stateParams.id, function (data) {
+                        $scope.task = data;
+
+                        $scope.picker = {
+                            start: {
+                                hours: parseInt($scope.task.startTime.substr(0, 2)),
+                                minutes: parseInt($scope.task.startTime.substr(3, 2))
+                            },
+                            finish: {
+                                hours: parseInt($scope.task.finishTime.substr(0, 2)),
+                                minutes: parseInt($scope.task.finishTime.substr(3, 2))
+                            }
+                        };
+                    });
+                } else { //new assignment
+                    $scope.isEdit = false;
+
+                    $scope.task = {
+                        priority: 1,
+                        status: 0,
+                        duration: '00:20',
+                        assigner: ($scope.assigner.personalData.fullName + ' (' + $scope.assigner.user.username + ')'),
+                        type: 1,
+                        assignee: $scope.employees[0]
+                    };
+
+                    var now = moment();
+
+                    $scope.picker.start.hours = parseInt(now.format('H'));
+                    $scope.picker.start.minutes = parseInt(now.format('m'));
+
+                    now.add(20, 'minutes');
+
+                    $scope.picker.finish.hours = parseInt(now.format('H'));
+                    $scope.picker.finish.minutes = parseInt(now.format('m'));
+
                 }
-            }).then(
-                function (response) { //success
-                    return response.data;
-                },
-                function (response) { //error
-                    $scope.displayMessage(response.data);
-                })
-                .then(function (data) {
-                    $scope.employees = data;
-                });
-        };
 
-        if ($stateParams && $stateParams.id) {
-            $scope.getSingleData("tasks", $stateParams.id, function (data) {
-                $scope.task = data;
-
-                $scope.loadEmployees();
             });
-        }
+        });
 
         $scope.resetTask = function (task) {
             task = angular.copy($scope.master);
@@ -195,7 +259,13 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
         $scope.submitTask = function (task) {
             $scope.master = angular.copy(task);
 
-            $scope.saveData("tasks", $scope.task, function (task) {
+            if (!isEdit)
+                $scope.master.timePlaced = moment().format('YYYY-MM-DD HH:mm:ss');
+
+            $scope.master.startTime = ("0" + $scope.picker.start.hours).slice(-2) + ':' + ("0" + $scope.picker.start.minutes).slice(-2);
+            $scope.master.finishTime = ("0" + $scope.picker.finish.hours).slice(-2) + ':' + ("0" + $scope.picker.finish.minutes).slice(-2);
+
+            $scope.saveData("tasks", $scope.master, function (task) {
                 console.log(task);
 
                 $scope.page.message = {
@@ -206,16 +276,12 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
                 $('#messageModal').modal('show');
 
                 $location.path('/tasks/dashboard');
-            }, $scope.resetTask, true);
+            }, $scope.resetTask, $scope.isEdit);
         };
     }
 
 
     angular.element(document).ready(function () {
-        $scope.getEmployeeByUserId($scope.loginData.id, function (employee) {
-            $scope.assigner = employee;
-        });
-
         if ($location.path().includes("dashboard")) {
             if (!$scope.refreshInterval) {
                 $scope.refreshInterval = $interval(function () {
@@ -230,41 +296,7 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
                 }
             });
         } else {
-            $('#startTime').daterangepicker({
-                singleDatePicker: true,
-                showDropdowns: false,
-                timePicker: true,
-                startDate: $scope.task.timePlaced,
-                minDate: $scope.task.timePlaced,
-                timePicker24Hour: true,
-                locale: {
-                    format: 'DD/MM/YYYY HH:mm',
-                    firstDay: 1
-                }
-            }, function (start) {
-                $scope.$apply(function () {
-                    $scope.task.startTime = start.format("HH:mm:ss");
-                    $('#targetTime').val($scope.task.startTime);
-                });
-            });
 
-            $('#finishTime').daterangepicker({
-                singleDatePicker: true,
-                showDropdowns: false,
-                timePicker: true,
-                startDate: $scope.task.timePlaced,
-                minDate: $scope.task.timePlaced,
-                timePicker24Hour: true,
-                locale: {
-                    format: 'DD/MM/YYYY HH:mm',
-                    firstDay: 1
-                }
-            }, function (start) {
-                $scope.$apply(function () {
-                    $scope.task.finishTime = start.format("HH:mm:ss");
-                    $('#targetTime').val($scope.task.finishTime);
-                });
-            });
         }
 
     });

@@ -3,7 +3,7 @@
         <div class="x_title">
             <h2>
                 <i class="fa fa-calendar-minus-o"></i>
-                Edit Task
+                Assign Task
                 <span class="label label-{{taskStatusLabels[task.status]}}" style="color:white">{{taskStatuses[task.status]}}</span>
             </h2>
             <div class="clearfix"></div>
@@ -37,26 +37,26 @@
                 </div>
 
                 <div class="row">
-                    <div class="form-group col-sm-6 col-xs-12">
-                        <label for="startTime">Start TIme *</label>
-                        <input type="text" class="form-control" id="startTime" name="startTime"
-                               minlength="4" maxlength="10" required="required"/>
+                    <div class="form-group col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                        <label for="startTime_h">Start TIme</label>
+                        <select id="startTime_h" name="startTime_h" ng-model="picker.start.hours"
+                                ng-options="item for item in timeSelect.hours"></select>
+                        <select id="startTime_m" name="startTime_m" ng-model="picker.start.minutes"
+                                ng-options="item for item in timeSelect.minutes"></select>
                         <div ng-show="taskForm.$submitted || taskForm.targetTime.$touched"
                              class="validation-message">
-                            <span ng-show="taskForm.targetTime.$error.required">This field is required</span>
-                            <span ng-show="taskForm.targetTime.$error.minlength">Input too short</span>
-                            <span ng-show="taskForm.targetTime.$error.maxlength">Input too long</span>
+                            <span ng-show="taskForm.startTime_h.$error.required">This field is required</span>
                         </div>
                     </div>
-                    <div class="form-group col-sm-6 col-xs-12">
-                        <label for="finishTime">Finish Time *</label>
-                        <input type="text" class="form-control" id="finishTime" name="finishTime"
-                               minlength="4" maxlength="10" required="required"/>
+                    <div class="form-group col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                        <label for="finishTime_h">Finish Time</label>
+                        <select id="finishTime_h" name="finishTime_h" ng-model="picker.finish.hours"
+                                ng-options="item for item in timeSelect.hours"></select>
+                        <select id="finishTime_m" name="finishTime_m" ng-model="picker.finish.minutes"
+                                ng-options="item for item in timeSelect.minutes"></select>
                         <div ng-show="taskForm.$submitted || taskForm.finishTime.$touched"
                              class="validation-message">
                             <span ng-show="taskForm.finishTime.$error.required">This field is required</span>
-                            <span ng-show="taskForm.finishTime.$error.minlength">Input too short</span>
-                            <span ng-show="taskForm.finishTime.$error.maxlength">Input too long</span>
                         </div>
                     </div>
                 </div>
