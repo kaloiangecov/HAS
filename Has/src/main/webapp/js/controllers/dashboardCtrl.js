@@ -259,7 +259,7 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
         $scope.submitTask = function (task) {
             $scope.master = angular.copy(task);
 
-            if (!isEdit)
+            if (!$scope.isEdit)
                 $scope.master.timePlaced = moment().format('YYYY-MM-DD HH:mm:ss');
 
             $scope.master.startTime = ("0" + $scope.picker.start.hours).slice(-2) + ':' + ("0" + $scope.picker.start.minutes).slice(-2);
