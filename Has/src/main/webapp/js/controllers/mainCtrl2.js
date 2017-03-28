@@ -213,8 +213,9 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                 rooms += (',' + $scope.selectedRooms[i].id);
         }
 
-        var url = "reservation/group?rooms=";
-        url += (rooms ? rooms.substr(1) : "-");
+        var url = "reservation/group";
+        if (rooms)
+            url += ("?rooms=" + rooms.substr(1));
 
         $http({
             method: 'PUT',
