@@ -6,6 +6,7 @@ import has.User.User;
 import has.Utils.DataTableResult;
 import has.Utils.TaskHandler;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
+import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -146,6 +147,14 @@ public class TaskController {
     @PreAuthorize("hasAuthority('PERM_EDIT_TASK')")
     public List<Task> equalizeTasks() throws Exception {
         return service.equalize();
+    }
+
+    @RequestMapping(value = "/test", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_EDIT_TASK')")
+    public LocalTime test() throws Exception {
+        return new LocalTime();
     }
 
 }
