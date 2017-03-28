@@ -77,16 +77,6 @@ app2.config(function ($stateProvider, $urlRouterProvider) {
                         }
                     );
 
-                    $('#identityIssueDate,#identityExpireDate').daterangepicker({
-                        parentEl: "body",
-                        singleDatePicker: true,
-                        showDropdowns: true,
-                        locale: {
-                            format: "YYYY-MM-DD",
-                            firstDay: 1
-                        }
-                    });
-
                     $rootScope.switchBreakfast = new Switchery(document.getElementById('breakfast'), {color: "#266CEa"});
                     $rootScope.switchDinner = new Switchery(document.getElementById('dinner'), {color: "#266CEa"});
                     $rootScope.switchAllInclusive = new Switchery(document.getElementById('allInclusive'), {color: "#EA6C26"});

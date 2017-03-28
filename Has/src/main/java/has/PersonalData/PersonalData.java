@@ -24,11 +24,11 @@ public class PersonalData implements Serializable {
     @Column(name = "PERSONAL_DATA_ID")
     private Long id;
 
-    @NotNull
+    //@NotNull
     @Size(min = 3, max = 200)
     private String address;
 
-    @NotNull
+    //@NotNull
     @Size(min = 10, max = 10)
     @Pattern(regexp = "[0-9]+")
     private String egn;
@@ -38,16 +38,16 @@ public class PersonalData implements Serializable {
 //    @Pattern(regexp = "[a-zA-Z]+")
     private String fullName;
 
-    @NotNull
+    //@NotNull
     private String identityExpireDate;
 
-    @NotNull
+    //@NotNull
     private String identityIssueDate;
 
-    @NotNull
+    //@NotNull
     private String identityIssuedBy;
 
-    @NotNull
+    //@NotNull
     @Size(min = 9, max = 9)
     @Pattern(regexp = "[0-9]+")
     private String identityNumber;

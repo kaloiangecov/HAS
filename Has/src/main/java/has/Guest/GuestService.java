@@ -1,8 +1,11 @@
 package has.Guest;
 
 import has.Exceptions.EmailAlreadyExists;
+import has.PersonalData.PersonalData;
+import has.Roles.UserRole;
 import has.User.User;
 import has.User.UserRepository;
+import has.Utils.TimeFormatter;
 import has.Utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,10 +30,20 @@ public class GuestService {
     private static final int NEW_RESEVATION = -1;
 
     public Guest save(Guest guest) throws Exception {
-        validateEgn(guest);
-        validateIssueDate(guest);
-        validateIdentityNumber(guest);
-        validateUserEmail(guest);
+        if (guest.getPersonalData().getEgn() != null)
+            validateEgn(guest);
+
+        if (guest.getPersonalData().getIdentityNumber() != null) {
+            validateIssueDate(guest);
+            validateIdentityNumber(guest);
+        }
+
+        if (guest.getUser() == null) {
+            guest.setUser(generateUserFromPersonalData(guest.getPersonalData()));
+        } else {
+            validateUserEmail(guest);
+        }
+
         return repo.save(guest);
     }
 
@@ -80,6 +93,32 @@ public class GuestService {
         Guest guest = repo.findByUserEmail(email);
         validateIdNotNull(guest);
         return guest;
+    }
+
+    private User generateUserFromPersonalData(PersonalData personalData) {
+        User newUser = new User();
+
+        // generate username from fullName and phone
+        String[] fullNameParts = personalData.getFullName().split(" ");
+        String phone = personalData.getPhone();
+
+        String newUsername = fullNameParts[0].toLowerCase();
+        int phoneLength = phone.length();
+        newUsername = newUsername.concat(phone.substring(phoneLength - 4));
+        newUser.setUsername(newUsername);
+
+        // generate password from fullName and phone
+        String newPass = fullNameParts[0] + phone.substring(0, 2) + fullNameParts[1] + phone.substring(phoneLength - 2);
+        newUser.setPassword(newPass);
+
+        // add role 5 (client)
+        newUser.setUserRole(new UserRole(5L, "CLIENT"));
+
+        newUser.setEmail("not_set_" + personalData.getId() + "@has.todo");
+
+        newUser.setRegDate(TimeFormatter.getNewDateAsString());
+
+        return newUser;
     }
 
     private void validateEgn(Guest guest) throws Exception {
