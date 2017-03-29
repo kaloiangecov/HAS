@@ -111,6 +111,11 @@ app.controller("employeeCtrl", function ($scope, $location, $state, $stateParams
                 //console.log(list);
             }, resetPaging);
         };
+
+        $scope.search = function () {
+            $scope.reloadTableData(false);
+            $scope.addDeleteFunctions();
+        };
     }
     else {
         if ($stateParams && $stateParams.id) {

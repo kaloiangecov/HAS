@@ -125,6 +125,11 @@ app.controller("userCtrl", function ($scope, $http, $location, $state, $statePar
                 //console.log(list);
             }, resetPaging);
         };
+
+        $scope.search = function () {
+            $scope.reloadTableData(false);
+            $scope.addDeleteFunctions();
+        };
     }
     else {
         $scope.getAllRoles(function (data) {

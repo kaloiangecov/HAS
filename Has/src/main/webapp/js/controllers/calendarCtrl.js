@@ -200,10 +200,10 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
             );
     };
 
-    $scope.getReservationRequests = function (id, callback) {
+    $scope.getReservationRequestMeals = function (id, callback) {
         $http({
             method: "GET",
-            url: ("requests/reservation/" + id),
+            url: ("request-meals/expenses/reservation/" + id),
             responseType: "json",
             headers: {
                 "Authorization": $scope.authentication
@@ -318,34 +318,6 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
                     $scope.reservationInfo.startDate = new Date($scope.reservationInfo.startDate).toLocaleDateString();
                     $scope.reservationInfo.endDate = new Date($scope.reservationInfo.endDate).toLocaleDateString();
 
-                    $scope.getReservationRequests(tmp.id, function (data) {
-                        if (data.length > 0) {
-                            $scope.reservationInfo.requestMeals = [];
-                            var totalPrice = 0.0;
-
-                            angular.forEach(data, function (request, key) {
-                                if (request.requestMeals && request.requestMeals.length > 0) {
-                                    var requestPrice;
-                                    angular.forEach(request.requestMeals, function (requestMeal, key2) {
-                                        var requestPrice = (requestMeal.meal.price * requestMeal.quantity);
-                                        totalPrice += requestPrice;
-                                        $scope.reservationInfo.requestMeals.push({
-                                            meal: requestMeal.meal.name,
-                                            quantity: requestMeal.quantity,
-                                            price: requestPrice
-                                        });
-                                    });
-                                }
-                            });
-
-                            $scope.reservationInfo.requestMeals.push({
-                                meal: '',
-                                quantity: '',
-                                price: totalPrice
-                            });
-                        }
-                    });
-
                     $('#infoModal').modal('show');
                 });
             }
@@ -439,8 +411,18 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
 
                 if (confirm("Close reservation?\n" + "Start: " + this.source.start() + "\nEnd:" + this.source.end())) {
                     //$scope.scheduler.events.remove(this.source);
-                    $scope.checkReservation('close', this.source.data.objReservation.id, function (data) {
+                    var tmpReservation = this.source.data.objReservation;
+
+                    $scope.checkReservation('close', tmpReservation.id, function (data) {
                         $scope.scheduler.message("Reservation closed: " + data.reservationGuests[0].guest.personalData.fullName);
+
+                        $scope.getReservationRequestMeals(data.id, function (rm) {
+                            if (rm.length > 0) {
+                                $scope.reservationInfo.requestMeals = rm;
+                                $('#infoModal').modal('show');
+                            }
+                        });
+
                         $scope.resetReservation();
                     });
                 } else {

@@ -105,6 +105,11 @@ app.controller("mealCtrl", function ($scope, $http, $location, $state, $statePar
                 //console.log(list);
             }, resetPaging);
         };
+
+        $scope.search = function () {
+            $scope.reloadTableData(false);
+            $scope.addDeleteFunctions();
+        };
     }
     else {
         $scope.getMealCategories(function (categoriesList) {

@@ -92,6 +92,10 @@ app.controller("roomCtrl", function ($scope, $http, $location, $state, $statePar
             }, resetPaging);
         };
 
+        $scope.search = function () {
+            $scope.reloadTableData(false);
+            $scope.addDeleteFunctions();
+        };
     }
     else {
         if ($stateParams && $stateParams.id) {
