@@ -103,7 +103,7 @@ public class TaskService {
         task.setStatus(status);
         if (status == 1) {
             task.setStartTime(new LocalTime().toString());
-        } else if (status == 2){
+        } else if (status == 2) {
             task.setFinishTime(new LocalTime().toString());
             organizeTasks(task.getAssignee().getId());
         }
@@ -124,7 +124,7 @@ public class TaskService {
     }
 
     public List<Task> organizeTasks(Long employeeId) throws Exception {
-        EmployeeDTO employeeDTO = employeeService.transferEmployeeToDTO(employeeId);
+        EmployeeDTO employeeDTO = employeeService.transferEmployeeToDTO(employeeId, false);
         return repo.save(taskHandler.organizeTasks(employeeDTO));
     }
 

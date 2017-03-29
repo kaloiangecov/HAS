@@ -149,7 +149,7 @@ public class EmployeeService {
     public List<EmployeeDTO> getEmployeesOnShift(int shift, boolean requiresManager, boolean tomorrowDate) throws Exception {
         String date = timeFormatter.getAsYearMonthDayFormat(new Date());
         if (tomorrowDate) {
-            date = timeFormatter.getTomorrowDate();
+            date = timeFormatter.getTomorrowDateAsString();
         }
         List<Employee> employees = null;
         if (!requiresManager) {
@@ -175,8 +175,11 @@ public class EmployeeService {
         return employeesDTO;
     }
 
-    public EmployeeDTO transferEmployeeToDTO(Long id) throws Exception {
+    public EmployeeDTO transferEmployeeToDTO(Long id, boolean tomorrow) throws Exception {
         String date = timeFormatter.getAsYearMonthDayFormat(new Date());
+        if (tomorrow) {
+//            date = timeFormatter.getAsYearMonthDayFormat(timeFormatter.getTomorrowDateAsString());
+        }
         EmployeeDTO employeeDTO = new EmployeeDTO();
         WorkingSchedule workingSchedule = workingScheduleRepository.findByEmployeeIdAndDate(id, date);
         if (workingSchedule != null) {

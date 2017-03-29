@@ -159,7 +159,7 @@ public class TaskController {
     public String test() throws Exception {
         Date date = new Date();
 
-        String result = "today: " + date.toString() + " tomorrow: " + timeFormatter.getTomorrowDate();
+        String result = "today: " + date.toString() + " tomorrow: " + timeFormatter.getTomorrowDateAsString();
         return result;
     }
 

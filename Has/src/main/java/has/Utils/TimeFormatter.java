@@ -38,7 +38,7 @@ public class TimeFormatter {
         return date;
     }
 
-    public static String getTomorrowDate() {
+    public static String getTomorrowDateAsString() {
         Date dt = new Date();
         Calendar c = Calendar.getInstance();
         c.setTime(dt);
