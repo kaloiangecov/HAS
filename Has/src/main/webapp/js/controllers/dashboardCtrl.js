@@ -267,6 +267,16 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
                 $scope.master.startTime = ("0" + $scope.picker.start.hours).slice(-2) + ':' + ("0" + $scope.picker.start.minutes).slice(-2);
                 $scope.master.finishTime = ("0" + $scope.picker.finish.hours).slice(-2) + ':' + ("0" + $scope.picker.finish.minutes).slice(-2);
 
+                if ($scope.master.startTime >= $scope.master.finishTime) {
+                    $scope.page.message = {
+                        type: 'danger',
+                        title: 'Invalid time!',
+                        text: "Start date can't be later than finish date!"
+                    };
+                    $('#messageModal').modal('show');
+                    return;
+                }
+
                 $scope.saveData("tasks", $scope.master, function (task) {
                     console.log(task);
 
