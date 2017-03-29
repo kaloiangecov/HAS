@@ -46,7 +46,11 @@
                         <div ng-show="mealForm.$submitted || mealForm.price.$touched"
                              class="validation-message">
                             <span ng-show="mealForm.price.$error.required">This field is required</span>
-                            <span ng-show="mealForm.price.$error.pattern">Allowed inputs:<br/>- an integer<br/>- a decimal number with less han 1000 a precission of 2 and '.' as adecimal separator</span>
+                            <span ng-show="mealForm.price.$error.pattern">
+                                Allowed inputs:<br/>
+                                - a positive integer < 1000<br/>
+                                - a positive decimal number < 1000 with a precision of 2 and '.' as adecimal separator
+                            </span>
                         </div>
                     </div>
                 </div>

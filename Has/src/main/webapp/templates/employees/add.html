@@ -27,13 +27,17 @@
                             <div class="input-group">
                                 <input type="text" class="form-control" id="salary" name="salary"
                                        ng-model="employee.salary"
-                                       ng-pattern="\d{1,4}(\.\d{1,2})?" required="required"/>
+                                       pattern="\d{1,5}(\.\d{1,2})?" required="required"/>
                                 <span class="input-group-addon">BGN</span>
                             </div>
                             <div ng-show="employeeForm.$submitted || employeeForm.salary.$touched"
                                  class="validation-message">
                                 <span ng-show="employeeForm.salary.$error.required">This field is required</span>
-                                <span ng-show="employeeForm.salary.$error.pattern">You must enter a decimal number with precision of 2</span>
+                                <span ng-show="employeeForm.salary.$error.pattern">
+                                    Allowed inputs:<br/>
+                                    - a positive integer < 10000<br/>
+                                    - a positive decimal number < 10000 with a precision of 2 and '.' as adecimal separator
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -48,7 +52,8 @@
                                     <small ng-bind-html="item.email | highlight: $select.search"></small>
                                 </ui-select-choices>
                             </ui-select>
-                            <div ng-show="employeeForm.$submitted || employeeForm.user.$touched" class="validation-message">
+                            <div ng-show="employeeForm.$submitted || employeeForm.user.$touched"
+                                 class="validation-message">
                                 <span ng-show="employeeForm.user.$error.required">This field is required</span>
                             </div>
                         </div>

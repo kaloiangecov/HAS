@@ -257,26 +257,29 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
         };
 
         $scope.submitTask = function (task) {
-            $scope.master = angular.copy(task);
+            if ($scope.taskForm.$valid) {
 
-            if (!$scope.isEdit)
-                $scope.master.timePlaced = moment().format('YYYY-MM-DD HH:mm:ss');
+                $scope.master = angular.copy(task);
 
-            $scope.master.startTime = ("0" + $scope.picker.start.hours).slice(-2) + ':' + ("0" + $scope.picker.start.minutes).slice(-2);
-            $scope.master.finishTime = ("0" + $scope.picker.finish.hours).slice(-2) + ':' + ("0" + $scope.picker.finish.minutes).slice(-2);
+                if (!$scope.isEdit)
+                    $scope.master.timePlaced = moment().format('YYYY-MM-DD HH:mm:ss');
 
-            $scope.saveData("tasks", $scope.master, function (task) {
-                console.log(task);
+                $scope.master.startTime = ("0" + $scope.picker.start.hours).slice(-2) + ':' + ("0" + $scope.picker.start.minutes).slice(-2);
+                $scope.master.finishTime = ("0" + $scope.picker.finish.hours).slice(-2) + ':' + ("0" + $scope.picker.finish.minutes).slice(-2);
 
-                $scope.page.message = {
-                    type: 'success',
-                    title: 'Success!',
-                    text: 'Task editted'
-                };
-                $('#messageModal').modal('show');
+                $scope.saveData("tasks", $scope.master, function (task) {
+                    console.log(task);
 
-                $location.path('/tasks/dashboard');
-            }, $scope.resetTask, $scope.isEdit);
+                    $scope.page.message = {
+                        type: 'success',
+                        title: 'Success!',
+                        text: 'Task editted'
+                    };
+                    $('#messageModal').modal('show');
+
+                    $location.path('/tasks/dashboard');
+                }, $scope.resetTask, $scope.isEdit);
+            }
         };
     }
 
