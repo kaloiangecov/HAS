@@ -154,7 +154,7 @@ public class TaskHandler {
                 .append(System.lineSeparator());
         if (req.getReservationGuest() != null) {
             description
-                    .append("From room: " + req.getReservationGuest().getReservation().getRoom())
+                    .append("From room: " + req.getReservationGuest().getReservation().getRoom().getNumber())
                     .append(System.lineSeparator());
         } else {
             description

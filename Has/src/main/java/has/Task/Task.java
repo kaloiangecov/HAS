@@ -32,7 +32,7 @@ public class Task implements Serializable {
     private String title;
 
     @NotNull
-    @Size(min = 10, max = 100)
+    @Size(min = 10, max = 255)
     private String description;
 
     @NotNull
