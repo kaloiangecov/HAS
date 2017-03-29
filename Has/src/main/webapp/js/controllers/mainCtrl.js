@@ -75,7 +75,7 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
             $scope.authentication = "";
             $scope.loginData = {};
 
-            if (!$scope.page.message.text)
+            if (!$scope.page.message.text || $scope.page.message.text.startsWith('{'))
                 $scope.page.message.text = "You are not logged in!"
 
             $timeout(function () {
@@ -83,8 +83,8 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
                 $('#messageModal').modal('hide');
             }, 2000);
         } else if (response.status === 403) {
-            if (!$scope.page.message.text)
-                $scope.page.message.text = "You are not authorized to view this page!"
+            if (!$scope.page.message.text || $scope.page.message.text.startsWith('{'))
+                $scope.page.message.text = "Access to this page is forbidden for you!"
 
             $timeout(function () {
                 $location.path('/home');
