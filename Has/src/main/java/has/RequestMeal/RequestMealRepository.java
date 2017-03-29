@@ -12,4 +12,8 @@ import java.util.List;
 public interface RequestMealRepository extends JpaRepository<RequestMeal, Long> {
 
     List<RequestMeal> findByRequestReservationGuestGuestId(Long guestId);
+
+    List<RequestMeal> findByRequestReservationGuestReservationId(Long reservationId);
+
+    List<RequestMeal> findByRequestReservationGuestReservationGroupId(Long groupId);
 }

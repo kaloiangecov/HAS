@@ -257,7 +257,7 @@ public class ReservationService {
                 }
             }
         }
-        templateHandler.sendReservationCode(reservation);
+//        templateHandler.sendReservationCode(reservation);
         return repo.save(reservation);
     }
 

@@ -1,5 +1,6 @@
 package has.RequestMeal;
 
+import has.Reservation.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,9 @@ public class RequestMealService {
 
     @Autowired
     private RequestMealRepository repo;
+
+    @Autowired
+    private ReservationService reservationService;
 
     public RequestMeal save(RequestMeal requestMeal) {
         return repo.save(requestMeal);
@@ -44,6 +48,14 @@ public class RequestMealService {
 
     public List<RequestMeal> findGuestExpenses(Long guestId) {
         return repo.findByRequestReservationGuestGuestId(guestId);
+    }
+
+    public List<RequestMeal> findReservationExpenses(Long reservationId) {
+        return repo.findByRequestReservationGuestReservationId(reservationId);
+    }
+
+    public List<RequestMeal> findGroupReservationExpenses(Long reservationGroupId) {
+        return repo.findByRequestReservationGuestReservationGroupId(reservationGroupId);
     }
 
     private void validateIdNotNull(RequestMeal requestMeal) throws Exception {

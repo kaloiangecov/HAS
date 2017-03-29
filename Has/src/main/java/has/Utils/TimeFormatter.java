@@ -27,10 +27,9 @@ public class TimeFormatter {
         return timeToParse;
     }
 
-    public static String getNewDateAsString() {
+    public static String getAsYearMonthDayFormat(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String date = sdf.format(new Date());
-        return date;
+        return sdf.format(date);
     }
 
     public static String getNewDateAsFullString() {
@@ -45,7 +44,7 @@ public class TimeFormatter {
         c.setTime(dt);
         c.add(Calendar.DATE, 1);
         dt = c.getTime();
-        return dt.toString();
+        return getAsYearMonthDayFormat(dt);
     }
 
 }

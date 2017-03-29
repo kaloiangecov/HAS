@@ -71,7 +71,7 @@ public class TaskHandler {
         task.setDescription(createDescription(request));
         task.setRequest(request);
         task.setTargetTime(request.getTargetTime());
-        task.setTimePlaced(timeFormatter.getNewDateAsString());
+        task.setTimePlaced(timeFormatter.getAsYearMonthDayFormat(new Date()));
         task.setPriority(2);
         task.setStatus(0);
         task.setDuration(NOT_SPECIFIED);
@@ -228,6 +228,7 @@ public class TaskHandler {
         LocalTime targetTime = parse(task.getStartTime());
         LocalTime endTime = parse(task.getDuration());
         endTime = addTime(targetTime, endTime);
+        targetTime = targetTime.minusMinutes(5);
         String shiftEndTime = shifts.get(findShift(targetTime)).getEndShift();
         if (shiftEndTime.equals(END_NIGHT_SHIFT) && endTime.isAfter(parse(shiftEndTime))) {
             return false;
@@ -302,7 +303,12 @@ public class TaskHandler {
 
     public List<Task> organizeTasks(EmployeeDTO employeeDTO) throws Exception {
         Task lastTask = null;
-        String firstTaskStartTime = new LocalTime().toString();
+        String firstTaskStartTime;
+        firstTaskStartTime = new LocalTime().toString();
+        if (employeeDTO.getWorkingSchedule().getShift() != findShift(new LocalTime())) {
+            firstTaskStartTime = shifts.get(employeeDTO.getWorkingSchedule().getShift()).getStartShift();
+        }
+
         List<Task> targetTimeTasks = employeeDTO.getTargetTimeTasks();
         List<Task> tasks = employeeDTO.getTasks();
         Task currentTask = employeeDTO.getCurrentTask();
@@ -337,6 +343,8 @@ public class TaskHandler {
                 }
             }
             if (!completeTaskBeforeShiftEnd(task)) {
+                task.setStartTime(null);
+                task.setFinishTime(null);
                 nextShiftTasks.add(task);
             }
             lastTask = task;
