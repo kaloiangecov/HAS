@@ -358,7 +358,10 @@ public class TaskHandler {
 
     private void moveRemainingTasks(List<Task> nextShiftTasks) throws Exception {
         for (Task task : nextShiftTasks) {
-            taskRepository.save(assignTask(task, NOT_INITIALIZED));
+            EmployeeDTO employeeDTO;
+            task = taskRepository.save(assignTask(task, NOT_INITIALIZED));
+            employeeDTO = employeeService.transferEmployeeToDTO(task.getAssignee().getId());
+            taskRepository.save(organizeTasks(employeeDTO));
         }
     }
 
