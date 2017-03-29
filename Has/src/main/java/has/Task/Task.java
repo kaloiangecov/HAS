@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,9 +28,11 @@ public class Task implements Serializable {
     private Long id;
 
     @NotNull
+    @Size(min = 3, max = 50)
     private String title;
 
     @NotNull
+    @Size(min = 10, max = 100)
     private String description;
 
     @NotNull
