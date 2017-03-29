@@ -76,7 +76,7 @@ public class TaskHandler {
         task.setStatus(0);
         task.setDuration(NOT_SPECIFIED);
         task = assignTask(task, findShift(new LocalTime()));
-        EmployeeDTO employeeDTO = employeeService.transferEmployeeToDTO(task.getAssignee().getId());
+        EmployeeDTO employeeDTO = employeeService.transferEmployeeToDTO(task.getAssignee().getId(), false);
         Task savedTask = taskRepository.save(task);
         taskRepository.save(organizeTasks(employeeDTO));
         return savedTask;
@@ -303,10 +303,12 @@ public class TaskHandler {
 
     public List<Task> organizeTasks(EmployeeDTO employeeDTO) throws Exception {
         Task lastTask = null;
+        boolean fromlastShift = false;
         String firstTaskStartTime;
         firstTaskStartTime = new LocalTime().toString();
         if (employeeDTO.getWorkingSchedule().getShift() != findShift(new LocalTime())) {
             firstTaskStartTime = shifts.get(employeeDTO.getWorkingSchedule().getShift()).getStartShift();
+            fromlastShift = true;
         }
 
         List<Task> targetTimeTasks = employeeDTO.getTargetTimeTasks();
@@ -342,10 +344,10 @@ public class TaskHandler {
                     }
                 }
             }
-            if (!completeTaskBeforeShiftEnd(task)) {
-                task.setStartTime(null);
-                task.setFinishTime(null);
-                nextShiftTasks.add(task);
+            if (!fromlastShift) {
+                if (!completeTaskBeforeShiftEnd(task)) {
+                    nextShiftTasks.add(task);
+                }
             }
             lastTask = task;
         }
@@ -360,7 +362,7 @@ public class TaskHandler {
         for (Task task : nextShiftTasks) {
             EmployeeDTO employeeDTO;
             task = taskRepository.save(assignTask(task, NOT_INITIALIZED));
-            employeeDTO = employeeService.transferEmployeeToDTO(task.getAssignee().getId());
+            employeeDTO = employeeService.transferEmployeeToDTO(task.getAssignee().getId(), false);
             taskRepository.save(organizeTasks(employeeDTO));
         }
     }
