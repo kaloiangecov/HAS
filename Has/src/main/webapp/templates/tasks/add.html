@@ -71,9 +71,8 @@
 
                 <div class="form-group">
                     <label>Description *</label>
-                    <textarea name="description" class="form-control" minlength="10" maxlength="100" rows="5"
-                              required="required"
-                              ng-model="task.description" style="resize: vertical;"/>
+                    <textarea name="description" class="form-control" minlength="10" maxlength="255" rows="5"
+                              required="required" ng-model="task.description" style="resize: vertical;"/>
                     <div ng-show="taskForm.$submitted || taskForm.description.$touched" class="validation-message">
                         <span ng-show="taskForm.description.$error.required">This field is required</span>
                         <span ng-show="taskForm.description.$error.minlength">Input too short</span>
