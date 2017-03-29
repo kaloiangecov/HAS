@@ -49,32 +49,35 @@
 
     <div class="row" id="guestData">
         <div class="col-md-8 col-md-offset-2">
-            <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                <label for="fullName">Full Name *</label>
-                <input type="text" class="form-control" id="fullName" name="fullName"
-                       ng-model="guest.personalData.fullName" minlength="4" maxlength="100"
-                       required="required" ng-disabled="guestFound"/>
-                <div ng-show="bookingGuestForm.$submitted || bookingGuestForm.fullName.$touched"
-                     class="validation-message">
-                    <span ng-show="bookingGuestForm.fullName.$error.required">This field is required</span>
-                    <span ng-show="bookingGuestForm.fullName.$error.minlength">Input too short</span>
-                    <span ng-show="bookingGuestForm.fullName.$error.maxlength">Input too long</span>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group">
+                    <label for="fullName">Full Name *</label>
+                    <input type="text" class="form-control" id="fullName" name="fullName"
+                           ng-model="guest.personalData.fullName" minlength="4" maxlength="100"
+                           required="required" ng-disabled="guestFound"/>
+                    <div ng-show="bookingGuestForm.$submitted || bookingGuestForm.fullName.$touched"
+                         class="validation-message">
+                        <span ng-show="bookingGuestForm.fullName.$error.required">This field is required</span>
+                        <span ng-show="bookingGuestForm.fullName.$error.minlength">Input too short</span>
+                        <span ng-show="bookingGuestForm.fullName.$error.maxlength">Input too long</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="text" class="form-control" id="phone" name="phone"
+                           ng-model="guest.personalData.phone" ng-pattern="/^[0-9]+$/"
+                           minlength="10" maxlength="20" required="required" ng-disabled="guestFound"/>
+                    <div ng-show="bookingGuestForm.$submitted || bookingGuestForm.phone.$touched"
+                         class="validation-message">
+                        <span ng-show="bookingGuestForm.phone.$error.required">This field is required</span>
+                        <span ng-show="bookingGuestForm.phone.$error.minlength">Input too short</span>
+                        <span ng-show="bookingGuestForm.phone.$error.maxlength">Input too long</span>
+                        <span ng-show="bookingGuestForm.phone.$error.pattern">Input should contain only digits</span>
+                    </div>
                 </div>
             </div>
             <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                <label for="phone">Phone Number *</label>
-                <input type="text" class="form-control" id="phone" name="phone"
-                       ng-model="guest.personalData.phone" ng-pattern="/^[0-9]+$/"
-                       minlength="10" maxlength="20" required="required" ng-disabled="guestFound"/>
-                <div ng-show="bookingGuestForm.$submitted || bookingGuestForm.phone.$touched"
-                     class="validation-message">
-                    <span ng-show="bookingGuestForm.phone.$error.required">This field is required</span>
-                    <span ng-show="bookingGuestForm.phone.$error.minlength">Input too short</span>
-                    <span ng-show="bookingGuestForm.phone.$error.maxlength">Input too long</span>
-                    <span ng-show="bookingGuestForm.phone.$error.pattern">Input should contain only digits</span>
-                </div>
-            </div>
-            <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                <label for="bookCapcha">Human Verification *</label>
                 <div id="bookCapcha"></div>
                 <div ng-show="bookingGuestForm.$submitted" class="validation-message">
                     <span ng-hide="bookCapchaResponse">Please, verify that you are a human!</span>
