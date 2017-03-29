@@ -1,14 +1,12 @@
 package has.Utils;
 
 import has.Employee.EmployeeDTO;
-import has.Employee.EmployeeRepository;
 import has.Employee.EmployeeService;
 import has.Meal.MealRepository;
 import has.Request.Request;
 import has.RequestMeal.RequestMeal;
 import has.Task.Task;
 import has.Task.TaskRepository;
-import has.Task.TaskService;
 import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,16 +21,10 @@ import java.util.*;
 public class TaskHandler {
 
     @Autowired
-    private TaskService taskService;
-
-    @Autowired
     private TaskRepository taskRepository;
 
     @Autowired
     private EmployeeService employeeService;
-
-    @Autowired
-    private EmployeeRepository employeeRepository;
 
     @Autowired
     private MealRepository mealRepo;
@@ -79,14 +71,14 @@ public class TaskHandler {
         task.setDescription(createDescription(request));
         task.setRequest(request);
         task.setTargetTime(request.getTargetTime());
-        task.setTimePlaced(timeFormatter.getNewDateAsString());
+        task.setTimePlaced(timeFormatter.getAsYearMonthDayFormat(new Date()));
         task.setPriority(2);
         task.setStatus(0);
         task.setDuration(NOT_SPECIFIED);
         task = assignTask(task, findShift(new LocalTime()));
         EmployeeDTO employeeDTO = employeeService.transferEmployeeToDTO(task.getAssignee().getId());
         Task savedTask = taskRepository.save(task);
-        List<Task> updatedTasks = taskRepository.save(organizeTasks(employeeDTO));
+        taskRepository.save(organizeTasks(employeeDTO));
         return savedTask;
     }
 
@@ -96,9 +88,15 @@ public class TaskHandler {
         if (task.getTargetTime() == null) {
             List<EmployeeDTO> employeesOnShift;
             if (shift == NOT_INITIALIZED) {
-                employeesOnShift = employeeService.getEmployeesOnShift(findShift(new LocalTime()), false);
+                int nextShift = findShift(new LocalTime()) + 1;
+                if (nextShift == 3) {
+                    nextShift = 0;
+                    employeesOnShift = employeeService.getEmployeesOnShift(nextShift, false, true);
+                } else {
+                    employeesOnShift = employeeService.getEmployeesOnShift(nextShift, false, false);
+                }
             } else {
-                employeesOnShift = employeeService.getEmployeesOnShift(shift, false);
+                employeesOnShift = employeeService.getEmployeesOnShift(shift, false, false);
             }
             if (!employeesOnShift.isEmpty()) {
                 if (task.getPriority() < LOW_PRIORITY) {
@@ -126,7 +124,7 @@ public class TaskHandler {
     }
 
     public List<EmployeeDTO> findEmployeesOnShiftDTO(LocalTime localTime, boolean requiresManager) throws Exception {
-        return employeeService.getEmployeesOnShift(findShift(localTime), requiresManager);
+        return employeeService.getEmployeesOnShift(findShift(localTime), requiresManager, false);
     }
 
     private Task assignToLeastBusy(Task task, List<EmployeeDTO> availableEmployees) {
@@ -230,9 +228,10 @@ public class TaskHandler {
         LocalTime targetTime = parse(task.getStartTime());
         LocalTime endTime = parse(task.getDuration());
         endTime = addTime(targetTime, endTime);
+        targetTime = targetTime.minusMinutes(5);
         String shiftEndTime = shifts.get(findShift(targetTime)).getEndShift();
         if (shiftEndTime.equals(END_NIGHT_SHIFT) && endTime.isAfter(parse(shiftEndTime))) {
-            return true;
+            return false;
         } else if (endTime.isBefore(parse(shiftEndTime))) {
             return true;
         }
@@ -304,7 +303,13 @@ public class TaskHandler {
 
     public List<Task> organizeTasks(EmployeeDTO employeeDTO) throws Exception {
         Task lastTask = null;
-        List<Task> targetTimeTasks = targetTimeTasks = employeeDTO.getTargetTimeTasks();
+        String firstTaskStartTime;
+        firstTaskStartTime = new LocalTime().toString();
+        if (employeeDTO.getWorkingSchedule().getShift() != findShift(new LocalTime())) {
+            firstTaskStartTime = shifts.get(employeeDTO.getWorkingSchedule().getShift()).getStartShift();
+        }
+
+        List<Task> targetTimeTasks = employeeDTO.getTargetTimeTasks();
         List<Task> tasks = employeeDTO.getTasks();
         Task currentTask = employeeDTO.getCurrentTask();
         tasks = bubbleSortByPriority(tasks);
@@ -317,37 +322,30 @@ public class TaskHandler {
                         task.setStartTime(addTime(parse(lastTask.getFinishTime()), parse(FIVE_MINUTES)).toString());
                         task.setFinishTime(addTime(parse(task.getStartTime()), parse(task.getDuration())).toString());
 
-
                         Task intersectingTask = findIntersectingTask(targetTimeTasks, task);
                         if (intersectingTask.getAssigner() != null) {
                             task.setStartTime(addTime(parse(intersectingTask.getFinishTime()), parse(FIVE_MINUTES)).toString());
                             task.setFinishTime(addTime(parse(task.getStartTime()), parse(task.getDuration())).toString());
-                            if (!completeTaskBeforeShiftEnd(task)) {
-                                nextShiftTasks.add(task);
-                            }
                         } else {
                             task.setStartTime(addTime(parse(lastTask.getFinishTime()), parse(FIVE_MINUTES)).toString());
                             task.setFinishTime(addTime(parse(task.getStartTime()), parse(task.getDuration())).toString());
-                            if (!completeTaskBeforeShiftEnd(task)) {
-                                nextShiftTasks.add(task);
-                            }
                         }
                     }
                 } else {
                     if (currentTask == null) {
-                        task.setStartTime(timeFormatter.hoursAndMinutes(new LocalTime()));
+                        task.setStartTime(firstTaskStartTime);
                         task.setFinishTime(addTime(parse(task.getStartTime()), parse(task.getDuration())).toString());
-                        if (!completeTaskBeforeShiftEnd(task)) {
-                            nextShiftTasks.add(task);
-                        }
                     } else {
                         task.setStartTime(addTime(parse(currentTask.getFinishTime()), parse(FIVE_MINUTES)).toString());
                         task.setFinishTime(addTime(parse(task.getStartTime()), parse(task.getDuration())).toString());
-                        if (!completeTaskBeforeShiftEnd(task)) {
-                            nextShiftTasks.add(task);
-                        }
+
                     }
                 }
+            }
+            if (!completeTaskBeforeShiftEnd(task)) {
+                task.setStartTime(null);
+                task.setFinishTime(null);
+                nextShiftTasks.add(task);
             }
             lastTask = task;
         }
@@ -360,7 +358,7 @@ public class TaskHandler {
 
     private void moveRemainingTasks(List<Task> nextShiftTasks) throws Exception {
         for (Task task : nextShiftTasks) {
-            assignTask(task, NOT_INITIALIZED);
+            taskRepository.save(assignTask(task, NOT_INITIALIZED));
         }
     }
 
@@ -464,5 +462,5 @@ public class TaskHandler {
     private LocalTime parse(String dateToParse) {
         return LocalTime.parse(dateToParse);
     }
-    
+
 }

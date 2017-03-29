@@ -60,11 +60,27 @@ public class RequestMealController {
         return requestMealService.update(id, requestMeal);
     }
 
-    @RequestMapping(value = "/request-meals/expenses/{id}", method = RequestMethod.GET,
+    @RequestMapping(value = "/request-meals/expenses/guest/{id}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @PreAuthorize("hasAuthority('PERM_VIEW_REQUEST_MEAL')")
     public List<RequestMeal> getAllGuestExpenses(@PathVariable Long id) {
         return requestMealService.findGuestExpenses(id);
+    }
+
+    @RequestMapping(value = "/request-meals/expenses/reservation/{id}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_VIEW_REQUEST_MEAL')")
+    public List<RequestMeal> getReservationExpenses(@PathVariable Long id) {
+        return requestMealService.findReservationExpenses(id);
+    }
+
+    @RequestMapping(value = "/request-meals/expenses/group/reservation/{id}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_VIEW_REQUEST_MEAL')")
+    public List<RequestMeal> getGroupReservationExpenses(@PathVariable Long id) {
+        return requestMealService.findGroupReservationExpenses(id);
     }
 }

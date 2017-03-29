@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -116,7 +117,7 @@ public class GuestService {
 
         newUser.setEmail("not_set_" + personalData.getId() + "@has.todo");
 
-        newUser.setRegDate(TimeFormatter.getNewDateAsString());
+        newUser.setRegDate(TimeFormatter.getAsYearMonthDayFormat(new Date()));
 
         return newUser;
     }

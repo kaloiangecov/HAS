@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -145,8 +146,11 @@ public class EmployeeService {
         }
     }
 
-    public List<EmployeeDTO> getEmployeesOnShift(int shift, boolean requiresManager) throws Exception {
-        String date = timeFormatter.getNewDateAsString();
+    public List<EmployeeDTO> getEmployeesOnShift(int shift, boolean requiresManager, boolean tomorrowDate) throws Exception {
+        String date = timeFormatter.getAsYearMonthDayFormat(new Date());
+        if (tomorrowDate) {
+            date = timeFormatter.getTomorrowDate();
+        }
         List<Employee> employees = null;
         if (!requiresManager) {
             employees = repo.findServiceEmployeesForShift(date, shift);
@@ -172,7 +176,7 @@ public class EmployeeService {
     }
 
     public EmployeeDTO transferEmployeeToDTO(Long id) throws Exception {
-        String date = timeFormatter.getNewDateAsString();
+        String date = timeFormatter.getAsYearMonthDayFormat(new Date());
         EmployeeDTO employeeDTO = new EmployeeDTO();
         WorkingSchedule workingSchedule = workingScheduleRepository.findByEmployeeIdAndDate(id, date);
         if (workingSchedule != null) {

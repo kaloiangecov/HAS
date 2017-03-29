@@ -5,6 +5,7 @@ import has.Employee.EmployeeService;
 import has.User.User;
 import has.Utils.DataTableResult;
 import has.Utils.TaskHandler;
+import has.Utils.TimeFormatter;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +34,8 @@ public class TaskController {
 
     @Autowired
     private TaskHandler taskHandler;
+
+    private TimeFormatter timeFormatter;
 
     @RequestMapping(value = "/tasks", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE,
@@ -146,6 +150,17 @@ public class TaskController {
     @PreAuthorize("hasAuthority('PERM_EDIT_TASK')")
     public List<Task> equalizeTasks() throws Exception {
         return service.equalize();
+    }
+
+    @RequestMapping(value = "/test", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_EDIT_TASK')")
+    public String test() throws Exception {
+        Date date = new Date();
+
+        String result = "today: " + date.toString() + " tomorrow: " + timeFormatter.getTomorrowDate();
+        return result;
     }
 
 }
