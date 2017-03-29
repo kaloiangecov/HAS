@@ -28,7 +28,7 @@ public class Employee implements Serializable {
     private String dateHired;
 
     @NotNull
-    @Min(0)
+    @Min(value = 0, message = "The salary must be a positive number")
     private Double salary;
 
     @NotNull
