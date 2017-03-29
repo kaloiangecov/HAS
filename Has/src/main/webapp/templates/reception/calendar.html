@@ -298,10 +298,10 @@
                             <th>Price</th>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="requestMealInfo in reservationInfo.requestMeals">
-                                <td>{{requestMealInfo.meal}}</td>
-                                <td>{{requestMealInfo.quantity}}</td>
-                                <td>{{requestMealInfo.price}}</td>
+                            <tr ng-repeat="requestMeal in reservationInfo.requestMeals">
+                                <td>{{requestMeal.meal.name}}</td>
+                                <td>{{requestMeal.quantity}}x</td>
+                                <td>{{requestMeal.meal.price}}</td>
                             </tr>
                             </tbody>
                         </table>
