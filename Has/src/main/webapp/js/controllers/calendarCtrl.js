@@ -379,6 +379,8 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
                 if (confirm("Start reservation?\n" + "Start: " + this.source.start() + "\nEnd:" + this.source.end())) {
                     $scope.checkReservation('checkin', tmpReservation.id, function (data) {
                         $scope.scheduler.message("Reservation started: " + data.reservationGuests[0].guest.personalData.fullName);
+
+                        $scope.changeRoomType();
                         loadEvents();
                     }, $scope.resetReservation, true);
                 } else {
@@ -414,6 +416,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
                             $('#billingModal').modal('show');
                         });
 
+                        $scope.changeRoomType();
                         $scope.resetReservation();
                     });
                 } else {
