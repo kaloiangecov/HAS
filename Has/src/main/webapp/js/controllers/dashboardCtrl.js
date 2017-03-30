@@ -3,6 +3,7 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
     $scope.assigner = {};
     $scope.employees = [];
     $scope.isEdit = false;
+    $scope.isTimePickerValid = true;
 
     var SHIFT_MORNING = 0;
     var SHIFT_LUNCH = 1;
@@ -257,6 +258,12 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
         };
 
         $scope.submitTask = function (task) {
+
+            if (task.startTime >= task.finishTime) {
+                $scope.isTimePickerValid = false;
+                return;
+            }
+
             if ($scope.taskForm.$valid) {
 
                 $scope.master = angular.copy(task);

@@ -25,10 +25,10 @@
                 <li>
                     <a href="#!/home"><i class="fa fa-home"></i> Home</a>
                 </li>
-                <li>
+                <li ng-show="loginData.userRole.id == 1 || loginData.userRole.id == 3">
                     <a href="#!/calendar"><i class="fa fa-calendar"></i> Scheduler</a>
                 </li>
-                <li>
+                <li ng-show="loginData.userRole.id == 1 || loginData.userRole.id == 2">
                     <a><i class="fa fa-tasks"></i> Tasks <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li>
@@ -39,7 +39,7 @@
                         </li>
                     </ul>
                 </li>
-                <li>
+                <li ng-show="loginData.userRole.id == 1">
                     <a><i class="fa fa-user-o"></i> Users <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li>
@@ -50,7 +50,7 @@
                         </li>
                     </ul>
                 </li>
-                <li>
+                <li ng-show="loginData.userRole.id == 1">
                     <a><i class="fa fa-user"></i> Employees <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li>
@@ -61,7 +61,7 @@
                         </li>
                     </ul>
                 </li>
-                <li>
+                <li ng-show="loginData.userRole.id == 1 || loginData.userRole.id == 2">
                     <a><i class="fa fa-calendar-o"></i> Working Schedule <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li>
@@ -72,7 +72,7 @@
                         </li>
                     </ul>
                 </li>
-                <li>
+                <li ng-show="loginData.userRole.id == 1 || loginData.userRole.id == 3">
                     <a><i class="fa fa-address-book-o"></i> Guests <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li>
@@ -83,7 +83,7 @@
                         </li>
                     </ul>
                 </li>
-                <li>
+                <li ng-show="loginData.userRole.id == 1 || loginData.userRole.id == 2">
                     <a><i class="fa fa-bed"></i> Rooms <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li>
@@ -94,7 +94,7 @@
                         </li>
                     </ul>
                 </li>
-                <li>
+                <li ng-show="loginData.userRole.id == 1 || loginData.userRole.id == 2">
                     <a><i class="fa fa-cutlery"></i> Meals <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li>
