@@ -230,8 +230,13 @@ public class TaskHandler {
         endTime = addTime(targetTime, endTime);
         targetTime = targetTime.minusMinutes(5);
         String shiftEndTime = shifts.get(findShift(targetTime)).getEndShift();
-        if (shiftEndTime.equals(END_NIGHT_SHIFT) && endTime.isAfter(parse(shiftEndTime))) {
-            return false;
+        if (shiftEndTime.equals(END_NIGHT_SHIFT)) {
+            if ((endTime.isBefore(parse("23:59")) && endTime.isAfter(parse("22:00")))
+                    || (endTime.isAfter(parse("00:00")) && endTime.isBefore(parse("06:00")))) {
+                return true;
+            } else {
+                return false;
+            }
         } else if (endTime.isBefore(parse(shiftEndTime))) {
             return true;
         }
