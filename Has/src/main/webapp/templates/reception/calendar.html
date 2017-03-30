@@ -283,15 +283,20 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                            ng-click="printReservation()">
+                        <span aria-hidden="true" class="fa fa-print"></span>
+                    </button>
                     <h4 class="modal-title"><i class="fa fa-money"></i> Reservation Billing</h4>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body reservation-print" id="billing_print_content">
+                    <p><strong>Period:</strong> {{reservationInfo.startDate}} - {{reservationInfo.endDate}}</p>
+                    <p><strong>Owner:</strong> {{reservationInfo.reservationGuests[0].guest.personalData.fullName}}</p>
+                    <p><strong>Reservation price:</strong> {{reservationInfo.price}} BGN</p>
 
                     <div ng-show="reservationInfo.requestMeals">
-                        <h3>Requested Meals</h3>
-                        <table class="table table-condensed table-striped" style="max-height:200px;overflow-y:scroll;">
+                        <h4>Requested Food and Bevarages</h4>
+                        <table class="table table-condensed table-striped" style="max-height:300px;overflow-y:scroll;">
                             <thead>
                             <th>Meal</th>
                             <th>Quantity</th>
@@ -301,11 +306,19 @@
                             <tr ng-repeat="requestMeal in reservationInfo.requestMeals">
                                 <td>{{requestMeal.meal.name}}</td>
                                 <td>{{requestMeal.quantity}}x</td>
-                                <td>{{requestMeal.meal.price}}</td>
+                                <td>{{requestMeal.meal.price}} BGN</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Total amount</strong></td>
+                                <td>-</td>
+                                <td>{{reservationInfo.totalMealsPrice}} BGN</td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
+
+                    <p class="total-price"><strong>Total reservation price:</strong> {{reservationInfo.totalMealsPrice +
+                        reservationInfo.price}} BGN</p>
                 </div>
                 <!--
                 <div class="modal-footer">

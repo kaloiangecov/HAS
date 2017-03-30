@@ -176,3 +176,13 @@ table#mealsTable > td.meal-cell {
     width: 128px;
     max-width: 128px;
 }
+
+.reservation-print {
+    text-align: center;
+}
+
+.reservation-print p.total-price {
+    border-top: 1px dashed #999;
+    padding-top: 5px;
+    font-size: larger;
+}
