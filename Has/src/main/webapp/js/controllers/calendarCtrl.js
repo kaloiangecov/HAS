@@ -696,7 +696,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
                         args.data.barColor = "#e55";  // red
                         status = "Late Arrival";
                     } else {
-                        args.data.barColor = "#feda55";  // orange
+                        args.data.barColor = "#feea99";  // yellow
                         status = "New"
                     }
                     break;
