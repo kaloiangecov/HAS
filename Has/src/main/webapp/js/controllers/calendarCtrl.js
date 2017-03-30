@@ -67,23 +67,6 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
             }).then(updateCallback);
     };
 
-    $scope.getEmployeeByUserId = function (userID, updateCallback) {
-        $http({
-            method: "GET",
-            url: ("employee/by-user/" + userID),
-            responseType: "json",
-            headers: {
-                "Authorization": $scope.authentication
-            }
-        }).then(
-            function (response) { //success
-                return response.data;
-            },
-            function (response) { //error
-                $scope.displayMessage(response.data);
-            }).then(updateCallback);
-    };
-
     $scope.saveReservationGuest = function (reservation) {
         function afterEventCreated(data) {
             $scope.scheduler.message("New event created!");
@@ -416,11 +399,19 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
                     $scope.checkReservation('close', tmpReservation.id, function (data) {
                         $scope.scheduler.message("Reservation closed: " + data.reservationGuests[0].guest.personalData.fullName);
 
+                        $scope.reservationInfo = data;
+
                         $scope.getReservationRequestMeals(data.id, function (rm) {
                             if (rm.length > 0) {
                                 $scope.reservationInfo.requestMeals = rm;
-                                $('#infoModal').modal('show');
+
+                                $scope.reservationInfo.totalMealsPrice = 0.0;
+                                angular.forEach($scope.reservationInfo.requestMeals, function (requestMeal, key) {
+                                    $scope.reservationInfo.totalMealsPrice += (requestMeal.quantity * requestMeal.meal.price);
+                                });
                             }
+
+                            $('#billingModal').modal('show');
                         });
 
                         $scope.resetReservation();
@@ -951,6 +942,10 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
         });
 
     }
+
+    $scope.printReservation = function () {
+        $('#billing_print_content').printThis();
+    };
 
     angular.element(document).ready(function () {
         $scope.changeRoomType();
