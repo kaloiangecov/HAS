@@ -58,6 +58,12 @@ public class RoomService {
         return room;
     }
 
+    public Room clearRoomByNumber(int number) {
+        Room room = repo.findByNumber(number);
+        room.setStatus(0);
+        return repo.save(room);
+    }
+
     public Room update(Long id, Room room) throws Exception {
         Room dbRoom = repo.findOne(id);
         validateIdNotNull(dbRoom);

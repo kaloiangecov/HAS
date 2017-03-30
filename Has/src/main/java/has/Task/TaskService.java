@@ -3,6 +3,7 @@ package has.Task;
 import has.Employee.Employee;
 import has.Employee.EmployeeDTO;
 import has.Employee.EmployeeService;
+import has.Room.RoomService;
 import has.Utils.TaskHandler;
 import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class TaskService {
 
     @Autowired
     private TaskRepository repo;
+
+    @Autowired
+    private RoomService roomService;
 
     @Autowired
     private TaskHandler taskHandler;
@@ -104,6 +108,10 @@ public class TaskService {
         if (status == 1) {
             task.setStartTime(new LocalTime().toString());
         } else if (status == 2) {
+            if (task.getRequest() != null && task.getRequest().getType() == 10) {
+                roomService.clearRoomByNumber(Integer.parseInt(
+                        task.getDescription().substring(task.getDescription().length() - 3)));
+            }
             task.setFinishTime(new LocalTime().toString());
             organizeTasks(task.getAssignee().getId());
         }
