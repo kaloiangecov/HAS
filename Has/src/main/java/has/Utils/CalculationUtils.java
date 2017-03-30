@@ -1,18 +1,29 @@
 package has.Utils;
 
 import has.Configuration.PropertiesReader;
+import has.RequestMeal.RequestMeal;
 import has.Reservation.Reservation;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.List;
 
 
 public class CalculationUtils {
 
     private CalculationUtils() {
 
+    }
+
+    public static Double getRequestsCost(List<RequestMeal> requestMealList) {
+        Double sum = 0d;
+        for (RequestMeal requestMeal : requestMealList) {
+            sum += requestMeal.getMeal().getPrice() * requestMeal.getQuantity();
+        }
+
+        return sum;
     }
 
     public static Double getReservationCost(Reservation reservation) throws IOException, URISyntaxException {
