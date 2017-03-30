@@ -976,7 +976,10 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
         loadEvents();
 
         if (!$scope.refreshInterval) {
-            $scope.refreshInterval = $interval(loadEvents, 5000);
+            $scope.refreshInterval = $interval(function () {
+                $scope.changeRoomType();
+                loadEvents();
+            }, 5000);
         }
 
         $scope.$on("$destroy", function () {
