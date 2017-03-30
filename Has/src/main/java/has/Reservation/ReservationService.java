@@ -3,6 +3,8 @@ package has.Reservation;
 import freemarker.template.TemplateException;
 import has.Employee.Employee;
 import has.Employee.EmployeeRepository;
+import has.Request.Request;
+import has.Request.RequestRepository;
 import has.ReservationGuest.ReservationGuest;
 import has.Room.Room;
 import has.Room.RoomRepository;
@@ -48,6 +50,9 @@ public class ReservationService {
 
     @Autowired
     private EmployeeRepository repoEmployee;
+
+    @Autowired
+    private RequestRepository repoRequest;
 
     @Autowired
     private TaskService taskService;
@@ -315,7 +320,7 @@ public class ReservationService {
 
         task.setTitle("Clean Room ");
         task.setDescription("Clean Room " + reservation.getRoom().getNumber());
-        task.setRequest(null);
+        task.setRequest(getDummyRequest());
         task.setTargetTime(null);
         task.setTimePlaced(timeFormatter.getNewDateAsFullString());
         task.setPriority(1);
@@ -324,6 +329,13 @@ public class ReservationService {
         task = taskHandler.assignTask(task, taskHandler.findShift(new LocalTime()));
         task = taskService.save(task, "SYSTEM");
         taskService.organizeTasks(task.getAssignee().getId());
+    }
+
+    public Request getDummyRequest() {
+        Request request = new Request();
+        request.setStatus(2);
+        request.setType(10);
+        return repoRequest.save(request);
     }
 
     public Page<Reservation> getClientHistory(Long id, int start, int length, String sortColumn, String sortDirection) {
