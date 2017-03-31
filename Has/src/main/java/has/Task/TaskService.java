@@ -20,7 +20,7 @@ import java.util.List;
 @Service
 public class TaskService {
 
-    private static final int UNRESOLVED = 3;
+    private static final int UNRESOLVED = 2;
 
     @Autowired
     private TaskRepository repo;
