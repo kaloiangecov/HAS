@@ -15,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -185,5 +186,13 @@ public class ReservationController {
                 guests.getTotalElements(),
                 guests.getTotalElements(),
                 guests.getContent());
+    }
+
+    @RequestMapping(value = "/reservation/guest", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorize("hasAuthority('PERM_VIEW_RESERVATION')")
+    public List<Reservation> findReservationByGuestFullName(@PathParam("fullName") String fullName) throws Exception {
+        return reservationService.findByGuestFullName(fullName);
     }
 }
