@@ -270,6 +270,8 @@ public class ReservationService {
         Reservation reservation = repo.findOne(id);
         validateIdNotNull(reservation);
 
+        reservation.setEndDate(new Date().toString());
+
         if ((reservation.getStatus() == RESERVATION_STATUS_ARRIVED)) {
             for (ReservationGuest reservationGuest : reservation.getReservationGuests()) {
                 int reservationsMade = reservationGuest.getGuest().getNumberReservations();
