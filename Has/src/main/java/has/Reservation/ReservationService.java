@@ -355,4 +355,8 @@ public class ReservationService {
         }
     }
 
+    public List<Reservation> findByGuestFullName(String fullName) {
+        return repo.findByReservationGuestsGuestPersonalDataFullNameContainingIgnoreCase(fullName);
+    }
+
 }
