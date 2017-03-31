@@ -269,7 +269,7 @@ public class ReservationService {
     public Reservation close(Long id, User user) throws Exception {
         Reservation reservation = repo.findOne(id);
         validateIdNotNull(reservation);
-
+      
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
         String today = sdf2.format(new Date());
