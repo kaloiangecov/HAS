@@ -269,8 +269,11 @@ public class ReservationService {
     public Reservation close(Long id, User user) throws Exception {
         Reservation reservation = repo.findOne(id);
         validateIdNotNull(reservation);
-
-        reservation.setEndDate(new Date().toString());
+      
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+        String today = sdf2.format(new Date());
+        reservation.setEndDate(today);
 
         if ((reservation.getStatus() == RESERVATION_STATUS_ARRIVED)) {
             for (ReservationGuest reservationGuest : reservation.getReservationGuests()) {
@@ -279,19 +282,12 @@ public class ReservationService {
                         CalculationUtils.getReservationDuration(reservation));
             }
         }
-        //TODO: testing out pricing this is some bullshit here
+
         {
             if (reservation.getGroupId() == null) {
                 reservation.setPrice(CalculationUtils.getReservationCost(reservation));
             }
         }
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-        String today = sdf2.format(new Date());
-        if (reservation.getEndDate().compareTo(today) > 0)
-            reservation.setEndDate(today);
-
         reservation.setStatus(RESERVATION_STATUS_CLOSED);
         reservation.getRoom().setStatus(2);
         reservation.setLastModifiedBy(user);
