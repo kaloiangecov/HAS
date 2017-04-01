@@ -191,11 +191,12 @@ public class ReservationService {
             arrRoomIds = roomIds.split(",");
 
         for (Reservation gr : groups) {
-            if (repo.findExistingReservationInSlot(
+            if ((i < arrRoomIds.length) &&
+                    (repo.findExistingReservationInSlot(
                     reservation.getStartDate(),
                     reservation.getEndDate(),
                     editRooms ? repoRoom.getOne(Long.parseLong(arrRoomIds[i])).getId() : gr.getRoom().getId(),
-                    gr.getId()) != null)
+                            gr.getId()) != null))
                 throw new IOException("There already is a reservation on the same room within the same time range! Please, try a new one.");
 
             gr.setPrice(reservation.getPrice());
@@ -208,7 +209,7 @@ public class ReservationService {
             gr.setNumberAdults(reservation.getNumberAdults());
             gr.setNumberChildren(reservation.getNumberChildren());
 
-            if (editRooms && arrRoomIds[i] != null) {
+            if (editRooms && (i < arrRoomIds.length)) {
                 Room newRoom = repoRoom.findOne(Long.parseLong(arrRoomIds[i]));
                 if (newRoom != null) {
                     gr.setRoom(newRoom);
