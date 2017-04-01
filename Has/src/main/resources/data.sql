@@ -370,15 +370,15 @@ INSERT INTO RESERVATION
 VALUES
   ('1', 'ksjdfh-alskdj-weiruowi-123213as', FALSE, TRUE, FALSE, 0, '2017-03-20', NULL, NULL, NULL, 2, 1, 40.0, 5, '5',
    '2017-03-16', 0),
-  ('2', '123dfh-eeekdj-weasuowi-123213as', TRUE, TRUE, TRUE, 10, '2017-03-22', 'asdasdmadafaka', NULL, NULL, 2, 1, 50.0,
+  ('2', '123dfh-eeekdj-weasuowi-123213as', TRUE, TRUE, TRUE, 10, '2017-03-22', 'groupunique12345', NULL, NULL, 2, 1, 50.0,
    8, '4', '2017-03-18', 1),
-  ('3', 'asddfh-alskdj-weirasda-123213as', TRUE, TRUE, TRUE, 10, '2017-03-22', 'asdasdmadafaka', NULL, NULL, 1, 1, 50.0,
+  ('3', 'asddfh-alskdj-weirasda-123213as', TRUE, TRUE, TRUE, 10, '2017-03-22', 'groupunique12345', NULL, NULL, 1, 1, 50.0,
    10, '4', '2017-03-18', 1),
   ('4', 'kswer4-alskdj-weiruowi-eee213as', FALSE, FALSE, TRUE, 10, '2017-03-24', NULL, NULL, NULL, 2, 0, 45.0, 2, '4',
    '2017-03-21', 0),
-  ('5', 'keeefh-alskdj-weiruowi-000013as', TRUE, FALSE, TRUE, 0, '2017-04-01', 'asdasdmadafaka2', NULL, NULL, 4, 0,
+  ('5', 'keeefh-alskdj-weiruowi-000013as', TRUE, FALSE, TRUE, 0, '2017-04-01', 'groupunique6789', NULL, NULL, 4, 0,
    45.0, 7, '4', '2017-03-29', 0),
-  ('6', 'mmjdfh-mmmmmm-weiruowi-00213as', TRUE, FALSE, TRUE, 0, '2017-04-01', 'asdasdmadafaka2', NULL, NULL, 4, 0, 45.0,
+  ('6', 'mmjdfh-mmmmmm-weiruowi-00213as', TRUE, FALSE, TRUE, 0, '2017-04-01', 'groupunique6789', NULL, NULL, 4, 0, 45.0,
    11, '4', '2017-03-29', 0);
 
 INSERT INTO RESERVATION_GUEST (RESERVATION_GUEST_ID, reservation_id, guest_id, owner) VALUES

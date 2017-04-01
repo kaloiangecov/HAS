@@ -208,10 +208,12 @@ public class ReservationService {
             gr.setNumberAdults(reservation.getNumberAdults());
             gr.setNumberChildren(reservation.getNumberChildren());
 
-            if (editRooms) {
+            if (editRooms && arrRoomIds[i] != null) {
                 Room newRoom = repoRoom.findOne(Long.parseLong(arrRoomIds[i]));
-                gr.setRoom(newRoom);
-                i++;
+                if (newRoom != null) {
+                    gr.setRoom(newRoom);
+                    i++;
+                }
             }
 
             setLastModified(gr, reservation.getReservationGuests().get(0).getGuest().getUser());
