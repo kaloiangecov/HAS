@@ -160,7 +160,7 @@ app.controller("guestCtrl", function ($scope, $state, $location, $stateParams, $
                     else
                         $scope.page.message.text = ('Created: ' + $scope.master.personalData.fullName);
 
-                    $('#messageModal').modal('show');
+                    angular.element('#messageModal').modal('show');
                     $location.path("/guests/list");
                 }, undefined, $scope.isEdit);
             }
@@ -174,7 +174,7 @@ app.controller("guestCtrl", function ($scope, $state, $location, $stateParams, $
             //$interval($scope.reloadTableData, 30000);
         }
         else {
-            $('#dateHired,#identityIssueDate,#identityExpireDate').daterangepicker({
+            angular.element('#dateHired,#identityIssueDate,#identityExpireDate').daterangepicker({
                 singleDatePicker: true,
                 showDropdowns: true,
                 locale: {

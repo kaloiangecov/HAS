@@ -74,7 +74,7 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
             title: response.error,
             text: response.message
         };
-        $('#messageModal').modal('show');
+        angular.element('#messageModal').modal('show');
 
         if (response.status === 401) {
             $scope.authentication = "";
@@ -132,7 +132,7 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                 };
 
                 $timeout(function () {
-                    $scope.dr2 = $('#newDateRange').daterangepicker({
+                    $scope.dr2 = angular.element('#newDateRange').daterangepicker({
                         startDate: new Date($scope.reservation.startDate),
                         endDate: new Date($scope.reservation.endDate),
                         minDate: new Date(),
@@ -144,7 +144,7 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                     $scope.dr2.on('apply.daterangepicker', function (ev, picker) {
                         setDateRange(picker.startDate.format('YYYY-MM-DD'), picker.endDate.format('YYYY-MM-DD'))
                     });
-                    $('.calendar').css({float: 'left'});
+                    angular.element('.calendar').css({float: 'left'});
 
                     if (!$rootScope.switchNewPets)
                         $rootScope.switchNewPets = new Switchery(document.getElementById('newPets'), {color: "#266CEa"});
@@ -252,7 +252,7 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                 title: 'Invalid date range',
                 text: "You can't have the same date for check in and out!"
             };
-            $('#messageModal').modal('show');
+            angular.element('#messageModal').modal('show');
             return;
         }
 
@@ -425,7 +425,7 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                         title: groups[0].reservationGuests[0].guest.personalData.fullName,
                         text: 'Reservation was successfully changed'
                     };
-                    $('#messageModal').modal('show');
+                    angular.element('#messageModal').modal('show');
 
                     //$state.go('app.root.home');
                     $scope.clearEverything();
@@ -442,7 +442,7 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                         title: updatedReservation.reservationGuests[0].guest.personalData.fullName,
                         text: 'Reservation was successfully changed'
                     };
-                    $('#messageModal').modal('show');
+                angular.element('#messageModal').modal('show');
 
                     //$state.go('app.root.reservationSuccessful');
                     $scope.clearEverything();
@@ -461,7 +461,7 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                 title: $scope.reservation.reservationGuests[0].guest.personalData.fullName,
                 text: 'Reservation was successfully canceled'
             };
-            $('#messageModal').modal('show');
+            angular.element('#messageModal').modal('show');
 
             $state.go('app.root.home');
         });

@@ -120,7 +120,7 @@ app.controller("workingScheduleCtrl", function ($scope, $http, $location, $state
                     else
                         $scope.page.message.text = ('Created.');
 
-                    $('#messageModal').modal('show');
+                    angular.element('#messageModal').modal('show');
                     $location.path("/schedule/list");
                 }, undefined, $scope.isEdit);
             }
@@ -130,7 +130,7 @@ app.controller("workingScheduleCtrl", function ($scope, $http, $location, $state
 
     angular.element(document).ready(function () {
         if ($location.path().includes("list")) {
-            $('#filterDateRange').daterangepicker({
+            angular.element('#filterDateRange').daterangepicker({
                 parentEl: "#scheduleContainer",
                 startDate: new Date($scope.searchFilters.schedules.startDate),
                 endDate: new Date($scope.searchFilters.schedules.endDate),
@@ -144,7 +144,7 @@ app.controller("workingScheduleCtrl", function ($scope, $http, $location, $state
                 });
             });
 
-            $('.calendar').css({float: 'left'});
+            angular.element('.calendar').css({float: 'left'});
 
             $scope.reloadTableData();
         } else {
@@ -158,7 +158,7 @@ app.controller("workingScheduleCtrl", function ($scope, $http, $location, $state
              })
              */
 
-            $('#date').daterangepicker({
+            angular.element('#date').daterangepicker({
                 singleDatePicker: true,
                 showDropdowns: true,
                 locale: {
