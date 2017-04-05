@@ -80,7 +80,7 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
 
             $timeout(function () {
                 $location.path('/login');
-                $('#messageModal').modal('hide');
+                angular.element('#messageModal').modal('hide');
             }, 2000);
         } else if (response.status === 403) {
             if (!$scope.page.message.text || $scope.page.message.text.startsWith('{'))
@@ -88,11 +88,11 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
 
             $timeout(function () {
                 $location.path('/home');
-                $('#messageModal').modal('hide');
+                angular.element('#messageModal').modal('hide');
             }, 2000);
         }
 
-        $('#messageModal').modal('show');
+        angular.element('#messageModal').modal('show');
     };
 
     $scope.getPrincipal = function (callbackSuccess, callbackError) {

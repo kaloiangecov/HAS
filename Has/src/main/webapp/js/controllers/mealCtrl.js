@@ -86,9 +86,9 @@ app.controller("mealCtrl", function ($scope, $http, $location, $state, $statePar
 
         $scope.addDeleteFunctions = function () {
             $timeout(function () {
-                var btns = $('table').find('td').find('button');
-                $(btns).off('click');
-                $(btns).on('click', function () {
+                var btns = angular.element('table').find('td').find('button');
+                angular.element(btns).off('click');
+                angular.element(btns).on('click', function () {
                     var id = this.id.split('_')[1];
                     $scope.deleteData('meal', id, function () {
                         $scope.reloadTableData(false);
@@ -152,7 +152,7 @@ app.controller("mealCtrl", function ($scope, $http, $location, $state, $statePar
                     else
                         $scope.page.message.text = ('Created: ' + $scope.master.name);
 
-                    $('#messageModal').modal('show');
+                    angular.element('#messageModal').modal('show');
                     $location.path("/meals/list");
                 }, undefined, $scope.isEdit);
             }
@@ -169,8 +169,8 @@ app.controller("mealCtrl", function ($scope, $http, $location, $state, $statePar
             //$interval($scope.reloadTableData, 30000);
         }
         else {
-            $('#inputPicture').on('change', function () {
-                var files = $(this).prop('files');
+            angular.element('#inputPicture').on('change', function () {
+                var files = angular.element(this).prop('files');
                 if (files && files[0]) {
                     var reader = new FileReader();
                     reader.onload = function (e) {
@@ -185,7 +185,7 @@ app.controller("mealCtrl", function ($scope, $http, $location, $state, $statePar
                                     title: 'Error!',
                                     text: "File size can't be more than 128 KB!"
                                 };
-                                $('#messageModal').modal('show');
+                                angular.element('#messageModal').modal('show');
                             });
                         }
                     };
@@ -195,7 +195,7 @@ app.controller("mealCtrl", function ($scope, $http, $location, $state, $statePar
             });
 
             $scope.chooseMealPicture = function () {
-                $('#inputPicture').trigger('click');
+                angular.element('#inputPicture').trigger('click');
             };
         }
     });

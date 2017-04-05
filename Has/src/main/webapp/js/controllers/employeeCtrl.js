@@ -88,9 +88,9 @@ app.controller("employeeCtrl", function ($scope, $location, $state, $stateParams
 
         $scope.addDeleteFunctions = function () {
             $timeout(function () {
-                var btns = $('table').find('td').find('button');
-                $(btns).off('click');
-                $(btns).on('click', function () {
+                var btns = angular.element('table').find('td').find('button');
+                angular.element(btns).off('click');
+                angular.element(btns).on('click', function () {
                     var id = this.id.split('_')[1];
                     $scope.changeEmployed(id, function () {
                         $scope.reloadTableData(false);
@@ -161,7 +161,7 @@ app.controller("employeeCtrl", function ($scope, $location, $state, $stateParams
                     else
                         $scope.page.message.text = ('Created: ' + $scope.master.personalData.fullName);
 
-                    $('#messageModal').modal('show');
+                    angular.element('#messageModal').modal('show');
                     $location.path('/employees/list');
                 }, undefined, $scope.isEdit);
             }
@@ -175,7 +175,7 @@ app.controller("employeeCtrl", function ($scope, $location, $state, $stateParams
 
             $scope.addDeleteFunctions();
 
-            $('#filterDateHired').daterangepicker({
+            angular.element('#filterDateHired').daterangepicker({
                     singleDatePicker: true,
                     showDropdowns: true,
                     autoUpdateInput: false
@@ -183,14 +183,14 @@ app.controller("employeeCtrl", function ($scope, $location, $state, $stateParams
                 function (start) {
                     $scope.searchFilters.employees.dateHired = start.format("YYYY-MM-DD");
                     $scope.$apply();
-                    $('#filterDateHired').val($scope.searchFilters.employees.dateHired);
+                    angular.element('#filterDateHired').val($scope.searchFilters.employees.dateHired);
                 });
 
             $scope.reloadTableData(false);
             //$interval($scope.reloadTableData, 30000);
         }
         else {
-            $('#dateHired,#identityIssueDate,#identityExpireDate').daterangepicker({
+            angular.element('#dateHired,#identityIssueDate,#identityExpireDate').daterangepicker({
                 singleDatePicker: true,
                 showDropdowns: true,
                 locale: {
