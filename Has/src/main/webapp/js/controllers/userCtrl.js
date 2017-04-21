@@ -104,9 +104,9 @@ app.controller("userCtrl", function ($scope, $http, $location, $state, $statePar
 
         $scope.addDeleteFunctions = function () {
             $timeout(function () {
-                var btns = $('table').find('td').find('button');
-                $(btns).off('click');
-                $(btns).on('click', function () {
+                var btns = angular.element('table').find('td').find('button');
+                angular.element(btns).off('click');
+                angular.element(btns).on('click', function () {
                     var userId = this.id.split('_')[1];
                     $scope.changeUserStatus(userId, function () {
                         $scope.reloadTableData(false);
@@ -167,7 +167,7 @@ app.controller("userCtrl", function ($scope, $http, $location, $state, $statePar
                         $scope.page.message.text = ('Created: ' + $scope.master.username);
                     }
 
-                    $('#messageModal').modal('show');
+                    angular.element('#messageModal').modal('show');
                     $location.path("/users/list");
                 }, undefined, $scope.isEdit);
             }

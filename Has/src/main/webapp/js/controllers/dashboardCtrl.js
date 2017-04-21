@@ -280,7 +280,7 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
                         title: 'Invalid time!',
                         text: "Start date can't be later than finish date!"
                     };
-                    $('#messageModal').modal('show');
+                    angular.element('#messageModal').modal('show');
                     return;
                 }
 
@@ -292,7 +292,7 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
                         title: 'Success!',
                         text: 'Task editted'
                     };
-                    $('#messageModal').modal('show');
+                    angular.element('#messageModal').modal('show');
 
                     $location.path('/tasks/dashboard');
                 }, $scope.resetTask, $scope.isEdit);

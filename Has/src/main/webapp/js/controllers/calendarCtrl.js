@@ -301,7 +301,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
                     $scope.reservationInfo.startDate = new Date($scope.reservationInfo.startDate).toLocaleDateString();
                     $scope.reservationInfo.endDate = new Date($scope.reservationInfo.endDate).toLocaleDateString();
 
-                    $('#infoModal').modal('show');
+                    angular.element('#infoModal').modal('show');
                 });
             }
         },
@@ -323,7 +323,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
                             title: "Can't add guest!",
                             text: "This room has reached its guest capacity!"
                         };
-                        $('#messageModal').modal('show');
+                        angular.element('#messageModal').modal('show');
 
                         $scope.resetReservation();
                         return;
@@ -356,7 +356,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
 
                 $scope.$apply();
 
-                $('#reservationModal').modal('show');
+                angular.element('#reservationModal').modal('show');
             }
         },
         checkIn: {
@@ -371,7 +371,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
                     return;
 
                 if (tmpReservation.groupId && !$scope.validateGroupCheckInDate(tmpReservation)) {
-                    $('#messageModal').modal('show');
+                    angular.element('#messageModal').modal('show');
                     loadEvents();
                     return;
                 }
@@ -413,7 +413,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
                                 });
                             }
 
-                            $('#billingModal').modal('show');
+                            angular.element('#billingModal').modal('show');
                         });
 
                         $scope.changeRoomType();
@@ -516,7 +516,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
                     title: "Can't change the room!",
                     text: "The new room doesn't have enough capacity!"
                 };
-                $('#messageModal').modal('show');
+                angular.element('#messageModal').modal('show');
 
                 $scope.resetReservation();
                 return;
@@ -527,7 +527,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
                 end: args.newEnd.value.substr(0, 10)
             };
             if (!$scope.validateCheckInDate(tmpReservation, newRange)) {
-                $('#messageModal').modal('show');
+                angular.element('#messageModal').modal('show');
                 loadEvents();
                 return;
             }
@@ -561,7 +561,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
                 end: args.newEnd.value.substr(0, 10)
             };
             if (!$scope.validateCheckInDate(tmpReservation, newRange)) {
-                $('#messageModal').modal('show');
+                angular.element('#messageModal').modal('show');
                 loadEvents();
                 return;
             }
@@ -649,7 +649,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
                     }
                 });
 
-                $('#reservationModal').modal('show');
+                angular.element('#reservationModal').modal('show');
             }
         },
         onEventMouseOver: function (args) {
@@ -864,7 +864,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
 
         $scope.saveReservationGuest(objReservation);
 
-        $('#reservationModal').modal('hide');
+        angular.element('#reservationModal').modal('hide');
 
     };
 
@@ -912,7 +912,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
             }, $scope.resetGuest);
         }
 
-        $('#reservationModal').modal('hide');
+        angular.element('#reservationModal').modal('hide');
     };
     $scope.resetGuest = function () {
         $scope.reservationGuest = {
@@ -947,13 +947,13 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
     }
 
     $scope.printReservation = function () {
-        $('#billing_print_content').printThis();
+        angular.element('#billing_print_content').printThis();
     };
 
     angular.element(document).ready(function () {
         $scope.changeRoomType();
 
-        $('#dateRange').daterangepicker({
+        angular.element('#dateRange').daterangepicker({
             parentEl: "#scheduleContainer",
             startDate: new Date($scope.startDate),
             endDate: new Date($scope.endDate),
@@ -962,7 +962,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
             }
         }, setDateRange);
 
-        $('#identityIssueDate,#identityExpireDate').daterangepicker({
+        angular.element('#identityIssueDate,#identityExpireDate').daterangepicker({
             parentEl: "#reservationModal",
             singleDatePicker: true,
             showDropdowns: true,
@@ -971,7 +971,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
             }
         });
 
-        $('.calendar').css({float: 'left'});
+        angular.element('.calendar').css({float: 'left'});
 
         loadEvents();
 

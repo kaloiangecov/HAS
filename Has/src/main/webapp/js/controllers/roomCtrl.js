@@ -64,9 +64,9 @@ app.controller("roomCtrl", function ($scope, $http, $location, $state, $statePar
 
         $scope.addDeleteFunctions = function () {
             $timeout(function () {
-                var btns = $('table').find('td').find('button');
-                $(btns).off('click');
-                $(btns).on('click', function () {
+                var btns = angular.element('table').find('td').find('button');
+                angular.element(btns).off('click');
+                angular.element(btns).on('click', function () {
 
                     var roomId = this.id.split('_')[1];
 
@@ -133,7 +133,7 @@ app.controller("roomCtrl", function ($scope, $http, $location, $state, $statePar
                     else
                         $scope.page.message.text = ('Created: ' + $scope.master.number);
 
-                    $('#messageModal').modal('show');
+                    angular.element('#messageModal').modal('show');
                     $location.path("/rooms/list");
                 }, undefined, $scope.isEdit);
             }
