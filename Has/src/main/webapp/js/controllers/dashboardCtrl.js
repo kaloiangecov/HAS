@@ -54,7 +54,7 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
 
     for (var i = 0; i < 24; i++)
         $scope.timeSelect.hours.push(i);
-    for (var i = 0; i < 60; i++)
+    for (i = 0; i < 60; i++)
         $scope.timeSelect.minutes.push(i);
 
     $scope.refreshInterval = undefined;
@@ -176,20 +176,17 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
             DTColumnBuilder.newColumn('assignee.personalData.fullName', 'Assignee'),
             DTColumnBuilder.newColumn('status', 'Status')
                 .renderWith(function (status) {
-                    var html = '<span class="label label-' + $scope.taskStatusLabels[status] +
+                    return '<span class="label label-' + $scope.taskStatusLabels[status] +
                         '">' + $scope.taskStatuses[status] + '</span>';
-                    return html;
                 }),
             DTColumnBuilder.newColumn('id').notSortable().withClass('actions-column')
                 .renderWith(function (id) {
-                    var html =
-                        '<div class="btn-group btn-group-sm">' +
+                    return '<div class="btn-group btn-group-sm">' +
                         '<a class="btn btn-default action-btn" href="#!/tasks/edit/' +
                         id + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
                         '<button class="btn btn-default action-btn delete-btn" id="del_' +
                         id + '"><i class="fa fa-calendar-times-o" aria-hidden="true"></i></button>' +
                         '</div>';
-                    return html;
                 })
         ];
 
@@ -264,8 +261,7 @@ app.controller("dashboardCtrl", function ($scope, $filter, $http, $location, $st
                 return;
             }
 
-            if ($scope.taskForm.$valid) {
-
+            if ($scope.taskForm.$valid && task.assignee) {
                 $scope.master = angular.copy(task);
 
                 if (!$scope.isEdit)

@@ -1,5 +1,4 @@
 app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeout) {
-    var ctrl = this;
     $scope.page = {
         title: "Booking",
         activePage: "home"
@@ -179,11 +178,10 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
             function (response) { //error
                 $scope.displayMessage(response.data);
                 if (errorCallback)
-                    errorCallback;
-                return;
+                    errorCallback();
             })
             .then(function (response) {
-                if (response && (response.status == 200) && response.data)
+                if (response && (response.status === 200) && response.data)
                     successCallback(response.data);
             });
     };
@@ -198,7 +196,7 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
             }
         }).then(
             function (response) { //success
-                response.data;
+                return response.data;
             },
             function (response) { //error
                 $scope.displayMessage(response.data);
@@ -232,10 +230,10 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
             function (response) { //error
                 $scope.displayMessage(response.data);
                 if (errorCallback)
-                    errorCallback;
+                    errorCallback();
             })
             .then(function (response) {
-                if (response && response.status == 200 && response.data)
+                if (response && response.status === 200 && response.data)
                     successCallback(response.data);
             });
     };
@@ -246,7 +244,7 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
     };
 
     $scope.search = function () {
-        if ($scope.filters.startDate == $scope.filters.endDate) {
+        if ($scope.filters.startDate === $scope.filters.endDate) {
             $scope.page.message = {
                 type: 'danger',
                 title: 'Invalid date range',
@@ -437,20 +435,20 @@ app2.controller("mainCtrl2", function ($rootScope, $scope, $state, $http, $timeo
                 });
         } else {
             $scope.saveData("reservation", $scope.reservation, function (updatedReservation) { //success
-                    $scope.page.message = {
-                        type: 'success',
-                        title: updatedReservation.reservationGuests[0].guest.personalData.fullName,
-                        text: 'Reservation was successfully changed'
-                    };
+                $scope.page.message = {
+                    type: 'success',
+                    title: updatedReservation.reservationGuests[0].guest.personalData.fullName,
+                    text: 'Reservation was successfully changed'
+                };
                 angular.element('#messageModal').modal('show');
 
-                    //$state.go('app.root.reservationSuccessful');
-                    $scope.clearEverything();
+                //$state.go('app.root.reservationSuccessful');
+                $scope.clearEverything();
             }, function () { // error reservation
                 $scope.results = [];
                 $scope.selectedRooms = [];
                 $scope.isSearchPerformed = false;
-                }, true);
+            }, true);
         }
     };
 
