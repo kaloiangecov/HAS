@@ -70,7 +70,7 @@ app.controller("employeeCtrl", function ($scope, $location, $state, $stateParams
                         '<a class="btn btn-default action-btn" href="#!/employees/edit/' +
                         id + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
 
-                    if (full.user.id != $scope.loginData.id) {
+                    if (full.user.id !== $scope.loginData.id) {
                         html += '<button type="button" class="btn btn-default action-btn delete-btn" id="del_' +
                             id + '">';
 

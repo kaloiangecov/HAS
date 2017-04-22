@@ -76,7 +76,7 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
             $scope.loginData = {};
 
             if (!$scope.page.message.text || $scope.page.message.text.startsWith('{'))
-                $scope.page.message.text = "You are not logged in!"
+                $scope.page.message.text = "You are not logged in!";
 
             $timeout(function () {
                 $location.path('/login');
@@ -84,7 +84,7 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
             }, 2000);
         } else if (response.status === 403) {
             if (!$scope.page.message.text || $scope.page.message.text.startsWith('{'))
-                $scope.page.message.text = "Access to this page is forbidden for you!"
+                $scope.page.message.text = "Access to this page is forbidden for you!";
 
             $timeout(function () {
                 $location.path('/home');
@@ -108,7 +108,7 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
                 return response.data;
             }, callbackError); //error
         response.then(callbackSuccess);
-    }
+    };
 
     $scope.login = function () {
         $scope.authentication = "Basic " + btoa($scope.credentials.username + ":" + $scope.credentials.password);
@@ -135,9 +135,9 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
     };
 
     $scope.logout = function () {
-        var response = $http({
+        $http({
             method: "POST",
-            url: "logout",
+            url: "logout"
             //headers: {
             //    "Authorization": $scope.authentication
             //}
@@ -215,13 +215,13 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
             },
             function (response) { //error
                 if (errorCallback)
-                    errorCallback;
+                    errorCallback();
                 else
                     $scope.displayMessage(response.data);
             })
             .then(function (response) {
                 if (response.status === 200)
-                    succcessCallback;
+                    succcessCallback();
             });
     };
 
@@ -244,11 +244,10 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
             function (response) { //error
                 $scope.displayMessage(response.data);
                 if (errorCallback)
-                    errorCallback;
-                return;
+                    errorCallback();
             })
             .then(function (response) {
-                if (response && response.status == 200 && response.data)
+                if (response && response.status === 200 && response.data)
                     successCallback(response.data);
             });
     };
@@ -269,7 +268,7 @@ app.controller("mainCtrl", function ($scope, $http, $location, $timeout) {
             function (response) { //error
                 $scope.displayMessage(response.data);
                 if (errorCallback)
-                    errorCallback;
+                    errorCallback();
             })
             .then(successCallback);
     };

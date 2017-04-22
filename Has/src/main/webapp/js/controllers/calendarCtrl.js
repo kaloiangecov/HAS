@@ -3,14 +3,12 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
     $scope.page.title = "Reception";
 
     $scope.roomTypes[3] = "All";
-
     $scope.events = {
         list: [],
         groupColors: {},
         selected: [],
         new: {}
     };
-
     ctrl.selectedRoomType = 3;
     $scope.guests = {
         list: [],
@@ -88,7 +86,6 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
 
             $scope.saveData("guest", $scope.reservationGuest.guest, function (data) {
                 $scope.reservationGuest.guest = data;
-
                 $scope.saveData(url, reservation, function (newReservation) {
 
                     $scope.reservationGuest.reservation = newReservation;
@@ -96,18 +93,15 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
                         afterEventCreated, $scope.resetReservation);
 
                 });
-
             });
         }
         else { // use existing guest
             $scope.reservationGuest.guest = $scope.guests.selectedGuest;
 
             $scope.saveData(url, reservation, function (newReservation) {
-
                 $scope.reservationGuest.reservation = newReservation;
                 $scope.saveData("reservation-guest", $scope.reservationGuest,
                     afterEventCreated, $scope.resetReservation);
-
             });
         }
     };
@@ -172,7 +166,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
                             $scope.groupReservationsList,
                             {groupId: reservation.groupId});
 
-                        if (!repeating || repeating.length == 0)
+                        if (!repeating || repeating.length === 0)
                             $scope.groupReservationsList.push(reservation);
                     });
 
@@ -203,9 +197,9 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
     $scope.validateCheckInDate = function (reservation, newRange) {
         var today = new Date().toISOString().substr(0, 10);
 
-        if ((reservation.status == 0 && newRange.start < today)
-            || (reservation.status == 1
-            && (newRange.start != reservation.startDate
+        if ((reservation.status === 0 && newRange.start < today)
+            || (reservation.status === 1
+            && (newRange.start !== reservation.startDate
             || newRange.end < today))) {
             $scope.page.message = {
                 type: 'danger',
@@ -222,14 +216,13 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
     $scope.validateGroupCheckInDate = function (reservation) {
         var groups = $filter('filter')(
             $scope.events.list, function (event) {
-                return (event.objReservation.groupId == reservation.groupId);
+                return (event.objReservation.groupId === reservation.groupId);
             });
         var differentGroupStart = false;
 
         angular.forEach(groups, function (event, key) {
-            if (event.objReservation.startDate != reservation.startDate) {
+            if (event.objReservation.startDate !== reservation.startDate) {
                 differentGroupStart = true;
-                return;
             }
         });
 
@@ -275,7 +268,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
                     if ($scope.reservationInfo.groupId) {
                         var repeating = $filter('filter')(
                             $scope.events.list, function (event) {
-                                return (event.objReservation.groupId == $scope.reservationInfo.groupId);
+                                return (event.objReservation.groupId === $scope.reservationInfo.groupId);
                             });
 
                         if (repeating && repeating.length > 0) {
@@ -364,7 +357,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
             onclick: function () {
                 var tmpReservation = this.source.data.objReservation;
 
-                if (tmpReservation.startDate != moment().format("YYYY-MM-DD"))
+                if (tmpReservation.startDate !== moment().format("YYYY-MM-DD"))
                     return;
 
                 if (tmpReservation.status > 0)
@@ -391,7 +384,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
         checkOut: {
             text: '<i class="fa fa-times"></i> Check out',
             onclick: function () {
-                if (this.source.data.objReservation.status != 1)
+                if (this.source.data.objReservation.status !== 1)
                     return;
 
                 if (confirm("Close reservation?\n" + "Start: " + this.source.start() + "\nEnd:" + this.source.end())) {
@@ -662,7 +655,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
                 case 0:
                     menuItems.push($scope.conextMenuItems.addAnotherGuest);
 
-                    if (reservation.startDate == moment().format("YYYY-MM-DD"))
+                    if (reservation.startDate === moment().format("YYYY-MM-DD"))
                         menuItems.push($scope.conextMenuItems.checkIn);
 
                     menuItems.push($scope.conextMenuItems.cancel);
@@ -735,7 +728,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
                 args.data.html += '<br/><span class="label label-default" style="background-color:'
                     + $scope.events.groupColors[groupId] + '">Group</span>';
 
-                var isRoomEmpty = (!reservation.reservationGuests || reservation.reservationGuests.length == 0);
+                var isRoomEmpty = (!reservation.reservationGuests || reservation.reservationGuests.length === 0);
                 if (!isRoomEmpty && reservation.reservationGuests[0].owner)
                     args.data.html += ' <span class="label label-warning">Owner</span>';
             }
@@ -775,7 +768,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
                         objReservation: reservation
                     };
 
-                    var isRoomEmpty = (!reservation.reservationGuests || reservation.reservationGuests.length == 0);
+                    var isRoomEmpty = (!reservation.reservationGuests || reservation.reservationGuests.length === 0);
                     // set event text
                     if (!isRoomEmpty)
                         tmpEvent.text = reservation.reservationGuests[0].guest.personalData.fullName;
@@ -785,7 +778,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
                     if (reservation.status > 0) {
                         tmpEvent.deleteEnabled = false;
 
-                        if (reservation.status == 2) {
+                        if (reservation.status === 2) {
                             tmpEvent.moveEnabled = false;
                             tmpEvent.resizeEnabled = false;
                         }
@@ -803,11 +796,10 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
         $scope.getRooms(function (data) {
             var orderedRooms = $filter('orderBy')(data, "number");
 
-            if (ctrl.selectedRoomType == 3) {
+            if (ctrl.selectedRoomType === 3) {
                 $scope.config.resources = orderedRooms;
             } else {
-                var filtered = $filter('filter')(orderedRooms, {roomClass: ctrl.selectedRoomType});
-                $scope.config.resources = filtered;
+                $scope.config.resources = $filter('filter')(orderedRooms, {roomClass: ctrl.selectedRoomType});
             }
         });
     };
@@ -867,7 +859,6 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
         angular.element('#reservationModal').modal('hide');
 
     };
-
     $scope.resetReservation = function () {
         $scope.events.new = {};
         $scope.events.selected = [];
@@ -929,7 +920,7 @@ app.controller("calendarCtrl", function ($scope, $filter, $http, $sce, $interval
 
     $scope.setScale = function (val) {
         $scope.config.scale = val;
-        if (val == "Day") {
+        if (val === "Day") {
             $scope.config.days = 14;
         }
     };
