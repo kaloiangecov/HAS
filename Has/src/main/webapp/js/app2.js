@@ -21,8 +21,11 @@ app2.config(function ($stateProvider, $urlRouterProvider) {
                 }
             },
             onEnter: function () {
-                $('.carousel').carousel({
-                    interval: 5000
+                angular.element(document).ready(function () {
+                    FastClick.attach(document.body);
+                    angular.element('.carousel').carousel({
+                        interval: 5000
+                    });
                 });
             }
         });
@@ -38,8 +41,8 @@ app2.config(function ($stateProvider, $urlRouterProvider) {
             },
             onEnter: function ($rootScope) {
                 setTimeout(function () {
-                    $('.navbar-nav').find('li').removeClass('active');
-                    $('#home').addClass('active');
+                    angular.element('.navbar-nav').find('li').removeClass('active');
+                    angular.element('#home').addClass('active');
 
                     $rootScope.dr1 = $('#dateRange').daterangepicker({
                         parentEl: "body",
@@ -52,7 +55,7 @@ app2.config(function ($stateProvider, $urlRouterProvider) {
                         }
                     });
 
-                    $('.calendar').css({float: 'left'});
+                    angular.element('.calendar').css({float: 'left'});
 
                     $rootScope.switchPets = new Switchery(document.getElementById('pets'), {color: "#266CEa"});
                     $rootScope.switchMinibar = new Switchery(document.getElementById('minibar'), {color: "#266CEa"});
@@ -95,15 +98,15 @@ app2.config(function ($stateProvider, $urlRouterProvider) {
             url: '/change-reservation',
             views: {
                 'content@app': {
-                    templateUrl: 'templates/booking/edit.html',
+                    templateUrl: 'templates/booking/edit.html'
                     //controller: 'changeReservationCtrl'
                 }
             },
-            onEnter: function ($rootScope) {
-                setTimeout(function () {
-                    $('.navbar-nav').find('li').removeClass('active');
-                    $('#change').addClass('active');
-                }, 1);
+            onEnter: function () {
+                angular.element(document).ready(function () {
+                    angular.element('.navbar-nav').find('li').removeClass('active');
+                    angular.element('#change').addClass('active');
+                });
             }
         });
 

@@ -2,24 +2,24 @@ var stateLogin = {
     url: "/login",
     views: {
         "login": {
-            templateUrl: "templates/login.html",
+            templateUrl: "templates/login.html"
             //controller: "mainCtrl"
         }
     },
     onEnter: function () {
         angular.element(document).ready(function () {
-            $('body').removeClass('nav-md');
-            $('body').addClass('login');
-            $('#logged_content').hide();
-            $('.login_wrapper').show();
+            angular.element('body').removeClass('nav-md');
+            angular.element('body').addClass('login');
+            angular.element('#logged_content').hide();
+            angular.element('.login_wrapper').show();
         });
     },
     onExit: function () {
         angular.element(document).ready(function () {
-            $('body').removeClass('login');
-            $('body').addClass('nav-md');
-            $('.login_wrapper').hide();
-            $('#logged_content').show();
+            angular.element('body').removeClass('login');
+            angular.element('body').addClass('nav-md');
+            angular.element('.login_wrapper').hide();
+            angular.element('#logged_content').show();
         });
     }
 };
@@ -29,10 +29,15 @@ var stateMain = {
     abstract: true,
     views: {
         "loggedin": {
-            templateUrl: "templates/main.html",
+            templateUrl: "templates/main.html"
             //controller: "mainCtrl"
         }
     },
+    onEnter: function () {
+        angular.element(document).ready(function () {
+            FastClick.attach(document.body);
+        });
+    }
 };
 
 var stateRoot = {
@@ -68,7 +73,7 @@ var stateHome = {
     url: '/home',
     views: {
         'content@loggedin': {
-            templateUrl: 'templates/home.html',
+            templateUrl: 'templates/home.html'
             //controller: "mainCtrl"
         }
     }
