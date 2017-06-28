@@ -1,3 +1,5 @@
+-- noinspection SqlNoDataSourceInspectionForFile
+
 INSERT INTO PERMISSION (PERMISSION_ID, permission) VALUES ('0', 'ADMIN');
 INSERT INTO PERMISSION (PERMISSION_ID, permission) VALUES ('1', 'PERM_VIEW_USER');
 INSERT INTO PERMISSION (PERMISSION_ID, permission) VALUES ('2', 'PERM_REMOVE_USER');
@@ -352,44 +354,53 @@ INSERT INTO GUEST (GUEST_ID, NUMBER_RESERVATIONS, STATUS, PERSONAL_DATA_ID) VALU
 INSERT INTO GUEST (GUEST_ID, NUMBER_RESERVATIONS, STATUS, PERSONAL_DATA_ID, USER_ID) VALUES (8, 1, 0, '19', '17');
 
 INSERT INTO ROOM (NUMBER, BEDS_DOUBLE, BEDS_SINGLE, ROOM_CLASS, STATUS, CHILDREN, PETS, MINIBAR) VALUES
-  (101, 1, 0, 0, 0, FALSE, FALSE, TRUE),
-  (102, 0, 1, 2, 1, FALSE, FALSE, FALSE),
+  (101, 1, 0, 0, 1, FALSE, FALSE, TRUE),
+  (102, 0, 1, 2, 0, FALSE, FALSE, FALSE),
   (103, 0, 1, 2, 0, FALSE, FALSE, FALSE),
   (201, 1, 1, 0, 0, TRUE, FALSE, TRUE),
-  (202, 1, 0, 1, 2, TRUE, TRUE, FALSE),
+  (202, 1, 0, 1, 0, TRUE, TRUE, FALSE),
   (203, 0, 3, 2, 1, FALSE, FALSE, FALSE),
-  (301, 0, 1, 0, 0, FALSE, FALSE, TRUE),
+  (301, 0, 1, 0, 1, FALSE, FALSE, TRUE),
   (302, 1, 0, 1, 0, TRUE, TRUE, TRUE),
-  (303, 0, 2, 1, 1, FALSE, TRUE, TRUE),
+  (303, 0, 2, 1, 2, FALSE, TRUE, TRUE),
   (304, 1, 1, 0, 2, TRUE, FALSE, TRUE),
   (401, 0, 2, 1, 0, FALSE, TRUE, TRUE),
   (402, 1, 2, 0, 0, TRUE, TRUE, TRUE);
 
-INSERT INTO RESERVATION
-(reservation_id, reservation_code, all_inclusive, breakfast, dinner, discount, end_date, group_id, last_modified_by_user_id, last_modified_time, number_adults, number_children, price, room_id, employee_id, start_date, status)
-VALUES
-  ('1', 'ksjdfh-alskdj-weiruowi-123213as', FALSE, TRUE, FALSE, 0, '2017-03-20', NULL, NULL, NULL, 2, 1, 40.0, 5, '5',
-   '2017-03-16', 0),
-  ('2', '123dfh-eeekdj-weasuowi-123213as', TRUE, TRUE, TRUE, 10, '2017-03-22', 'groupunique12345', NULL, NULL, 2, 1, 50.0,
-   8, '4', '2017-03-18', 1),
-  ('3', 'asddfh-alskdj-weirasda-123213as', TRUE, TRUE, TRUE, 10, '2017-03-22', 'groupunique12345', NULL, NULL, 1, 1, 50.0,
-   10, '4', '2017-03-18', 1),
-  ('4', 'kswer4-alskdj-weiruowi-eee213as', FALSE, FALSE, TRUE, 10, '2017-03-24', NULL, NULL, NULL, 2, 0, 45.0, 2, '4',
-   '2017-03-21', 0),
-  ('5', 'keeefh-alskdj-weiruowi-000013as', TRUE, FALSE, TRUE, 0, '2017-04-01', 'groupunique6789', NULL, NULL, 4, 0,
-   45.0, 7, '4', '2017-03-29', 0),
-  ('6', 'mmjdfh-mmmmmm-weiruowi-00213as', TRUE, FALSE, TRUE, 0, '2017-04-01', 'groupunique6789', NULL, NULL, 4, 0, 45.0,
-   11, '4', '2017-03-29', 0);
 
-INSERT INTO RESERVATION_GUEST (RESERVATION_GUEST_ID, reservation_id, guest_id, owner) VALUES
-  (1, 1, 1, TRUE),
-  (2, 2, 2, TRUE),
-  (3, 3, 3, FALSE),
-  (4, 4, 1, TRUE),
-  (5, 4, 2, FALSE),
-  (6, 5, 4, TRUE),
-  (7, 6, 5, FALSE),
-  (8, 6, 3, FALSE);
+INSERT INTO RESERVATION
+(reservation_id, reservation_code, group_id, room_id, start_date, end_date, number_adults, number_children, all_inclusive, breakfast, dinner,
+ last_modified_by_user_id, last_modified_time, price, discount, employee_id, status)
+VALUES
+  (1, 'res-code-001', 'group-id-001', 1, '2017-06-28', '2017-07-03', 3, 3, TRUE, FALSE, FALSE,
+   NULL, NULL, 230, 0, 5, 1),
+  (2, 'res-code-002', 'group-id-001', 7, '2017-06-28', '2017-07-03', 3, 3, TRUE, FALSE, FALSE,
+   NULL, NULL, 230, 0, 5, 1),
+  (3, 'res-code-003', NULL, 2, '2017-07-02', '2017-07-05', 1, 1, FALSE, TRUE, FALSE,
+   NULL, NULL, 160, 10, 5, 0),
+  (4, 'res-code-004', NULL, 2, '2017-07-05', '2017-07-08', 1, 0, FALSE, TRUE, TRUE,
+   NULL, NULL, 180, 0, 5, 0),
+  (5, 'res-code-005', 'group-id-002', 3, '2017-07-03', '2017-07-07', 2, 3, TRUE, FALSE, FALSE,
+   NULL, NULL, 210, 0, 5, 0),
+  (6, 'res-code-006', 'group-id-002', 8, '2017-07-03', '2017-07-07', 2, 3, TRUE, FALSE, FALSE,
+   NULL, NULL, 210, 0, 5, 0),
+  (7, 'res-code-007', NULL, 6, '2017-06-29', '2017-07-02', 1, 2, TRUE, TRUE, TRUE,
+   NULL, NULL, 160, 8, 5, 1),
+  (8, 'res-code-008', NULL, 9, '2017-06-27', '2017-06-29', 2, 0, FALSE, FALSE, TRUE,
+   NULL, NULL, 120, 10, 5, 2);
+
+INSERT INTO RESERVATION_GUEST (reservation_id, guest_id, owner) VALUES
+  (1, 1, TRUE),
+  (1, 2, FALSE),
+  (2, 3, FALSE),
+  (3, 4, TRUE),
+  (4, 6, TRUE),
+  (5, 2, TRUE),
+  (5, 7, FALSE),
+  (6, 2, FALSE),
+  (7, 5, TRUE),
+  (8, 8, TRUE),
+  (8, 1, FALSE);
 
 INSERT INTO MEAL_CATEGORY (MEAL_CATEGORY_ID, TITLE, IMG, DESCRIPTION) VALUES
   (1, 'Dessert', 'img/cake.jpg', 'Find the best desserts here.'),
@@ -424,4 +435,6 @@ INSERT INTO MEAL (MEAL_ID, MEAl_CATEGORY_ID, DATE_POSTED, IMG, DESCRIPTION, MEAL
 
 INSERT INTO REQUEST (REQUEST_ID, RESERVATION_GUEST_ID, STATUS, REQUEST_TYPE) VALUES
   (1, 1, 0, 2),
-  (2, 2, 0, 1);
+  (2, 2, 0, 1),
+  (3, 8, 2, 1),
+  (4, 8, 0, 2);
