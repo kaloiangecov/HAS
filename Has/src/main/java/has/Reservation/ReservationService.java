@@ -87,6 +87,8 @@ public class ReservationService {
                 reservation.setGroupId(String.valueOf(code));
             }
         }
+//        repo.save(reservation);
+        reservation.setRoom(repoRoom.findOne(reservation.getRoom().getId()));
         reservation.setPrice(CalculationUtils.getReservationCost(reservation));
         return repo.save(reservation);
     }
@@ -236,6 +238,7 @@ public class ReservationService {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         dbReservation.setLastModifiedTime(sdf.format(new Date()));
+        dbReservation.setPrice(CalculationUtils.getReservationCost(reservation));
         templateHandler.notifyCustomer(dbReservation);
         return repo.save(dbReservation);
     }
